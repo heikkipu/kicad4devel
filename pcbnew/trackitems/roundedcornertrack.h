@@ -1,5 +1,3 @@
-#include <class_track.h>
-#include <class_track.h>
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -34,6 +32,7 @@
 #include <class_track.h>
 #include <class_board.h>
 #include "roundedtrackscorner.h"
+
 
 class ROUNDEDCORNERTRACK : public TRACK
 {
