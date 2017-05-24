@@ -46,7 +46,11 @@ void ROUNDEDTRACKSCORNERS::Popup(wxMenu* aMenu, const TRACK* aTrackSeg, const wx
                 Menu_AddToTrack(corner_menu, aTrackSeg, track_nearest_endpoint);
             if(corner)
             {
-                Menu_ChangeFromTrack(corner_menu, aTrackSeg, track_nearest_endpoint);
+                if(corner->GetParams() != GetParams())
+                {
+                    Menu_CopyParamsToCurrent(corner_menu, aTrackSeg, track_nearest_endpoint);
+                    Menu_ChangeFromTrack(corner_menu, aTrackSeg, track_nearest_endpoint);
+                }
                 Menu_RemoveFromTrack(corner_menu, aTrackSeg, track_nearest_endpoint);
             }
             corner_menu->AppendSeparator();
@@ -97,4 +101,20 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeFromTrack(wxMenu* aMenu, const TRACK* aTra
     }
 }
 
+void ROUNDEDTRACKSCORNERS::Menu_CopyParamsToCurrent(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+{
+    if(aMenu && aTrackSeg && IsOn())
+    {
+        if(aTrackSeg->Type() == PCB_TRACE_T)
+        {
+            ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(aTrackSeg, aPos));
+            if(corner)
+            {
+                wxString msg;
+                msg.Printf(_("Copy Corner Settings %s to Current"), GetChars(ParamsTxtToMenu(corner->GetParams())));
+                AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT, msg, KiBitmap(tools_xpm));
+            }
+        }
+    }
+}
 

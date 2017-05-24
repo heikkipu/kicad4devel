@@ -577,6 +577,20 @@ ROUNDEDTRACKSCORNER::PARAMS ROUNDEDTRACKSCORNERS::GetDefaultParams(void) const
     return params;
 }
 
+ROUNDEDTRACKSCORNER::PARAMS ROUNDEDTRACKSCORNERS::CopyCurrentParams(const TRACK* aTrackSegAt, const wxPoint& aCurPosAt)
+{
+    ROUNDEDTRACKSCORNER::PARAMS corner_params = {0,0,10};
+    wxPoint track_pos = TrackSegNearestEndpoint(aTrackSegAt, aCurPosAt);
+    ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(aTrackSegAt, track_pos));
+    if(corner)
+    {
+        corner_params = corner->GetParams();
+        SetParams(corner_params);
+        RecreateMenu();
+    }
+    return corner_params;
+}
+
 TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Next(const TRACK* aTrackSegAt) const
 {
     ROUNDEDTRACKSCORNER* result = nullptr;

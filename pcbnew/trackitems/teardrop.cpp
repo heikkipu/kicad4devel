@@ -77,6 +77,7 @@ bool TEARDROP::Update(void)
 
     m_connected_pos_delta = m_connected_pos;
     m_connected_pos_length_delta = 0;    
+    m_can_draw_clearance = true;
     
     SetConnectedItem();
     SetRoundedCornerTrack();
@@ -165,9 +166,8 @@ void TEARDROP::CalcSubland(const int aWidthRatio, const int aLengthRatio)
 {
     m_width_rad = CalcSublandRad(aWidthRatio, m_connected_item_rad, m_trackseg_rad);
     m_length = CalcSublandPosDist(aLengthRatio, m_connected_item_rad, m_width_rad);
-    int tr_d = m_trackseg_length - m_length - m_width_rad;
+    int tr_d = m_trackseg_length - m_length - m_width_rad + m_trackseg_rad;
     m_connected_pos_length_delta = std::min(m_connected_pos_length_delta, tr_d);
-    m_can_draw_clearance = true;
 }
 
 uint TEARDROP::CalcFilletWidthRad(const int aWidthRatio, const uint aConnectedItemRad, const uint aTrackSegRad)
@@ -180,7 +180,7 @@ uint TEARDROP::CalcFilletWidthRad(const int aWidthRatio, const uint aConnectedIt
 
 uint TEARDROP::CalcFilletPosDist(const int aLengthRatio, const uint aConnectedItemRad)
 {
-    return aConnectedItemRad + double(aConnectedItemRad) * (double(aLengthRatio) / 100.0);
+    return aConnectedItemRad + double(aConnectedItemRad) * (double(aLengthRatio) / 100.0) - m_trackseg_rad;
 }
 
 uint TEARDROP::CalcFilletLength(const int aLengthRatio)
@@ -208,7 +208,6 @@ void TEARDROP::CalcFillet(const int aWidthRatio, const int aLengthRatio)
     m_length -= m_length_width_corr;
     
     CalcFilletSegs();
-    m_can_draw_clearance = true;
 }
 
 void TEARDROP::SetFilletPoints(void)
@@ -280,8 +279,6 @@ void TEARDROP::CalcTeardrop(const int aWidthRatio, const int aLengthRatio)
 
     CalcTeardropArcs();
 
-    //m_can_draw_clearance = (m_teardrop_segs_arc_rad >= m_poly_seg_rad + m_clearance);
-    //m_can_draw_clearance = (m_trackseg_length > m_connected_item_rad + m_clearance);
     m_can_draw_clearance = (m_length > m_connected_item_rad + m_clearance);
 }
 
@@ -329,8 +326,22 @@ void TEARDROP::SetTeardropPoints(void)
 
 void TEARDROP::TestTrackLength(void)
 {
-    if(m_connected_item_rad + m_connected_pos_length_delta - m_length_width_corr >= m_trackseg_length)
-        m_set_ok = false;
+    switch(m_shape)
+    {
+        case FILLET_T:
+            if(m_connected_item_rad + m_connected_pos_length_delta - m_length_width_corr - m_trackseg_rad >= m_trackseg_length)
+                m_set_ok = false;
+            break;
+        case TEARDROP_T:
+            if(m_connected_item_rad + m_connected_pos_length_delta - m_length_width_corr >= m_trackseg_length)
+                m_set_ok = false;
+            break;
+        case SUBLAND_T:
+            if(m_connected_item_rad - m_trackseg_rad >= m_trackseg_length)
+                m_set_ok = false;
+            break;
+        default:;
+    }
 }
 
 void TEARDROP::TestTrackWidth(void)
@@ -887,8 +898,7 @@ void TEARDROP_RECT::CalcFillet(const int aWidthRatio, const int aLengthRatio)
         
         uint length_corr = 9 * m_trackseg_rad / 10;
         uint max_dist_item_to_tear = CalcFilletPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
-        uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr - m_trackseg_rad);
-        //uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length - m_trackseg_rad);
+        uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr);
         m_length = dist_item_to_tear - m_connected_pos_length_delta;
         CalcFilletSegs();
         m_length -= length_corr;
@@ -934,7 +944,6 @@ void TEARDROP_RECT::SetFilletPoints(void)
         wxPoint hpos = GetPoint(m_pos, m_trackseg_angle_inv, m_rect_edge_dist_x + m_poly_seg_rad);
         m_seg_points[0] = GetPoint(hpos, m_trackseg_angle_inv + M_PI_2, m_width_rad + seg_rad);
         m_seg_points[3] = GetPoint(hpos, m_trackseg_angle_inv - M_PI_2, m_width_rad + seg_rad);
-        
         
         //A
         m_seg_outer_points[0] = GetPoint(m_seg_points[0], m_trackseg_angle_inv, m_poly_seg_rad);
@@ -1367,7 +1376,7 @@ void TEARDROP_JUNCTIONS::TestTrackLength(void)
 {
     if(m_T_tracks)
     {
-        if(m_connected_pos_length_delta + m_trackseg_rad >= m_trackseg_length)
+        if(m_connected_pos_length_delta + m_trackseg_rad  >= m_trackseg_length)
             m_set_ok = false;
     }
     else
@@ -1379,13 +1388,9 @@ void TEARDROP_JUNCTIONS::CalcSubland(const int aWidthRatio, const int aLengthRat
     if(m_T_tracks)
     {
         m_width_rad = CalcSublandRad(aWidthRatio, m_connected_item_rad, m_trackseg_rad);
-        //m_length = CalcSublandPosDist(aLengthRatio, m_connected_item_rad, m_width_rad);
         m_length = double(m_connected_item_rad>>1) * (double(aLengthRatio) / 100.0);
         int tr_d = m_trackseg_length - m_length - m_width_rad;
         m_connected_pos_length_delta = std::min(m_connected_pos_length_delta, tr_d);
-        //double angle = CosineAlpha(m_width_rad, m_connected_item_rad, m_length);
-        //m_connected_pos_length_delta += m_connected_item_rad - double(m_connected_item_rad) * cos(angle);
-        //TEARDROP::CalcSubland(aWidthRatio, aLengthRatio);
     }
     else
         TEARDROP::CalcSubland(aWidthRatio, aLengthRatio);
@@ -1398,7 +1403,7 @@ void TEARDROP_JUNCTIONS::CalcFillet(const int aWidthRatio, const int aLengthRati
         //uint length_corr = 5 * m_Width / 7;
         uint length_corr = 5 * m_poly_seg_width / 7;
         uint max_dist_item_to_tear = CalcFilletPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
-        uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr - m_trackseg_rad);
+        uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr);
         m_length = dist_item_to_tear - m_connected_pos_length_delta;
         CalcFilletSegs();
         m_length -= length_corr;
@@ -1433,6 +1438,8 @@ void TEARDROP_JUNCTIONS::CalcTeardrop(const int aWidthRatio, const int aLengthRa
         
         m_teardrop_segs_arc_rad = m_length;
         m_teardrop_segs_angle_add = M_PI_2 / double(m_num_arc_segs); 
+        
+        m_can_draw_clearance = (m_length > m_connected_pos_length_delta + m_width_rad + m_clearance);
     }
     else
     {

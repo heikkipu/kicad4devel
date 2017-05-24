@@ -76,6 +76,7 @@ public:
     TrackNodeItem::TRACKNODEITEM* Parse(PCB_PARSER* aParser) throw( IO_ERROR, PARSE_ERROR ) override;
     
     void LoadDefaultParams(void);
+    TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS CopyCurrentParams(const TRACK* aTrackSegAt, const wxPoint& aCurPosAt);
     
     TrackNodeItem::TRACKNODEITEM* Next(const TRACK* aTrackSegAt) const override;
     TrackNodeItem::TRACKNODEITEM* Back(const TRACK* aTrackSegAt) const override;
@@ -233,6 +234,7 @@ private:
     void Menu_AddToTrack(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
     void Menu_RemoveFromTrack(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
     void Menu_ChangeFromTrack(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
+    void Menu_CopyParamsToCurrent(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
 
     wxString ParamsTxtToMenu(const TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS aParams) const;
     inline int MenuToDo_CalcSizeLengthSet(const int aMenuID);

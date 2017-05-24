@@ -271,6 +271,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_PLACE:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CHANGE:
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST + 1:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST + 2:
@@ -2094,6 +2095,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CHANGE_ALL:
         break;
         
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT:
+        if( GetCurItem() )
+            GetBoard()->TrackItems()->RoundedTracksCorners()->CopyCurrentParams( static_cast<TRACK*>(GetCurItem()), 
+                                                        GetCrossHairPosition() 
+                                                      );
+        break;
+
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST + 1:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST + 2:
