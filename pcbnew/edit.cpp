@@ -1539,16 +1539,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_TEARDROP_COPYCURRENT:
         if( GetCurItem() )
             GetBoard()->TrackItems()->Teardrops()->CopyCurrentParams( static_cast<TRACK*>(GetCurItem()), 
-                                                        GetCrossHairPosition() 
-                                                      );
+                                                                      GetCrossHairPosition() );
         break;
 
     case ID_POPUP_PCB_TEARDROP_LOCK_TOGGLE:
         if( GetCurItem() )
         {
             GetBoard()->TrackItems()->Teardrops()->LockToggle( static_cast<TRACK*>(GetCurItem()), 
-                                                 GetCrossHairPosition() 
-                                               );
+                                                               GetCrossHairPosition() );
             OnModify();
         }
         break;
@@ -1557,9 +1555,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() )
         {
             GetBoard()->TrackItems()->Teardrops()->Lock( static_cast<TRACK*>(GetCurItem()), 
-                                           GetCrossHairPosition(),
-                                           &GetBoard()->m_Track
-                                         );
+                                                         GetCrossHairPosition(),
+                                                         &GetBoard()->m_Track);
             OnModify();
         }
         break;
@@ -1568,9 +1565,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() )
         {
             GetBoard()->TrackItems()->Teardrops()->Unlock( static_cast<TRACK*>(GetCurItem()), 
-                                             GetCrossHairPosition(),
-                                             &GetBoard()->m_Track
-                                           );
+                                                           GetCrossHairPosition(),
+                                                           &GetBoard()->m_Track);
             OnModify();
         }
         break;
@@ -1580,8 +1576,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             if( GetCurItem()->Type() == PCB_TRACE_T )
             {
-                GetBoard()->TrackItems()->Teardrops()->Lock(static_cast<TRACK*>(GetCurItem())->GetNetCode(),
-                                                            static_cast<TRACK*>(GetCurItem()));
+                GetBoard()->TrackItems()->Teardrops()->Lock( static_cast<TRACK*>(GetCurItem())->GetNetCode(),
+                                                             static_cast<TRACK*>(GetCurItem()) );
                 OnModify();
             }
         }
@@ -1592,8 +1588,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             if( GetCurItem()->Type() == PCB_TRACE_T )
             {
-                GetBoard()->TrackItems()->Teardrops()->Unlock(static_cast<TRACK*>(GetCurItem())->GetNetCode(),
-                                                              static_cast<TRACK*>(GetCurItem()));
+                GetBoard()->TrackItems()->Teardrops()->Unlock( static_cast<TRACK*>(GetCurItem())->GetNetCode(),
+                                                               static_cast<TRACK*>(GetCurItem()) );
                 OnModify();
             }
         }
