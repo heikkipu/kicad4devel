@@ -1538,8 +1538,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     //Teardrops
     case ID_POPUP_PCB_TEARDROP_COPYCURRENT:
         if( GetCurItem() )
-            GetBoard()->TrackItems()->Teardrops()->CopyCurrentParams( static_cast<TRACK*>(GetCurItem()), 
-                                                                      GetCrossHairPosition() );
+        {
+            TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
+            GetBoard()->TrackItems()->Teardrops()->CopyCurrentParams( cur_track,
+                TrackNodeItem::TrackSegNearestEndpoint(cur_track, GetCrossHairPosition() ) );
+        }
         break;
 
     case ID_POPUP_PCB_TEARDROP_LOCK_TOGGLE:
@@ -1765,8 +1768,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() )
         {
             m_canvas->MoveCursorToCrossHair();
-            GetBoard()->TrackItems()->Teardrops()->Change( GetBoard()->TrackItems()->Teardrops()->Get(
-                static_cast<TRACK*>(GetCurItem()), GetCrossHairPosition()) );
+            TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
+            GetBoard()->TrackItems()->Teardrops()->Change( GetBoard()->TrackItems()->Teardrops()->Get( cur_track,
+                TrackNodeItem::TrackSegNearestEndpoint(cur_track, GetCrossHairPosition()) ) );
             OnModify();
         }
         break;
@@ -1784,7 +1788,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() )
         {
             m_canvas->MoveCursorToCrossHair();
-            GetBoard()->TrackItems()->Teardrops()->Remove( GetBoard()->TrackItems()->Teardrops()->Get( static_cast<TRACK*>(GetCurItem()), GetCrossHairPosition()),  true, false );
+            TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
+            GetBoard()->TrackItems()->Teardrops()->Remove( GetBoard()->TrackItems()->Teardrops()->Get( cur_track,
+                TrackNodeItem::TrackSegNearestEndpoint(cur_track, GetCrossHairPosition()) ),  true, false );
             OnModify();
         }
         break;
@@ -2068,7 +2074,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() )
         {
             m_canvas->MoveCursorToCrossHair();
-            GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( GetBoard()->TrackItems()->RoundedTracksCorners()->Get( static_cast<TRACK*>(GetCurItem()), GetCrossHairPosition()), true, false );
+            TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( GetBoard()->TrackItems()->RoundedTracksCorners()->Get( cur_track, TrackNodeItem::TrackSegNearestEndpoint(cur_track, GetCrossHairPosition())), true, false );
             OnModify();
         }
         break;
@@ -2082,7 +2089,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() )
         {
             m_canvas->MoveCursorToCrossHair();
-            GetBoard()->TrackItems()->RoundedTracksCorners()->Change( GetBoard()->TrackItems()->RoundedTracksCorners()->Get( static_cast<TRACK*>(GetCurItem()), GetCrossHairPosition()), true, false );
+            TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Change( GetBoard()->TrackItems()->RoundedTracksCorners()->Get( cur_track,
+                TrackNodeItem::TrackSegNearestEndpoint(cur_track, GetCrossHairPosition()) ), true, false );
             OnModify();
         }
         break;
@@ -2092,9 +2101,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT:
         if( GetCurItem() )
-            GetBoard()->TrackItems()->RoundedTracksCorners()->CopyCurrentParams( static_cast<TRACK*>(GetCurItem()), 
-                                                        GetCrossHairPosition() 
-                                                      );
+        {
+            TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
+            GetBoard()->TrackItems()->RoundedTracksCorners()->CopyCurrentParams( cur_track,
+                TrackNodeItem::TrackSegNearestEndpoint(cur_track, GetCrossHairPosition()) );
+        }
         break;
 
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST:

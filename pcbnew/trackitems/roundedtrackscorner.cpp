@@ -333,7 +333,7 @@ const EDA_RECT ROUNDEDTRACKSCORNER::GetBoundingBox() const
 
 uint ROUNDEDTRACKSCORNER::GetBoundingRad(void) const
 {
-    return m_trackseg->GetWidth() >> 1;
+    return m_trackseg->GetWidth();
 }
 
 wxString ROUNDEDTRACKSCORNER::GetSelectMenuText() const

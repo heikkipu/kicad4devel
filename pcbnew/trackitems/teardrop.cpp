@@ -385,7 +385,7 @@ uint TEARDROP::GetBoundingRad(void) const
             return m_length >> 1;
     }
     else
-        return m_trackseg->GetWidth() >> 1;
+        return m_trackseg->GetWidth();
 }
 
 uint TEARDROP::GetCalcLength(void) const
