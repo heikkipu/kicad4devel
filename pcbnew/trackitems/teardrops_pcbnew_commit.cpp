@@ -38,12 +38,15 @@ void TEARDROPS::GalCommitPushAdd(BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedo
             m_gal_commit_tracks.push_back(static_cast<TRACK*>(aItem));
 
             //Routing.
-            TOOL_BASE* tool = m_EditFrame->GetToolManager()->FindTool( "pcbnew.InteractiveRouter" );
-            ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>(tool);
-            if(router && (!router->Router()->IsDragging())) 
+            if(m_EditFrame)
             {
-                if(dynamic_cast<BOARD_CONNECTED_ITEM*>(aItem)->GetNetCode() == m_current_routed_track_netcode)
-                    Add(static_cast<TRACK*>(aItem), aUndoRedoList);
+                TOOL_BASE* tool = m_EditFrame->GetToolManager()->FindTool( "pcbnew.InteractiveRouter" );
+                ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>(tool);
+                if(router && (!router->Router()->IsDragging())) 
+                {
+                    if(dynamic_cast<BOARD_CONNECTED_ITEM*>(aItem)->GetNetCode() == m_current_routed_track_netcode)
+                        Add(static_cast<TRACK*>(aItem), aUndoRedoList);
+                }
             }
 
             //Dragging and/or pushing when routing.
@@ -125,20 +128,23 @@ void TEARDROPS::GalCommitPushPrepare(void)
     m_fillet_params_gal = GetShapeParams(TEARDROP::FILLET_T);
     m_subland_params_gal = GetShapeParams(TEARDROP::SUBLAND_T);
 
-    TOOL_BASE* tool = m_EditFrame->GetToolManager()->FindTool( "pcbnew.InteractiveRouter" );
-    ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>(tool);
-    if(router) 
+    if(m_EditFrame)
     {
-        PNS::ITEM* start_item = router->GetStartItem();
-        if(start_item)
+        TOOL_BASE* tool = m_EditFrame->GetToolManager()->FindTool( "pcbnew.InteractiveRouter" );
+        ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>(tool);
+        if(router) 
         {
-            m_current_routed_track_netcode = start_item->Net();
-            m_gal_drag_via_dragged = nullptr;
-            if((start_item->Kind() == PNS::ITEM::VIA_T) && router->Router()->IsDragging())
-                m_gal_drag_via_dragged = static_cast<VIA*>(start_item->Parent());
-            m_gal_drag_vias_added.clear();
-            m_gal_drag_tears_used.clear();
-            m_gal_commit_tracks.clear();
+            PNS::ITEM* start_item = router->GetStartItem();
+            if(start_item)
+            {
+                m_current_routed_track_netcode = start_item->Net();
+                m_gal_drag_via_dragged = nullptr;
+                if((start_item->Kind() == PNS::ITEM::VIA_T) && router->Router()->IsDragging())
+                    m_gal_drag_via_dragged = static_cast<VIA*>(start_item->Parent());
+                m_gal_drag_vias_added.clear();
+                m_gal_drag_tears_used.clear();
+                m_gal_commit_tracks.clear();
+            }
         }
     }
 }

@@ -1048,8 +1048,9 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 #ifdef PCBNEW_WITH_TRACKITEMS
     BOARD* pcb = GetBoard();
     //Junctions. 
-    //pcb->Teardrops()->Repopulate( current_net_code, TEARDROPS::JUNCTIONS_AND_TJUNCTIONS_T, 
-    //                                     &s_ItemsListPicker );
+    pcb->TrackItems()->Teardrops()->Repopulate( current_net_code,
+                                                TEARDROPS::JUNCTIONS_AND_TJUNCTIONS_T,
+                                                &s_ItemsListPicker );
     pcb->TrackItems()->Teardrops()->UpdateListClear();
     pcb->TrackItems()->RoundedTracksCorners()->UpdateListClear();
 #endif
