@@ -305,6 +305,31 @@ private:
     
 //--------------------------------------------------------------------------------------------------- 
 
+//--------------------------------------------------------------------------------------------------- 
+// Length matching fine tuning
+//--------------------------------------------------------------------------------------------------- 
+public:
+    double GetNetLength(const TRACK* aTrack);
+    void SetMsgPanel(const TRACK* aTrack);
+    
+private:
+    class NET_SCAN_NET_LENGTH : public NET_SCAN_BASE
+    {
+    public:
+        NET_SCAN_NET_LENGTH(const TRACKITEMS* aParent, const TRACK* aTrackSeg);
+        ~NET_SCAN_NET_LENGTH() {};
+
+        double GetLength(void) const{ return m_netlength;}
+        
+    protected:
+        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        
+    private:
+        double m_netlength = 0.0;
+    };
+//--------------------------------------------------------------------------------------------------- 
+
+    
 }; //TRACKITEMS
 
 #endif // TRACKITEMS_H

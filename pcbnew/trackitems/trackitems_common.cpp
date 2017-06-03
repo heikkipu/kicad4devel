@@ -605,3 +605,87 @@ bool TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::ExecuteAt(const TRACK* aTrackSeg)
     }
     return false;
 }
+
+//----------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------
+// Length match.
+//----------------------------------------------------------------------------------------
+
+TRACKITEMS::NET_SCAN_NET_LENGTH::NET_SCAN_NET_LENGTH(const TRACKITEMS* aParent, const TRACK* aTrackSeg) : NET_SCAN_BASE(aTrackSeg, aParent)
+{
+    m_netlength = 0.0;
+}
+
+bool TRACKITEMS::NET_SCAN_NET_LENGTH::ExecuteAt(const TRACK* aTrackSeg)
+{
+    if(aTrackSeg->Type() == PCB_TRACE_T)
+    {
+        if(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSeg)))
+            m_netlength += dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSeg))->GetLengthVisible();
+        else
+            m_netlength += aTrackSeg->GetLength();
+    }
+    
+    if( aTrackSeg->Type() == PCB_ROUNDEDTRACKSCORNER_T )
+        m_netlength += dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(aTrackSeg))->GetLengthVisible();
+    
+    return false;
+}
+
+double TRACKITEMS::GetNetLength(const TRACK* aTrack)
+{
+    double length = 0.0;
+    if(aTrack && (aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_ROUNDEDTRACKSCORNER_T))
+    {
+        std::unique_ptr<NET_SCAN_NET_LENGTH> net_length(new NET_SCAN_NET_LENGTH(this, aTrack));
+        if(net_length)
+        {
+            net_length->Execute();
+            length = net_length->GetLength();
+        }
+    }
+    return length;
+}
+
+void TRACKITEMS::SetMsgPanel(const TRACK* aTrack)
+{
+    if(aTrack && (aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_ROUNDEDTRACKSCORNER_T ))
+    {
+        MSG_PANEL_ITEMS msg_panel_items;
+        const_cast<TRACK*>(aTrack)->GetMsgPanelInfo(msg_panel_items);
+
+        if(m_EditFrame)
+        {
+            wxString length_txt = m_EditFrame->LengthDoubleToString(GetNetLength(aTrack));
+            if(!msg_panel_items.empty())
+            {
+                for(MSG_PANEL_ITEMS::iterator panel_item = msg_panel_items.begin() ; panel_item != msg_panel_items.end(); ++panel_item)
+                {
+                    if( panel_item->GetUpperText() ==  _("Length"))
+                    {
+                        panel_item->SetLowerText(length_txt);
+                        break;
+                    }
+                }
+                m_EditFrame->SetMsgPanel(msg_panel_items);
+            }
+            else
+                m_EditFrame->AppendMsgPanel( _("Net Length"), length_txt, DARKCYAN );
+        }
+    }
+}
+
+/*
+void TRACKITEMS::NetLength_AddTracks()
+{
+    int netcode = aTrack->GetNetCode();
+    m_showlength_tracks.clear();
+    for(TRACK *track = m_Board->m_Track; track != nullptr; track = track->Next())
+    {
+        if(track->GetNetCode() == netcode)
+            m_showlength_tracks.insert(track);
+    }
+}
+*/
+

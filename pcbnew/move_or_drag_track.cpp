@@ -205,11 +205,15 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     displ_opts->m_DisplayPcbTrackFill = tmp;
 
     // Display track length
+#ifdef PCBNEW_WITH_TRACKITEMS
+    pcb->TrackItems()->SetMsgPanel( track );
+#else
     if( track )
     {
         PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
         frame->SetMsgPanel( track );
     }
+#endif
 }
 
 
@@ -524,8 +528,10 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
         r_track_end->Draw( aPanel, aDC, draw_mode );
 
     displ_opts->m_DisplayPcbTrackFill = cur_displOpt_trackFill;
-#endif
+    pcb->TrackItems()->SetMsgPanel( Track );
+#else
     frame->SetMsgPanel( Track );
+#endif
 }
 
 
@@ -966,11 +972,13 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
 #ifdef PCBNEW_WITH_TRACKITEMS
     GetBoard()->TrackItems()->Teardrops()->AddToDragList( track, g_DragSegmentList );
     GetBoard()->TrackItems()->RoundedTracksCorners()->AddToDragList( track, g_DragSegmentList );
+    
     if( TrackToStartPoint )
     {
         GetBoard()->TrackItems()->Teardrops()->AddToDragList( TrackToStartPoint, g_DragSegmentList ); 
         GetBoard()->TrackItems()->RoundedTracksCorners()->AddToDragList( TrackToStartPoint, g_DragSegmentList );
     }
+    
     if( TrackToEndPoint )
     {
         GetBoard()->TrackItems()->Teardrops()->AddToDragList( TrackToEndPoint, g_DragSegmentList ); 
