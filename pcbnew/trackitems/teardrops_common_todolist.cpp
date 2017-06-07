@@ -70,6 +70,28 @@ void TEARDROPS::UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     }
 }
 
+void TEARDROPS::UpdateListDo_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase)
+{
+    if(m_update_list)
+    {
+        for(TEARDROP* tear : *m_update_list)
+        {
+            TRACK* track_seg = tear->GetTrackSeg();
+            if((track_seg == g_CurrentTrackSegment) || track_seg == g_CurrentTrackSegment->Back()) 
+            {
+                if(aErase)
+                    tear->Draw(aPanel, aDC, GR_XOR);
+                tear->Update();
+                tear->Draw(aPanel, aDC, GR_XOR);
+            }
+            else
+                tear->Draw(aPanel, aDC, GR_OR);
+        }
+        
+        GRSetDrawMode( aDC, GR_XOR );
+    }
+}
+
 void TEARDROPS::UpdateListDo_UndoRedo(void)
 {
     if(m_update_list)

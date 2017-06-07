@@ -131,10 +131,12 @@ public:
     void UpdateListAdd(const TRACK* aTrackSegFrom);
     void UpdateListDo(void);
     void UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase);
+    void UpdateListDo_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase);
     void UpdateListDo_UndoRedo(void);
     void UpdateListDo_BlockDuplicate(const wxPoint aMoveVector, PICKED_ITEMS_LIST* aUndoRedoList);
 
     void UpdateList_DrawTracks(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode);
+    void UpdateList_DrawTracks_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC);
     RoundedCornerTrack_Container* UpdateList_GetUpdatedTracks(void) const { return m_update_tracks_list; }
 
 private:

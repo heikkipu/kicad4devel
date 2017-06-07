@@ -307,6 +307,7 @@ public:
     void UpdateListAdd(const ROUNDEDTRACKSCORNERS::RoundedCornerTrack_Container* aRoundedTracks);
     void UpdateListDo(void);
     void UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase);
+    void UpdateListDo_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase);
     void UpdateListDo_UndoRedo(void);
     void UpdateListDo_BlockDuplicate(const wxPoint aMoveVector, PICKED_ITEMS_LIST* aUndoRedoList);
 

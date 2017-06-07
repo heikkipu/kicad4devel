@@ -675,17 +675,3 @@ void TRACKITEMS::SetMsgPanel(const TRACK* aTrack)
         }
     }
 }
-
-/*
-void TRACKITEMS::NetLength_AddTracks()
-{
-    int netcode = aTrack->GetNetCode();
-    m_showlength_tracks.clear();
-    for(TRACK *track = m_Board->m_Track; track != nullptr; track = track->Next())
-    {
-        if(track->GetNetCode() == netcode)
-            m_showlength_tracks.insert(track);
-    }
-}
-*/
-

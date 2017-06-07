@@ -81,7 +81,36 @@ void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks(EDA_DRAW_PANEL* aPanel, wxDC* a
 {
     if(m_update_tracks_list)
         for(auto r_t: *m_update_tracks_list )
-            r_t->Draw( aPanel, aDC, aDrawMode );
+            if(r_t)
+                r_t->Draw( aPanel, aDC, aDrawMode );
+}
+
+void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC)
+{
+    if(m_update_tracks_list)
+    {
+        TRACK* seg_third_back = nullptr;
+        TRACK* seg_back = g_CurrentTrackSegment->Back();
+        if(seg_back)
+        {
+            seg_third_back = seg_back->Back();
+            for(TRACK* t = seg_third_back; t; seg_third_back = seg_third_back->Back())
+                if(seg_third_back->Type() == PCB_TRACE_T)
+                    break;
+        }
+                
+        for(auto r_t: *m_update_tracks_list )
+        {
+            if(r_t)
+            {
+                if((r_t == g_CurrentTrackSegment) || (r_t == seg_back) || (r_t == seg_third_back))
+                    r_t->Draw( aPanel, aDC, GR_XOR );
+                else
+                    r_t->Draw( aPanel, aDC, GR_OR );
+            }
+        }
+    }   
+    GRSetDrawMode( aDC, GR_XOR );
 }
 
 void ROUNDEDTRACKSCORNERS::UpdateListDo(void)
@@ -122,6 +151,38 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DR
         for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
             if(corner)
                 corner->Draw(aPanel, aDC, aDrawMode);
+    }
+}
+
+void ROUNDEDTRACKSCORNERS::UpdateListDo_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase)
+{
+    if(m_update_tracks_list)
+        for(auto r_t: *m_update_tracks_list )
+            r_t->ResetVisibleEndpoints();
+    
+    if(m_update_list)
+    {
+        for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
+            if(corner)
+                if(aErase)
+                    if((corner->GetTrackSeg() == g_CurrentTrackSegment) || corner->GetTrackSeg() == g_CurrentTrackSegment->Back() || (corner->GetTrackSegSecond() == g_CurrentTrackSegment) || corner->GetTrackSegSecond() == g_CurrentTrackSegment->Back()) 
+                        corner->Draw(aPanel, aDC, GR_XOR);
+        for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
+            if(corner)
+                corner->ResetVisibleEndpoints();
+        for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
+            if(corner)
+                corner->Update();
+        for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
+            if(corner)
+            {
+                if((corner->GetTrackSeg() == g_CurrentTrackSegment) || corner->GetTrackSeg() == g_CurrentTrackSegment->Back() || (corner->GetTrackSegSecond() == g_CurrentTrackSegment) || corner->GetTrackSegSecond() == g_CurrentTrackSegment->Back()) 
+                    corner->Draw(aPanel, aDC, GR_XOR);
+                else
+                    corner->Draw(aPanel, aDC, GR_OR);
+            }
+            
+        GRSetDrawMode( aDC, GR_XOR );
     }
 }
 

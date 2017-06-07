@@ -414,7 +414,7 @@ void ROUNDEDTRACKSCORNER::DrawItem(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const COLO
         else
         {
             //Corner is drawn arc, but it consists segments.
-            if(m_angle_btw_tracks < M_PI)
+            if((m_angle_btw_tracks < M_PI) && (m_angle_btw_tracks > 0.0))
                 GRArc1(clip_box, aDC, m_pos_start, m_pos_end, m_arc_center_pos, m_Width, aColor );
             else
                 GRArc1(clip_box, aDC, m_pos_end, m_pos_start, m_arc_center_pos, m_Width, aColor );

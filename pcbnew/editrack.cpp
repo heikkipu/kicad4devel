@@ -912,7 +912,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     if( aErase )
     {
 #ifdef PCBNEW_WITH_TRACKITEMS
-        pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks( aPanel, aDC, GR_XOR );
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks_Route( aPanel, aDC );
         if(!pcb->TrackItems()->RoundedTracksCorners()->IsOn())
 #endif
         DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
@@ -1006,12 +1006,12 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         for( TRACK* tr = g_CurrentTrackList; tcount > 0 && tr; tcount--, tr = tr->Next() )
             if(dynamic_cast<ROUNDEDCORNERTRACK*>(tr))
                 pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
-        pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo( aPanel, aDC, GR_XOR, aErase );
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo_Route( aPanel, aDC, aErase );
         pcb->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(arc_cor));
-        pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks( aPanel, aDC, GR_XOR );
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks_Route( aPanel, aDC );
         pcb->TrackItems()->Teardrops()->UpdateListClear();
         pcb->TrackItems()->Teardrops()->UpdateListAdd( pcb->TrackItems()->RoundedTracksCorners()->UpdateList_GetUpdatedTracks() );
-        pcb->TrackItems()->Teardrops()->UpdateListDo( aPanel, aDC, GR_XOR, aErase );       
+        pcb->TrackItems()->Teardrops()->UpdateListDo_Route( aPanel, aDC, aErase );       
     }
     else
         pcb->TrackItems()->Teardrops()->Update(g_CurrentTrackSegment->Back());
@@ -1019,9 +1019,9 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                                                     g_CurrentTrackSegment,
                                                     boardViaRadius, aErase,
                                                     &g_Track_45_Only_Allowed );
+    
     if(!pcb->TrackItems()->RoundedTracksCorners()->IsOn())
 #endif
-
     DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
@@ -1033,6 +1033,17 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                                            boardViaRadius, viaRadiusWithClearence, color);
 
     }
+
+#ifdef PCBNEW_WITH_TRACKITEMS
+    //Draw vias once in OR mode. They do not move.
+    if(pcb->TrackItems()->RoundedTracksCorners()->IsOn())
+    {
+        int nbsegment = g_CurrentTrackList.GetCount();
+        for( TRACK* track = g_FirstTrackSegment; nbsegment > 0 && track; nbsegment--, track = track->Next() )
+            if( track->Type() == PCB_VIA_T )
+                track->Draw( aPanel, aDC, GR_OR );
+    }
+#endif
 
     /* Display info about current segment and the full new track:
      *  Choose the interesting segment: because we are using a 2 segments step,
