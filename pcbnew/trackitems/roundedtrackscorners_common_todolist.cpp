@@ -85,7 +85,7 @@ void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks(EDA_DRAW_PANEL* aPanel, wxDC* a
                 r_t->Draw( aPanel, aDC, aDrawMode );
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC)
+void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const bool aOnlyChanged)
 {
     if(m_update_tracks_list)
     {
@@ -94,9 +94,12 @@ void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks_Route(EDA_DRAW_PANEL* aPanel, w
         if(seg_back)
         {
             seg_third_back = seg_back->Back();
-            for(TRACK* t = seg_third_back; t; seg_third_back = seg_third_back->Back())
-                if(seg_third_back->Type() == PCB_TRACE_T)
+            for(TRACK* t = seg_third_back; t; t=t->Back())
+                if(t->Type() == PCB_TRACE_T)
+                {
+                    seg_third_back = t;
                     break;
+                }
         }
                 
         for(auto r_t: *m_update_tracks_list )
@@ -106,7 +109,8 @@ void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks_Route(EDA_DRAW_PANEL* aPanel, w
                 if((r_t == g_CurrentTrackSegment) || (r_t == seg_back) || (r_t == seg_third_back))
                     r_t->Draw( aPanel, aDC, GR_XOR );
                 else
-                    r_t->Draw( aPanel, aDC, GR_OR );
+                    if(!aOnlyChanged)
+                        r_t->Draw( aPanel, aDC, GR_OR );
             }
         }
     }   

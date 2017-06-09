@@ -362,11 +362,19 @@ bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::ExecuteAt(const TRACK* aTrackSeg)
 
 void ROUNDEDTRACKSCORNERS::Add(const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList)
 {
-    std::unique_ptr<NET_SCAN_NET_ADD> net(new NET_SCAN_NET_ADD(aNetCodeTo, this, aUndoRedoList));
-    if(net)
+    std::unique_ptr<NET_SCAN_NET_ADD> net_add(new NET_SCAN_NET_ADD(aNetCodeTo, this, aUndoRedoList));
+    if(net_add)
     {
-        net->Execute();
+        net_add->Execute();
     }
+}
+
+void ROUNDEDTRACKSCORNERS::Add(const int aNetCodeTo)
+{
+    PICKED_ITEMS_LIST undoredo_items;
+    Add(aNetCodeTo, &undoredo_items);
+    if(m_EditFrame && undoredo_items.GetCount() )
+        m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_NEW);
 }
 
 void ROUNDEDTRACKSCORNERS::Remove(const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo)
@@ -473,17 +481,21 @@ void ROUNDEDTRACKSCORNERS::Remove(const int aNetCodeFrom, PICKED_ITEMS_LIST* aUn
     DLIST<TRACK>* tracks_list = &m_Board->m_Track;
     m_recreate_list->clear();
 
-    std::unique_ptr<NET_SCAN_NET_REMOVE> net(new NET_SCAN_NET_REMOVE(aNetCodeFrom, this, aUndoRedoList, m_recreate_list, aLockedToo));
-    if(net)
-        net->Execute();
+    std::unique_ptr<NET_SCAN_NET_REMOVE> net_remove(new NET_SCAN_NET_REMOVE(aNetCodeFrom, this, aUndoRedoList, m_recreate_list, aLockedToo));
+    if(net_remove)
+        net_remove->Execute();
     
     for(ROUNDEDTRACKSCORNER* corner : *m_recreate_list)
-    {
         if(corner)
-        {
             Delete(corner, tracks_list, aUndoRedoList);
-        }
-    }
+}
+
+void ROUNDEDTRACKSCORNERS::Remove(const int aNetCodeFrom, const bool aUndo, const bool aLockedToo)
+{
+    PICKED_ITEMS_LIST undoredo_items;
+    Remove(aNetCodeFrom, &undoredo_items, aLockedToo);
+    if(m_EditFrame && aUndo && undoredo_items.GetCount() )
+        m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_DELETED);
 }
 
 void ROUNDEDTRACKSCORNERS::Change(const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo)

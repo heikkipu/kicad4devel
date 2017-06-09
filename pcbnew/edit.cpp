@@ -268,7 +268,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_TRACKS_MARK_SHARP_ANGLES:
         //rounded corners
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_PLACE:
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_PLACE_NET:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE:
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE_NET:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CHANGE:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST:
@@ -2065,6 +2067,17 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_PLACE_NET:
+        if( GetCurItem() && GetCurItem()->Type() == PCB_TRACE_T )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Add( static_cast<TRACK*>(GetCurItem())->GetNetCode() );
+            if( static_cast<TRACK*>(GetCurItem())->GetNetCode() > 0 )
+                TestNetConnection( nullptr, static_cast<TRACK*>(GetCurItem())->GetNetCode() );
+            OnModify();
+        }
+        break;
+
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_PLACE_ALL:
         GetBoard()->TrackItems()->RoundedTracksCorners()->Add(&GetBoard()->m_Track);
         OnModify();
@@ -2076,6 +2089,16 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->MoveCursorToCrossHair();
             TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
             GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( GetBoard()->TrackItems()->RoundedTracksCorners()->Get( cur_track, TrackNodeItem::TrackSegNearestEndpoint(cur_track, GetCrossHairPosition())), true, false );
+            OnModify();
+        }
+        break;
+
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE_NET:
+        if( GetCurItem() )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( static_cast<TRACK*>(GetCurItem())->GetNetCode(), true, false );
             OnModify();
         }
         break;

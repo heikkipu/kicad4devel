@@ -912,7 +912,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     if( aErase )
     {
 #ifdef PCBNEW_WITH_TRACKITEMS
-        pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks_Route( aPanel, aDC );
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks_Route( aPanel, aDC, true );
         if(!pcb->TrackItems()->RoundedTracksCorners()->IsOn())
 #endif
         DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
@@ -1008,7 +1008,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                 pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
         pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo_Route( aPanel, aDC, aErase );
         pcb->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(arc_cor));
-        pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks_Route( aPanel, aDC );
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks_Route( aPanel, aDC, false );
         pcb->TrackItems()->Teardrops()->UpdateListClear();
         pcb->TrackItems()->Teardrops()->UpdateListAdd( pcb->TrackItems()->RoundedTracksCorners()->UpdateList_GetUpdatedTracks() );
         pcb->TrackItems()->Teardrops()->UpdateListDo_Route( aPanel, aDC, aErase );       

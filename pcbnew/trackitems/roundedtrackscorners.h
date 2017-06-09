@@ -58,12 +58,14 @@ public:
     //All
     void Add(const DLIST<TRACK>* aTracksAt);
     void Add(const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList);
+    void Add(const int aNetCodeTo);
 
     void Remove(const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo);
     void Remove(const TRACK* aTrackItemFrom, PICKED_ITEMS_LIST* aUndoRedoList, const bool aLockedToo);
     void Remove(const TRACK* aTrackItemFrom, BOARD_COMMIT& aCommit, const bool aLockedToo);
     void Remove(DLIST<TRACK>* aTracksAt); //All
     void Remove(const int aNetCodeFrom, PICKED_ITEMS_LIST* aUndoRedoList, const bool aLockedToo);
+    void Remove(const int aNetCodeFrom, const bool aUndo, const bool aLockedToo);
     
     void Change(const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo);
 
@@ -136,7 +138,7 @@ public:
     void UpdateListDo_BlockDuplicate(const wxPoint aMoveVector, PICKED_ITEMS_LIST* aUndoRedoList);
 
     void UpdateList_DrawTracks(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode);
-    void UpdateList_DrawTracks_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC);
+    void UpdateList_DrawTracks_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const bool aOnlyChanged);
     RoundedCornerTrack_Container* UpdateList_GetUpdatedTracks(void) const { return m_update_tracks_list; }
 
 private:
@@ -237,6 +239,8 @@ private:
     void Menu_RemoveFromTrack(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
     void Menu_ChangeFromTrack(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
     void Menu_CopyParamsToCurrent(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
+    void Menu_AddToNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
+    void Menu_RemoveFromNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
 
     wxString ParamsTxtToMenu(const TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS aParams) const;
     inline int MenuToDo_CalcSizeLengthSet(const int aMenuID);
