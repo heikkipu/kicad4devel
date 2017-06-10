@@ -403,7 +403,7 @@ void ROUNDEDTRACKSCORNER::DrawItem(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const COLO
         EDA_RECT* clip_box = aPanel->GetClipBox();
         bool showClearance = (IsCopperLayer(m_trackseg->GetLayer()) && ((aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS && ( m_trackseg->IsDragging() || m_trackseg->IsMoving() || m_trackseg->IsNew()  ||  m_trackseg_second->IsDragging() || m_trackseg_second->IsMoving() || m_trackseg_second->IsNew() )) || ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ))) ;//&& m_can_draw_clearance;
         
-        if((!aDisplOpts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) || m_draw_mode_unfill))
+        if((!aDisplOpts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) || m_drawmode_unfill))
         {
             for(int n = 0; n < m_num_arc_segs; ++n)
             {
@@ -413,11 +413,18 @@ void ROUNDEDTRACKSCORNER::DrawItem(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const COLO
         }
         else
         {
-            //Corner is drawn arc, but it consists segments.
-            if((m_angle_btw_tracks < M_PI) && (m_angle_btw_tracks > 0.0))
-                GRArc1(clip_box, aDC, m_pos_start, m_pos_end, m_arc_center_pos, m_Width, aColor );
+            if(m_draw_with_segments)
+            {
+                for(int n = 0; n < m_num_arc_segs; ++n)
+                    GRFillCSegm(clip_box, aDC, m_seg_points[n].x + aOffset.x,m_seg_points[n].y + aOffset.y, m_seg_points[n + 1].x + aOffset.x, m_seg_points[n + 1].y + aOffset.y, m_Width, aColor );
+            }
             else
-                GRArc1(clip_box, aDC, m_pos_end, m_pos_start, m_arc_center_pos, m_Width, aColor );
+            {
+                if(m_angle_btw_tracks < M_PI)
+                    GRArc1(clip_box, aDC, m_pos_start, m_pos_end, m_arc_center_pos, m_Width, aColor );
+                else
+                    GRArc1(clip_box, aDC, m_pos_end, m_pos_start, m_arc_center_pos, m_Width, aColor );
+            }
         }
 
         if(showClearance)

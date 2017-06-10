@@ -125,8 +125,9 @@ namespace TrackNodeItem
         bool m_trackseg_second_startpos_is_pos;
 
         //Own drawing modes. 
-        bool m_draw_mode_unfill{false};     //Graphic Edit.
-        
+        bool m_drawmode_unfill{false};     //Graphic Edit.
+        bool m_draw_with_segments{true};
+            
         bool m_set_ok{true};
         void SetArc(void);
         void SetPoints(void);

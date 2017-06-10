@@ -393,13 +393,16 @@ void SCAN_NET_BASE::Execute(void)
             {
                 if(track_seg->GetNetCode() == net_code)
                 {
+                    TRACK* next_seg = nullptr;
+                    if(m_reverse)
+                        (n)? next_seg = track_seg->Next() : next_seg = track_seg->Back();
+                    else
+                        (n)? next_seg = track_seg->Back() : next_seg = track_seg->Next();
+                    
                     if(ExecuteAt(track_seg)) //Break when virtual function true. MUST REMEMBER!
                         return;
-                
-                    if(m_reverse)
-                        (n)? track_seg = track_seg->Next() : track_seg = track_seg->Back();
-                    else
-                        (n)? track_seg = track_seg->Back() : track_seg = track_seg->Next();
+                    
+                    track_seg = next_seg;
                 }
                 else
                     track_seg = nullptr;

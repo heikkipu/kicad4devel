@@ -362,11 +362,13 @@ bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::ExecuteAt(const TRACK* aTrackSeg)
 
 void ROUNDEDTRACKSCORNERS::Add(const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList)
 {
+    std::unique_ptr<NET_SCAN_NET_CONVERT> net_convert(new NET_SCAN_NET_CONVERT(aNetCodeTo, this, aUndoRedoList));
+    if(net_convert)
+        net_convert->Execute();
+    
     std::unique_ptr<NET_SCAN_NET_ADD> net_add(new NET_SCAN_NET_ADD(aNetCodeTo, this, aUndoRedoList));
     if(net_add)
-    {
         net_add->Execute();
-    }
 }
 
 void ROUNDEDTRACKSCORNERS::Add(const int aNetCodeTo)
@@ -375,6 +377,23 @@ void ROUNDEDTRACKSCORNERS::Add(const int aNetCodeTo)
     Add(aNetCodeTo, &undoredo_items);
     if(m_EditFrame && undoredo_items.GetCount() )
         m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_NEW);
+}
+
+ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::NET_SCAN_NET_CONVERT(const int aNet, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList) : NET_SCAN_BASE(nullptr, aParent)
+{
+    m_picked_items = aUndoRedoList;
+    DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track; 
+    m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode(aNet);
+}
+
+bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::ExecuteAt(const TRACK* aTrackSeg)
+{
+    if(aTrackSeg->Type() == PCB_TRACE_T)
+    {
+        TRACK* track = static_cast<TRACK*>(const_cast<TRACK*>(aTrackSeg));
+        track = static_cast<ROUNDEDTRACKSCORNERS*>(m_Parent)->ConvertTrackInList(track, m_picked_items);
+    }
+    return false;
 }
 
 void ROUNDEDTRACKSCORNERS::Remove(const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo)

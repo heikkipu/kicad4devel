@@ -264,6 +264,18 @@ private:
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
     };
 
+    class NET_SCAN_NET_CONVERT : public NET_SCAN_BASE
+    {
+    public:
+        NET_SCAN_NET_CONVERT(const int aNet, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
+        ~NET_SCAN_NET_CONVERT() {};
+
+    protected:
+        bool ExecuteAt(const TRACK* aTrackSeg) override;
+
+        PICKED_ITEMS_LIST* m_picked_items {nullptr};
+    };
+
     class NET_SCAN_NET_REMOVE : public NET_SCAN_BASE
     {
     public:
