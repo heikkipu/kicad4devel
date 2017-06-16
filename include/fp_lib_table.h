@@ -131,18 +131,16 @@ public:
      *
      * @throw IO_ERROR if \a aNickName cannot be found.
      */
-    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
+    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName );
 
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
     /**
-     * Function FootprintEnumerate
-     * returns a list of footprint names contained within the library given by
-     * @a aNickname.
+     * Return a list of footprint names contained within the library given by @a aNickname.
+     *
+     * @param aFootprintNames is the list to fill with the footprint names found in \a aNickname
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
-     *
-     * @return wxArrayString - is the array of available footprint names inside a library
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
@@ -249,8 +247,7 @@ public:
      *          is thrown in the case where aFootprintName cannot be found.
      * @throw   PARSE_ERROR if @a aFootprintId is not parsed OK.
      */
-    MODULE* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
-        throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
+    MODULE* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId );
 
     /**
      * Function LoadGlobalTable
@@ -265,8 +262,7 @@ public:
      * @throw IO_ERROR if an error occurs attempting to load the footprint library
      *                 table.
      */
-    static bool LoadGlobalTable( FP_LIB_TABLE& aTable )
-        throw (IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
+    static bool LoadGlobalTable( FP_LIB_TABLE& aTable );
 
     /**
      * Function GetGlobalTableFileName

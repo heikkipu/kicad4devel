@@ -43,6 +43,7 @@ ROUNDEDTRACKSCORNER::ROUNDEDTRACKSCORNER(const BOARD_ITEM* aParent, const TRACK*
     m_trackseg_second = const_cast<TRACK*>(aTrackSegSecond);
     m_length_set = 0;
     m_length_ratio = 100;
+    m_draw_with_segments = true;
     
     m_connected_pos = aPosition;
     CallConstructor(aTrackSeg, aParams, aCheckNullTrack);
@@ -420,10 +421,10 @@ void ROUNDEDTRACKSCORNER::DrawItem(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const COLO
             }
             else
             {
-                if(m_angle_btw_tracks < M_PI)
-                    GRArc1(clip_box, aDC, m_pos_start, m_pos_end, m_arc_center_pos, m_Width, aColor );
-                else
+                if(m_angle_btw_tracks > M_PI)
                     GRArc1(clip_box, aDC, m_pos_end, m_pos_start, m_arc_center_pos, m_Width, aColor );
+                else
+                    GRArc1(clip_box, aDC, m_pos_start, m_pos_end, m_arc_center_pos, m_Width, aColor );
             }
         }
 

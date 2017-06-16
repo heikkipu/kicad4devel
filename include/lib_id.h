@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2010-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,9 +70,9 @@ public:
      *
      * @param aId is a string to be parsed into the LIB_ID object.
      */
-    LIB_ID( const std::string& aId ) throw( PARSE_ERROR );
+    LIB_ID( const std::string& aId );
 
-    LIB_ID( const wxString& aId ) throw( PARSE_ERROR );
+    LIB_ID( const wxString& aId );
 
     /**
      * This LIB_ID ctor is a special version which ignores the parsing due to symbol
@@ -161,8 +161,7 @@ public:
      * @throw PARSE_ERROR if any of the pieces are illegal.
      */
     static UTF8 Format( const UTF8& aLibNickname, const UTF8& aLibItemName,
-                        const UTF8& aRevision = "" )
-        throw( PARSE_ERROR );
+                        const UTF8& aRevision = "" );
 
     /**
      * Function IsValid
@@ -199,16 +198,14 @@ public:
     bool empty() const { return nickname.empty() && item_name.empty() && revision.empty(); }
 
     /**
-     * Function Compare
-     *
-     * compares the contents of LIB_ID objects by performing a std::string comparison of the
+     * Compare the contents of LIB_ID objects by performing a std::string comparison of the
      * library nickname, library entry name, and revision strings respectively.
      *
      * @param aLibId is the LIB_ID to compare against.
      *
      * @return -1 if less than \a aLibId, 1 if greater than \a aLibId, and 0 if equal to \a aLibId.
      */
-    int compare( const LIB_ID& aLIB_ID ) const;
+    int compare( const LIB_ID& aLibId ) const;
 
     bool operator < ( const LIB_ID& aLibId ) const { return this->compare( aLibId ) < 0; }
     bool operator > ( const LIB_ID& aLibId ) const { return this->compare( aLibId ) > 0; }

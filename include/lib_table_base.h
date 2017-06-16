@@ -300,12 +300,10 @@ public:
     virtual void Parse( LIB_TABLE_LEXER* aLexer ) = 0;
 
     /**
-     * Function Format
-     *
-     * Generates the table s-expression format to the \a aOutput with an indention level
+     * Generate the table in s-expression format to \a aOutput with an indention level
      * of \a aIndentLevel.
      *
-     * @param aOutput is the #OUTPUTFORMATER to format the table into.
+     * @param aOutput is the #OUTPUTFORMATTER to format the table into.
      * @param aIndentLevel is the indentation level (2 spaces) to indent.
      *
      * @throw IO_ERROR if an I/O error occurs during output.
@@ -415,7 +413,7 @@ public:
      * @throw IO_ERROR if an error occurs attempting to load the footprint library
      *                 table.
      */
-    void Load( const wxString& aFileName ) throw( IO_ERROR );
+    void Load( const wxString& aFileName );
 
     /**
      * Function Save
@@ -424,8 +422,7 @@ public:
      *
      * @param aFileName is the name of the file to write to.
      */
-    void Save( const wxString& aFileName ) const
-        throw( IO_ERROR, boost::interprocess::lock_exception );
+    void Save( const wxString& aFileName ) const;
 
     /**
      * Search the paths all of the #LIB_TABLE_ROWS of the #LIB_TABLE and add all of the

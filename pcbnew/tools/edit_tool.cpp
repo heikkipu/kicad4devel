@@ -202,6 +202,7 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
                       || SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     menu.AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
@@ -1112,7 +1113,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
 
-    frame()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    frame()->SetNoToolSelected();
 
     return 0;
 }

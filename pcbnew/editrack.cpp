@@ -689,6 +689,8 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
                 GetBoard()->TrackItems()->RoundedTracksCorners()->Add(tr, &s_ItemsListPicker);
             GetBoard()->TrackItems()->Teardrops()->Add(tr, &s_ItemsListPicker );
         }
+        GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( netcode, &s_ItemsListPicker, true );
+        GetBoard()->TrackItems()->RoundedTracksCorners()->Recreate( netcode, &s_ItemsListPicker );
 #endif
         SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
         s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items

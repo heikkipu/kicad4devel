@@ -205,7 +205,7 @@ TOOL_ACTION PCB_ACTIONS::zoomTool( "pcbnew.Control.zoomTool",
         _( "Zoom to Selection" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
-        AS_GLOBAL, ' ',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::switchCursor( "pcbnew.Control.switchCursor",
@@ -774,7 +774,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     assert( picker );
 
     // TODO it will not check the toolbar button in the module editor, as it uses a different ID..
-    m_frame->SetToolID( ID_PCB_DELETE_ITEM_BUTT, wxCURSOR_PENCIL, _( "Delete item" ) );
+    m_frame->SetToolID( ID_PCB_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
     picker->SetSnapping( false );
     picker->SetClickHandler( std::bind( deleteItem, m_toolMgr, _1 ) );
     picker->Activate();

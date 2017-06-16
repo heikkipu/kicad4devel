@@ -173,8 +173,8 @@ namespace TrackNodeItems
     // Save, Load
     //-----------------------------------------------------------------------------------------------------------   
     public:
-        virtual void Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const throw( IO_ERROR ) = 0;
-        virtual TrackNodeItem::TRACKNODEITEM* Parse(PCB_PARSER* aParser) throw( IO_ERROR, PARSE_ERROR ) = 0;
+        virtual void Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const = 0;
+        virtual TrackNodeItem::TRACKNODEITEM* Parse(PCB_PARSER* aParser) = 0;
         
     protected:
         TRACK* GetTrackSegment(const wxPoint aStart, const wxPoint aEnd, const int aLayer, const int aNetCode) const;

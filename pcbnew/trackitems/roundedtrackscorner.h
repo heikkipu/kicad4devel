@@ -100,6 +100,8 @@ namespace TrackNodeItem
     protected:
         bool CallConstructor(const TRACK* aTrackSeg, const PARAMS aParams, const bool aCheckNullTrack);
 
+        bool m_draw_with_segments{false};
+        
         void DrawItem(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const COLOR4D aColor, const wxPoint& aOffset, const DISPLAY_OPTIONS* aDisplOpts) override;
         void DrawItem(KIGFX::GAL* aGal, const bool aIsSketch ) override;
 
@@ -126,7 +128,6 @@ namespace TrackNodeItem
 
         //Own drawing modes. 
         bool m_drawmode_unfill{false};     //Graphic Edit.
-        bool m_draw_with_segments{true};
             
         bool m_set_ok{true};
         void SetArc(void);

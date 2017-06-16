@@ -29,7 +29,7 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // Save
 //-----------------------------------------------------------------------------------------------------/
-void ROUNDEDTRACKSCORNERS::Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const throw( IO_ERROR )
+void ROUNDEDTRACKSCORNERS::Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const 
 {
     bool corners = false;
     ROUNDEDTRACKSCORNER::PARAMS prev_params = {0, 0};
@@ -73,7 +73,7 @@ void ROUNDEDTRACKSCORNERS::Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) 
 //-----------------------------------------------------------------------------------------------------/
 // Load
 //-----------------------------------------------------------------------------------------------------/
-TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Parse(PCB_PARSER* aParser) throw( IO_ERROR, PARSE_ERROR )
+TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Parse(PCB_PARSER* aParser) 
 {
     using namespace PCB_KEYS_T;
     wxCHECK_MSG( aParser->CurTok() == T_roundedtrackscorner, nullptr,

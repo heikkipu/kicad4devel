@@ -316,7 +316,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         if( GetToolId() == ID_NO_TOOL_SELECTED )
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         else
             SetCursor( (wxStockCursor) m_canvas->GetDefaultCursor() );
 
@@ -331,7 +331,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             if( m_lastDrawToolId != GetToolId() )
                 m_lastDrawToolId = GetToolId();
 
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         }
         break;
     }
@@ -453,7 +453,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -2097,7 +2097,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetCurItem() )
         {
             m_canvas->MoveCursorToCrossHair();
-            TRACK* cur_track = static_cast<TRACK*>(GetCurItem());
             GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( static_cast<TRACK*>(GetCurItem())->GetNetCode(), true, false );
             OnModify();
         }
@@ -2334,9 +2333,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
-
-    if( GetToolId() == id )
-        return;
+    int lastToolID = GetToolId();
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
@@ -2347,11 +2344,15 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     switch( id )
     {
     case ID_NO_TOOL_SELECTED:
-        SetToolID( id, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     case ID_ZOOM_SELECTION:
-        SetToolID( id, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        // This tool is located on the main toolbar: switch it on or off on click on it
+        if( lastToolID != ID_ZOOM_SELECTION )
+            SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        else
+            SetNoToolSelected();
         break;
 
     case ID_TRACK_BUTT:

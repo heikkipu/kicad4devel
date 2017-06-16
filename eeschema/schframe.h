@@ -24,7 +24,7 @@
  */
 
 /**
- * @file wxEeschemaStruct.h
+ * @file schframe.h
  */
 
 #ifndef  WX_EESCHEMA_STRUCT_H
@@ -212,8 +212,7 @@ protected:
 
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
-    void backAnnotateFootprints( const std::string& aChangedSetOfReferences )
-        throw( IO_ERROR, boost::bad_pointer );
+    void backAnnotateFootprints( const std::string& aChangedSetOfReferences );
 
     /**
      * Function prepareForNetlist

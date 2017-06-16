@@ -184,8 +184,8 @@ public:
     void Plot(const TrackNodeItem::TRACKNODEITEM* aTrackNodeItem, PLOTTER* aPlotter, const EDA_DRAW_MODE_T* aPlotMode, void* aData ) override;
 
     //Save, Load
-    void Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const throw( IO_ERROR ) override;
-    TrackNodeItem::TRACKNODEITEM* Parse(PCB_PARSER* aParser) throw( IO_ERROR, PARSE_ERROR ) override;
+    void Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const override;
+    TrackNodeItem::TRACKNODEITEM* Parse(PCB_PARSER* aParser) override;
 
     //Clean teardrops. Can not be undone. Remove only serious errors. "Never" happens.
     bool Clean(const DLIST<TRACK>* aTracksAt);

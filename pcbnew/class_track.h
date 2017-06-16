@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,9 +232,6 @@ public:
 
     virtual bool HitTest( const wxPoint& aPosition ) const override;
 
-    /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
-     *                               bool aContained = true, int aAccuracy ) const
-     */
     virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
     /**
@@ -311,10 +308,8 @@ public:
 
     virtual EDA_ITEM* Clone() const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLOD()
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
 #if defined (DEBUG)
@@ -443,10 +438,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLOD()
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     virtual void Flip( const wxPoint& aCentre ) override;

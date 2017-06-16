@@ -29,7 +29,7 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // Save
 //-----------------------------------------------------------------------------------------------------/
-void TEARDROPS::Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const throw( IO_ERROR )
+void TEARDROPS::Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const 
 {
     bool tears = false;
     TEARDROP::PARAMS prev_params = {TEARDROP::NULL_T, 0, 0, 0};
@@ -91,7 +91,7 @@ void TEARDROPS::Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const throw
 //-----------------------------------------------------------------------------------------------------/
 // Load
 //-----------------------------------------------------------------------------------------------------/
-TRACKNODEITEM* TEARDROPS::Parse(PCB_PARSER* aParser) throw( IO_ERROR, PARSE_ERROR )
+TRACKNODEITEM* TEARDROPS::Parse(PCB_PARSER* aParser) 
 {
     using namespace PCB_KEYS_T;
     wxCHECK_MSG( aParser->CurTok() == T_teardrop, nullptr,

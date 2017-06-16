@@ -73,9 +73,9 @@ public:
 
     void Plot(const TrackNodeItem::TRACKNODEITEM* aTrackItem, PLOTTER* aPlotter, const EDA_DRAW_MODE_T* aPlotMode, void* aData ) override;
 
-    //Sace, Load
-    void Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const throw( IO_ERROR ) override;
-    TrackNodeItem::TRACKNODEITEM* Parse(PCB_PARSER* aParser) throw( IO_ERROR, PARSE_ERROR ) override;
+    //Save, Load
+    void Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const override;
+    TrackNodeItem::TRACKNODEITEM* Parse(PCB_PARSER* aParser) override;
     
     void LoadDefaultParams(void);
     TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS CopyCurrentParams(const TRACK* aTrackSegAt, const wxPoint& aCurPosAt);

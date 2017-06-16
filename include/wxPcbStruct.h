@@ -256,8 +256,7 @@ public:
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *           occurs while reading footprint library files.
      */
-    void LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
-        throw( IO_ERROR, PARSE_ERROR );
+    void LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter );
 
     void OnQuit( wxCommandEvent& event );
 
@@ -625,8 +624,8 @@ public:
      * Function SetElementVisibility
      * changes the visibility of an element category
      * @param aElement is from the enum by the same name
-     * @param GAL_LAYER_ID = The new visibility state of the element category
-     * @see enum PCB_LAYER_ID
+     * @see enum GAL_LAYER_ID
+     * @param aNewState = The new visibility state of the element category
      */
     void SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState );
 
