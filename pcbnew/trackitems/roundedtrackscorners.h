@@ -71,6 +71,8 @@ public:
 
     void Recreate(const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList);
 
+    void Repopulate(const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList);
+
     void Plot(const TrackNodeItem::TRACKNODEITEM* aTrackItem, PLOTTER* aPlotter, const EDA_DRAW_MODE_T* aPlotMode, void* aData ) override;
 
     //Save, Load

@@ -517,6 +517,12 @@ void ROUNDEDTRACKSCORNERS::Remove(const int aNetCodeFrom, const bool aUndo, cons
         m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_DELETED);
 }
 
+void ROUNDEDTRACKSCORNERS::Repopulate(const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    Remove( aNetCodeTo, aUndoRedoList, true );
+    Recreate( aNetCodeTo, aUndoRedoList );
+}
+
 void ROUNDEDTRACKSCORNERS::Change(const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo)
 {
     if(aTrackItemFrom && aTrackItemFrom->Type() == PCB_ROUNDEDTRACKSCORNER_T)
