@@ -227,7 +227,7 @@ TRACKITEMS::NET_SCAN_SHARP_ANGLES::NET_SCAN_SHARP_ANGLES(const TRACK* aTrackSeg,
     m_result_track = nullptr;
 }
 
-bool TRACKITEMS::NET_SCAN_SHARP_ANGLES::ExecuteAt(const TRACK* aTrackSeg)
+bool TRACKITEMS::NET_SCAN_SHARP_ANGLES::ExecuteAt(TRACK* aTrackSeg)
 {
     if((aTrackSeg != m_net_start_seg) && (aTrackSeg->Type() == PCB_TRACE_T) && aTrackSeg->IsOnLayer(m_layer_id))
     {

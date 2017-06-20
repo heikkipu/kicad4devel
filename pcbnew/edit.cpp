@@ -298,6 +298,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SET_DEFAULT_PARAMS:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_EDIT_LENGTH_SET:
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_EDIT_LENGTH_RATIO:
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED:
 #endif
         break;
 
@@ -2165,6 +2166,18 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_EDIT_LENGTH_RATIO:
         GetBoard()->TrackItems()->RoundedTracksCorners()->ToggleEdit( ROUNDEDTRACKSCORNERS::EDIT_LENGTH_RATIO_T );
+        break;
+
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED:
+        if( GetCurItem() && GetCurItem()->Type() == PCB_TRACE_T )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            GetBoard()->TrackItems()->RoundedTracksCorners()->ConvertSegmentedCorners( static_cast<TRACK*>(GetCurItem()),
+                                                                                       true );
+            if( static_cast<TRACK*>(GetCurItem())->GetNetCode() > 0 )
+                TestNetConnection( nullptr, static_cast<TRACK*>(GetCurItem())->GetNetCode() );
+            OnModify();
+        }
         break;
 
 #endif        

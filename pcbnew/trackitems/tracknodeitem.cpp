@@ -286,7 +286,7 @@ SCAN_NET_COLLECT::SCAN_NET_COLLECT(const TRACK* aTrackSeg, const wxPoint aPosAt,
     m_tracks_list->clear();
 }
 
-bool SCAN_NET_COLLECT::ExecuteAt(const TRACK* aTrackSeg)
+bool SCAN_NET_COLLECT::ExecuteAt(TRACK* aTrackSeg)
 {
     if((aTrackSeg != m_net_start_seg) && (aTrackSeg->Type() == PCB_TRACE_T) && aTrackSeg->IsOnLayer(m_layer))
         if((aTrackSeg->GetStart() == m_pos) || (aTrackSeg->GetEnd() == m_pos))
@@ -348,7 +348,7 @@ SCAN_NET_FIND_T_TRACKS::SCAN_NET_FIND_T_TRACKS(const TRACK* aTrackSeg, const wxP
     m_angle_back_rnd = Rad2DeciDegRnd(m_angle_back);
 }
 
-bool SCAN_NET_FIND_T_TRACKS::ExecuteAt(const TRACK* aTrackSeg)
+bool SCAN_NET_FIND_T_TRACKS::ExecuteAt(TRACK* aTrackSeg)
 {
     if((aTrackSeg != m_net_start_seg) && (aTrackSeg->Type() == PCB_TRACE_T) && aTrackSeg->IsOnLayer(m_layer))
         if((aTrackSeg->GetStart() == m_pos) || (aTrackSeg->GetEnd() == m_pos))
@@ -376,6 +376,7 @@ SCAN_NET_BASE::SCAN_NET_BASE(const TRACK* aNetStartSeg)
 {
     m_net_start_seg = const_cast<TRACK*>(aNetStartSeg);
     m_reverse = false;
+    m_return_at_break = true;
 }
 
 void SCAN_NET_BASE::Execute(void)
@@ -400,7 +401,12 @@ void SCAN_NET_BASE::Execute(void)
                         (n)? next_seg = track_seg->Back() : next_seg = track_seg->Next();
                     
                     if(ExecuteAt(track_seg)) //Break when virtual function true. MUST REMEMBER!
-                        return;
+                    {
+                        if(m_return_at_break)
+                            return;
+                        else
+                            break;
+                    }
                     
                     track_seg = next_seg;
                 }

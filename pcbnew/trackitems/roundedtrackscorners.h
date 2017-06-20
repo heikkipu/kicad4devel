@@ -85,7 +85,8 @@ public:
     TrackNodeItem::TRACKNODEITEM* Next(const TRACK* aTrackSegAt) const override;
     TrackNodeItem::TRACKNODEITEM* Back(const TRACK* aTrackSegAt) const override;
     
-    void ConvertSegmentsArc(const TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
+    void ConvertSegmentedCorners(const TRACK* aTrackFrom, const bool aUndo);
+    void ConvertSegmentedCorners(const TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
     
 protected:
     ROUNDEDTRACKSCORNERS(){};
@@ -245,6 +246,7 @@ private:
     void Menu_CopyParamsToCurrent(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
     void Menu_AddToNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
     void Menu_RemoveFromNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
+    void Menu_ConvertSegmentedCorner(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
 
     wxString ParamsTxtToMenu(const TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS aParams) const;
     inline int MenuToDo_CalcSizeLengthSet(const int aMenuID);
@@ -263,7 +265,7 @@ private:
         ~NET_SCAN_NET_ADD() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
     };
@@ -275,7 +277,7 @@ private:
         ~NET_SCAN_NET_CONVERT() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_NET_REMOVE : public NET_SCAN_BASE
@@ -285,7 +287,7 @@ private:
         ~NET_SCAN_NET_REMOVE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
         RoundedTracksCorner_Container* m_recreate_list {nullptr};
@@ -299,7 +301,7 @@ private:
         ~NET_SCAN_NET_RECREATE();
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
         
     private:
         TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS m_current_params;
@@ -312,22 +314,25 @@ private:
         ~NET_SCAN_TRACK_UPDATE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
-    class NET_SCAN_TRACK_CORNER_CONVERT : public NET_SCAN_BASE
+    class NET_SCAN_TRACK_COLLECT_SAME_LENGTH : public NET_SCAN_BASE
     {
     public:
-        NET_SCAN_TRACK_CORNER_CONVERT(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
-        ~NET_SCAN_TRACK_CORNER_CONVERT() {};
+        NET_SCAN_TRACK_COLLECT_SAME_LENGTH(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
+        ~NET_SCAN_TRACK_COLLECT_SAME_LENGTH() {};
 
+        std::set<TRACK*>* GetSegments(void) {return &m_collected_segments;}
+        
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
         
     private:
-        double m_track_length{0.0};
+        uint m_track_length{0};
         std::set<TRACK*> m_collected_segments;
+        static const uint ROUND_DIVIDER = 100;
     };
 
 //-----------------------------------------------------------------------------------------------------/

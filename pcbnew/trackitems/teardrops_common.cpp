@@ -268,7 +268,7 @@ TEARDROPS::NET_SCAN_PAD_ADD::NET_SCAN_PAD_ADD(const D_PAD* aPad, const TEARDROPS
     m_picked_items = aUndoRedoList;
 }
 
-bool TEARDROPS::NET_SCAN_PAD_ADD::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_ADD::ExecuteAt(TRACK* aTrackSeg)
 {
     ITEM_PICKER picker(nullptr, UR_NEW);
     TEARDROP* tear = m_Parent->Create(aTrackSeg, m_pad, false);
@@ -302,7 +302,7 @@ TEARDROPS::NET_SCAN_VIA_ADD::NET_SCAN_VIA_ADD(const VIA* aVia, const TEARDROPS* 
     m_picked_items = const_cast<PICKED_ITEMS_LIST*>(aUndoRedoList);
 }
 
-bool TEARDROPS::NET_SCAN_VIA_ADD::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_ADD::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -412,7 +412,7 @@ TEARDROPS::NET_SCAN_NET_ADD::NET_SCAN_NET_ADD(const int aNet, const TEARDROPS* a
     m_type_todo = aTypeToDo;
 }
 
-bool TEARDROPS::NET_SCAN_NET_ADD::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_NET_ADD::ExecuteAt(TRACK* aTrackSeg)
 {
     if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_TJUNCTIONS_T) || (m_type_todo == JUNCTIONS_AND_TJUNCTIONS_T))
     {
@@ -569,7 +569,7 @@ TEARDROPS::NET_SCAN_VIA_REMOVE::NET_SCAN_VIA_REMOVE(const VIA* aVia, const TEARD
     m_locked_too = aLockedToo;
 }
 
-bool TEARDROPS::NET_SCAN_VIA_REMOVE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_REMOVE::ExecuteAt(TRACK* aTrackSeg)
 {    
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -611,7 +611,7 @@ TEARDROPS::NET_SCAN_PAD_REMOVE::NET_SCAN_PAD_REMOVE(const D_PAD* aPad, const TEA
     m_locked_too = aLockedToo;
 }
 
-bool TEARDROPS::NET_SCAN_PAD_REMOVE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_REMOVE::ExecuteAt(TRACK* aTrackSeg)
 {
     TEARDROP* tear = dynamic_cast<TEARDROPS*>(m_Parent)->GetTeardrop(aTrackSeg, m_pad);
     if(tear)
@@ -703,7 +703,7 @@ TEARDROPS::NET_SCAN_NET_REMOVE::NET_SCAN_NET_REMOVE(const int aNet, const TEARDR
     m_locked_too = aLockedToo;
 }
 
-bool TEARDROPS::NET_SCAN_NET_REMOVE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_NET_REMOVE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TEARDROP_T)
     {
@@ -841,7 +841,7 @@ TEARDROPS::NET_SCAN_NET_RECREATE::~NET_SCAN_NET_RECREATE()
     dynamic_cast<TEARDROPS*>(m_Parent)->RecreateMenu();
 }
 
-bool TEARDROPS::NET_SCAN_NET_RECREATE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_NET_RECREATE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -953,7 +953,7 @@ TEARDROPS::NET_SCAN_PAD_RECREATE::~NET_SCAN_PAD_RECREATE()
     m_Parent->RecreateMenu();
 }
 
-bool TEARDROPS::NET_SCAN_PAD_RECREATE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_RECREATE::ExecuteAt(TRACK* aTrackSeg)
 {
     for(TEARDROP* tear : *m_recreate_list)
     {
@@ -1101,7 +1101,7 @@ TEARDROPS::NET_SCAN_PAD_LOCK::NET_SCAN_PAD_LOCK(const D_PAD* aPad, const TEARDRO
 {
 }
 
-bool TEARDROPS::NET_SCAN_PAD_LOCK::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_LOCK::ExecuteAt(TRACK* aTrackSeg)
 {
     TEARDROP* tear = m_Parent->GetTeardrop(aTrackSeg, m_pad);
     if(tear)
@@ -1141,7 +1141,7 @@ TEARDROPS::NET_SCAN_PAD_UNLOCK::NET_SCAN_PAD_UNLOCK(const D_PAD* aPad, const TEA
 {
 }
 
-bool TEARDROPS::NET_SCAN_PAD_UNLOCK::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_UNLOCK::ExecuteAt(TRACK* aTrackSeg)
 {
     TEARDROP* tear = m_Parent->GetTeardrop(aTrackSeg, m_pad);
     if(tear)
@@ -1181,7 +1181,7 @@ TEARDROPS::NET_SCAN_VIA_LOCK::NET_SCAN_VIA_LOCK(const VIA* aVia, const TEARDROPS
 {
 }
 
-bool TEARDROPS::NET_SCAN_VIA_LOCK::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_LOCK::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -1208,7 +1208,7 @@ TEARDROPS::NET_SCAN_VIA_UNLOCK::NET_SCAN_VIA_UNLOCK(const VIA* aVia, const TEARD
 {
 }
 
-bool TEARDROPS::NET_SCAN_VIA_UNLOCK::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_UNLOCK::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -1247,7 +1247,7 @@ void TEARDROPS::Unlock(const BOARD_CONNECTED_ITEM* aViaOrPadAt)
         Unlock(static_cast<D_PAD*>(const_cast<BOARD_CONNECTED_ITEM*>(aViaOrPadAt)));
 }
 
-bool TEARDROPS::NET_SCAN_NET_LOCK::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_NET_LOCK::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TEARDROP_T)
         dynamic_cast<TEARDROP*> (const_cast<TRACK*>(aTrackSeg))->SetLocked(true);
@@ -1261,7 +1261,7 @@ void TEARDROPS::Lock(const int aNetCodeAt, const TRACK* aTrackSeg)
         net->Execute();
 }
 
-bool TEARDROPS::NET_SCAN_NET_UNLOCK::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_NET_UNLOCK::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TEARDROP_T)
         dynamic_cast<TEARDROP*> (const_cast<TRACK*>(aTrackSeg))->SetLocked(false);
@@ -1280,7 +1280,7 @@ TEARDROPS::NET_SCAN_PAD_EMPTY::NET_SCAN_PAD_EMPTY(const D_PAD* aPad, const TEARD
     m_num_tears = 0;
 }
 
-bool TEARDROPS::NET_SCAN_PAD_EMPTY::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_EMPTY::ExecuteAt(TRACK* aTrackSeg)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP*>(m_Parent->Get(aTrackSeg, m_pad_pos));
     if(!tear)
@@ -1310,7 +1310,7 @@ TEARDROPS::NET_SCAN_VIA_EMPTY::NET_SCAN_VIA_EMPTY(const VIA* aVia, const TEARDRO
     m_num_tears = 0;
 }
 
-bool TEARDROPS::NET_SCAN_VIA_EMPTY::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_EMPTY::ExecuteAt(TRACK* aTrackSeg)
         
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
@@ -1362,7 +1362,7 @@ TEARDROPS::NET_SCAN_NET_EMPTY::NET_SCAN_NET_EMPTY(const int aNet, const TRACK* a
     m_result_value = false;
 }
 
-bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -1455,7 +1455,7 @@ TEARDROPS::NET_SCAN_PAD_CONTAINS::NET_SCAN_PAD_CONTAINS(const D_PAD* aPad, const
 {
 }
 
-bool TEARDROPS::NET_SCAN_PAD_CONTAINS::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
 {
     TEARDROP* tear = m_Parent->GetTeardrop(aTrackSeg, m_pad);
     if(tear)
@@ -1489,7 +1489,7 @@ TEARDROPS::NET_SCAN_VIA_CONTAINS::NET_SCAN_VIA_CONTAINS(const VIA* aVia, const T
 {  
 }
 
-bool TEARDROPS::NET_SCAN_VIA_CONTAINS::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -1547,7 +1547,7 @@ TEARDROPS::NET_SCAN_NET_CONTAINS::NET_SCAN_NET_CONTAINS(const int aNet, const TR
 {
 }
 
-bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -1673,7 +1673,7 @@ TEARDROPS::NET_SCAN_PAD_SMALLTEARS::NET_SCAN_PAD_SMALLTEARS(const D_PAD* aPad, c
 {    
 }
 
-bool TEARDROPS::NET_SCAN_PAD_SMALLTEARS::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_SMALLTEARS::ExecuteAt(TRACK* aTrackSeg)
 {
     TEARDROP* tear = m_Parent->GetTeardrop(aTrackSeg, m_pad);
     if(tear)
@@ -1731,7 +1731,7 @@ TEARDROPS::NET_SCAN_TRACK_UPDATE::NET_SCAN_TRACK_UPDATE(const TRACK* aTrackSeg, 
 {
 }
 
-bool TEARDROPS::NET_SCAN_TRACK_UPDATE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_TRACK_UPDATE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(dynamic_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSeg)))
         if(dynamic_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSeg))->GetTrackSeg() == m_net_start_seg)
@@ -1765,7 +1765,7 @@ TEARDROPS::NET_SCAN_VIA_UPDATE::NET_SCAN_VIA_UPDATE(const VIA* aVia, const TEARD
     m_via_pos = m_via->GetEnd();
 }
 
-bool TEARDROPS::NET_SCAN_VIA_UPDATE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_UPDATE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -1813,7 +1813,7 @@ TEARDROPS::NET_SCAN_PAD_UPDATE::NET_SCAN_PAD_UPDATE(const D_PAD* aPad, const TEA
     m_only_exact_connected = false; //Update all connected at pad
 }
 
-bool TEARDROPS::NET_SCAN_PAD_UPDATE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_UPDATE::ExecuteAt(TRACK* aTrackSeg)
 {
     for(int n=0; n<2; ++n)
     {
@@ -1863,7 +1863,7 @@ TEARDROPS::NET_SCAN_NET_UPDATE::NET_SCAN_NET_UPDATE(const int aNet, const TRACK*
         m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode(aNet);
 }
 
-bool TEARDROPS::NET_SCAN_NET_UPDATE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_NET_UPDATE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(dynamic_cast<TEARDROP*> (const_cast<TRACK*>(aTrackSeg)))
         dynamic_cast<TEARDROP*> (const_cast<TRACK*>(aTrackSeg))->Update();
@@ -1892,7 +1892,7 @@ TEARDROPS::NET_SCAN_TRACK_DRAW_UPDATE::NET_SCAN_TRACK_DRAW_UPDATE(const TRACK* a
     m_erase = aErase;
 }
 
-bool TEARDROPS::NET_SCAN_TRACK_DRAW_UPDATE::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_TRACK_DRAW_UPDATE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(dynamic_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSeg)))
         if(dynamic_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSeg))->GetTrackSeg() == m_net_start_seg)
@@ -2140,7 +2140,7 @@ TEARDROPS::NET_SCAN_GET_NEXT_TEARDROP::NET_SCAN_GET_NEXT_TEARDROP(const TRACK* a
 {
 }
 
-bool TEARDROPS::NET_SCAN_GET_NEXT_TEARDROP::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_GET_NEXT_TEARDROP::ExecuteAt(TRACK* aTrackSeg)
 {
     if(dynamic_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSeg)))
         if(dynamic_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSeg))->GetTrackSeg() == m_net_start_seg)
@@ -2174,7 +2174,7 @@ TEARDROPS::NET_SCAN_GET_BACK_TEARDROP::NET_SCAN_GET_BACK_TEARDROP(const TRACK* a
     m_reverse = true;
 }
 
-bool TEARDROPS::NET_SCAN_GET_BACK_TEARDROP::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_GET_BACK_TEARDROP::ExecuteAt(TRACK* aTrackSeg)
 {
     if(dynamic_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSeg)))
         if(dynamic_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSeg))->GetTrackSeg() == m_net_start_seg)
@@ -2209,7 +2209,7 @@ TEARDROPS::NET_SCAN_GET_TEARDROP::NET_SCAN_GET_TEARDROP(const TRACK* aTrackSeg, 
     m_result_teardrop = nullptr;
 }
 
-bool TEARDROPS::NET_SCAN_GET_TEARDROP::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_GET_TEARDROP::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TEARDROP_T)
     {

@@ -87,7 +87,7 @@ TRACKITEMS::NET_SCAN_GET_VIA::NET_SCAN_GET_VIA(const TRACK* aTrackSeg, const wxP
     m_result_via = nullptr;
 }
 
-bool TRACKITEMS::NET_SCAN_GET_VIA::ExecuteAt(const TRACK* aTrackSeg)
+bool TRACKITEMS::NET_SCAN_GET_VIA::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_VIA_T)
         if(aTrackSeg->IsOnLayer(m_net_start_seg->GetLayer()))
@@ -118,7 +118,7 @@ TRACKITEMS::NET_SCAN_GET_NEXT_VIA::NET_SCAN_GET_NEXT_VIA(const TRACK* aTrackSeg,
 {
 }
 
-bool TRACKITEMS::NET_SCAN_GET_NEXT_VIA::ExecuteAt(const TRACK* aTrackSeg)
+bool TRACKITEMS::NET_SCAN_GET_NEXT_VIA::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_VIA_T)
         if(aTrackSeg->IsOnLayer(m_net_start_seg->GetLayer()))
@@ -150,7 +150,7 @@ TRACKITEMS::NET_SCAN_GET_BACK_VIA::NET_SCAN_GET_BACK_VIA(const TRACK* aTrackSeg,
     m_reverse = true;
 }
 
-bool TRACKITEMS::NET_SCAN_GET_BACK_VIA::ExecuteAt(const TRACK* aTrackSeg)
+bool TRACKITEMS::NET_SCAN_GET_BACK_VIA::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_VIA_T)
         if(aTrackSeg->IsOnLayer(m_net_start_seg->GetLayer()))
@@ -503,7 +503,7 @@ TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::NET_SCAN_DRAW_TARGET_NODE_POS(const T
     m_drag_segments = const_cast<std::vector<DRAG_SEGM_PICKER>*>(aDragSegmentList);
 }
         
-bool TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::ExecuteAt(const TRACK* aTrackSeg)
+bool TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg != m_net_start_seg)
     {
@@ -590,7 +590,7 @@ TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::NET_SCAN_VIA_BAD_CONNECTION(const TRACK
     m_via = nullptr;
 }
 
-bool TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::ExecuteAt(const TRACK* aTrackSeg)
+bool TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::ExecuteAt(TRACK* aTrackSeg)
 {
     PCB_LAYER_ID layer = m_net_start_seg->GetLayer();
 
@@ -617,7 +617,7 @@ TRACKITEMS::NET_SCAN_NET_LENGTH::NET_SCAN_NET_LENGTH(const TRACKITEMS* aParent, 
     m_netlength = 0.0;
 }
 
-bool TRACKITEMS::NET_SCAN_NET_LENGTH::ExecuteAt(const TRACK* aTrackSeg)
+bool TRACKITEMS::NET_SCAN_NET_LENGTH::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {

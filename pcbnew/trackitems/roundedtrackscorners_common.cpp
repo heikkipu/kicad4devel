@@ -263,7 +263,6 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::ConvertTrackInList(TRACK* aTrack, PICK
                 }
             }
         }
-        //aTrack = rounded_track;
     }
     return rounded_track;
 }
@@ -353,7 +352,7 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::NET_SCAN_NET_ADD(const int aNet, const R
     m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode(aNet);
 }
 
-bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::ExecuteAt(const TRACK* aTrackSeg)
+bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
         dynamic_cast<ROUNDEDTRACKSCORNERS*>(m_Parent)->Add(const_cast<TRACK*>(aTrackSeg), m_picked_items);
@@ -383,7 +382,7 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::NET_SCAN_NET_CONVERT(const int aNet,
 {
 }
 
-bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::ExecuteAt(const TRACK* aTrackSeg)
+bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -479,7 +478,7 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_NET_REMOVE::NET_SCAN_NET_REMOVE(const int aNet, c
     m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode(aNet);
 }
 
-bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_REMOVE::ExecuteAt(const TRACK* aTrackSeg)
+bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_REMOVE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_ROUNDEDTRACKSCORNER_T)
     {
@@ -551,7 +550,7 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_NET_RECREATE::~NET_SCAN_NET_RECREATE()
     dynamic_cast<ROUNDEDTRACKSCORNERS*>(m_Parent)->RecreateMenu();
 }
 
-bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_RECREATE::ExecuteAt(const TRACK* aTrackSeg)
+bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_RECREATE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -646,7 +645,7 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_UPDATE::NET_SCAN_TRACK_UPDATE(const TRACK* 
 {
 }
 
-bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_UPDATE::ExecuteAt(const TRACK* aTrackSeg)
+bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_UPDATE::ExecuteAt(TRACK* aTrackSeg)
 {
     if(dynamic_cast<ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(aTrackSeg)))
     {

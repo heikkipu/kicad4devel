@@ -22,7 +22,9 @@
  */
 
 #include "roundedtrackscorners.h"
+#include "trackitems.h"
 
+#include <ratsnest_data.h>
 using namespace TrackNodeItem;
 
 //-----------------------------------------------------------------------------------------------------/
@@ -50,42 +52,84 @@ void ROUNDEDTRACKSCORNERS::Plot(const TRACKNODEITEM* aTrackNodeItem, PLOTTER* aP
 //-----------------------------------------------------------------------------------------------------/
 // Convert segments arc to rounded corner.
 //-----------------------------------------------------------------------------------------------------/
-void ROUNDEDTRACKSCORNERS::ConvertSegmentsArc(const TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList)
+void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(const TRACK* aTrackFrom, const bool aUndo)
 {
-    std::unique_ptr<NET_SCAN_TRACK_CORNER_CONVERT> arc_convert(new NET_SCAN_TRACK_CORNER_CONVERT(aTrackFrom, this, aUndoRedoList));
-    if(arc_convert)
+    PICKED_ITEMS_LIST undoredo_items;
+    ConvertSegmentedCorners(aTrackFrom, &undoredo_items);
+    if(m_EditFrame && aUndo && undoredo_items.GetCount() )
+        m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_CHANGED);
+}
+
+void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(const TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    std::unique_ptr<NET_SCAN_TRACK_COLLECT_SAME_LENGTH> same_lengt_tracks(new NET_SCAN_TRACK_COLLECT_SAME_LENGTH(aTrackFrom, this, aUndoRedoList));
+    if(same_lengt_tracks)
     {
-        arc_convert->Execute();
+        same_lengt_tracks->Execute();
+        std::set<TRACK*>* tracks_same = same_lengt_tracks->GetSegments();
         
-    }
-}
-
-ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_CORNER_CONVERT::NET_SCAN_TRACK_CORNER_CONVERT(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList) : NET_SCAN_BASE(aTrackSeg, aParent)
-{
-    m_picked_items = aUndoRedoList;
-    m_track_length = aTrackSeg->GetLength();
-    m_collected_segments.clear();
-}
-
-bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_CORNER_CONVERT::ExecuteAt(const TRACK* aTrackSeg)
-{
-    if(aTrackSeg->Type() == PCB_TRACE_T)
-    {
-        if(aTrackSeg->GetLength() == m_track_length)
+        std::set<TRACK*> tracks_collected;
+        tracks_collected.clear();
+        tracks_collected.insert(const_cast<TRACK*>(aTrackFrom));
+        
+        uint num_collected = 0;
+        do
         {
-            m_collected_segments.insert(const_cast<TRACK*>(aTrackSeg));
-            return false;
-        }
-        else
-        {
-            if(!m_reverse)
+            num_collected = tracks_collected.size();
+            for(auto t : *tracks_same)
             {
-                m_reverse = true;
-                return false;
+                if(t)
+                {
+                    wxPoint t_start = t->GetStart();
+                    wxPoint t_end = t->GetEnd();
+                    for(auto t2 : tracks_collected)
+                    {
+                        if(t2)
+                        {
+                            wxPoint t2_start = t2->GetStart();
+                            wxPoint t2_end = t2->GetEnd();
+                            if((t_start == t2_start) || (t_start == t2_end) || (t_end == t2_start) || (t_end == t2_end))
+                                tracks_collected.insert(t);
+                        }
+                    }
+                }
+            }
+        }
+        while(num_collected != tracks_collected.size());
+        
+        if(tracks_collected.size() > 5)
+        {
+            ITEM_PICKER picker( NULL, UR_DELETED );
+            for(auto track : tracks_collected)
+            {
+                GetBoard()->TrackItems()->Teardrops()->Remove(track, aUndoRedoList, true );
+                Remove(track, aUndoRedoList, true );
+                
+                GetBoard()->Remove(track);
+                GetBoard()->GetRatsnest()->Remove(track);
+                picker.SetItem(track);
+                aUndoRedoList->PushItem(picker);
             }
         }
     }
-    return true;
+}
+    
+ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_COLLECT_SAME_LENGTH::NET_SCAN_TRACK_COLLECT_SAME_LENGTH(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList) : NET_SCAN_BASE(aTrackSeg, aParent)
+{
+    m_picked_items = aUndoRedoList;
+    m_track_length = aTrackSeg->GetLength() / ROUND_DIVIDER;
+    m_collected_segments.clear();
+}
+
+bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_COLLECT_SAME_LENGTH::ExecuteAt(TRACK* aTrackSeg)
+{
+    if(aTrackSeg->Type() == PCB_TRACE_T)
+    {
+        uint length = aTrackSeg->GetLength() / ROUND_DIVIDER;
+        if(length == m_track_length)
+            m_collected_segments.insert(aTrackSeg);
+    }
+    return false;
 }
 
 //-----------------------------------------------------------------------------------------------------/

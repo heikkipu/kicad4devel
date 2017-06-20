@@ -471,7 +471,7 @@ TEARDROPS::NET_SCAN_MULTI_TEARDROPS::NET_SCAN_MULTI_TEARDROPS(const TEARDROP* aT
     m_result_teardrop = nullptr;    
 }
 
-bool TEARDROPS::NET_SCAN_MULTI_TEARDROPS::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_MULTI_TEARDROPS::ExecuteAt(TRACK* aTrackSeg)
 {
     if(aTrackSeg && (aTrackSeg->Type() == PCB_TEARDROP_T))
     {

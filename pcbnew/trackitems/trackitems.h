@@ -117,7 +117,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         VIA* m_result_via {nullptr};
     private:
@@ -131,7 +131,7 @@ private:
         ~NET_SCAN_GET_NEXT_VIA() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_GET_BACK_VIA : public NET_SCAN_GET_VIA
@@ -141,7 +141,7 @@ private:
         ~NET_SCAN_GET_BACK_VIA() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
 //--------------------------------------------------------------------------------------------------- 
@@ -160,7 +160,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
     private:
         bool m_result {false};
@@ -216,7 +216,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
     private:
         wxPoint m_pos {0,0};
@@ -267,7 +267,7 @@ private:
         VIA* GetVia(void) { return m_via; }
         
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
         
     private:
         wxPoint m_track_pos {0,0};
@@ -322,7 +322,7 @@ private:
         double GetLength(void) const{ return m_netlength;}
         
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
         
     private:
         double m_netlength = 0.0;

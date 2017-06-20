@@ -265,11 +265,12 @@ namespace TrackNodeItem
     protected:
         SCAN_NET_BASE(){};
         SCAN_NET_BASE(const TRACK* aNetStartSeg);
-        virtual bool ExecuteAt(const TRACK* aTrackSeg)=0;
+        virtual bool ExecuteAt(TRACK* aTrackSeg)=0;
         
         TRACK* m_net_start_seg{nullptr};
         
         bool m_reverse{false};
+        bool m_return_at_break{true};
     };
 
     class SCAN_NET_COLLECT : public SCAN_NET_BASE
@@ -279,7 +280,7 @@ namespace TrackNodeItem
         ~SCAN_NET_COLLECT(){};
         
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
         wxPoint m_pos{0,0};
         PCB_LAYER_ID m_layer;
         Tracks_Container* m_tracks_list{nullptr};
@@ -294,7 +295,7 @@ namespace TrackNodeItem
         TRACK* GetResultTrack(bool aFirstSecond) const;
         
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     private:
         double m_angle_next;
         double m_angle_back;

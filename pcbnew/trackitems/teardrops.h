@@ -417,7 +417,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
         TrackNodeItem::TEARDROP* m_result_teardrop {nullptr};
 
     private:
@@ -431,7 +431,7 @@ private:
         ~NET_SCAN_GET_NEXT_TEARDROP() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_GET_BACK_TEARDROP : public NET_SCAN_GET_TEARDROP
@@ -441,7 +441,7 @@ private:
         ~NET_SCAN_GET_BACK_TEARDROP() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_TRACK_UPDATE : public NET_SCAN_BASE
@@ -451,7 +451,7 @@ private:
         ~NET_SCAN_TRACK_UPDATE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_TRACK_DRAW_UPDATE : public NET_SCAN_BASE
@@ -461,7 +461,7 @@ private:
         ~NET_SCAN_TRACK_DRAW_UPDATE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
     private:
         EDA_DRAW_PANEL* m_panel {nullptr};
@@ -481,7 +481,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
     private:
         TrackNodeItem::TEARDROP* m_result_teardrop {nullptr};
@@ -498,7 +498,7 @@ private:
         ~NET_SCAN_VIA_UPDATE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         VIA* m_via {nullptr};
         wxPoint m_via_pos {0,0};
@@ -511,7 +511,7 @@ private:
         ~NET_SCAN_VIA_ADD() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
     };
@@ -523,7 +523,7 @@ private:
         ~NET_SCAN_VIA_REMOVE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
     private:
         Teardrop_Container* m_recreate_list {nullptr};
@@ -541,7 +541,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         int m_num_tears{0};
     };
@@ -555,7 +555,7 @@ private:
         int NumLocked(void) const { return m_num_locked; }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
         
     private:
         int m_num_locked{0};
@@ -568,7 +568,7 @@ private:
         ~NET_SCAN_VIA_LOCK() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_VIA_UNLOCK : public NET_SCAN_VIA_UPDATE
@@ -578,7 +578,7 @@ private:
         ~NET_SCAN_VIA_UNLOCK() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_VIA_COLLECTCOMMIT : public NET_SCAN_VIA_UPDATE
@@ -588,7 +588,7 @@ private:
         ~NET_SCAN_VIA_COLLECTCOMMIT() {};
         
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         bool m_locked_too{false};
         std::set<TRACK*>* m_commit_container{nullptr};
@@ -605,7 +605,7 @@ private:
         virtual ~NET_SCAN_NET_UPDATE() {};
 
     protected:
-        virtual bool ExecuteAt(const TRACK* aTrackSeg) override;
+        virtual bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_NET_ADD : public NET_SCAN_NET_UPDATE
@@ -615,7 +615,7 @@ private:
         ~NET_SCAN_NET_ADD() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
         TEARDROPS::TEARDROPS_TYPE_TODO m_type_todo;
@@ -628,7 +628,7 @@ private:
         ~NET_SCAN_NET_REMOVE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         Teardrop_Container* m_recreate_list {nullptr};
         bool m_locked_too{false};
@@ -641,7 +641,7 @@ private:
         ~NET_SCAN_NET_RECREATE();
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
     private:
         TrackNodeItem::TEARDROP::SHAPES_T m_current_shape;
@@ -661,7 +661,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         TEARDROPS::TEARDROPS_TYPE_TODO m_type_todo;
         bool m_result_value {false};
@@ -678,7 +678,7 @@ private:
         ~NET_SCAN_NET_CONTAINS() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_NET_LOCK : public NET_SCAN_NET_UPDATE
@@ -689,7 +689,7 @@ private:
         virtual ~NET_SCAN_NET_LOCK() {};
 
     protected:
-        virtual bool ExecuteAt(const TRACK* aTrackSeg) override;
+        virtual bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_NET_UNLOCK : public NET_SCAN_NET_UPDATE
@@ -700,7 +700,7 @@ private:
         virtual ~NET_SCAN_NET_UNLOCK() {};
 
     protected:
-        virtual bool ExecuteAt(const TRACK* aTrackSeg) override;
+        virtual bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
 
@@ -717,7 +717,7 @@ private:
         void Execute(void);
 
     protected:
-        virtual bool ExecuteAt(const TRACK* aTrackSeg)=0;
+        virtual bool ExecuteAt(TRACK* aTrackSeg)=0;
 
         D_PAD* m_pad {nullptr};
         wxPoint m_pad_pos {0,0};
@@ -732,7 +732,7 @@ private:
         ~NET_SCAN_PAD_UPDATE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
     
     class NET_SCAN_PAD_ADD : public NET_SCAN_PAD_BASE
@@ -742,7 +742,7 @@ private:
         ~NET_SCAN_PAD_ADD() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
     };
@@ -754,7 +754,7 @@ private:
         ~NET_SCAN_PAD_REMOVE() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         Teardrop_Container* m_recreate_list {nullptr};
         bool m_locked_too{false};
@@ -769,7 +769,7 @@ private:
         int NumTeardrops(void) const { return m_num_tears; }
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         int m_num_tears{0};
     };
@@ -782,7 +782,7 @@ private:
 
         int NumLocked(void) const { return m_num_locked; }
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
     private:
         int m_num_locked{0};
@@ -795,7 +795,7 @@ private:
         ~NET_SCAN_PAD_RECREATE();
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
     private:
         TrackNodeItem::TEARDROP::SHAPES_T m_current_shape;
@@ -811,7 +811,7 @@ private:
         ~NET_SCAN_PAD_SMALLTEARS() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_PAD_LOCK : public NET_SCAN_PAD_BASE
@@ -821,7 +821,7 @@ private:
         ~NET_SCAN_PAD_LOCK() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_PAD_UNLOCK : public NET_SCAN_PAD_BASE
@@ -831,7 +831,7 @@ private:
         ~NET_SCAN_PAD_UNLOCK() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
     class NET_SCAN_PAD_COLLECTCOMMIT : public NET_SCAN_PAD_BASE
@@ -841,7 +841,7 @@ private:
         ~NET_SCAN_PAD_COLLECTCOMMIT() {};
 
     protected:
-        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        bool ExecuteAt(TRACK* aTrackSeg) override;
 
         bool m_locked_too{false};
         std::set<TRACK*>* m_commit_container{nullptr};

@@ -57,6 +57,8 @@ void ROUNDEDTRACKSCORNERS::Popup(wxMenu* aMenu, const TRACK* aTrackSeg, const wx
             Menu_AddToNet(corner_menu, aTrackSeg, aPos);
             Menu_RemoveFromNet(corner_menu, aTrackSeg, aPos);
             corner_menu->AppendSeparator();
+            Menu_ConvertSegmentedCorner(corner_menu, aTrackSeg, aPos);
+            corner_menu->AppendSeparator();
         }
         Menu_ChangeSize(corner_menu);
     }
@@ -143,3 +145,14 @@ void ROUNDEDTRACKSCORNERS::Menu_RemoveFromNet(wxMenu* aMenu, const TRACK* aTrack
         }
     }
 }
+
+void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCorner(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+{
+    if(aMenu && aTrackSeg && IsOn())
+    {
+        wxString msg;
+        msg.Printf(_("Convert Segments to Corner %s"), GetChars(ParamsTxtToMenu(GetParams())));
+        AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED, msg, KiBitmap(add_arc_xpm));
+    }
+}
+

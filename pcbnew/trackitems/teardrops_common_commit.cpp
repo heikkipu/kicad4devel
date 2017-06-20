@@ -44,7 +44,7 @@ TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::NET_SCAN_VIA_COLLECTCOMMIT(const VIA* aVi
     m_commit_container = aCommitContainer;
 }
 
-bool TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::ExecuteAt(TRACK* aTrackSeg)
 {    
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
@@ -76,7 +76,7 @@ TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::NET_SCAN_PAD_COLLECTCOMMIT(const D_PAD* a
     m_commit_container = aCommitContainer;
 }
 
-bool TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::ExecuteAt(const TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::ExecuteAt(TRACK* aTrackSeg)
 {
     TEARDROP* tear = m_Parent->GetTeardrop(aTrackSeg, m_pad);
     if(tear)
