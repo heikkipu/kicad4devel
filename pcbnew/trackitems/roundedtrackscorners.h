@@ -85,6 +85,8 @@ public:
     TrackNodeItem::TRACKNODEITEM* Next(const TRACK* aTrackSegAt) const override;
     TrackNodeItem::TRACKNODEITEM* Back(const TRACK* aTrackSegAt) const override;
     
+    void ConvertSegmentsArc(const TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
+    
 protected:
     ROUNDEDTRACKSCORNERS(){};
     void CreateMenu(wxMenu* aMenu) const override;
@@ -266,7 +268,7 @@ private:
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
     };
 
-    class NET_SCAN_NET_CONVERT : public NET_SCAN_BASE
+    class NET_SCAN_NET_CONVERT : virtual public NET_SCAN_NET_ADD
     {
     public:
         NET_SCAN_NET_CONVERT(const int aNet, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
@@ -274,8 +276,6 @@ private:
 
     protected:
         bool ExecuteAt(const TRACK* aTrackSeg) override;
-
-        PICKED_ITEMS_LIST* m_picked_items {nullptr};
     };
 
     class NET_SCAN_NET_REMOVE : public NET_SCAN_BASE
@@ -313,6 +313,21 @@ private:
 
     protected:
         bool ExecuteAt(const TRACK* aTrackSeg) override;
+    };
+
+    class NET_SCAN_TRACK_CORNER_CONVERT : public NET_SCAN_BASE
+    {
+    public:
+        NET_SCAN_TRACK_CORNER_CONVERT(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
+        ~NET_SCAN_TRACK_CORNER_CONVERT() {};
+
+    protected:
+        bool ExecuteAt(const TRACK* aTrackSeg) override;
+        PICKED_ITEMS_LIST* m_picked_items {nullptr};
+        
+    private:
+        double m_track_length{0.0};
+        std::set<TRACK*> m_collected_segments;
     };
 
 //-----------------------------------------------------------------------------------------------------/

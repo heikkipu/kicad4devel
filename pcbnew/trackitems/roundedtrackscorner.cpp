@@ -487,6 +487,7 @@ ROUNDEDTRACKSCORNER_ROUTE_EDIT::ROUNDEDTRACKSCORNER_ROUTE_EDIT(const BOARD_ITEM*
     if(aTrackSeg)
         m_connected_pos = aTrackSeg->GetStart();
     
+    m_draw_with_segments = false;
     CallConstructor(aTrackSeg, aParams, aCheckNullTrack);
 }
 

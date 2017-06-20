@@ -379,11 +379,8 @@ void ROUNDEDTRACKSCORNERS::Add(const int aNetCodeTo)
         m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_NEW);
 }
 
-ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::NET_SCAN_NET_CONVERT(const int aNet, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList) : NET_SCAN_BASE(nullptr, aParent)
+ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::NET_SCAN_NET_CONVERT(const int aNet, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList) : NET_SCAN_NET_ADD(aNet, aParent, aUndoRedoList)
 {
-    m_picked_items = aUndoRedoList;
-    DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track; 
-    m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode(aNet);
 }
 
 bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::ExecuteAt(const TRACK* aTrackSeg)

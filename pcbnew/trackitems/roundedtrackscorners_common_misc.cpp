@@ -45,4 +45,48 @@ void ROUNDEDTRACKSCORNERS::Plot(const TRACKNODEITEM* aTrackNodeItem, PLOTTER* aP
         }
     }
 }
+//-----------------------------------------------------------------------------------------------------/
+
+//-----------------------------------------------------------------------------------------------------/
+// Convert segments arc to rounded corner.
+//-----------------------------------------------------------------------------------------------------/
+void ROUNDEDTRACKSCORNERS::ConvertSegmentsArc(const TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    std::unique_ptr<NET_SCAN_TRACK_CORNER_CONVERT> arc_convert(new NET_SCAN_TRACK_CORNER_CONVERT(aTrackFrom, this, aUndoRedoList));
+    if(arc_convert)
+    {
+        arc_convert->Execute();
+        
+    }
+}
+
+ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_CORNER_CONVERT::NET_SCAN_TRACK_CORNER_CONVERT(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList) : NET_SCAN_BASE(aTrackSeg, aParent)
+{
+    m_picked_items = aUndoRedoList;
+    m_track_length = aTrackSeg->GetLength();
+    m_collected_segments.clear();
+}
+
+bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_CORNER_CONVERT::ExecuteAt(const TRACK* aTrackSeg)
+{
+    if(aTrackSeg->Type() == PCB_TRACE_T)
+    {
+        if(aTrackSeg->GetLength() == m_track_length)
+        {
+            m_collected_segments.insert(const_cast<TRACK*>(aTrackSeg));
+            return false;
+        }
+        else
+        {
+            if(!m_reverse)
+            {
+                m_reverse = true;
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+//-----------------------------------------------------------------------------------------------------/
 
