@@ -42,7 +42,7 @@ void TEARDROPS::Plot(const TRACKNODEITEM* aTrackNodeItem, PLOTTER* aPlotter, con
             {
                 case TEARDROP::FILLET_T:
                 case TEARDROP::TEARDROP_T:
-                    for(uint n = 0; n < tear->GetPolyPointsNum() - 1; n++)
+                    for(unsigned int n = 0; n < tear->GetPolyPointsNum() - 1; n++)
                     {
                         corners.push_back(tear->GetPolyPoint(n));
                         aPlotter->ThickSegment(tear->GetPolyPoint(n), tear->GetPolyPoint(n+1), tear->GetPolySegmentWidth(), *aPlotMode, aData );

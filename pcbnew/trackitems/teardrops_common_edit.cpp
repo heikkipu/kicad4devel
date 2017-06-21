@@ -143,7 +143,7 @@ void TEARDROPS::DrawEditParams(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     }
 }
 
-void TEARDROPS::UpdateRouteEdit(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const TRACK* aTrack, const uint aViaRad,  const bool aErase, bool* aTrack45Only)
+void TEARDROPS::UpdateRouteEdit(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const TRACK* aTrack, const unsigned int aViaRad,  const bool aErase, bool* aTrack45Only)
 {
     if(m_current_shape && m_can_edit)
     {
@@ -196,7 +196,7 @@ void TEARDROPS::UpdateRouteEdit(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const TRACK* 
                         }
                         case EDIT_SIZE_LENGTH_T:
                         {
-                            ulong mltplr = 100;
+                            unsigned long mltplr = 100;
                             if(m_edit_params.shape == TEARDROP::SUBLAND_T)
                                 mltplr = 50;
                             m_edit_params.length_ratio = mltplr * dist / aViaRad;

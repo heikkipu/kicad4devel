@@ -183,12 +183,12 @@ TEARDROP* TEARDROPS::Add(const TRACK* aTrackSegTo, const wxPoint& aCurPosAt)
         VIA* item_via = nullptr;
         TEARDROP* tear = nullptr;
         D_PAD* item_pad = nullptr;
-        uint min_dist = std::numeric_limits<uint>::max();
+        unsigned int min_dist = std::numeric_limits<unsigned int>::max();
 
-        for(uint n = 0; n<aTrackSegTo->m_PadsConnected.size(); ++n)
+        for(unsigned int n = 0; n<aTrackSegTo->m_PadsConnected.size(); ++n)
         {
             wxPoint pad_pos = aTrackSegTo->m_PadsConnected.at(n)->GetPosition();
-            uint dist = hypot(abs(pad_pos.y - aCurPosAt.y) , abs(pad_pos.x - aCurPosAt.x));
+            unsigned int dist = hypot(abs(pad_pos.y - aCurPosAt.y) , abs(pad_pos.x - aCurPosAt.x));
             if(dist < min_dist)
             {
                 min_dist = dist;
@@ -196,14 +196,14 @@ TEARDROP* TEARDROPS::Add(const TRACK* aTrackSegTo, const wxPoint& aCurPosAt)
             }
         }
             
-        for(uint n = 0; n < 2; ++n)
+        for(unsigned int n = 0; n < 2; ++n)
         {
             VIA* via;
             (n)? via = m_Parent->BackVia(aTrackSegTo) : via = m_Parent->NextVia(aTrackSegTo);
             if(via)
             {
                 wxPoint via_pos = via->GetPosition();
-                uint dist = hypot(abs(via_pos.y - aCurPosAt.y) , abs(via_pos.x - aCurPosAt.x));
+                unsigned int dist = hypot(abs(via_pos.y - aCurPosAt.y) , abs(via_pos.x - aCurPosAt.x));
                 if(dist < min_dist)
                 {
                     item_via = via;
@@ -212,14 +212,14 @@ TEARDROP* TEARDROPS::Add(const TRACK* aTrackSegTo, const wxPoint& aCurPosAt)
             }
         }
 
-        uint dist_start = hypot(abs(aTrackSegTo->GetStart().y - aCurPosAt.y) , abs(aTrackSegTo->GetStart().x - aCurPosAt.x));
+        unsigned int dist_start = hypot(abs(aTrackSegTo->GetStart().y - aCurPosAt.y) , abs(aTrackSegTo->GetStart().x - aCurPosAt.x));
         if(dist_start < min_dist)
         {
             item_via = nullptr;
             item_pad = nullptr;
             min_dist = dist_start;
         }
-        uint dist_end = hypot(abs(aTrackSegTo->GetEnd().y - aCurPosAt.y) , abs(aTrackSegTo->GetEnd().x - aCurPosAt.x));
+        unsigned int dist_end = hypot(abs(aTrackSegTo->GetEnd().y - aCurPosAt.y) , abs(aTrackSegTo->GetEnd().x - aCurPosAt.x));
         if(dist_end < min_dist)
         {
             item_via = nullptr;
@@ -496,9 +496,9 @@ void TEARDROPS::Remove(const BOARD_CONNECTED_ITEM* aItemFrom, BOARD_COMMIT& aCom
         PICKED_ITEMS_LIST undoredo_items;
         Remove(aItemFrom, &undoredo_items, aLockedToo);
 
-        uint num_removed_tears = undoredo_items.GetCount();
+        unsigned int num_removed_tears = undoredo_items.GetCount();
         if(num_removed_tears)
-            for(uint n = 0; n < num_removed_tears; ++n)
+            for(unsigned int n = 0; n < num_removed_tears; ++n)
                 aCommit.Removed(undoredo_items.GetPickedItem(n));
     }
 }
@@ -521,7 +521,7 @@ void TEARDROPS::Remove(const BOARD_CONNECTED_ITEM* aItemFrom, PICKED_ITEMS_LIST*
                 else
                 {
                     TEARDROP* tear = nullptr;
-                    for(uint n = 0; n < 2; ++n)
+                    for(unsigned int n = 0; n < 2; ++n)
                     {
                         n? tear = dynamic_cast<TEARDROP*>(Next(static_cast<TRACK*>(const_cast<BOARD_CONNECTED_ITEM*>(aItemFrom)))) :
                             tear = dynamic_cast<TEARDROP*>(Back(static_cast<TRACK*>(const_cast<BOARD_CONNECTED_ITEM*>(aItemFrom))));
@@ -1083,9 +1083,9 @@ void TEARDROPS::FromMemory(const TRACK* aTrackSegTo, BOARD_COMMIT& aCommit)
     PICKED_ITEMS_LIST undo_redo_list;
     FromMemory(aTrackSegTo, &undo_redo_list);
     
-    uint num_added_tears = undo_redo_list.GetCount();
+    unsigned int num_added_tears = undo_redo_list.GetCount();
     if(num_added_tears)
-        for(uint n = 0; n < num_added_tears; ++n)
+        for(unsigned int n = 0; n < num_added_tears; ++n)
             aCommit.Added(undo_redo_list.GetPickedItem(n));
 }
 
@@ -1368,7 +1368,7 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
     {
         //Teardrops of Pads.
         if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_TEARDROPS_T))
-            for(uint m = 0; m < aTrackSeg->m_PadsConnected.size(); ++m)
+            for(unsigned int m = 0; m < aTrackSeg->m_PadsConnected.size(); ++m)
             {
                 wxPoint pad_pos = aTrackSeg->m_PadsConnected.at(m)->GetPosition();
                 if((aTrackSeg->GetStart() == pad_pos) || (aTrackSeg->GetEnd() == pad_pos))
@@ -1385,7 +1385,7 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
         //T-Junctoins and Junctions of Traces.
         if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_TJUNCTIONS_T)|| (m_type_todo == ONLY_JUNCTIONS_T) || (m_type_todo == JUNCTIONS_AND_TJUNCTIONS_T))
         {
-            for(uint m = 0; m < 2; ++m)
+            for(unsigned int m = 0; m < 2; ++m)
             {
                 wxPoint track_pos;
                 (m)? track_pos = aTrackSeg->GetStart() : track_pos = aTrackSeg->GetEnd();
@@ -1553,7 +1553,7 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
     {
         //Teardrops of Pads.
         if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_TEARDROPS_T))
-            for(uint m = 0; m < aTrackSeg->m_PadsConnected.size(); ++m)
+            for(unsigned int m = 0; m < aTrackSeg->m_PadsConnected.size(); ++m)
             {
                 wxPoint pad_pos = aTrackSeg->m_PadsConnected.at(m)->GetPosition();
                 if((aTrackSeg->GetStart() == pad_pos) || (aTrackSeg->GetEnd() == pad_pos))
@@ -1569,7 +1569,7 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
         
         //T-Junctions and Junctions of Traces.
         if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_JUNCTIONS_T) || (m_type_todo == ONLY_TJUNCTIONS_T) || (m_type_todo == JUNCTIONS_AND_TJUNCTIONS_T))
-        for(uint m = 0; m < 2; ++m)
+        for(unsigned int m = 0; m < 2; ++m)
         {
             wxPoint track_pos;
             (m)? track_pos = aTrackSeg->GetStart() : track_pos = aTrackSeg->GetEnd();
@@ -1639,7 +1639,7 @@ bool TEARDROPS::IsTrimmed(const TRACK* aTrackSeg) const
     TEARDROP* tear = nullptr;
     if(aTrackSeg && (aTrackSeg->Type() == PCB_TRACE_T))
     {
-        uint t_length = aTrackSeg->GetLength();
+        unsigned int t_length = aTrackSeg->GetLength();
         if(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSeg)))
             t_length = dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSeg))->GetLengthVisible();
         
@@ -1659,7 +1659,7 @@ bool TEARDROPS::IsTrimmed(const TEARDROP* aTear) const
     if(aTear && aTear->Type() == PCB_TEARDROP_T)
     {
         TRACK* track = aTear->GetTrackSeg();
-        uint t_length = track->GetLength();
+        unsigned int t_length = track->GetLength();
         if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
             t_length = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetLengthVisible();
         
@@ -1799,7 +1799,7 @@ TEARDROPS::NET_SCAN_PAD_BASE::NET_SCAN_PAD_BASE(const D_PAD* aPad, const TEARDRO
         
 void TEARDROPS::NET_SCAN_PAD_BASE::Execute(void)
 {
-    for(uint n = 0; n < m_pad->m_TracksConnected.size(); ++n)
+    for(unsigned int n = 0; n < m_pad->m_TracksConnected.size(); ++n)
     {
         TRACK* track_seg = static_cast<TRACK*>(m_pad->m_TracksConnected.at(n));
         if(!m_only_exact_connected || (m_only_exact_connected && m_Parent->IsConnected(m_pad, track_seg)))
@@ -1921,7 +1921,7 @@ void TEARDROPS::Update(TRACK* aTrackSegAt, EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR
 void TEARDROPS::Update(D_PAD* aPadAt, EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase)
 {
     if(aPadAt)
-        for(uint n = 0; n < aPadAt->m_TracksConnected.size(); ++n)
+        for(unsigned int n = 0; n < aPadAt->m_TracksConnected.size(); ++n)
             Update(static_cast<TRACK*>(aPadAt->m_TracksConnected.at(n)), aPanel, aDC, aDrawMode, aErase);
 }
 

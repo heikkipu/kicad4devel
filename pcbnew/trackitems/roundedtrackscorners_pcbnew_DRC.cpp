@@ -31,7 +31,7 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 bool ROUNDEDTRACKSCORNERS::DRC_DoClearanceTest(const ROUNDEDTRACKSCORNER* aCorner, const wxPoint aTestPoint, const int aMinDist)
 {
-    for(uint n = 0; n < aCorner->GetPolyPointsNum() - 1; ++n)
+    for(unsigned int n = 0; n < aCorner->GetPolyPointsNum() - 1; ++n)
     {
         wxPoint segStart = aCorner->GetPolyPoint(n);
         wxPoint segEnd = aCorner->GetPolyPoint(n+1);
@@ -57,7 +57,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest(const ROUNDEDTRACKSCORNER* aCorner,
         track_end_pos = dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSeg))->GetEndVisible();
     }
 
-    for(uint n = 0; n < aCorner->GetPolyPointsNum(); ++n)
+    for(unsigned int n = 0; n < aCorner->GetPolyPointsNum(); ++n)
     {
         if(!TestSegment(track_start_pos, track_end_pos, aCorner->GetPolyPoint(n), aMinDist))
             return false;
@@ -68,7 +68,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest(const ROUNDEDTRACKSCORNER* aCorner,
 
 bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest(const TrackNodeItem::ROUNDEDTRACKSCORNER* aCornerFirst, TrackNodeItem::ROUNDEDTRACKSCORNER* aCornerSecond, const int aMinDist)
 {
-    for(uint n = 0; n < aCornerSecond->GetPolyPointsNum(); ++n)
+    for(unsigned int n = 0; n < aCornerSecond->GetPolyPointsNum(); ++n)
     {
         if(!DRC_DoClearanceTest(aCornerFirst, aCornerSecond->GetPolyPoint(n), aMinDist))
             return false;
@@ -154,13 +154,13 @@ bool ROUNDEDTRACKSCORNERS::DRC_DoClearanceTest(const ROUNDEDTRACKSCORNER* aCorne
     wxPoint saved_segm_end = aDRC->m_segmEnd;
     int saved_segm_angle = aDRC->m_segmAngle;
     int saved_segm_lengt = aDRC->m_segmLength;
-    uint poly_points;
+    unsigned int poly_points;
     wxPoint pad_shape_pos = aPad->ShapePos();
     wxPoint delta;
     bool ret_val = true;
     
     poly_points = aCorner->GetPolyPointsNum();
-    for(uint n = 0; n < poly_points -1; ++n)
+    for(unsigned int n = 0; n < poly_points -1; ++n)
     {
         aDRC->m_padToTestPos = pad_shape_pos - aCorner->GetPolyPoint(n);
         aDRC->m_segmEnd = delta = aCorner->GetPolyPoint(n+1) - aCorner->GetPolyPoint(n);
@@ -213,7 +213,7 @@ void ROUNDEDTRACKSCORNERS::DRC_Clearance(const BOARD_CONNECTED_ITEM* aRef, const
         text_shape.clear();
         aText->TransformTextShapeToSegmentList(text_shape);
         
-        for(uint n = 0; n < corner->GetPolyPointsNum() - 1; n++)
+        for(unsigned int n = 0; n < corner->GetPolyPointsNum() - 1; n++)
         {
             wxPoint segStart = corner->GetPolyPoint(n);
             wxPoint segEnd = corner->GetPolyPoint(n+1);

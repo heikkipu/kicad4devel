@@ -130,7 +130,7 @@ bool TRACKNODEITEM::Update(void)
     return true;
 }
 
-wxPoint TRACKNODEITEM::GetPolyPoint(const uint aPoint) const
+wxPoint TRACKNODEITEM::GetPolyPoint(const unsigned int aPoint) const
 {
     if(aPoint < m_seg_points.size())
         return m_seg_points[aPoint];
@@ -384,7 +384,7 @@ void SCAN_NET_BASE::Execute(void)
     if(m_net_start_seg)
     {
         int net_code = m_net_start_seg->GetNetCode();
-        for(uint n = 0; n < 2; ++n)
+        for(unsigned int n = 0; n < 2; ++n)
         {
             TRACK* track_seg = m_net_start_seg;
             if(n)

@@ -133,7 +133,7 @@ TEARDROPS::TRACKS_PROGRESS_CLEAN::TRACKS_PROGRESS_CLEAN(const TEARDROPS* aParent
     m_progress_style = wxPD_AUTO_HIDE;
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_CLEAN::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_CLEAN::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -169,7 +169,7 @@ bool TEARDROPS::Clean(const DLIST<TRACK>* aTracksAt)
     std::unique_ptr<TRACKS_PROGRESS_CLEAN> tears_clean(new TRACKS_PROGRESS_CLEAN(this, aTracksAt, &undoredo_list));
     if(tears_clean)
     {
-        uint cleaned = tears_clean->Execute();
+        unsigned int cleaned = tears_clean->Execute();
         return (bool)cleaned;
     }
     return false;
@@ -251,9 +251,9 @@ TEARDROPS::MODULES_PROGRESS_ADD_TEARS::MODULES_PROGRESS_ADD_TEARS(const TEARDROP
     m_progress_title.Printf(_("Adding Teardrops to Footprints"));
 }
 
-uint TEARDROPS::MODULES_PROGRESS_ADD_TEARS::DoAtPad(const D_PAD* aPadAt)
+unsigned int TEARDROPS::MODULES_PROGRESS_ADD_TEARS::DoAtPad(const D_PAD* aPadAt)
 {
-    uint num_added = m_undoredo_items->GetCount();
+    unsigned int num_added = m_undoredo_items->GetCount();
     m_Parent->Add(aPadAt, m_undoredo_items);
     num_added = m_undoredo_items->GetCount() - num_added;
     return num_added;
@@ -265,9 +265,9 @@ TEARDROPS::MODULES_PROGRESS_REMOVE_TEARS::MODULES_PROGRESS_REMOVE_TEARS(const TE
     m_progress_title.Printf(_("Removing Teardrops from Footprints"));
 }
 
-uint TEARDROPS::MODULES_PROGRESS_REMOVE_TEARS::DoAtPad(const D_PAD* aPadAt)
+unsigned int TEARDROPS::MODULES_PROGRESS_REMOVE_TEARS::DoAtPad(const D_PAD* aPadAt)
 {
-    uint num_removed = m_undoredo_items->GetCount();
+    unsigned int num_removed = m_undoredo_items->GetCount();
     m_Parent->Remove(aPadAt, m_undoredo_items, false);
     num_removed = m_undoredo_items->GetCount() - num_removed;
     return num_removed;
@@ -291,9 +291,9 @@ TEARDROPS::MODULES_PROGRESS_CHANGE_TEARS::~MODULES_PROGRESS_CHANGE_TEARS()
     }
 }
 
-uint TEARDROPS::MODULES_PROGRESS_CHANGE_TEARS::DoAtPad(const D_PAD* aPadAt)
+unsigned int TEARDROPS::MODULES_PROGRESS_CHANGE_TEARS::DoAtPad(const D_PAD* aPadAt)
 {
-    uint rv = MODULES_PROGRESS_REMOVE_TEARS::DoAtPad(aPadAt);
+    unsigned int rv = MODULES_PROGRESS_REMOVE_TEARS::DoAtPad(aPadAt);
     for(TEARDROP* tear : *m_removed_tears)
         m_tears_list->insert(tear);
     return rv;
@@ -311,7 +311,7 @@ TEARDROPS::MODULES_PROGRESS_LOCK_TEARS::MODULES_PROGRESS_LOCK_TEARS(const TEARDR
     m_progress_title.Printf(_("Locking Teardrops of Footprints"));
 }
 
-uint TEARDROPS::MODULES_PROGRESS_LOCK_TEARS::DoAtPad(const D_PAD* aPadAt)
+unsigned int TEARDROPS::MODULES_PROGRESS_LOCK_TEARS::DoAtPad(const D_PAD* aPadAt)
 {
     int num_locked = 0;
     int num_tears = m_Parent->Contains(aPadAt, num_locked);
@@ -326,7 +326,7 @@ TEARDROPS::MODULES_PROGRESS_UNLOCK_TEARS::MODULES_PROGRESS_UNLOCK_TEARS(const TE
     m_progress_title.Printf(_("Unlocking Teardrops of Footprints"));
 }
 
-uint TEARDROPS::MODULES_PROGRESS_UNLOCK_TEARS::DoAtPad(const D_PAD* aPadAt)
+unsigned int TEARDROPS::MODULES_PROGRESS_UNLOCK_TEARS::DoAtPad(const D_PAD* aPadAt)
 {
     int num_locked = 0;
     int num_tears = m_Parent->Contains(aPadAt, num_locked);
@@ -345,9 +345,9 @@ TEARDROPS::TRACKS_PROGRESS_ADD_TEARS_VIAS::TRACKS_PROGRESS_ADD_TEARS_VIAS(const 
     m_progress_title.Printf(_("Adding Teardrops to Vias"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_ADD_TEARS_VIAS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_ADD_TEARS_VIAS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint num_added = 0;
+    unsigned int num_added = 0;
     TRACK* track_seg = dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(track_seg)
     {
@@ -388,7 +388,7 @@ void TEARDROPS::TRACKS_PROGRESS_REMOVE_TEARS_VIAS::ExecuteEnd(void)
     }
 }
         
-uint TEARDROPS::TRACKS_PROGRESS_REMOVE_TEARS_VIAS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_REMOVE_TEARS_VIAS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_VIA*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -423,9 +423,9 @@ TEARDROPS::TRACKS_PROGRESS_ADD_TJUNCTIONS::TRACKS_PROGRESS_ADD_TJUNCTIONS(const 
     m_progress_title.Printf(_("Adding T-Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_ADD_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_ADD_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint num_added = m_undoredo_items->GetCount();
+    unsigned int num_added = m_undoredo_items->GetCount();
     TRACK* track_seg = dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(track_seg)
         m_Parent->Add(track_seg, TEARDROPS::TJUNCTION_TO_ADD, m_undoredo_items);
@@ -440,7 +440,7 @@ TEARDROPS::TRACKS_PROGRESS_REMOVE_TJUNCTIONS::TRACKS_PROGRESS_REMOVE_TJUNCTIONS(
     m_progress_title.Printf(_("Removing T-Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_REMOVE_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_REMOVE_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_JUNCTIONS*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -466,7 +466,7 @@ TEARDROPS::TRACKS_PROGRESS_CHANGE_TJUNCTIONS::TRACKS_PROGRESS_CHANGE_TJUNCTIONS(
     m_progress_title.Printf(_("Changing T-Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_CHANGE_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_CHANGE_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     return TRACKS_PROGRESS_REMOVE_TJUNCTIONS::ExecuteItem(aItemAt);
 }
@@ -482,9 +482,9 @@ TEARDROPS::TRACKS_PROGRESS_ADD_JUNCTIONS::TRACKS_PROGRESS_ADD_JUNCTIONS(const TE
     m_progress_title.Printf(_("Adding Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_ADD_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_ADD_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint num_added = m_undoredo_items->GetCount();
+    unsigned int num_added = m_undoredo_items->GetCount();
     TRACK* track_seg = dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(track_seg)
         m_Parent->Add(track_seg, TEARDROPS::JUNCTION_TO_ADD, m_undoredo_items);
@@ -500,7 +500,7 @@ TEARDROPS_TRACKS_PROGRESS(aParent, aTracks, aUndoRedoList),
     m_progress_title.Printf(_("Removing Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_REMOVE_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_REMOVE_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_JUNCTIONS*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -526,7 +526,7 @@ TEARDROPS_TRACKS_PROGRESS(aParent, aTracks, aUndoRedoList),
     m_progress_title.Printf(_("Changing Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_CHANGE_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_CHANGE_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     return TRACKS_PROGRESS_REMOVE_JUNCTIONS::ExecuteItem(aItemAt);
 }
@@ -543,7 +543,7 @@ TEARDROPS::TRACKS_PROGRESS_LOCK_SAME::TRACKS_PROGRESS_LOCK_SAME(const TEARDROPS*
     m_progress_title.Printf(_("Locking All [%s]"), GetChars(aParent->ParamsTxtToMenu(m_params)));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_LOCK_SAME::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_LOCK_SAME::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -563,7 +563,7 @@ TEARDROPS::TRACKS_PROGRESS_UNLOCK_SAME::TRACKS_PROGRESS_UNLOCK_SAME(const TEARDR
     m_progress_title.Printf(_("Unlocking All [%s]"), GetChars(aParent->ParamsTxtToMenu(aParams)));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_UNLOCK_SAME::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_UNLOCK_SAME::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -583,7 +583,7 @@ TEARDROPS::TRACKS_PROGRESS_LOCK_TEARS_VIAS::TRACKS_PROGRESS_LOCK_TEARS_VIAS(cons
     m_progress_title.Printf(_("Locking Teardrops of Vias"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_LOCK_TEARS_VIAS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_LOCK_TEARS_VIAS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_VIA*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -600,7 +600,7 @@ TEARDROPS::TRACKS_PROGRESS_UNLOCK_TEARS_VIAS::TRACKS_PROGRESS_UNLOCK_TEARS_VIAS(
     m_progress_title.Printf(_("Unlocking Teardrops of Vias"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_UNLOCK_TEARS_VIAS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_UNLOCK_TEARS_VIAS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_VIA*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -617,7 +617,7 @@ TEARDROPS::TRACKS_PROGRESS_LOCK_TJUNCTIONS::TRACKS_PROGRESS_LOCK_TJUNCTIONS(cons
     m_progress_title.Printf(_("Locking T-Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_LOCK_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_LOCK_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_JUNCTIONS*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -637,7 +637,7 @@ TEARDROPS::TRACKS_PROGRESS_UNLOCK_TJUNCTIONS::TRACKS_PROGRESS_UNLOCK_TJUNCTIONS(
     m_progress_title.Printf(_("Unlocking T-Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_UNLOCK_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_UNLOCK_TJUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_JUNCTIONS*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -657,7 +657,7 @@ TEARDROPS::TRACKS_PROGRESS_LOCK_JUNCTIONS::TRACKS_PROGRESS_LOCK_JUNCTIONS(const 
     m_progress_title.Printf(_("Locking Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_LOCK_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_LOCK_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_JUNCTIONS*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -677,7 +677,7 @@ TEARDROPS::TRACKS_PROGRESS_UNLOCK_JUNCTIONS::TRACKS_PROGRESS_UNLOCK_JUNCTIONS(co
     m_progress_title.Printf(_("Unlocking Junctions"));
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_UNLOCK_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_UNLOCK_JUNCTIONS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     TEARDROP* tear = dynamic_cast<TEARDROP_JUNCTIONS*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
@@ -729,9 +729,9 @@ TEARDROPS::TRACKS_PROGRESS_MARK_DIFF::~TRACKS_PROGRESS_MARK_DIFF()
         delete m_collected_tears;
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_MARK_DIFF::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_DIFF::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint num_marks = 0;
+    unsigned int num_marks = 0;
     TEARDROP* tear = dynamic_cast<TEARDROP*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)
     {
@@ -804,9 +804,9 @@ TEARDROPS::TRACKS_PROGRESS_MARK_CURR::TRACKS_PROGRESS_MARK_CURR(const TEARDROPS*
     }
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_MARK_CURR::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_CURR::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint num_marks = 0;
+    unsigned int num_marks = 0;
     TEARDROP::PARAMS curr_params = m_Parent->GetShapeParams(m_Parent->GetCurrentShape());
     TEARDROP* tear = dynamic_cast<TEARDROP*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(tear)

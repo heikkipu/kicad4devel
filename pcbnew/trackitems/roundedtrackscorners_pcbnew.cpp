@@ -54,9 +54,9 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS::ROUNDEDTRACKSCO
     m_progress_title.Printf(_("Adding Rounded Corners"));
 }
 
-uint ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint num_added = 0;
+    unsigned int num_added = 0;
     TRACK* track_seg = dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(track_seg)
     {
@@ -104,7 +104,7 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS::ROUNDEDTRACK
     m_progress_style = wxPD_AUTO_HIDE;
 }
 
-uint ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     if(aItemAt->Type() == PCB_TRACE_T)
     {
@@ -157,7 +157,7 @@ void ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS::Execute
     }
 }
         
-uint ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(corner)
@@ -183,7 +183,7 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN::ROUNDEDTRACKSCORNERS_
     m_progress_style = wxPD_AUTO_HIDE;
 }
 
-uint ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
     ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(corner)
@@ -203,11 +203,11 @@ bool ROUNDEDTRACKSCORNERS::Clean(const DLIST<TRACK>* aTracksAt, BOARD_COMMIT& aC
     std::unique_ptr<ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN> corners_clean(new ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN(this, aTracksAt, &undoredo_list));
     if(corners_clean)
     {
-        uint cleaned = corners_clean->Execute();
+        unsigned int cleaned = corners_clean->Execute();
         
-        uint num_cleaned_corners = undoredo_list.GetCount();
+        unsigned int num_cleaned_corners = undoredo_list.GetCount();
         if(num_cleaned_corners)
-            for(uint n = 0; n < num_cleaned_corners; ++n)
+            for(unsigned int n = 0; n < num_cleaned_corners; ++n)
                 aCommit.Removed(undoredo_list.GetPickedItem(n));
             
         return (bool)cleaned;

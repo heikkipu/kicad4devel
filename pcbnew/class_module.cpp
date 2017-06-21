@@ -213,7 +213,7 @@ MODULE& MODULE::operator=( const MODULE& aOther )
         if( !hit )
             del_pads.push_back( pad_t );
     }
-    for( uint n = 0; n < del_pads.size(); ++n )
+    for( unsigned int n = 0; n < del_pads.size(); ++n )
         m_Pads.Remove(del_pads.at(n));
     
     //Copy aOther pads data to this module pads and create pads that are not in this module, if any..

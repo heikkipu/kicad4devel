@@ -308,13 +308,13 @@ void ROUNDEDTRACKSCORNERS::Add(TRACK* aTrackSegTo, const wxPoint& aCurPosAt)
     {
         PICKED_ITEMS_LIST undoredo_items;
         
-        uint min_dist = std::numeric_limits<uint>::max();
+        unsigned int min_dist = std::numeric_limits<unsigned int>::max();
 
-        uint dist_start = hypot(abs(aTrackSegTo->GetStart().y - aCurPosAt.y) , abs(aTrackSegTo->GetStart().x - aCurPosAt.x));
+        unsigned int dist_start = hypot(abs(aTrackSegTo->GetStart().y - aCurPosAt.y) , abs(aTrackSegTo->GetStart().x - aCurPosAt.x));
         if(dist_start < min_dist)
             min_dist = dist_start;
         
-        uint dist_end = hypot(abs(aTrackSegTo->GetEnd().y - aCurPosAt.y) , abs(aTrackSegTo->GetEnd().x - aCurPosAt.x));
+        unsigned int dist_end = hypot(abs(aTrackSegTo->GetEnd().y - aCurPosAt.y) , abs(aTrackSegTo->GetEnd().x - aCurPosAt.x));
         wxPoint pos;
         (dist_start < dist_end)? pos = aTrackSegTo->GetStart() : pos = aTrackSegTo->GetEnd();
         
@@ -337,6 +337,18 @@ void ROUNDEDTRACKSCORNERS::Add(TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoL
             Add(aTrackSegTo, pos, aUndoRedoList);
         }
     }
+}
+
+void ROUNDEDTRACKSCORNERS::Add(TRACK* aTrackSegTo, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    ROUNDEDTRACKSCORNER::PARAMS current_params = GetParams();
+    ROUNDEDTRACKSCORNER::PARAMS params = current_params;
+    params.length_set = aLength;
+    params.length_ratio = 100;
+    SetParams(params);
+    Add(aTrackSegTo, aUndoRedoList);
+    SetParams(current_params);
+    RecreateMenu();
 }
 
 void ROUNDEDTRACKSCORNERS::Add(TRACK* aTrackSegTo)
@@ -413,7 +425,7 @@ void ROUNDEDTRACKSCORNERS::Remove(const TRACK* aTrackItemFrom, PICKED_ITEMS_LIST
             if(aTrackItemFrom->Type() == PCB_TRACE_T)
             {
                 ROUNDEDTRACKSCORNER* corner = nullptr;
-                for(uint n = 0; n < 2; ++n)
+                for(unsigned int n = 0; n < 2; ++n)
                 {
                     n? corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Next(const_cast<TRACK*>(aTrackItemFrom))) : corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Back(const_cast<TRACK*>(aTrackItemFrom)));
 
@@ -461,9 +473,9 @@ void ROUNDEDTRACKSCORNERS::Remove(const TRACK* aTrackItemFrom, BOARD_COMMIT& aCo
         PICKED_ITEMS_LIST undoredo_items;
         Remove(aTrackItemFrom, &undoredo_items, aLockedToo);
         
-        uint num_removed_corners = undoredo_items.GetCount();
+        unsigned int num_removed_corners = undoredo_items.GetCount();
         if(num_removed_corners)
-            for(uint n = 0; n < num_removed_corners; ++n)
+            for(unsigned int n = 0; n < num_removed_corners; ++n)
                 aCommit.Removed(undoredo_items.GetPickedItem(n));
     }
 }
@@ -762,8 +774,8 @@ void ROUNDEDTRACKSCORNERS::FromMemory(const TRACK* aTrackSegTo, BOARD_COMMIT& aC
     PICKED_ITEMS_LIST undoredo_items;
     FromMemory(aTrackSegTo, &undoredo_items);
     
-    uint num_added_corners = undoredo_items.GetCount();
+    unsigned int num_added_corners = undoredo_items.GetCount();
     if(num_added_corners)
-        for(uint n = 0; n < num_added_corners; ++n)
+        for(unsigned int n = 0; n < num_added_corners; ++n)
             aCommit.Added(undoredo_items.GetPickedItem(n));
 }

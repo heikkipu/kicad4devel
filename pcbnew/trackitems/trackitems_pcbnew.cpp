@@ -127,9 +127,9 @@ TRACKITEMS::TRACKS_PROGRESS_MARK_SHARP_ANGLES::TRACKS_PROGRESS_MARK_SHARP_ANGLES
     m_progress_title.Printf(_("Searching Sharp Angles of Tracks"));
 }
 
-uint TRACKITEMS::TRACKS_PROGRESS_MARK_SHARP_ANGLES::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TRACKITEMS::TRACKS_PROGRESS_MARK_SHARP_ANGLES::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint num_marks = 0;
+    unsigned int num_marks = 0;
     TRACK* track_seg = dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(track_seg && (track_seg->Type() == PCB_TRACE_T))
     {
@@ -303,9 +303,9 @@ TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::~TRACKS_PROGRESS_FIX_ITEM_CONNE
             m_Parent->RoundedTracksCorners()->Update(track_seg);
 }
 
-uint TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint exec_count = 0;
+    unsigned int exec_count = 0;
     TRACK* track_seg = dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(track_seg && (track_seg->Type() == PCB_TRACE_T))
     {

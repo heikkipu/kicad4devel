@@ -38,7 +38,7 @@ bool TEARDROPS::DRC_DoClearanceTest(const TEARDROP* aTear, const wxPoint aTestPo
     {
         case TEARDROP::FILLET_T:
         case TEARDROP::TEARDROP_T:
-            for(uint n = 0; n < aTear->GetPolyPointsNum() - 1; ++n)
+            for(unsigned int n = 0; n < aTear->GetPolyPointsNum() - 1; ++n)
             {
                 wxPoint segStart = aTear->GetPolyPoint(n);
                 wxPoint segEnd = aTear->GetPolyPoint(n+1);
@@ -115,7 +115,7 @@ bool TEARDROPS::DRC_ClearanceTest(const TEARDROP* aTear, const TRACK* aTrackSeg,
 
 bool TEARDROPS::DRC_ClearanceTest(const TEARDROP* aTear, ROUNDEDTRACKSCORNER* aCorner, const int aMinDist)
 {
-    for(uint n = 0; n < aCorner->GetPolyPointsNum(); ++n)
+    for(unsigned int n = 0; n < aCorner->GetPolyPointsNum(); ++n)
     {
         if(!DRC_DoClearanceTest(aTear, aCorner->GetPolyPoint(n), aMinDist))
             return false;
@@ -275,7 +275,7 @@ bool TEARDROPS::DRC_DoClearanceTest(const TEARDROP* aTear, const D_PAD* aPad, co
     wxPoint saved_segm_end = aDRC->m_segmEnd;
     int saved_segm_angle = aDRC->m_segmAngle;
     int saved_segm_lengt = aDRC->m_segmLength;
-    uint poly_points;
+    unsigned int poly_points;
     wxPoint pad_shape_pos = aPad->ShapePos();
     wxPoint delta;
     bool ret_val = true;
@@ -284,7 +284,7 @@ bool TEARDROPS::DRC_DoClearanceTest(const TEARDROP* aTear, const D_PAD* aPad, co
         case TEARDROP::FILLET_T:
         case TEARDROP::TEARDROP_T:
             poly_points = aTear->GetPolyPointsNum();
-            for(uint n = 0; n < poly_points -1; ++n)
+            for(unsigned int n = 0; n < poly_points -1; ++n)
             {
                 aDRC->m_padToTestPos = pad_shape_pos - aTear->GetPolyPoint(n);
                 aDRC->m_segmEnd = delta = aTear->GetPolyPoint(n+1) - aTear->GetPolyPoint(n);
@@ -350,7 +350,7 @@ void TEARDROPS::DRC_Clearance(const BOARD_CONNECTED_ITEM* aRef, const TEXTE_PCB*
         {
             case TEARDROP::FILLET_T:
             case TEARDROP::TEARDROP_T:
-                for(uint n = 0; n < tear->GetPolyPointsNum() - 1; n++)
+                for(unsigned int n = 0; n < tear->GetPolyPointsNum() - 1; n++)
                 {
                     wxPoint segStart = tear->GetPolyPoint(n);
                     wxPoint segEnd = tear->GetPolyPoint(n+1);
@@ -511,16 +511,16 @@ TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::~MODULES_PROGRESS_MARK_WARNINGS()
         m_Parent->GetBoard()->DeleteMARKERs();
 }
 
-uint TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::DoAtPad(const D_PAD* aPadAt)
+unsigned int TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::DoAtPad(const D_PAD* aPadAt)
 {
-    uint num_marks = 0;
+    unsigned int num_marks = 0;
     if(aPadAt)
     {
-        for(uint n = 0; n < aPadAt->m_TracksConnected.size(); ++n)
+        for(unsigned int n = 0; n < aPadAt->m_TracksConnected.size(); ++n)
         {
             TRACK* track_seg = static_cast<TRACK*>(aPadAt->m_TracksConnected.at(n));
             bool same_seg = false;
-            for(uint m = 0 ; m < n; ++m)
+            for(unsigned int m = 0 ; m < n; ++m)
                 if(aPadAt->m_TracksConnected.at(m) == track_seg)
                     same_seg = true;
             wxPoint pad_pos = aPadAt->GetPosition();
@@ -656,9 +656,9 @@ TEARDROPS::TRACKS_PROGRESS_MARK_WARNINGS::~TRACKS_PROGRESS_MARK_WARNINGS()
         m_Parent->GetBoard()->DeleteMARKERs();
 }
 
-uint TEARDROPS::TRACKS_PROGRESS_MARK_WARNINGS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_WARNINGS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint num_marks = 0;
+    unsigned int num_marks = 0;
     TRACK* track_seg = dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(track_seg)
     {

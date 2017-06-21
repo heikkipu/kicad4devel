@@ -54,6 +54,7 @@ public:
     void Add(TRACK* aTrackSegTo, const wxPoint& aCurPosAt); 
     TrackNodeItem::ROUNDEDTRACKSCORNER* Add(TRACK* aTrackSegTo, const wxPoint aPosition, PICKED_ITEMS_LIST* aUndoRedoList);
     void Add(TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList);
+    void Add(TRACK* aTrackSegTo, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList);
     void Add(TRACK* aTrackSegTo); //Track routing trace.
     //All
     void Add(const DLIST<TRACK>* aTracksAt);
@@ -85,8 +86,8 @@ public:
     TrackNodeItem::TRACKNODEITEM* Next(const TRACK* aTrackSegAt) const override;
     TrackNodeItem::TRACKNODEITEM* Back(const TRACK* aTrackSegAt) const override;
     
-    void ConvertSegmentedCorners(const TRACK* aTrackFrom, const bool aUndo);
-    void ConvertSegmentedCorners(const TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
+    void ConvertSegmentedCorners(TRACK* aTrackFrom, const bool aUndo);
+    void ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
     
 protected:
     ROUNDEDTRACKSCORNERS(){};
@@ -317,22 +318,24 @@ private:
         bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
-    class NET_SCAN_TRACK_COLLECT_SAME_LENGTH : public NET_SCAN_BASE
+    class NET_SCAN_TRACK_COLLECT_SAMELENGTH : public NET_SCAN_BASE
     {
     public:
-        NET_SCAN_TRACK_COLLECT_SAME_LENGTH(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
-        ~NET_SCAN_TRACK_COLLECT_SAME_LENGTH() {};
+        NET_SCAN_TRACK_COLLECT_SAMELENGTH(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
+        ~NET_SCAN_TRACK_COLLECT_SAMELENGTH() {};
 
-        std::set<TRACK*>* GetSegments(void) {return &m_collected_segments;}
+        std::set<TRACK*>* GetSamelengthSegments(void) {return &m_samelength_segments;}
+        std::set<TRACK*>* GetAnotherSegments(void) {return &m_another_segments;}
         
     protected:
         bool ExecuteAt(TRACK* aTrackSeg) override;
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
         
     private:
-        uint m_track_length{0};
-        std::set<TRACK*> m_collected_segments;
-        static const uint ROUND_DIVIDER = 100;
+        unsigned int m_track_length{0};
+        std::set<TRACK*> m_samelength_segments;
+        std::set<TRACK*> m_another_segments;
+        static const unsigned int ROUND_DIVIDER = 100;
     };
 
 //-----------------------------------------------------------------------------------------------------/
@@ -357,7 +360,7 @@ private:
     public:
         ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS(const ROUNDEDTRACKSCORNERS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     //Convert all TRACKs to ROUNDEDCORNERTRACKs.
@@ -366,7 +369,7 @@ private:
     public:
         ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS(const ROUNDEDTRACKSCORNERS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS : virtual public ROUNDEDTRACKSCORNERS_PROGRESS
@@ -376,7 +379,7 @@ private:
         ~ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS();
 
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
         void ExecuteEnd(void) override;
         RoundedTracksCorner_Container* m_remove_corners {nullptr};
 
@@ -396,7 +399,7 @@ private:
     public:
         ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN(const ROUNDEDTRACKSCORNERS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 //-----------------------------------------------------------------------------------------------------/
 

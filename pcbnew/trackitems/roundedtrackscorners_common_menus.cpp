@@ -75,7 +75,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeSize(wxMenu* aMenu) const
         AddMenuItem(aMenu, size_length_set_menu, ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_COMMON_MNU, msg, KiBitmap(tools_xpm));
         for(int n = ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST; n <= ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_LAST; ++n)
         {
-            uint length_set = const_cast<ROUNDEDTRACKSCORNERS*> (this)->MenuToDo_CalcSizeLengthSet(n);
+            unsigned int length_set = const_cast<ROUNDEDTRACKSCORNERS*> (this)->MenuToDo_CalcSizeLengthSet(n);
             if(length_set != current_params.length_set)
             {
                 if(!length_set)

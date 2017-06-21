@@ -262,7 +262,7 @@ public:
     bool CanEdit(void) const { return m_can_edit;}
     void ToggleEdit(const TO_EDIT_T aEdit);
     bool IsEditOn(void) const { return (bool)m_to_edit; }
-    void UpdateRouteEdit(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const TRACK* aTrack, const uint aViaRad, const bool aErase, bool* aTrack45Only);
+    void UpdateRouteEdit(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const TRACK* aTrack, const unsigned int aViaRad, const bool aErase, bool* aTrack45Only);
 
 private:
     TrackNodeItem::TEARDROP_VIA* m_track_edit_tear;
@@ -666,7 +666,7 @@ private:
         TEARDROPS::TEARDROPS_TYPE_TODO m_type_todo;
         bool m_result_value {false};
 
-        static const uint COUNTS_MAX {
+        static const unsigned int COUNTS_MAX {
             100
         };
     };
@@ -870,7 +870,7 @@ private:
     public:
         MODULES_PROGRESS_ADD_TEARS(const TEARDROPS* aParent, const DLIST<MODULE>* aModules, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint DoAtPad(const D_PAD* aPadAt) override;
+        unsigned int DoAtPad(const D_PAD* aPadAt) override;
     };
 
     class MODULES_PROGRESS_REMOVE_TEARS : public TEARDROPS_MODULES_PROGRESS
@@ -878,7 +878,7 @@ private:
     public:
         MODULES_PROGRESS_REMOVE_TEARS(const TEARDROPS* aParent, const DLIST<MODULE>* aModules, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint DoAtPad(const D_PAD* aPadAt) override;
+        unsigned int DoAtPad(const D_PAD* aPadAt) override;
     };
 
     class MODULES_PROGRESS_CHANGE_TEARS : public MODULES_PROGRESS_REMOVE_TEARS
@@ -888,7 +888,7 @@ private:
                                       const Teardrop_Container* aRemovedList, PICKED_ITEMS_LIST* aUndoRedoList);
         ~MODULES_PROGRESS_CHANGE_TEARS();
     protected:
-        uint DoAtPad(const D_PAD* aPadAt) override;
+        unsigned int DoAtPad(const D_PAD* aPadAt) override;
         void ExecuteEnd(void) override;
     private:
         TEARDROPS::Teardrop_Container* m_removed_tears {nullptr};
@@ -901,7 +901,7 @@ private:
         MODULES_PROGRESS_MARK_WARNINGS(const TEARDROPS* aParent, const DLIST<MODULE>* aModules, DRC* aDRC);
         ~MODULES_PROGRESS_MARK_WARNINGS();
     protected:
-        uint DoAtPad(const D_PAD* aPadAt) override;
+        unsigned int DoAtPad(const D_PAD* aPadAt) override;
         DRC* m_DRC = nullptr;
     };
 
@@ -910,7 +910,7 @@ private:
     public:
         MODULES_PROGRESS_LOCK_TEARS(const TEARDROPS* aParent, const DLIST<MODULE>* aModules);
     protected:
-        uint DoAtPad(const D_PAD* aPadAt) override;
+        unsigned int DoAtPad(const D_PAD* aPadAt) override;
     };
 
     class MODULES_PROGRESS_UNLOCK_TEARS : public TEARDROPS_MODULES_PROGRESS
@@ -918,7 +918,7 @@ private:
     public:
         MODULES_PROGRESS_UNLOCK_TEARS(const TEARDROPS* aParent, const DLIST<MODULE>* aModules);
     protected:
-        uint DoAtPad(const D_PAD* aPadAt) override;
+        unsigned int DoAtPad(const D_PAD* aPadAt) override;
     };
 
 //-----------------------------------------------------------------------------------------------------/
@@ -941,7 +941,7 @@ private:
     public:
         TRACKS_PROGRESS_ADD_TEARS_VIAS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_REMOVE_TEARS_VIAS : virtual public TEARDROPS_TRACKS_PROGRESS
@@ -951,7 +951,7 @@ private:
         ~TRACKS_PROGRESS_REMOVE_TEARS_VIAS();
 
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
         void ExecuteEnd(void) override;
         TEARDROPS::Teardrop_Container* m_remove_tears {nullptr};
 
@@ -973,7 +973,7 @@ private:
     public:
         TRACKS_PROGRESS_ADD_TJUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_REMOVE_TJUNCTIONS : virtual public TRACKS_PROGRESS_REMOVE_TEARS_VIAS
@@ -982,7 +982,7 @@ private:
         TRACKS_PROGRESS_REMOVE_TJUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
 
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_CHANGE_TJUNCTIONS : public TRACKS_PROGRESS_CHANGE_TEARS_VIAS, public TRACKS_PROGRESS_REMOVE_TJUNCTIONS
@@ -990,7 +990,7 @@ private:
     public:
         TRACKS_PROGRESS_CHANGE_TJUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
         void ExecuteEnd(void) override;
     };
 
@@ -999,7 +999,7 @@ private:
     public:
         TRACKS_PROGRESS_ADD_JUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_REMOVE_JUNCTIONS : public TRACKS_PROGRESS_REMOVE_TJUNCTIONS
@@ -1008,7 +1008,7 @@ private:
         TRACKS_PROGRESS_REMOVE_JUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
 
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_CHANGE_JUNCTIONS : public TRACKS_PROGRESS_CHANGE_TEARS_VIAS, public TRACKS_PROGRESS_REMOVE_JUNCTIONS
@@ -1016,7 +1016,7 @@ private:
     public:
         TRACKS_PROGRESS_CHANGE_JUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
         void ExecuteEnd(void) override;
     };
 
@@ -1026,7 +1026,7 @@ private:
         TRACKS_PROGRESS_MARK_WARNINGS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, const TEARDROPS::TEARDROPS_TYPE_TODO aTypeToDo, DRC* aDRC);
         ~TRACKS_PROGRESS_MARK_WARNINGS();
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
         DRC* m_DRC = nullptr;
         TEARDROPS::TEARDROPS_TYPE_TODO m_type_todo;
     };
@@ -1038,7 +1038,7 @@ private:
         ~TRACKS_PROGRESS_MARK_DIFF();
         
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
         Teardrop_Container* m_collected_tears {nullptr};
     };
 
@@ -1048,7 +1048,7 @@ private:
         TRACKS_PROGRESS_MARK_CURR(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, const TEARDROPS::TEARDROPS_TYPE_TODO aTypeToDo, DRC* aDRC);
         
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     //Clean all teardrops and junctions.
@@ -1057,7 +1057,7 @@ private:
     public:
         TRACKS_PROGRESS_CLEAN(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_LOCK_SAME : public TEARDROPS_TRACKS_PROGRESS
@@ -1065,7 +1065,7 @@ private:
     public:
         TRACKS_PROGRESS_LOCK_SAME(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, const TrackNodeItem::TEARDROP::PARAMS aParams);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
         TrackNodeItem::TEARDROP::PARAMS m_params{TrackNodeItem::TEARDROP::NULL_T,0,0,0};
     };
 
@@ -1074,7 +1074,7 @@ private:
     public:
         TRACKS_PROGRESS_UNLOCK_SAME(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks, const TrackNodeItem::TEARDROP::PARAMS aParams);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_LOCK_TEARS_VIAS : public TEARDROPS_TRACKS_PROGRESS
@@ -1082,7 +1082,7 @@ private:
     public:
         TRACKS_PROGRESS_LOCK_TEARS_VIAS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_UNLOCK_TEARS_VIAS : public TEARDROPS_TRACKS_PROGRESS
@@ -1090,7 +1090,7 @@ private:
     public:
         TRACKS_PROGRESS_UNLOCK_TEARS_VIAS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_LOCK_TJUNCTIONS : public TRACKS_PROGRESS_LOCK_TEARS_VIAS
@@ -1098,7 +1098,7 @@ private:
     public:
         TRACKS_PROGRESS_LOCK_TJUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_UNLOCK_TJUNCTIONS : public TRACKS_PROGRESS_UNLOCK_TEARS_VIAS
@@ -1106,7 +1106,7 @@ private:
     public:
         TRACKS_PROGRESS_UNLOCK_TJUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_LOCK_JUNCTIONS : public TRACKS_PROGRESS_LOCK_TEARS_VIAS
@@ -1114,7 +1114,7 @@ private:
     public:
         TRACKS_PROGRESS_LOCK_JUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 
     class TRACKS_PROGRESS_UNLOCK_JUNCTIONS : public TRACKS_PROGRESS_UNLOCK_TEARS_VIAS
@@ -1122,7 +1122,7 @@ private:
     public:
         TRACKS_PROGRESS_UNLOCK_JUNCTIONS(const TEARDROPS* aParent, const DLIST<TRACK>* aTracks);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     };
 }; //class TEARDROPS
 

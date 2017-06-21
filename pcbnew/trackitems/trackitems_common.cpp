@@ -182,7 +182,7 @@ D_PAD* TRACKITEMS::GetPad(const TRACK* aTrackSegAt, const wxPoint aPosAt) const
     if(aTrackSegAt && ((aTrackSegAt->GetStart() == aPosAt) || (aTrackSegAt->GetEnd() == aPosAt)))
     {
         if(aTrackSegAt->Type() == PCB_TRACE_T)
-            for(uint n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
+            for(unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
                 if(aTrackSegAt->m_PadsConnected.at(n)->GetPosition() == aPosAt)
                     return aTrackSegAt->m_PadsConnected.at(n);
     }
@@ -194,7 +194,7 @@ D_PAD* TRACKITEMS::NextPad(const TRACK* aTrackSegAt) const
     if(aTrackSegAt)
     {
         if(aTrackSegAt->Type() == PCB_TRACE_T)
-            for(uint n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
+            for(unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
                 if(aTrackSegAt->GetEnd() == aTrackSegAt->m_PadsConnected.at(n)->GetPosition())
                     return aTrackSegAt->m_PadsConnected.at(n);
     }
@@ -206,7 +206,7 @@ D_PAD* TRACKITEMS::BackPad(const TRACK* aTrackSegAt) const
     if(aTrackSegAt)
     {
         if(aTrackSegAt->Type() == PCB_TRACE_T)
-            for(uint n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
+            for(unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
                 if(aTrackSegAt->GetStart() == aTrackSegAt->m_PadsConnected.at(n)->GetPosition())
                     return aTrackSegAt->m_PadsConnected.at(n);
     }
@@ -222,7 +222,7 @@ void TRACKITEMS::PickViaSize(const VIA* aVia)
     VIA_DIMENSION via_dim;
     via_dim.m_Diameter = aVia->GetWidth();
     via_dim.m_Drill = aVia->GetDrillValue();
-    uint index = 0;
+    unsigned int index = 0;
     for(index = 1; index < m_Board->GetDesignSettings().m_ViasDimensionsList.size(); ++index)
         if(m_Board->GetDesignSettings().m_ViasDimensionsList.at(index).m_Diameter == via_dim.m_Diameter)
         {
@@ -245,7 +245,7 @@ void TRACKITEMS::PickViaSize(const VIA* aVia)
 void TRACKITEMS::PickTrackSize(const TRACK* aTrack)
 {
     int width = aTrack->GetWidth();
-    uint index = 0;
+    unsigned int index = 0;
     for(index = 1; index < m_Board->GetDesignSettings().m_TrackWidthList.size(); ++index)
         if(m_Board->GetDesignSettings().m_TrackWidthList.at(index) == width)
         {
@@ -391,13 +391,13 @@ void TRACKITEMS::Angles(const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList, c
     angle_arc.clear();
     
     std::size_t drag_seg_list_size = aDragSegmentList->size();
-    for(uint n = 0; n < drag_seg_list_size; ++n)
+    for(unsigned int n = 0; n < drag_seg_list_size; ++n)
     {
         TRACK* track_seg = aDragSegmentList->at(n).m_Track;
             
         //Calc angle 45 degrees multiples versus another track in current pos.
         TRACK* track_cmp = nullptr;
-        for(uint m = n + 1; m < drag_seg_list_size; ++m)
+        for(unsigned int m = n + 1; m < drag_seg_list_size; ++m)
         {
             if(n < drag_seg_list_size - 1)
                 track_cmp = aDragSegmentList->at(m).m_Track; 
@@ -509,7 +509,7 @@ bool TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::ExecuteAt(TRACK* aTrackSeg)
     {
         if(((aTrackSeg->GetStart() == m_pos) || (aTrackSeg->GetEnd() == m_pos)) && aTrackSeg->IsOnLayer(m_net_start_seg->GetLayer()))
         {
-            for(uint n = 0; n < m_drag_segments->size(); ++n)
+            for(unsigned int n = 0; n < m_drag_segments->size(); ++n)
                 if(m_drag_segments->at(n).m_Track == aTrackSeg)
                     return false;
 
@@ -524,7 +524,7 @@ bool TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::ExecuteAt(TRACK* aTrackSeg)
 void TRACKITEMS::Target(const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList, const wxPoint aPosition, EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset)
 {
     TRACK* track_seg = nullptr;
-    for(uint n = 0; n < aDragSegmentList->size(); ++n)
+    for(unsigned int n = 0; n < aDragSegmentList->size(); ++n)
     {
         track_seg = aDragSegmentList->at(n).m_Track;
         if((track_seg->GetStart() == aPosition) || (track_seg->GetEnd() == aPosition))

@@ -1492,7 +1492,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_GOTO_NEXT_MARKER:
         if( !GetBoard()->m_markers.empty() )
         {
-            uint index = 0;
+            unsigned int index = 0;
             if( GetCurItem() && GetCurItem()->Type() == PCB_MARKER_T )
             {
                 for( MARKER_PCB* curma : GetBoard()->m_markers ) 

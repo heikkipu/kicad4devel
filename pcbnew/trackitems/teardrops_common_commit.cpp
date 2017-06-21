@@ -101,7 +101,7 @@ void TEARDROPS::CollectCommit(const TRACK* aTrackSegFrom, std::set<TRACK*>* aCom
     if(aTrackSegFrom && aCommitContainer)
     {
         TEARDROP* tear = nullptr;
-        for(uint n = 0; n < 2; ++n)
+        for(unsigned int n = 0; n < 2; ++n)
         {
             n? tear = dynamic_cast<TEARDROP*>(Next(aTrackSegFrom)) : tear = dynamic_cast<TEARDROP*>(Back(aTrackSegFrom));
             

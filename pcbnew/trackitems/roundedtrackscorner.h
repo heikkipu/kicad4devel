@@ -47,7 +47,7 @@ namespace TrackNodeItem
         {
         public:
 
-            uint length_set; //if 0 m_length_set value depends on m_Width;
+            unsigned int length_set; //if 0 m_length_set value depends on m_Width;
             int length_ratio;
             int num_segments;
             bool operator==(const PARAMS& aComp) const 
@@ -88,7 +88,7 @@ namespace TrackNodeItem
         bool Update(void) override;
 
         bool IsSetOK(void) const {return m_set_ok;}
-        uint GetBoundingRad(void) const override;
+        unsigned int GetBoundingRad(void) const override;
         
         void SetTrackSecondEndpoint(void);
         void ReleaseTrackSegs(void);
@@ -108,14 +108,14 @@ namespace TrackNodeItem
         void SetTracksSegSecond(const TRACK* aNewTrackSecond) {m_trackseg_second = const_cast<TRACK*>(aNewTrackSecond);}
     
     private:
-        static constexpr uint DEFAULT_SEGMENTS_NUM = DEFAULT_NUM_SEGMENTS;
-        static constexpr uint DEFAULT_OUTER_POLY_POINTS_NUM = DEFAULT_NUM_SEGMENTS * 2 + 2;
+        static constexpr unsigned int DEFAULT_SEGMENTS_NUM = DEFAULT_NUM_SEGMENTS;
+        static constexpr unsigned int DEFAULT_OUTER_POLY_POINTS_NUM = DEFAULT_NUM_SEGMENTS * 2 + 2;
         
         bool m_on{true}; //On / Off
         
         int m_length_ratio;
         int m_num_arc_segs;
-        uint m_length_set; 
+        unsigned int m_length_set; 
         
         wxPoint m_pos{0,0};
         wxPoint m_pos_start{0,0};   // = m_seg_points[0]. Arc starting point : m_trackseg side.
@@ -123,7 +123,7 @@ namespace TrackNodeItem
         wxPoint m_mid_pos;
         
         TRACK* m_trackseg_second;
-        uint m_trackseg_second_length;
+        unsigned int m_trackseg_second_length;
         bool m_trackseg_second_startpos_is_pos;
 
         //Own drawing modes. 
@@ -135,12 +135,12 @@ namespace TrackNodeItem
         void SetTracksVisibleEndpoints(void);         //Set ROUNDEDCORNERTRACK Visible points:
         int m_num_arc_outer_points;
 
-        uint m_trackseg_arced_length;       //segments arced length 
+        unsigned int m_trackseg_arced_length;       //segments arced length 
         double m_angle_btw_tracks;          //Angle between tracks;
         double m_angle_inner_btw_tracks;    //Inner side between tracks angle.
         double m_angle_inner_half;          //Inner half angle;
         wxPoint m_arc_center_pos{0,0};         
-        uint m_arc_radius;                  //Arc radius
+        unsigned int m_arc_radius;                  //Arc radius
         
         void SetNotOKValues(void);
     };

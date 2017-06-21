@@ -100,13 +100,13 @@ TRACKNODEITEM* TRACKNODEITEMS::Get(const TRACK* aTrackSegAt, const wxPoint& aPos
         const_cast<TRACKNODEITEMS*>(this)->AddGetList(aTrackSegAt);
         if(m_get_list)
         {
-            uint min_dist = std::numeric_limits<uint>::max();
+            unsigned int min_dist = std::numeric_limits<unsigned int>::max();
             for(TRACKNODEITEM* item : *m_get_list)
             {
                 wxPoint center_pos = item->GetPosition(); //Center pos
-                uint dist_center = hypot(abs(center_pos.y - aPosAt.y) , abs(center_pos.x - aPosAt.x));
+                unsigned int dist_center = hypot(abs(center_pos.y - aPosAt.y) , abs(center_pos.x - aPosAt.x));
                 wxPoint pos = item->GetEnd();
-                uint dist_pos = hypot(abs(pos.y - aPosAt.y) , abs(pos.x - aPosAt.x));
+                unsigned int dist_pos = hypot(abs(pos.y - aPosAt.y) , abs(pos.x - aPosAt.x));
                 if((dist_pos < min_dist) && ((dist_center < item->GetBoundingRad()) || (aPosAt == pos)))
                 {
                     min_dist = dist_pos;

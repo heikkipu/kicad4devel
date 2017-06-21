@@ -168,7 +168,7 @@ bool ROUNDEDTRACKSCORNER::Update(void)
     if(m_angle_inner_btw_tracks > M_PI)
         m_angle_inner_btw_tracks = M_PIx2 - m_angle_inner_btw_tracks;
     m_angle_inner_half = m_angle_inner_btw_tracks / 2.0;
-    if((m_angle_btw_tracks == M_PI) || (m_angle_inner_btw_tracks < M_PI_2))
+    if((m_angle_btw_tracks == M_PI) || (Rad2MilsInt(m_angle_inner_btw_tracks) < RAD_90_MILS_INT))
     {
         SetNotOKValues();
         return false;
@@ -193,14 +193,14 @@ void ROUNDEDTRACKSCORNER::SetArc(void)
 {
     //Trackseg arced length.
     //Calculated length from trackseg width.
-    uint seg_length_max = m_Width;
+    unsigned int seg_length_max = m_Width;
     //From set value.
     if(m_length_set)
         seg_length_max = m_length_set;
-    uint max_dist_pos_to_arc_end = double(seg_length_max) * (double(m_length_ratio) / 100.0);
+    unsigned int max_dist_pos_to_arc_end = double(seg_length_max) * (double(m_length_ratio) / 100.0);
     
     //Half of the tracksegs length.
-    uint seg_min_length = std::min(m_trackseg_second_length / 2, m_trackseg_length / 2);
+    unsigned int seg_min_length = std::min(m_trackseg_second_length / 2, m_trackseg_length / 2);
     m_trackseg_arced_length = std::min(max_dist_pos_to_arc_end, seg_min_length);
 }
 
@@ -208,7 +208,7 @@ void ROUNDEDTRACKSCORNER::SetPoints(void)
 {
     m_pos = GetPoint(m_connected_pos, m_trackseg_angle, m_trackseg_arced_length);
 
-    uint hyp = double(m_trackseg_arced_length) / cos(m_angle_inner_half);
+    unsigned int hyp = double(m_trackseg_arced_length) / cos(m_angle_inner_half);
     m_arc_radius = cathete(hyp, m_trackseg_arced_length);
     double angel_inner_half_opposite = M_PI_2 - m_angle_inner_half;
     
@@ -332,7 +332,7 @@ const EDA_RECT ROUNDEDTRACKSCORNER::GetBoundingBox() const
     return ret;
 }
 
-uint ROUNDEDTRACKSCORNER::GetBoundingRad(void) const
+unsigned int ROUNDEDTRACKSCORNER::GetBoundingRad(void) const
 {
     return m_trackseg->GetWidth();
 }
@@ -374,7 +374,7 @@ void ROUNDEDTRACKSCORNER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& 
 {
     if(IsSetOK() && m_on)
     {
-        for(uint n = 0; n < m_seg_points.size() - 1; ++n)
+        for(unsigned int n = 0; n < m_seg_points.size() - 1; ++n)
         {
             TransformRoundedEndsSegmentToPolygon( aCornerBuffer, m_seg_points[n], m_seg_points[n + 1], aCircleToSegmentsCount, m_Width + ( 2 * aClearanceValue) );
         }
@@ -385,7 +385,7 @@ void ROUNDEDTRACKSCORNER::AddTo3DContainer(CBVHCONTAINER2D* aContainer, const do
 {
     if(IsSetOK() && m_on)
     {
-        for(uint n = 0; n < m_seg_points.size() - 1; ++n)
+        for(unsigned int n = 0; n < m_seg_points.size() - 1; ++n)
         {
             SFVEC2F start3DU(m_seg_points[n].x * aBiuTo3Dunits, -m_seg_points[n].y * aBiuTo3Dunits);
             SFVEC2F end3DU (m_seg_points[n + 1].x * aBiuTo3Dunits, -m_seg_points[n + 1].y * aBiuTo3Dunits);

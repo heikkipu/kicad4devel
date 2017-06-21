@@ -71,11 +71,11 @@ namespace TrackNodeItem
         bool IsTrackEndpointStart(void) const {return m_trackstartpos_is_pos;}
         bool IsTrackEndpointEnd(void) const {return !m_trackstartpos_is_pos;}
 
-        wxPoint GetPolyPoint(const uint aPoint) const;
-        uint GetPolyPointsNum(void) const { return m_seg_points.size(); }
-        uint GetPolySegmentWidth(void) const {return m_poly_seg_width; }
+        wxPoint GetPolyPoint(const unsigned int aPoint) const;
+        unsigned int GetPolyPointsNum(void) const { return m_seg_points.size(); }
+        unsigned int GetPolySegmentWidth(void) const {return m_poly_seg_width; }
 
-        virtual uint GetBoundingRad(void) const = 0;
+        virtual unsigned int GetBoundingRad(void) const = 0;
         virtual bool Update(void);
 
         virtual void AddTo3DContainer(CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits) = 0;    
@@ -93,21 +93,21 @@ namespace TrackNodeItem
         bool m_trackstartpos_is_pos;
         double m_trackseg_angle;
         double m_trackseg_angle_inv;
-        uint m_trackseg_rad;
-        uint m_trackseg_length;
+        unsigned int m_trackseg_rad;
+        unsigned int m_trackseg_length;
         //base class m_Width = m_trackseg width
 
         void SetConnectedPos(void);
         wxPoint m_connected_pos{0,0};   //Tracks connected position. Via, Pad, track endpoint or node.
         wxPoint m_opposite_pos{0,0};    //Tracks opposite pos of connected pos.
         
-        static const uint MIN_POLYSEG_WIDTH = 2540; //0.1 mils 
-        uint m_poly_seg_rad; 
-        uint m_poly_seg_width;
+        static const unsigned int MIN_POLYSEG_WIDTH = 2540; //0.1 mils 
+        unsigned int m_poly_seg_rad; 
+        unsigned int m_poly_seg_width;
         std::vector<wxPoint> m_seg_points;
         std::vector<wxPoint> m_seg_outer_points;
 
-        uint m_clearance;
+        unsigned int m_clearance;
         std::vector<wxPoint> m_seg_clearance_points;
 
         bool m_created_ok{false};
@@ -167,7 +167,7 @@ namespace TrackNodeItem
     constexpr int ANGLE_315 = 3150;
     constexpr int ANGLE_360 = 3600;
             
-    //Rounding angle rads to integer whit it's desimal places.
+    //Rounding angle rads to integer with it's desimal places.
     //Accuracy using angle when compre angles with radius representation.
     constexpr inline int Rad2MilsInt(const double aRadAngle)
     {

@@ -54,13 +54,13 @@ namespace TrackNodeItems
 
     public:
         virtual ~ITEMS_PROGRESS_BASE();
-        uint Execute(void);
+        unsigned int Execute(void);
 
     protected:
         ITEMS_PROGRESS_BASE() {};
         ITEMS_PROGRESS_BASE(const PCB_EDIT_FRAME* aFrame, const BOARD_ITEM* aListFirstItem, PICKED_ITEMS_LIST* aUndoRedo);
 
-        virtual uint ExecuteItem(const BOARD_ITEM* aItemAt)=0; 
+        virtual unsigned int ExecuteItem(const BOARD_ITEM* aItemAt)=0; 
         virtual void ExecuteEnd(void) {};
 
         PICKED_ITEMS_LIST* m_undoredo_items;
@@ -75,7 +75,7 @@ namespace TrackNodeItems
         int m_progress_to_count {0};
 
         wxProgressDialog* m_progress {nullptr};
-        inline bool UpdateProgress(const uint aProgress, const uint aOperations);
+        inline bool UpdateProgress(const unsigned int aProgress, const unsigned int aOperations);
 
         const BOARD_ITEM* m_list_first_item{nullptr};
         PCB_EDIT_FRAME* m_frame{nullptr};
@@ -93,8 +93,8 @@ namespace TrackNodeItems
     protected:
         MODULES_PROGRESS(){;}
 
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
-        virtual uint DoAtPad(const D_PAD* aPadAt) { return 0; };
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        virtual unsigned int DoAtPad(const D_PAD* aPadAt) { return 0; };
     };
 
 //-----------------------------------------------------------------------------------------------------------   

@@ -100,10 +100,10 @@ namespace TrackNodeItem
 
         bool IsSetOK(void) const { return m_set_ok; }
         
-        uint GetBoundingRad(void) const override; //Max radius from mid. Depend on shape
-        uint GetCalcLength(void) const; //Max teardrop calculated lengt from item pos to teardrop pos, depend on shape. How long it should have be.
-        uint GetRealLength(void) const; //Max real length from item. How long it is.
-        uint GetSizeLength(void) const; //Only teardrops length
+        unsigned int GetBoundingRad(void) const override; //Max radius from mid. Depend on shape
+        unsigned int GetCalcLength(void) const; //Max teardrop calculated lengt from item pos to teardrop pos, depend on shape. How long it should have be.
+        unsigned int GetRealLength(void) const; //Max real length from item. How long it is.
+        unsigned int GetSizeLength(void) const; //Only teardrops length
         
         BOARD_CONNECTED_ITEM* GetConnectedItem(void) const { return m_connected_item; }
         virtual wxString GetConnectedItemName(void) const;
@@ -133,16 +133,16 @@ namespace TrackNodeItem
         //CallConstruct must be call at the end from derived class constructor.
         bool CallConstructor(const TRACK* aTrackSeg, const PARAMS aParams, const bool aCheckNullTrack);
 
-        inline uint CalcSublandPosDist(const int aLengthRatio, const uint aConnectedItemRad, const uint aSublandRad);
-        inline uint CalcFilletPosDist(const int aLengthRatio, const uint aConnectedItemRad);
-        inline uint CalcTeardropPosDist(const int aLengthRatio, const uint aConnectedItemRad);
+        inline unsigned int CalcSublandPosDist(const int aLengthRatio, const unsigned int aConnectedItemRad, const unsigned int aSublandRad);
+        inline unsigned int CalcFilletPosDist(const int aLengthRatio, const unsigned int aConnectedItemRad);
+        inline unsigned int CalcTeardropPosDist(const int aLengthRatio, const unsigned int aConnectedItemRad);
         
-        inline uint CalcSublandRad(const int aWidthRatio, const uint aConnectedItemRad, const uint aTrackSegRad);
-        inline uint CalcFilletWidthRad(const int aWidthRatio, const uint aConnectedItemRad, const uint aTrackSegRad);
-        inline uint CalcTeardropWidthRad(const int aWidthRatio, const uint aConnectedItemRad, const uint aTrackSegRad);
+        inline unsigned int CalcSublandRad(const int aWidthRatio, const unsigned int aConnectedItemRad, const unsigned int aTrackSegRad);
+        inline unsigned int CalcFilletWidthRad(const int aWidthRatio, const unsigned int aConnectedItemRad, const unsigned int aTrackSegRad);
+        inline unsigned int CalcTeardropWidthRad(const int aWidthRatio, const unsigned int aConnectedItemRad, const unsigned int aTrackSegRad);
 
-        inline uint CalcFilletLength(const int aLengthRatio);
-        inline uint CalcTeardropLength(const int aLengthRatio);
+        inline unsigned int CalcFilletLength(const int aLengthRatio);
+        inline unsigned int CalcTeardropLength(const int aLengthRatio);
 
         virtual void CalcSubland(const int aWidthRatio, const int aLengthRatio);
         virtual void CalcFillet(const int aWidthRatio, const int aLengthRatio);
@@ -156,24 +156,24 @@ namespace TrackNodeItem
         
         virtual void SetConnectedItem(void){};
         BOARD_CONNECTED_ITEM* m_connected_item;
-        uint m_connected_item_rad; //Connected item radius. Via, Pad or something else.
+        unsigned int m_connected_item_rad; //Connected item radius. Via, Pad or something else.
         wxPoint m_connected_pos_delta; //Teardrop delta pos from item.
         int m_connected_pos_length_delta; //Distance item to teardrop delta length.
         int m_length_width_corr; //??
 	
         wxPoint m_pos;
-        uint m_width_rad;
-        uint m_length;
+        unsigned int m_width_rad;
+        unsigned int m_length;
 
         int m_length_ratio;
         int m_width_ratio;
 
-        uint m_fillet_seg_length;
+        unsigned int m_fillet_seg_length;
         double m_fillet_seg_A_angle;
         double m_fillet_seg_B_angle;
 
         double m_teardrop_segs_angle_add;
-        ulong m_teardrop_segs_arc_rad;
+        unsigned long m_teardrop_segs_arc_rad;
         wxPoint m_teardrop_arc_A_center_pos;
         wxPoint m_teardrop_arc_B_center_pos;
         
@@ -191,9 +191,9 @@ namespace TrackNodeItem
         void DrawItem(KIGFX::GAL* aGal, const bool aIsSketch ) override;
 
     private:
-        static const uint FILLET_POLY_POINTS_NUM = 4;
-        static const uint FILLET_OUTER_POLY_POINTS_NUM = 6;
-        static const uint FILLET_CLEARANCE_POLY_POINTS_NUM = FILLET_OUTER_POLY_POINTS_NUM;
+        static const unsigned int FILLET_POLY_POINTS_NUM = 4;
+        static const unsigned int FILLET_OUTER_POLY_POINTS_NUM = 6;
+        static const unsigned int FILLET_CLEARANCE_POLY_POINTS_NUM = FILLET_OUTER_POLY_POINTS_NUM;
         
         SHAPES_T m_shape;
         wxPoint m_mid_pos;
@@ -219,8 +219,8 @@ namespace TrackNodeItem
         wxString GetClass() const override { return wxT( "TEARDROP_VIA" ); }
 
         VIA* GetConnectedVia(void) const { return m_connected_via; }
-        void SetViaRad(const uint aNewViaRad);
-        uint GetViaRad(void) const { return m_connected_item_rad; }
+        void SetViaRad(const unsigned int aNewViaRad);
+        unsigned int GetViaRad(void) const { return m_connected_item_rad; }
         
     protected:
         void SetConnectedItem(void) override;
@@ -233,7 +233,7 @@ namespace TrackNodeItem
     class TEARDROP_EDIT_VIA : public TEARDROP_VIA
     {
     public:
-        TEARDROP_EDIT_VIA(const BOARD_ITEM* aParent, const uint aViaRadius, const TRACK* aTrackSeg, const PARAMS aParams, const bool aCheckNullTrack);
+        TEARDROP_EDIT_VIA(const BOARD_ITEM* aParent, const unsigned int aViaRadius, const TRACK* aTrackSeg, const PARAMS aParams, const bool aCheckNullTrack);
         ~TEARDROP_EDIT_VIA(){;}
     
         wxString GetClass() const override { return wxT( "TEARDROP_EDIT_VIA" ); }

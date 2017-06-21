@@ -152,12 +152,12 @@ void TEARDROP::SetPoints(void)
     }
 }
 
-uint TEARDROP::CalcSublandRad(const int aWidthRatio, const uint aConnectedItemRad, const uint aTrackSegRad)
+unsigned int TEARDROP::CalcSublandRad(const int aWidthRatio, const unsigned int aConnectedItemRad, const unsigned int aTrackSegRad)
 {
     return (double(aConnectedItemRad) * (double(aWidthRatio) / 100.0));
 }
 
-uint TEARDROP::CalcSublandPosDist(const int aLengthRatio, const uint aConnectedItemRad, const uint aSublandRad)
+unsigned int TEARDROP::CalcSublandPosDist(const int aLengthRatio, const unsigned int aConnectedItemRad, const unsigned int aSublandRad)
 {
     return aConnectedItemRad - aSublandRad + (aSublandRad * aLengthRatio / 100.0);
 }
@@ -170,7 +170,7 @@ void TEARDROP::CalcSubland(const int aWidthRatio, const int aLengthRatio)
     m_connected_pos_length_delta = std::min(m_connected_pos_length_delta, tr_d);
 }
 
-uint TEARDROP::CalcFilletWidthRad(const int aWidthRatio, const uint aConnectedItemRad, const uint aTrackSegRad)
+unsigned int TEARDROP::CalcFilletWidthRad(const int aWidthRatio, const unsigned int aConnectedItemRad, const unsigned int aTrackSegRad)
 {
     if(aWidthRatio > 100)
         return (double(aConnectedItemRad) * (double(aWidthRatio) / 100.0)) - aTrackSegRad;
@@ -178,15 +178,15 @@ uint TEARDROP::CalcFilletWidthRad(const int aWidthRatio, const uint aConnectedIt
         return double(aConnectedItemRad - aTrackSegRad) * (double(aWidthRatio) / 100.0);
 }
 
-uint TEARDROP::CalcFilletPosDist(const int aLengthRatio, const uint aConnectedItemRad)
+unsigned int TEARDROP::CalcFilletPosDist(const int aLengthRatio, const unsigned int aConnectedItemRad)
 {
     return aConnectedItemRad + double(aConnectedItemRad) * (double(aLengthRatio) / 100.0) - m_trackseg_rad;
 }
 
-uint TEARDROP::CalcFilletLength(const int aLengthRatio)
+unsigned int TEARDROP::CalcFilletLength(const int aLengthRatio)
 {
-    uint max_dist_item_to_tear = CalcFilletPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
-    uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length);
+    unsigned int max_dist_item_to_tear = CalcFilletPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
+    unsigned int dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length);
     return dist_item_to_tear - m_connected_pos_length_delta;
 }
 
@@ -214,7 +214,7 @@ void TEARDROP::SetFilletPoints(void)
 {
     double seg_A_pos_angle = m_fillet_seg_A_angle + M_PI_2;
     double seg_B_pos_angle = m_fillet_seg_B_angle - M_PI_2;
-    uint seg_rad = m_trackseg_rad - m_poly_seg_rad;
+    unsigned int seg_rad = m_trackseg_rad - m_poly_seg_rad;
 
     m_seg_points[1] = GetPoint(m_pos, seg_A_pos_angle, seg_rad);
     m_seg_points[2] = GetPoint(m_pos, seg_B_pos_angle, seg_rad);
@@ -231,7 +231,7 @@ void TEARDROP::SetFilletPoints(void)
     m_seg_outer_points[5] = GetPoint(m_seg_points[3], m_trackseg_angle_inv, m_poly_seg_rad);
 
     //Clearance
-    uint track_clearance_rad = m_poly_seg_rad + m_clearance;
+    unsigned int track_clearance_rad = m_poly_seg_rad + m_clearance;
     //A
     m_seg_clearance_points[0] = GetPoint(m_seg_points[0], m_trackseg_angle_inv, track_clearance_rad);
     m_seg_clearance_points[1] = GetPoint(m_seg_points[0], seg_A_pos_angle, track_clearance_rad);
@@ -242,7 +242,7 @@ void TEARDROP::SetFilletPoints(void)
     m_seg_clearance_points[5] = GetPoint(m_seg_points[3], m_trackseg_angle_inv, track_clearance_rad);
 }
 
-uint TEARDROP::CalcTeardropWidthRad(const int aWidthRatio, const uint aConnectedItemRad, const uint aTrackSegRad)
+unsigned int TEARDROP::CalcTeardropWidthRad(const int aWidthRatio, const unsigned int aConnectedItemRad, const unsigned int aTrackSegRad)
 {
     if(aWidthRatio > 100)
         return (double(aConnectedItemRad) * (double(aWidthRatio) / 100.0)) - aTrackSegRad;
@@ -256,15 +256,15 @@ void TEARDROP::CalcTeardropArcs(void)
     m_teardrop_segs_angle_add = atan(double(m_length) / double(m_teardrop_segs_arc_rad)) / double(m_num_arc_segs);
 }
 
-uint TEARDROP::CalcTeardropPosDist(const int aLengthRatio, const uint aConnectedItemRad)
+unsigned int TEARDROP::CalcTeardropPosDist(const int aLengthRatio, const unsigned int aConnectedItemRad)
 {
     return aConnectedItemRad + double(aConnectedItemRad) * (double(aLengthRatio) / 100.0);
 }
 
-uint TEARDROP::CalcTeardropLength(const int aLengthRatio)
+unsigned int TEARDROP::CalcTeardropLength(const int aLengthRatio)
 {
-    uint max_dist_item_to_tear = CalcTeardropPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
-    uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length);
+    unsigned int max_dist_item_to_tear = CalcTeardropPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
+    unsigned int dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length);
     return dist_item_to_tear - m_connected_pos_length_delta;
 }
 
@@ -289,12 +289,12 @@ void TEARDROP::SetTeardropPoints(void)
 
     double angle_tan_A = m_trackseg_angle + M_PI_2;
     double angle_tan_B = m_trackseg_angle - M_PI_2;     
-    uint arc_outer_rad = m_teardrop_segs_arc_rad - m_trackseg_rad;
-    uint arc_rad = arc_outer_rad + m_poly_seg_rad;
+    unsigned int arc_outer_rad = m_teardrop_segs_arc_rad - m_trackseg_rad;
+    unsigned int arc_rad = arc_outer_rad + m_poly_seg_rad;
 
     //Clearance
-    uint arc_clearance_rad = arc_outer_rad - m_clearance;
-    uint track_clearance_rad = m_poly_seg_rad + m_clearance;
+    unsigned int arc_clearance_rad = arc_outer_rad - m_clearance;
+    unsigned int track_clearance_rad = m_poly_seg_rad + m_clearance;
 
     int ppA{0};
     int ppB{0};
@@ -375,7 +375,7 @@ void TEARDROP::SetNotOKValues(void)
     m_can_draw_clearance = false;
 }
 
-uint TEARDROP::GetBoundingRad(void) const
+unsigned int TEARDROP::GetBoundingRad(void) const
 {
     if(m_set_ok)
     {
@@ -388,7 +388,7 @@ uint TEARDROP::GetBoundingRad(void) const
         return m_trackseg->GetWidth();
 }
 
-uint TEARDROP::GetCalcLength(void) const
+unsigned int TEARDROP::GetCalcLength(void) const
 {
     switch(m_shape)
     {
@@ -405,7 +405,7 @@ uint TEARDROP::GetCalcLength(void) const
     return 0;
 }
 
-uint TEARDROP::GetRealLength(void) const
+unsigned int TEARDROP::GetRealLength(void) const
 {
     switch(m_shape)
     {
@@ -419,7 +419,7 @@ uint TEARDROP::GetRealLength(void) const
     return 0;
 }
 
-uint TEARDROP::GetSizeLength(void) const
+unsigned int TEARDROP::GetSizeLength(void) const
 {
     if(m_shape != ZERO_T)
         return m_length;
@@ -460,7 +460,7 @@ void TEARDROP::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
                 else
                 {
                     //Copper areas clearence for. 
-                    for(uint n = 0; n < m_seg_points.size() - 1; ++n)
+                    for(unsigned int n = 0; n < m_seg_points.size() - 1; ++n)
                     {
                         TransformRoundedEndsSegmentToPolygon( aCornerBuffer, m_seg_points[n], m_seg_points[n + 1], aCircleToSegmentsCount, m_poly_seg_width + ( 2 * aClearanceValue) );
                     }
@@ -833,12 +833,12 @@ void TEARDROP_VIA::SetConnectedItem(void)
     }
 }
 
-void TEARDROP_VIA::SetViaRad(const uint aNewViaRad)
+void TEARDROP_VIA::SetViaRad(const unsigned int aNewViaRad)
 {
     m_connected_item_rad = aNewViaRad;
 }
 
-TEARDROP_EDIT_VIA::TEARDROP_EDIT_VIA(const BOARD_ITEM* aParent, const uint aViaRadius, const TRACK* aTrackSeg, const PARAMS aParams, const bool aCheckNullTrack) : TEARDROP_VIA(aParent, nullptr, aTrackSeg, aParams, aCheckNullTrack) 
+TEARDROP_EDIT_VIA::TEARDROP_EDIT_VIA(const BOARD_ITEM* aParent, const unsigned int aViaRadius, const TRACK* aTrackSeg, const PARAMS aParams, const bool aCheckNullTrack) : TEARDROP_VIA(aParent, nullptr, aTrackSeg, aParams, aCheckNullTrack) 
 {
     m_connected_via = nullptr;
     m_connected_item_rad = aViaRadius;
@@ -877,7 +877,7 @@ void TEARDROP_RECT::SetConnectedItem(void)
 void TEARDROP_RECT::CalcSegment(void)
 {
     m_poly_seg_rad = m_trackseg_rad>>2; 
-    uint sub_rad = m_connected_item_rad - m_trackseg_rad;
+    unsigned int sub_rad = m_connected_item_rad - m_trackseg_rad;
     if(m_trackseg_rad > sub_rad)
         m_poly_seg_rad = sub_rad>>2; 
     m_poly_seg_width = m_poly_seg_rad<<1;
@@ -896,9 +896,9 @@ void TEARDROP_RECT::CalcFillet(const int aWidthRatio, const int aLengthRatio)
     {
         m_width_rad = CalcFilletWidthRad(aWidthRatio, m_connected_item_rad, m_trackseg_rad);
         
-        uint length_corr = 9 * m_trackseg_rad / 10;
-        uint max_dist_item_to_tear = CalcFilletPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
-        uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr);
+        unsigned int length_corr = 9 * m_trackseg_rad / 10;
+        unsigned int max_dist_item_to_tear = CalcFilletPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
+        unsigned int dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr);
         m_length = dist_item_to_tear - m_connected_pos_length_delta;
         CalcFilletSegs();
         m_length -= length_corr;
@@ -913,11 +913,11 @@ void TEARDROP_RECT::CalcFillet(const int aWidthRatio, const int aLengthRatio)
         double seg_angle;
         if(m_rect_edge_dist_x > 0)
         {
-            uint dw_op_cha = m_width_rad + m_trackseg_rad - m_poly_seg_rad;
-            uint dw_ne_cha = m_rect_edge_dist_x + m_poly_seg_rad;
+            unsigned int dw_op_cha = m_width_rad + m_trackseg_rad - m_poly_seg_rad;
+            unsigned int dw_ne_cha = m_rect_edge_dist_x + m_poly_seg_rad;
             double dw_seg_angle = atan((double(dw_op_cha)) / double(dw_ne_cha));
-            uint com_hypot = (double(dw_op_cha) / sin(dw_seg_angle));
-            uint up_op_cha = m_trackseg_rad - m_poly_seg_rad;
+            unsigned int com_hypot = (double(dw_op_cha) / sin(dw_seg_angle));
+            unsigned int up_op_cha = m_trackseg_rad - m_poly_seg_rad;
             double up_seg_angle = asin(double(up_op_cha) / double(com_hypot));
             seg_angle = dw_seg_angle - up_seg_angle; //M_PI_2 - (M_PI_2 - dw_seg_angle + up_seg_angle);
         }
@@ -937,7 +937,7 @@ void TEARDROP_RECT::SetFilletPoints(void)
     {
         double seg_A_pos_angle = m_fillet_seg_A_angle + M_PI_2;
         double seg_B_pos_angle = m_fillet_seg_B_angle - M_PI_2;
-        uint seg_rad = m_trackseg_rad - m_poly_seg_rad;
+        unsigned int seg_rad = m_trackseg_rad - m_poly_seg_rad;
         
         m_seg_points[1] = GetPoint(m_pos, seg_A_pos_angle, seg_rad);
         m_seg_points[2] = GetPoint(m_pos, seg_B_pos_angle, seg_rad);
@@ -955,7 +955,7 @@ void TEARDROP_RECT::SetFilletPoints(void)
         m_seg_outer_points[5] = GetPoint(m_seg_points[3], m_trackseg_angle_inv, m_poly_seg_rad);
 
         //Clearance
-        uint track_clearance_rad = m_poly_seg_rad + m_clearance;
+        unsigned int track_clearance_rad = m_poly_seg_rad + m_clearance;
         //A
         m_seg_clearance_points[0] = GetPoint(m_seg_points[0], m_trackseg_angle_inv, track_clearance_rad);
         m_seg_clearance_points[1] = GetPoint(m_seg_points[0], seg_A_pos_angle, track_clearance_rad);
@@ -975,9 +975,9 @@ void TEARDROP_RECT::CalcTeardrop(const int aWidthRatio, const int aLengthRatio)
     {
         m_width_rad = CalcTeardropWidthRad(aWidthRatio, m_connected_item_rad, m_trackseg_rad);
         
-        uint length_corr = 4 * m_trackseg_rad / 5;
-        uint max_dist_item_to_tear = CalcTeardropPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
-        uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr - m_trackseg_rad);
+        unsigned int length_corr = 4 * m_trackseg_rad / 5;
+        unsigned int max_dist_item_to_tear = CalcTeardropPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
+        unsigned int dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr - m_trackseg_rad);
         m_length = dist_item_to_tear - m_connected_pos_length_delta + m_trackseg_rad;
         m_length -= length_corr;
 
@@ -1011,7 +1011,7 @@ void TEARDROP_RECT::SetTeardropPoints(void)
         double angle_tan_B = m_trackseg_angle - M_PI_2;     
 
         //Clearance
-        uint track_clearance_rad = m_poly_seg_rad + m_clearance;
+        unsigned int track_clearance_rad = m_poly_seg_rad + m_clearance;
 
         int arc_rad = m_teardrop_segs_arc_rad - m_trackseg_rad + m_poly_seg_rad;
         int arc_x_move_dist = (int(m_rect_edge_dist_x) - arc_rad) / int(m_num_arc_segs);
@@ -1107,8 +1107,8 @@ void TEARDROP_PAD::SetConnectedItem(void)
         PAD_SHAPE_T pad_shape = m_connected_pad->GetShape();
         int pad_width = m_connected_pad->GetSize().GetWidth();
         int pad_height = m_connected_pad->GetSize().GetHeight();
-        uint max_rad = std::max(pad_width, pad_height)>>1;
-        uint min_rad = std::min(pad_width, pad_height)>>1;
+        unsigned int max_rad = std::max(pad_width, pad_height)>>1;
+        unsigned int min_rad = std::min(pad_width, pad_height)>>1;
         m_connected_item_rad = min_rad;
         double radius_ratio = 0.0;
 
@@ -1170,7 +1170,7 @@ void TEARDROP_PAD::SetConnectedItem(void)
                         if(!m_connected_pos_length_delta) 
                         {
                             m_rect_type = true;
-                            uint max_half = max_rad>>1;
+                            unsigned int max_half = max_rad>>1;
                             if(max_half > min_rad)
                             {
                                 m_connected_item_rad = max_half;
@@ -1191,7 +1191,7 @@ void TEARDROP_PAD::SetConnectedItem(void)
                         //Longest sideline.
                         if(!m_connected_pos_length_delta) 
                         {
-                            uint max_half = max_rad>>1;
+                            unsigned int max_half = max_rad>>1;
                             if(max_half > min_rad)
                             {
                                 m_connected_item_rad = max_half;
@@ -1323,7 +1323,7 @@ TEARDROP_JUNCTIONS::TEARDROP_JUNCTIONS(const BOARD_ITEM* aParent, const TRACK* a
     {
         m_connected_pos = aPosition;
         CollectTracks(aTrackSeg, m_connected_pos);
-        m_connected_item_rad = uint(aTrackSeg->GetWidth());
+        m_connected_item_rad = (unsigned int)(aTrackSeg->GetWidth());
         CallConstructor(aTrackSeg, aParams, aCheckNullTrack);
     }
 }
@@ -1341,7 +1341,7 @@ void TEARDROP_JUNCTIONS::SetConnectedItem(void)
     //If any of connected track is wider than this track. Make it's rad to item rad. But not in T.
     int max_width = MaxWidthFromTracks();
     BOARD_CONNECTED_ITEM* lock_point = GetBoard()->GetLockPoint(m_connected_pos, GetTrackSeg()->GetLayerSet());
-    if(max_width > m_Width) //uint(GetTrackSeg()->GetWidth()))
+    if(max_width > m_Width) 
     {
         m_connected_item_rad = max_width>>1; 
         if(m_T_tracks) 
@@ -1400,10 +1400,10 @@ void TEARDROP_JUNCTIONS::CalcFillet(const int aWidthRatio, const int aLengthRati
 {
     if(m_T_tracks)
     {
-        //uint length_corr = 5 * m_Width / 7;
-        uint length_corr = 5 * m_poly_seg_width / 7;
-        uint max_dist_item_to_tear = CalcFilletPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
-        uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr);
+        //unsigned int length_corr = 5 * m_Width / 7;
+        unsigned int length_corr = 5 * m_poly_seg_width / 7;
+        unsigned int max_dist_item_to_tear = CalcFilletPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
+        unsigned int dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr);
         m_length = dist_item_to_tear - m_connected_pos_length_delta;
         CalcFilletSegs();
         m_length -= length_corr;
@@ -1428,9 +1428,9 @@ void TEARDROP_JUNCTIONS::CalcTeardrop(const int aWidthRatio, const int aLengthRa
     {
         m_width_rad = CalcTeardropWidthRad(aWidthRatio, m_connected_item_rad, m_trackseg_rad);
         
-        uint length_corr = 4 * m_trackseg_rad / 5;
-        uint max_dist_item_to_tear = CalcTeardropPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
-        uint dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr);
+        unsigned int length_corr = 4 * m_trackseg_rad / 5;
+        unsigned int max_dist_item_to_tear = CalcTeardropPosDist(aLengthRatio, m_connected_item_rad) + m_connected_pos_length_delta;
+        unsigned int dist_item_to_tear = std::min(max_dist_item_to_tear, m_trackseg_length + length_corr);
         m_length = dist_item_to_tear - m_connected_pos_length_delta;
         m_length -= length_corr;
 

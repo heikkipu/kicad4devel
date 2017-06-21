@@ -64,7 +64,7 @@ ITEMS_PROGRESS_BASE::~ITEMS_PROGRESS_BASE()
     
 }
 
-bool ITEMS_PROGRESS_BASE::UpdateProgress(const uint aProgress, const uint aOperations)
+bool ITEMS_PROGRESS_BASE::UpdateProgress(const unsigned int aProgress, const unsigned int aOperations)
 {
     wxString msg;
     msg.Printf(_( "Number of: %d" ), aOperations);
@@ -72,7 +72,7 @@ bool ITEMS_PROGRESS_BASE::UpdateProgress(const uint aProgress, const uint aOpera
     return m_progress->Update(aProgress, msg, &skip);
 }
 
-uint ITEMS_PROGRESS_BASE::Execute(void)
+unsigned int ITEMS_PROGRESS_BASE::Execute(void)
 {
     if(m_list_first_item)    
     {
@@ -85,10 +85,10 @@ uint ITEMS_PROGRESS_BASE::Execute(void)
         if(m_progress)
         {
             BOARD_ITEM* item = const_cast<BOARD_ITEM*>(m_list_first_item);
-            uint operations_count = 0;
+            unsigned int operations_count = 0;
             int progress_count = 0;
-            uint update_val = m_list_first_item->GetList()->GetCount() / 100;
-            uint update_count = 0;
+            unsigned int update_val = m_list_first_item->GetList()->GetCount() / 100;
+            unsigned int update_count = 0;
             while(item)
             {
                 BOARD_ITEM* next_item = item->Next();
@@ -126,9 +126,9 @@ MODULES_PROGRESS::MODULES_PROGRESS(const PCB_EDIT_FRAME* aFrame, const DLIST<MOD
 {
 }
 
-uint MODULES_PROGRESS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int MODULES_PROGRESS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
-    uint operations_count = 0;
+    unsigned int operations_count = 0;
     MODULE* module = dynamic_cast<MODULE*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(module)
     {

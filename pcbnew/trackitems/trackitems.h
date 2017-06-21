@@ -199,7 +199,7 @@ private:
     public:
         TRACKS_PROGRESS_MARK_SHARP_ANGLES(const TRACKITEMS* aParent, const DLIST<TRACK>* aTracks, DRC* aDRC);
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
     private:
         std::vector<wxPoint> marked_tracks_sharp_angle;
         TRACK* Find_Tracks_Sharp_Angle(const TRACK* aTrackSegAt, const wxPoint aPosAt) const;
@@ -240,7 +240,7 @@ private:
         TRACKS_PROGRESS_FIX_ITEM_CONNECTION(const TRACKITEMS* aParent, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedoList);
         ~TRACKS_PROGRESS_FIX_ITEM_CONNECTION();
     protected:
-        uint ExecuteItem(const BOARD_ITEM* aItemAt) override;
+        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
 
     private:
         TrackNodeItem::TEARDROP::SHAPES_T m_current_shape;
