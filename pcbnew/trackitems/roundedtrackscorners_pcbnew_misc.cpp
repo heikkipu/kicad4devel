@@ -127,20 +127,8 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITE
             
             if(tracks_connected2arced.size() == 2) //Only two segments are acceptable.
             {
-                //Remove individual arced segments
-                ITEM_PICKER deleted_picker(nullptr, UR_DELETED);
-                for(auto track : tracks_arced)
-                {
-                    GetBoard()->TrackItems()->Teardrops()->Remove(track, aUndoRedoList, true );
-                    Remove(track, aUndoRedoList, true );
-                    
-                    GetBoard()->Remove(track);
-                    GetBoard()->GetRatsnest()->Remove(track);
-                    deleted_picker.SetItem(track);
-                    aUndoRedoList->PushItem(deleted_picker);
-                }
+                ITEM_PICKER changed_picker(nullptr, UR_CHANGED);
                 
-                //Create new cornersystem.
                 std::map<TRACK*, bool>::iterator connected_tracks_it = tracks_connected2arced.begin();
                 TRACK* first_track = connected_tracks_it->first;
                 bool is_first_track_connected_at_startpoint = connected_tracks_it->second;
@@ -157,13 +145,22 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITE
                     second_track_connected_pos = second_track->GetStart();
                 double second_track_angle = TrackSegAngle(second_track, second_track_connected_pos);
                 
+                first_track = ConvertTrackInList(first_track, aUndoRedoList);
+                second_track = ConvertTrackInList(second_track, aUndoRedoList);
+                changed_picker.SetItem(first_track);
+                changed_picker.SetLink(first_track->Clone());
+                aUndoRedoList->PushItem(changed_picker);
+                changed_picker.SetItem(second_track);
+                changed_picker.SetLink(second_track->Clone());
+                aUndoRedoList->PushItem(changed_picker);
+                
+                double angle_btw_tracks = AngleBtwTracks(first_track, first_track_connected_pos, second_track, second_track_connected_pos);
                 //Parallel tracks.
-                if(Rad2MilsInt(first_track_angle) == Rad2MilsInt(second_track_angle))
+                if(Rad2MilsInt(angle_btw_tracks) == RAD_0_MILS_INT)
                 {
-                    double half_dist_btw_tracks = GetLineLength(first_track_connected_pos, second_track_connected_pos) / 2.0;
+                    RemoveArcedSegments(&tracks_arced, aUndoRedoList);
                     
-                    first_track = ConvertTrackInList(first_track, aUndoRedoList);
-                    second_track = ConvertTrackInList(second_track, aUndoRedoList);
+                    double half_dist_btw_tracks = GetLineLength(first_track_connected_pos, second_track_connected_pos) / 2.0;
                     
                     wxPoint first_track_new_pos = GetPoint(first_track_connected_pos, first_track_angle + M_PI, half_dist_btw_tracks);
                     if(is_first_track_connected_at_startpoint)
@@ -187,7 +184,34 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITE
                     
                     Add(new_track, half_dist_btw_tracks + 10, aUndoRedoList);
                 }
-                
+                else 
+                {
+                    //90 degrees
+                    if((Rad2MilsInt(angle_btw_tracks) == RAD_90_MILS_INT) || (Rad2MilsInt(angle_btw_tracks) == RAD_270_MILS_INT))
+                    {
+                        RemoveArcedSegments(&tracks_arced, aUndoRedoList);
+                        
+                        double dist_nodes = GetLineLength(first_track_connected_pos, second_track_connected_pos);
+                        double add_length = sin(M_PI_4) * dist_nodes;
+                        wxPoint common_point = GetPoint(first_track_connected_pos, first_track_angle + M_PI, add_length);
+                        
+                        if(is_first_track_connected_at_startpoint)
+                            first_track->SetStart(common_point);
+                        else
+                            first_track->SetEnd(common_point);
+
+                        if(is_second_track_connected_at_startpoint)
+                            second_track->SetStart(common_point);
+                        else
+                            second_track->SetEnd(common_point);
+                        
+                        Add(first_track, common_point, add_length, aUndoRedoList);
+                    }
+                    else //other degrees
+                    {
+                        
+                    }
+                }
             }
         }
     }
@@ -214,6 +238,21 @@ bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_COLLECT_SAMELENGTH::ExecuteAt(TRACK* a
     return false;
 }
 
+//Remove individual arced segments
+void ROUNDEDTRACKSCORNERS::RemoveArcedSegments(std::set<TRACK*>* aTracksArced, PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    ITEM_PICKER deleted_picker(nullptr, UR_DELETED);
+    for(auto track : *aTracksArced)
+    {
+        GetBoard()->TrackItems()->Teardrops()->Remove(track, aUndoRedoList, true );
+        Remove(track, aUndoRedoList, true );
+        
+        GetBoard()->Remove(track);
+        GetBoard()->GetRatsnest()->Remove(track);
+        deleted_picker.SetItem(track);
+        aUndoRedoList->PushItem(deleted_picker);
+    }
+}               
 //-----------------------------------------------------------------------------------------------------/
 
 

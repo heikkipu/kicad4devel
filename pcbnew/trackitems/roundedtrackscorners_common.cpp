@@ -351,6 +351,18 @@ void ROUNDEDTRACKSCORNERS::Add(TRACK* aTrackSegTo, const unsigned int aLength, P
     RecreateMenu();
 }
 
+void ROUNDEDTRACKSCORNERS::Add(TRACK* aTrackSegTo, const wxPoint aPosition, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    ROUNDEDTRACKSCORNER::PARAMS current_params = GetParams();
+    ROUNDEDTRACKSCORNER::PARAMS params = current_params;
+    params.length_set = aLength;
+    params.length_ratio = 100;
+    SetParams(params);
+    Add(aTrackSegTo, aPosition, aUndoRedoList);
+    SetParams(current_params);
+    RecreateMenu();
+}
+
 void ROUNDEDTRACKSCORNERS::Add(TRACK* aTrackSegTo)
 {
     PICKED_ITEMS_LIST null_undo_redo_list;

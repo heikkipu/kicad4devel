@@ -150,9 +150,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCorner(wxMenu* aMenu, const TRAC
 {
     if(aMenu && aTrackSeg && IsOn())
     {
-        wxString msg;
-        msg.Printf(_("Convert Segments to Corner %s"), GetChars(ParamsTxtToMenu(GetParams())));
-        AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED, msg, KiBitmap(add_arc_xpm));
+        AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED, _("Convert Segments to Corner"), KiBitmap(add_arc_xpm));
     }
 }
 

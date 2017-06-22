@@ -53,6 +53,7 @@ public:
     //One aCorner
     void Add(TRACK* aTrackSegTo, const wxPoint& aCurPosAt); 
     TrackNodeItem::ROUNDEDTRACKSCORNER* Add(TRACK* aTrackSegTo, const wxPoint aPosition, PICKED_ITEMS_LIST* aUndoRedoList);
+    void Add(TRACK* aTrackSegTo, const wxPoint aPosition, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList);
     void Add(TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList);
     void Add(TRACK* aTrackSegTo, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList);
     void Add(TRACK* aTrackSegTo); //Track routing trace.
@@ -85,9 +86,6 @@ public:
     
     TrackNodeItem::TRACKNODEITEM* Next(const TRACK* aTrackSegAt) const override;
     TrackNodeItem::TRACKNODEITEM* Back(const TRACK* aTrackSegAt) const override;
-    
-    void ConvertSegmentedCorners(TRACK* aTrackFrom, const bool aUndo);
-    void ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
     
 protected:
     ROUNDEDTRACKSCORNERS(){};
@@ -253,7 +251,40 @@ private:
     inline int MenuToDo_CalcSizeLengthSet(const int aMenuID);
     inline int MenuToDo_CalcSizeLengthRatio(const int aMenuID);
     void Menu_ChangeSize(wxMenu* aMenu) const;
+//-----------------------------------------------------------------------------------------------------/
 
+//-----------------------------------------------------------------------------------------------------/
+// Convert segmented arced corners to rounded corner.
+//-----------------------------------------------------------------------------------------------------/
+public:
+    void ConvertSegmentedCorners(TRACK* aTrackFrom, const bool aUndo);
+    void ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
+    
+private:
+    void RemoveArcedSegments(std::set<TRACK*>* aTracksArced, PICKED_ITEMS_LIST* aUndoRedoList);
+    
+    class NET_SCAN_TRACK_COLLECT_SAMELENGTH : public NET_SCAN_BASE
+    {
+    public:
+        NET_SCAN_TRACK_COLLECT_SAMELENGTH(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
+        ~NET_SCAN_TRACK_COLLECT_SAMELENGTH() {};
+
+        std::set<TRACK*>* GetSamelengthSegments(void) {return &m_samelength_segments;}
+        std::set<TRACK*>* GetAnotherSegments(void) {return &m_another_segments;}
+        
+    protected:
+        bool ExecuteAt(TRACK* aTrackSeg) override;
+        PICKED_ITEMS_LIST* m_picked_items {nullptr};
+        
+    private:
+        unsigned int m_track_length{0};
+        std::set<TRACK*> m_samelength_segments;
+        std::set<TRACK*> m_another_segments;
+        static const unsigned int ROUND_DIVIDER = 1000;
+    };
+
+//-----------------------------------------------------------------------------------------------------/
+    
 //-----------------------------------------------------------------------------------------------------/
 // NETSCAN OPERATIONS 
 //-----------------------------------------------------------------------------------------------------/
@@ -316,26 +347,6 @@ private:
 
     protected:
         bool ExecuteAt(TRACK* aTrackSeg) override;
-    };
-
-    class NET_SCAN_TRACK_COLLECT_SAMELENGTH : public NET_SCAN_BASE
-    {
-    public:
-        NET_SCAN_TRACK_COLLECT_SAMELENGTH(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList);
-        ~NET_SCAN_TRACK_COLLECT_SAMELENGTH() {};
-
-        std::set<TRACK*>* GetSamelengthSegments(void) {return &m_samelength_segments;}
-        std::set<TRACK*>* GetAnotherSegments(void) {return &m_another_segments;}
-        
-    protected:
-        bool ExecuteAt(TRACK* aTrackSeg) override;
-        PICKED_ITEMS_LIST* m_picked_items {nullptr};
-        
-    private:
-        unsigned int m_track_length{0};
-        std::set<TRACK*> m_samelength_segments;
-        std::set<TRACK*> m_another_segments;
-        static const unsigned int ROUND_DIVIDER = 100;
     };
 
 //-----------------------------------------------------------------------------------------------------/
