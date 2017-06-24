@@ -36,7 +36,7 @@ void ROUNDEDTRACKSCORNERS::Add(const DLIST<TRACK>* aTracksAt)
     {
         PICKED_ITEMS_LIST undoredo_list;
         //Convert all tracks, witch are not been converted, to rounded tracks.
-        ConvertTracksInList(aTracksAt, &undoredo_list);
+        Convert(aTracksAt, &undoredo_list);
         
         std::unique_ptr<ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS> corners_add(new ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS(this, aTracksAt, &undoredo_list));
         if(corners_add)
@@ -71,7 +71,7 @@ unsigned int ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS::Ex
 }
     
 //Convert all TRACKs to ROUNDEDCORNERTRACKs
-void ROUNDEDTRACKSCORNERS::ConvertTracksInList(const DLIST<TRACK>* aTracksAt, PICKED_ITEMS_LIST* aUndoRedoList)
+void ROUNDEDTRACKSCORNERS::Convert(const DLIST<TRACK>* aTracksAt, PICKED_ITEMS_LIST* aUndoRedoList)
 {
     bool created_undoredo_list = false;
     if(!aUndoRedoList)
@@ -110,7 +110,7 @@ unsigned int ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS:
     {
         TRACK* track = static_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));
         TRACK* track_in = track;
-        track = m_parent->ConvertTrackInList(track, m_undoredo_items);
+        track = m_parent->Convert(track, m_undoredo_items);
         if(track != track_in)
             return 1;
     }

@@ -104,8 +104,9 @@ private:
     TRACK* FindSecondTrack(const TRACK* aTrackSegTo, wxPoint aPosition);
     
     //aTrack is converted to ROUNDEDCORNERTRACK in m_board->m_Track
-    ROUNDEDCORNERTRACK* ConvertTrackInList(TRACK* aTrack, PICKED_ITEMS_LIST* aUndoRedoList); //One Track
-    void ConvertTracksInList(const DLIST<TRACK>* aTracksAt, PICKED_ITEMS_LIST* aUndoRedoList); //All TRACKs in m_Tracks list.
+    ROUNDEDCORNERTRACK* Convert(TRACK* aTrack, PICKED_ITEMS_LIST* aUndoRedoList); //One Track
+    void Convert(const int aNetCode, PICKED_ITEMS_LIST* aUndoRedoList); //One Net
+    void Convert(const DLIST<TRACK>* aTracksAt, PICKED_ITEMS_LIST* aUndoRedoList); //All TRACKs in m_Tracks list.
     
     TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS GetParams(void) const { return m_params; }
     void SetParams(const TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS aParams);

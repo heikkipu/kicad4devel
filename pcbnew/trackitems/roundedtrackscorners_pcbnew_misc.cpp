@@ -133,20 +133,28 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITE
                 TRACK* first_track = connected_tracks_it->first;
                 bool is_first_track_connected_at_startpoint = connected_tracks_it->second;
                 wxPoint first_track_connected_pos = first_track->GetEnd();
+                wxPoint first_track_opposite_pos = first_track->GetStart();
                 if(is_first_track_connected_at_startpoint)
+                {
                     first_track_connected_pos = first_track->GetStart();
+                    first_track_opposite_pos = first_track->GetEnd();
+                }
                 double first_track_angle = TrackSegAngle(first_track, first_track_connected_pos);
                 
                 connected_tracks_it++;
                 TRACK* second_track = connected_tracks_it->first;
                 bool is_second_track_connected_at_startpoint = connected_tracks_it->second;
                 wxPoint second_track_connected_pos = second_track->GetEnd();
+                wxPoint second_track_opposite_pos = second_track->GetStart();
                 if(is_second_track_connected_at_startpoint)
+                {
                     second_track_connected_pos = second_track->GetStart();
+                    second_track_opposite_pos = second_track->GetEnd();
+                }
                 double second_track_angle = TrackSegAngle(second_track, second_track_connected_pos);
                 
-                first_track = ConvertTrackInList(first_track, aUndoRedoList);
-                second_track = ConvertTrackInList(second_track, aUndoRedoList);
+                first_track = Convert(first_track, aUndoRedoList);
+                second_track = Convert(second_track, aUndoRedoList);
                 changed_picker.SetItem(first_track);
                 changed_picker.SetLink(first_track->Clone());
                 aUndoRedoList->PushItem(changed_picker);
@@ -154,9 +162,8 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITE
                 changed_picker.SetLink(second_track->Clone());
                 aUndoRedoList->PushItem(changed_picker);
                 
-                double angle_btw_tracks = AngleBtwTracks(first_track, first_track_connected_pos, second_track, second_track_connected_pos);
                 //Parallel tracks.
-                if(Rad2MilsInt(angle_btw_tracks) == RAD_0_MILS_INT)
+                if(Rad2MilsInt(first_track_angle) == Rad2MilsInt(second_track_angle))
                 {
                     RemoveArcedSegments(&tracks_arced, aUndoRedoList);
                     
@@ -186,6 +193,7 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITE
                 }
                 else 
                 {
+                    double angle_btw_tracks = AngleBtwTracks(first_track, first_track_connected_pos, second_track, second_track_connected_pos);
                     //90 degrees
                     if((Rad2MilsInt(angle_btw_tracks) == RAD_90_MILS_INT) || (Rad2MilsInt(angle_btw_tracks) == RAD_270_MILS_INT))
                     {
@@ -209,7 +217,32 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITE
                     }
                     else //other degrees
                     {
+                        RemoveArcedSegments(&tracks_arced, aUndoRedoList);
                         
+                        angle_btw_tracks = InnerAngle(angle_btw_tracks);
+                        
+                        double first_trac_opposite_angle = TrackSegAngle(first_track, first_track_opposite_pos);
+                        double virtual_trac_angle = AngleRad(first_track_opposite_pos, second_track_opposite_pos);
+                        
+                        double angle_first_btw_virtual = NormAngle(first_trac_opposite_angle - virtual_trac_angle, 0.0, M_PIx2, M_PIx2);
+                        angle_first_btw_virtual = InnerAngle(angle_first_btw_virtual);
+                        
+                        double virtual_track_length = GetLineLength(first_track_opposite_pos, second_track_opposite_pos);
+                        double second_track_full_length = virtual_track_length * sin(angle_first_btw_virtual) / sin(angle_btw_tracks);
+                        double second_track_length = GetLineLength(second_track->GetStart(), second_track->GetEnd());
+                        
+                        wxPoint common_point = GetPoint(second_track_opposite_pos, second_track_angle + M_PI, second_track_full_length);
+                        if(is_first_track_connected_at_startpoint)
+                            first_track->SetStart(common_point);
+                        else
+                            first_track->SetEnd(common_point);
+
+                        if(is_second_track_connected_at_startpoint)
+                            second_track->SetStart(common_point);
+                        else
+                            second_track->SetEnd(common_point);
+                        
+                        Add(first_track, common_point, second_track_full_length - second_track_length, aUndoRedoList);
                     }
                 }
             }

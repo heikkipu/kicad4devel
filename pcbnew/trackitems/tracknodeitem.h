@@ -219,6 +219,14 @@ namespace TrackNodeItem
         }
         return angle_ret;
     }
+
+    inline double InnerAngle(const double aAngle)
+    {
+        double angle_ret = aAngle;
+        if(angle_ret > M_PI)
+            angle_ret = M_PIx2 - angle_ret;
+        return angle_ret;
+    }
     
     inline bool IsSharpAngle(const double aAngle, const bool aRoundedCorner)
     {

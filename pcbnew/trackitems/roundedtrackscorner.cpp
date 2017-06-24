@@ -164,9 +164,7 @@ bool ROUNDEDTRACKSCORNER::Update(void)
     m_trackseg_second_length = m_trackseg_second->GetLength();
     
     m_angle_btw_tracks = AngleBtwTracks(m_trackseg, m_connected_pos, m_trackseg_second, m_connected_pos);
-    m_angle_inner_btw_tracks = m_angle_btw_tracks;
-    if(m_angle_inner_btw_tracks > M_PI)
-        m_angle_inner_btw_tracks = M_PIx2 - m_angle_inner_btw_tracks;
+    m_angle_inner_btw_tracks = InnerAngle(m_angle_btw_tracks);
     m_angle_inner_half = m_angle_inner_btw_tracks / 2.0;
     if((m_angle_btw_tracks == M_PI) || (Rad2MilsInt(m_angle_inner_btw_tracks) < RAD_90_MILS_INT))
     {

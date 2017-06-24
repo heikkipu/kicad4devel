@@ -214,7 +214,7 @@ TRACK* ROUNDEDTRACKSCORNERS::FindSecondTrack(const TRACK* aTrackSegTo, wxPoint a
 }
 
 
-ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::ConvertTrackInList(TRACK* aTrack, PICKED_ITEMS_LIST* aUndoRedoList)
+ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert(TRACK* aTrack, PICKED_ITEMS_LIST* aUndoRedoList)
 {
     ROUNDEDCORNERTRACK* rounded_track = nullptr;
     if(aTrack && aTrack->Type() == PCB_TRACE_T)
@@ -276,8 +276,8 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Add(TRACK* aTrackSegTo, const wxPoint
         TRACK* track_second = FindSecondTrack(aTrackSegTo, aPosition);
         if(track_second)
         {
-            track_second = ConvertTrackInList(track_second, aUndoRedoList);
-            aTrackSegTo = ConvertTrackInList(aTrackSegTo, aUndoRedoList);
+            track_second = Convert(track_second, aUndoRedoList);
+            aTrackSegTo = Convert(aTrackSegTo, aUndoRedoList);
             
             corner = Create(aTrackSegTo, track_second, aPosition, false);
 
@@ -385,9 +385,7 @@ bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::ExecuteAt(TRACK* aTrackSeg)
 
 void ROUNDEDTRACKSCORNERS::Add(const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList)
 {
-    std::unique_ptr<NET_SCAN_NET_CONVERT> net_convert(new NET_SCAN_NET_CONVERT(aNetCodeTo, this, aUndoRedoList));
-    if(net_convert)
-        net_convert->Execute();
+    Convert(aNetCodeTo, aUndoRedoList);
     
     std::unique_ptr<NET_SCAN_NET_ADD> net_add(new NET_SCAN_NET_ADD(aNetCodeTo, this, aUndoRedoList));
     if(net_add)
@@ -411,9 +409,16 @@ bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::ExecuteAt(TRACK* aTrackSeg)
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
         TRACK* track = static_cast<TRACK*>(const_cast<TRACK*>(aTrackSeg));
-        track = static_cast<ROUNDEDTRACKSCORNERS*>(m_Parent)->ConvertTrackInList(track, m_picked_items);
+        track = static_cast<ROUNDEDTRACKSCORNERS*>(m_Parent)->Convert(track, m_picked_items);
     }
     return false;
+}
+
+void ROUNDEDTRACKSCORNERS::Convert(const int aNetCode, PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    std::unique_ptr<NET_SCAN_NET_CONVERT> net_convert(new NET_SCAN_NET_CONVERT(aNetCode, this, aUndoRedoList));
+    if(net_convert)
+        net_convert->Execute();
 }
 
 void ROUNDEDTRACKSCORNERS::Remove(const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo)
