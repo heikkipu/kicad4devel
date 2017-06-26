@@ -247,6 +247,7 @@ private:
     void Menu_AddToNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
     void Menu_RemoveFromNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
     void Menu_ConvertSegmentedCorner(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
+    void Menu_ConvertSegmentedCornersNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const;
 
     wxString ParamsTxtToMenu(const TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS aParams) const;
     inline int MenuToDo_CalcSizeLengthSet(const int aMenuID);
@@ -260,9 +261,13 @@ private:
 public:
     void ConvertSegmentedCorners(TRACK* aTrackFrom, const bool aUndo);
     void ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
+    void ConvertSegmentedCorners(const int aNetCode, const bool aUndo);
     
 private:
     void RemoveArcedSegments(std::set<TRACK*>* aTracksArced, PICKED_ITEMS_LIST* aUndoRedoList);
+    std::set<TRACK*> CollectSameLengthConnected(const TRACK* aTrackToConnect, const std::set<TRACK*>* aTracksSameLength);
+    std::map<TRACK*, bool> FindSegmentsBothSidesOfArced(const std::set<TRACK*>* aTracksArced, const std::set<TRACK*>* aTracksOthers);
+    bool CreateCorner(std::set<TRACK*>* aTracksArced, const std::map<TRACK*, bool>* aBothSidesTracks, PICKED_ITEMS_LIST* aUndoRedoList);
     
     class NET_SCAN_TRACK_COLLECT_SAMELENGTH : public NET_SCAN_BASE
     {

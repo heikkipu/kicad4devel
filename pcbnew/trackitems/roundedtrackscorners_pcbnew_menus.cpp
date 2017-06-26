@@ -58,6 +58,7 @@ void ROUNDEDTRACKSCORNERS::Popup(wxMenu* aMenu, const TRACK* aTrackSeg, const wx
             Menu_RemoveFromNet(corner_menu, aTrackSeg, aPos);
             corner_menu->AppendSeparator();
             Menu_ConvertSegmentedCorner(corner_menu, aTrackSeg, aPos);
+            Menu_ConvertSegmentedCornersNet(corner_menu, aTrackSeg, aPos);
             corner_menu->AppendSeparator();
         }
         Menu_ChangeSize(corner_menu);
@@ -151,6 +152,19 @@ void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCorner(wxMenu* aMenu, const TRAC
     if(aMenu && aTrackSeg && IsOn())
     {
         AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED, _("Convert Segments to Corner"), KiBitmap(add_arc_xpm));
+    }
+}
+
+void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCornersNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+{
+    if(aMenu && aTrackSeg && IsOn())
+    {
+        if(aTrackSeg->Type() == PCB_TRACE_T)
+        {
+            wxString msg;
+            msg.Printf(_("Convert Segments to Corner from NET: %s"), GetChars(m_Board->FindNet(aTrackSeg->GetNetCode())->GetShortNetname()));
+            AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED_NET, msg, KiBitmap(add_arc_xpm));
+        }
     }
 }
 

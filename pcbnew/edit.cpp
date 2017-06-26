@@ -2180,6 +2180,16 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
+    case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED_NET:
+        if( GetCurItem() && GetCurItem()->Type() == PCB_TRACE_T )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            GetBoard()->TrackItems()->RoundedTracksCorners()->ConvertSegmentedCorners( static_cast<TRACK*>(GetCurItem())->GetNetCode(), true );
+            if( static_cast<TRACK*>(GetCurItem())->GetNetCode() > 0 )
+                TestNetConnection( nullptr, static_cast<TRACK*>(GetCurItem())->GetNetCode() );
+            OnModify();
+        }
+        break;
 #endif        
 
     default:
