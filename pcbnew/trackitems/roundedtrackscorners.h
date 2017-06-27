@@ -286,7 +286,7 @@ private:
         unsigned int m_track_length{0};
         std::set<TRACK*> m_samelength_segments;
         std::set<TRACK*> m_another_segments;
-        static const unsigned int ROUND_DIVIDER = 1000;
+        static constexpr double ROUND_DIVIDER = 100.0;
     };
 
 //-----------------------------------------------------------------------------------------------------/

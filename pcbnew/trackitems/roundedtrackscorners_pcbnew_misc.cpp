@@ -135,7 +135,7 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(const int aNetCode, const boo
 ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_COLLECT_SAMELENGTH::NET_SCAN_TRACK_COLLECT_SAMELENGTH(const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent, PICKED_ITEMS_LIST* aUndoRedoList) : NET_SCAN_BASE(aTrackSeg, aParent)
 {
     m_picked_items = aUndoRedoList;
-    m_track_length = aTrackSeg->GetLength() / ROUND_DIVIDER;
+    m_track_length = round(aTrackSeg->GetLength() / ROUND_DIVIDER);
     m_samelength_segments.clear();
     m_another_segments.clear();
 }
@@ -144,7 +144,7 @@ bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_COLLECT_SAMELENGTH::ExecuteAt(TRACK* a
 {
     if(aTrackSeg->Type() == PCB_TRACE_T)
     {
-        unsigned int length = aTrackSeg->GetLength() / ROUND_DIVIDER;
+        unsigned int length = round(aTrackSeg->GetLength() / ROUND_DIVIDER);
         if(length == m_track_length)
             m_samelength_segments.insert(aTrackSeg);
         else
