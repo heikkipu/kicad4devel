@@ -128,6 +128,7 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(const int aNetCode, const boo
     }
     while(created);
     
+    Repopulate(aNetCode, &undoredo_items);
     if(m_EditFrame && aUndo && undoredo_items.GetCount() )
         m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_CHANGED);
 }
@@ -178,20 +179,20 @@ std::set<TRACK*> ROUNDEDTRACKSCORNERS::CollectSameLengthConnected(const TRACK* a
     do
     {
         num_collected = tracks_arced.size();
-        for(auto t : *aTracksSameLength)
+        for(auto tSamelength : *aTracksSameLength)
         {
-            if(t)
+            if(tSamelength)
             {
-                wxPoint t_start = t->GetStart();
-                wxPoint t_end = t->GetEnd();
-                for(auto t2 : tracks_arced)
+                wxPoint tSamelength_start = tSamelength->GetStart();
+                wxPoint tSamelength_end = tSamelength->GetEnd();
+                for(auto tArced : tracks_arced)
                 {
-                    if(t2)
+                    if(tArced)
                     {
-                        wxPoint t2_start = t2->GetStart();
-                        wxPoint t2_end = t2->GetEnd();
-                        if((t_start == t2_start) || (t_start == t2_end) || (t_end == t2_start) || (t_end == t2_end))
-                            tracks_arced.insert(t);
+                        wxPoint tArced_start = tArced->GetStart();
+                        wxPoint tArced_end = tArced->GetEnd();
+                        if((tSamelength_start == tArced_start) || (tSamelength_start == tArced_end) || (tSamelength_end == tArced_start) || (tSamelength_end == tArced_end))
+                            tracks_arced.insert(tSamelength);
                     }
                 }
             }
@@ -206,22 +207,22 @@ std::map<TRACK*, bool> ROUNDEDTRACKSCORNERS::FindSegmentsBothSidesOfArced(const 
 {
     std::map<TRACK*, bool> tracks_connected2arced;
     tracks_connected2arced.clear();
-    for(auto seg : *aTracksArced)
+    for(auto segArced : *aTracksArced)
     {
-        if(seg)
+        if(segArced)
         {
-            wxPoint seg_start = seg->GetStart();
-            wxPoint seg_end = seg->GetEnd();
-            for(auto seg2 : *aTracksOthers)
+            wxPoint segArced_start = segArced->GetStart();
+            wxPoint segArced_end = segArced->GetEnd();
+            for(auto segOther : *aTracksOthers)
             {
-                if(seg2)
+                if(segOther)
                 {
-                    wxPoint seg2_start = seg2->GetStart();
-                    wxPoint seg2_end = seg2->GetEnd();
-                    if((seg_start == seg2_start) || (seg_start == seg2_end) || (seg_end == seg2_start) || (seg_end == seg2_end))
+                    wxPoint segOther_start = segOther->GetStart();
+                    wxPoint segOther_end = segOther->GetEnd();
+                    if((segArced_start == segOther_start) || (segArced_start == segOther_end) || (segArced_end == segOther_start) || (segArced_end == segOther_end))
                     {
-                        bool startpoint = ((seg2_start == seg_start)||(seg2_start == seg_end));
-                        tracks_connected2arced.insert(std::pair<TRACK*, bool>(seg2, startpoint));
+                        bool startpoint = ((segOther_start == segArced_start)||(segOther_start == segArced_end));
+                        tracks_connected2arced.insert(std::pair<TRACK*, bool>(segOther, startpoint));
                     }
                 }
             }
@@ -301,60 +302,34 @@ bool ROUNDEDTRACKSCORNERS::CreateCorner(std::set<TRACK*>* aTracksArced, const st
     else 
     {
         double angle_btw_tracks = AngleBtwTracks(first_track, first_track_connected_pos, second_track, second_track_connected_pos);
-        //90 degrees
-        if((Rad2MilsInt(angle_btw_tracks) == RAD_90_MILS_INT) || (Rad2MilsInt(angle_btw_tracks) == RAD_270_MILS_INT))
-        {
-            RemoveArcedSegments(aTracksArced, aUndoRedoList);
-            
-            double dist_nodes = GetLineLength(first_track_connected_pos, second_track_connected_pos);
-            double add_length = sin(M_PI_4) * dist_nodes;
-            wxPoint common_point = GetPoint(first_track_connected_pos, first_track_angle + M_PI, add_length);
-            
-            if(is_first_track_connected_at_startpoint)
-                first_track->SetStart(common_point);
-            else
-                first_track->SetEnd(common_point);
+        double virtual_track_length = GetLineLength(first_track_opposite_pos, second_track_opposite_pos);
+        
+        RemoveArcedSegments(aTracksArced, aUndoRedoList);
+        
+        angle_btw_tracks = InnerAngle(angle_btw_tracks);
+        
+        double virtual_trac_angle = AngleRad(first_track_opposite_pos, second_track_opposite_pos);
+        
+        double first_trac_opposite_angle = TrackSegAngle(first_track, first_track_opposite_pos);
+        double angle_first_btw_virtual = NormAngle(first_trac_opposite_angle - virtual_trac_angle, 0.0, M_PIx2, M_PIx2);
+        angle_first_btw_virtual = InnerAngle(angle_first_btw_virtual);
+        
+        double second_track_full_length = virtual_track_length * sin(angle_first_btw_virtual) / sin(angle_btw_tracks);
+        double second_track_length = GetLineLength(second_track->GetStart(), second_track->GetEnd());
+        
+        wxPoint common_point = GetPoint(second_track_opposite_pos, second_track_angle + M_PI, second_track_full_length);
+        if(is_first_track_connected_at_startpoint)
+            first_track->SetStart(common_point);
+        else
+            first_track->SetEnd(common_point);
 
-            if(is_second_track_connected_at_startpoint)
-                second_track->SetStart(common_point);
-            else
-                second_track->SetEnd(common_point);
-            
-            Add(first_track, common_point, add_length, aUndoRedoList);
-            okay = true;
-        }
-        else //other degrees
-        {
-            //if something here .....
-            
-            RemoveArcedSegments(aTracksArced, aUndoRedoList);
-            
-            angle_btw_tracks = InnerAngle(angle_btw_tracks);
-            
-            double first_trac_opposite_angle = TrackSegAngle(first_track, first_track_opposite_pos);
-            double virtual_trac_angle = AngleRad(first_track_opposite_pos, second_track_opposite_pos);
-            
-            double angle_first_btw_virtual = NormAngle(first_trac_opposite_angle - virtual_trac_angle, 0.0, M_PIx2, M_PIx2);
-            angle_first_btw_virtual = InnerAngle(angle_first_btw_virtual);
-            
-            double virtual_track_length = GetLineLength(first_track_opposite_pos, second_track_opposite_pos);
-            double second_track_full_length = virtual_track_length * sin(angle_first_btw_virtual) / sin(angle_btw_tracks);
-            double second_track_length = GetLineLength(second_track->GetStart(), second_track->GetEnd());
-            
-            wxPoint common_point = GetPoint(second_track_opposite_pos, second_track_angle + M_PI, second_track_full_length);
-            if(is_first_track_connected_at_startpoint)
-                first_track->SetStart(common_point);
-            else
-                first_track->SetEnd(common_point);
-
-            if(is_second_track_connected_at_startpoint)
-                second_track->SetStart(common_point);
-            else
-                second_track->SetEnd(common_point);
-            
-            Add(first_track, common_point, second_track_full_length - second_track_length, aUndoRedoList);
-            okay = true;
-        }
+        if(is_second_track_connected_at_startpoint)
+            second_track->SetStart(common_point);
+        else
+            second_track->SetEnd(common_point);
+        
+        Add(first_track, common_point, second_track_full_length - second_track_length, aUndoRedoList);
+        okay = true;
     }
     return okay;
 }
