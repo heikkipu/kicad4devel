@@ -81,18 +81,16 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create(const TRACK* aTrackSegTo, cons
         if(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSegTo)) && dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSegSecond)))
         {
             //Not in pad or via:
-            if(const_cast<TRACK*>(aTrackSegTo)->GetVia( aPosition, aTrackSegTo->GetLayer()))
+            if(const_cast<TRACK*>(aTrackSegTo)->GetVia(aPosition, aTrackSegTo->GetLayer()))
                 return nullptr;
-                    
-            std::vector<D_PAD*> connected_pads = aTrackSegTo->m_PadsConnected;
-                for(auto pad : connected_pads)
-                    if(pad->HitTest(aPosition))
-                        return nullptr;
+            
+            BOARD_CONNECTED_ITEM* lock_point = m_Board->GetLockPoint(aPosition, aTrackSegTo->GetLayerSet());
+            if(lock_point && (lock_point->Type() == PCB_PAD_T))
+                return nullptr;
 
-            connected_pads = aTrackSegSecond->m_PadsConnected;
-                for(auto pad : connected_pads)
-                    if(pad->HitTest(aPosition))
-                        return nullptr;
+            lock_point = m_Board->GetLockPoint(aPosition, aTrackSegSecond->GetLayerSet());
+            if(lock_point && (lock_point->Type() == PCB_PAD_T))
+                return nullptr;
 
             ROUNDEDTRACKSCORNER* trackseg_corner_atpos = nullptr;
             if(aPosition == dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSegTo))->GetStart())

@@ -215,6 +215,29 @@ D_PAD* TRACKITEMS::BackPad(const TRACK* aTrackSegAt) const
 //--------------------------------------------------------------------------------------------------- 
 
 //--------------------------------------------------------------------------------------------------- 
+// Get all pads at aNetCode.
+//--------------------------------------------------------------------------------------------------- 
+std::vector<D_PAD*> TRACKITEMS::GetPads(const int aNetCode) const
+{
+    std::vector<D_PAD*> pads;
+    DLIST<MODULE>* modules = &m_Board->m_Modules;
+    MODULE* module = modules->GetFirst();
+    while(module)
+    {
+       D_PAD* pad = module->Pads();
+       while(pad)
+       {
+           if(pad->GetNetCode() == aNetCode)
+               pads.push_back(pad);
+            pad = pad->Next();
+       }
+       module = module->Next();
+    }
+    return pads;
+}
+//--------------------------------------------------------------------------------------------------- 
+
+//--------------------------------------------------------------------------------------------------- 
 // Pick Vias and track sizes.
 //--------------------------------------------------------------------------------------------------- 
 void TRACKITEMS::PickViaSize(const VIA* aVia)

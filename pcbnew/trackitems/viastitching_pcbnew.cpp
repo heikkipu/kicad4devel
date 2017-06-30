@@ -22,6 +22,7 @@
  */
 
 #include "viastitching.h"
+#include "trackitems.h"
 
 using namespace ViaStitching;
 
@@ -129,9 +130,7 @@ void VIASTITCHING::AddViaArrayPrepare( const PCB_EDIT_FRAME* aEditFrame, const V
     if(g_Drc_On)
     {
         //Do not add pads in same netcode
-        CONNECTIONS connections( const_cast<BOARD*>(aEditFrame->GetBoard()) );
-        connections.BuildPadsList(m_via_array_netcode);
-        m_via_array_netcode_pads = connections.GetPadsList();
+        m_via_array_netcode_pads = m_board->TrackItems()->GetPads(m_via_array_netcode);
         for(auto pad : m_via_array_netcode_pads)
             pad->SetNetCode(0); //Mark them diff netcode
     }
@@ -325,10 +324,7 @@ void VIASTITCHING::ConnectThermalViasToZones( void )
 
                     //Test pad connectivity.
                     bool hit = false;
-
-                    CONNECTIONS connections( const_cast<BOARD*>( m_board ) );
-                    connections.BuildPadsList( thermalcode );
-                    std::vector<D_PAD*> test_pads = connections.GetPadsList();
+                    std::vector<D_PAD*> test_pads = m_board->TrackItems()->GetPads(thermalcode);
 
                     for( auto& poly: vias_polys )
                     {

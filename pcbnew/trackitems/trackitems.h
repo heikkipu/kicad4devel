@@ -104,6 +104,7 @@ public:
     D_PAD* GetPad(const TRACK* aTrackSegAt, const wxPoint aPosAt) const;
     D_PAD* NextPad(const TRACK* aTrackSegAt) const;
     D_PAD* BackPad(const TRACK* aTrackSegAt) const;
+    std::vector<D_PAD*> GetPads(const int aNetcode) const;
 
 private:
     class NET_SCAN_GET_VIA : public NET_SCAN_BASE
