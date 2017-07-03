@@ -33,6 +33,27 @@
 #include "teardrops.h"
 #include "roundedtrackscorners.h"
 
+namespace TrackItems
+{
+    
+    class PADS_SCAN_BASE
+    {
+
+    public:
+        virtual ~PADS_SCAN_BASE(){};
+        void Execute(void);
+
+    protected:
+        PADS_SCAN_BASE() {};
+        PADS_SCAN_BASE(const BOARD* aBoard);
+
+        virtual bool ExecutePad(const D_PAD* aPad)=0; 
+
+    private:
+        MODULE* m_first_module;
+    };
+
+} //namespace TrackItems
 
 //-----------------------------------------------------------------------------------------------------/
 // Track items tools class 
@@ -145,6 +166,19 @@ private:
         bool ExecuteAt(TRACK* aTrackSeg) override;
     };
 
+    class PADS_SCAN_GET_PADS_IN_NET : public TrackItems::PADS_SCAN_BASE
+    {
+    public:
+        PADS_SCAN_GET_PADS_IN_NET(const int aNetCode, std::vector<D_PAD*>& aPadsList, const BOARD* aBoard);
+
+    protected:
+        virtual bool ExecutePad(const D_PAD* aPad) override; 
+        
+    private:
+        int m_netcode;
+        std::vector<D_PAD*>* m_pads_list;
+    };
+    
 //--------------------------------------------------------------------------------------------------- 
 
 //--------------------------------------------------------------------------------------------------- 

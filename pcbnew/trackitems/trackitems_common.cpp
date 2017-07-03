@@ -27,6 +27,7 @@
 #include <view/view.h>
 
 using namespace TrackNodeItem;
+using namespace TrackItems;
 using namespace TrackNodeItems;
 
 
@@ -212,29 +213,56 @@ D_PAD* TRACKITEMS::BackPad(const TRACK* aTrackSegAt) const
     }
     return nullptr;
 }
-//--------------------------------------------------------------------------------------------------- 
 
-//--------------------------------------------------------------------------------------------------- 
 // Get all pads at aNetCode.
-//--------------------------------------------------------------------------------------------------- 
+TRACKITEMS::PADS_SCAN_GET_PADS_IN_NET::PADS_SCAN_GET_PADS_IN_NET(const int aNetCode, std::vector<D_PAD*>& aPadsList, const BOARD* aBoard) : PADS_SCAN_BASE(aBoard)
+{
+    m_pads_list = &aPadsList;
+    m_netcode = aNetCode;
+}
+bool TRACKITEMS::PADS_SCAN_GET_PADS_IN_NET::ExecutePad(const D_PAD* aPad)
+{
+    if(aPad->GetNetCode() == m_netcode)
+        m_pads_list->push_back(const_cast<D_PAD*>(aPad));
+    return false;
+}
+
 std::vector<D_PAD*> TRACKITEMS::GetPads(const int aNetCode) const
 {
+    std::vector<D_PAD*> pads_list;
+    pads_list.clear();
+    std::unique_ptr<PADS_SCAN_GET_PADS_IN_NET> get_pads(new PADS_SCAN_GET_PADS_IN_NET(aNetCode, pads_list, m_Board));
+    if(get_pads)
+        get_pads->Execute();
+    return pads_list;
+}
+
+//--------------------------------------------------------------------------------------------------- 
+// PADs scan base.
+//--------------------------------------------------------------------------------------------------- 
+TrackItems::PADS_SCAN_BASE::PADS_SCAN_BASE(const BOARD* aBoard)
+{
     std::vector<D_PAD*> pads;
-    DLIST<MODULE>* modules = &m_Board->m_Modules;
-    MODULE* module = modules->GetFirst();
+    DLIST<MODULE>* modules = &const_cast<BOARD*>(aBoard)->m_Modules;
+    m_first_module = modules->GetFirst(); 
+}
+
+void PADS_SCAN_BASE::Execute(void)
+{
+    MODULE* module = m_first_module;
     while(module)
     {
-       D_PAD* pad = module->Pads();
-       while(pad)
-       {
-           if(pad->GetNetCode() == aNetCode)
-               pads.push_back(pad);
+        D_PAD* pad = module->Pads();
+        while(pad)
+        {
+            if(ExecutePad(pad))
+                break;
             pad = pad->Next();
-       }
-       module = module->Next();
+        }
+        module = module->Next();
     }
-    return pads;
 }
+
 //--------------------------------------------------------------------------------------------------- 
 
 //--------------------------------------------------------------------------------------------------- 
