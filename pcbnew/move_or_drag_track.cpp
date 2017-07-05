@@ -832,7 +832,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     TRACK* TrackToEndPoint   = NULL;
     bool   error = false;
 
-    if( !track )
+    if( !track || (track->Type() != PCB_TRACE_T) )
         return;
 
     // TODO: Use cleanup functions to merge collinear segments if track
