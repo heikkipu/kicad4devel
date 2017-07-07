@@ -374,7 +374,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         {
 #ifdef PCBNEW_WITH_TRACKITEMS
             //Add thermal via.
-            if( GetToolId() == ID_TRACK_BUTT )
+            if( GetToolId() == ID_PCB_DRAW_VIA_BUTT )
             {
                 evt_type = hk_id == HK_ADD_BLIND_BURIED_VIA ?
                 ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA : ID_POPUP_PCB_PLACE_ZONE_THROUGH_VIA;
@@ -408,7 +408,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 #ifdef PCBNEW_WITH_TRACKITEMS
         {
             //Add thermal via with selecting layer(s)(net).
-            if( GetToolId() == ID_TRACK_BUTT )
+            if( GetToolId() == ID_PCB_DRAW_VIA_BUTT )
             {
                 evt_type = hk_id == HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA ?
                     ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA : 

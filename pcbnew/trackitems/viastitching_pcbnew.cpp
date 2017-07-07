@@ -30,24 +30,27 @@ using namespace ViaStitching;
 //Legacy canvas add.
 void VIASTITCHING::AddThermalVia( const PCB_EDIT_FRAME* aEditFrame, const int aViaType_ID ) 
 {
-    VIATYPE_T viatype = VIA_THROUGH;
-    if( ( aViaType_ID == ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA ) || 
-        ( aViaType_ID ==  ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA ) )
-        viatype = VIA_BLIND_BURIED;
+    if(aViaType_ID != ID_POPUP_PCB_PLACE_ZONE_CURRENTTYPE_VIA)
+    {
+        m_viatype = VIA_THROUGH;
+        if( ( aViaType_ID == ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA ) || 
+            ( aViaType_ID ==  ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA ) )
+            m_viatype = VIA_BLIND_BURIED;
+    }
 
     bool select_layer = ( aViaType_ID == ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA ) || 
                         ( aViaType_ID == ID_POPUP_PCB_SEL_LAYER_AND_PLACE_ZONE_THROUGH_VIA );
 
-    AddThermalVia( aEditFrame, viatype, select_layer );
+    AddThermalVia( aEditFrame, m_viatype, select_layer );
     const_cast<PCB_EDIT_FRAME*>(aEditFrame)->GetCanvas()->Refresh( true );
 }
 
 //Gal canvas add.
-void VIASTITCHING::AddThermalVia( const PCB_EDIT_FRAME* aEditFrame, const VIATYPE_T aViaType, const bool aSelectLayer )
+void VIASTITCHING::AddThermalVia(const PCB_EDIT_FRAME* aEditFrame, const VIATYPE_T aViaType, const bool aSelectLayer)
 {
-    if( aEditFrame->GetToolId() == ID_TRACK_BUTT )
+    if(aEditFrame->GetToolId() == ID_PCB_DRAW_VIA_BUTT)
     {
-        if( ( aViaType == VIA_BLIND_BURIED ) && !aEditFrame->GetBoard()->GetDesignSettings().m_BlindBuriedViaAllowed )
+        if(( aViaType == VIA_BLIND_BURIED ) && !aEditFrame->GetBoard()->GetDesignSettings().m_BlindBuriedViaAllowed)
             return;
 
         wxPoint pos = aEditFrame->GetCrossHairPosition();

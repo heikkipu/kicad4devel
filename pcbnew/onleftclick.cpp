@@ -50,6 +50,7 @@
 
 #ifdef PCBNEW_WITH_TRACKITEMS
 #include "trackitems/trackitems.h"
+#include "trackitems/viastitching.h"
 #endif
 
 
@@ -319,6 +320,12 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         break;
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    case ID_PCB_DRAW_VIA_BUTT:
+        GetBoard()->ViaStitching()->AddThermalVia( this, ID_POPUP_PCB_PLACE_ZONE_CURRENTTYPE_VIA ); 
+        break;
+#endif
+        
     case ID_PCB_ZONES_BUTT:
     case ID_PCB_KEEPOUT_AREA_BUTT:
         /* ZONE or KEEPOUT Tool is selected. Determine action for a left click:

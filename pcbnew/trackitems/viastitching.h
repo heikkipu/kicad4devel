@@ -87,6 +87,7 @@ protected:
 private:
     const BOARD* m_board;
     
+    VIATYPE_T m_viatype{VIA_THROUGH};
     int m_via_array_netcode{0};
     std::vector<D_PAD*> m_via_array_netcode_pads{nullptr};
 

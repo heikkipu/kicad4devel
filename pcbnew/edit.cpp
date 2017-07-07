@@ -166,6 +166,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA:
     case ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA:
     case ID_POPUP_PCB_SEL_LAYER_AND_PLACE_ZONE_THROUGH_VIA:
+    case ID_POPUP_PCB_CREATE_VIA_ARRAY:
     //Teardrops
     case ID_POPUP_PCB_TEARDROP_COPYCURRENT:
     case ID_POPUP_PCB_TEARDROP_LOCK_TOGGLE:
@@ -1526,7 +1527,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_CREATE_VIA_ARRAY:
-        if( GetCurItem()->Type() == PCB_VIA_T)
+        if((GetCurItem()->Type() == PCB_VIA_T) && (GetToolId() == ID_PCB_DRAW_VIA_BUTT))
         {
             const VIA* via = static_cast<const VIA*>(GetCurItem());
             if(dynamic_cast<const VIA*>(via)->GetThermalCode())
@@ -2389,6 +2390,10 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             Compile_Ratsnest( &dc, true );
         }
 
+        break;
+
+    case ID_PCB_DRAW_VIA_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Via Stitching" ) );
         break;
 
     case ID_PCB_MODULE_BUTT:

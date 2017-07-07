@@ -410,33 +410,45 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER_PAIR,
                          _( "Select Layer Pair for Vias" ), KiBitmap( select_layer_pair_xpm ) );
 
-#ifdef PCBNEW_WITH_TRACKITEMS
-            //Via Stitching thermal vias.
-            msg = AddHotkeyName( _( "Place Through Via" ), g_Board_Editor_Hokeys_Descr,
-                                 HK_ADD_THROUGH_VIA );
-            AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_THROUGH_VIA, msg, KiBitmap( via_xpm ) );
-            if( GetDesignSettings().m_BlindBuriedViaAllowed )
-            {
-                msg = AddHotkeyName( _( "Place Blind/Buried Via" ),
-                                    g_Board_Editor_Hokeys_Descr, HK_ADD_BLIND_BURIED_VIA );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA, 
-                             msg, KiBitmap( via_buried_xpm ) );
-            }
-            msg = AddHotkeyName( _( "Select Layer and Place Through Via" ),
-                                g_Board_Editor_Hokeys_Descr, HK_SEL_LAYER_AND_ADD_THROUGH_VIA );
-            AddMenuItem( aPopMenu, ID_POPUP_PCB_SEL_LAYER_AND_PLACE_ZONE_THROUGH_VIA,
-                        msg, KiBitmap( via_xpm ) );
-            if( GetDesignSettings().m_BlindBuriedViaAllowed )
-            {
-                msg = AddHotkeyName( _( "Select Layer Pair and Place Blind/Buried Via" ),
-                                    g_Board_Editor_Hokeys_Descr, HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA,
-                            msg, KiBitmap( via_buried_xpm ) );
-            }
-#endif
-
             aPopMenu->AppendSeparator();
         }
+        break;
+
+    case ID_PCB_DRAW_VIA_BUTT:
+#ifdef PCBNEW_WITH_TRACKITEMS
+        aPopMenu->AppendSeparator();
+        //Via Stitching thermal vias.
+        msg = AddHotkeyName( _( "Place Through Via" ), g_Board_Editor_Hokeys_Descr,
+                                HK_ADD_THROUGH_VIA );
+        AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_THROUGH_VIA, msg, KiBitmap( via_xpm ) );
+        if( GetDesignSettings().m_BlindBuriedViaAllowed )
+        {
+            msg = AddHotkeyName( _( "Place Blind/Buried Via" ),
+                                g_Board_Editor_Hokeys_Descr, HK_ADD_BLIND_BURIED_VIA );
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA, 
+                            msg, KiBitmap( via_buried_xpm ) );
+        }
+        msg = AddHotkeyName( _( "Select Layer and Place Through Via" ),
+                            g_Board_Editor_Hokeys_Descr, HK_SEL_LAYER_AND_ADD_THROUGH_VIA );
+        AddMenuItem( aPopMenu, ID_POPUP_PCB_SEL_LAYER_AND_PLACE_ZONE_THROUGH_VIA,
+                    msg, KiBitmap( via_xpm ) );
+        if( GetDesignSettings().m_BlindBuriedViaAllowed )
+        {
+            msg = AddHotkeyName( _( "Select Layer Pair and Place Blind/Buried Via" ),
+                                g_Board_Editor_Hokeys_Descr, HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA );
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA,
+                        msg, KiBitmap( via_buried_xpm ) );
+        }
+        
+        if( trackFound && (static_cast<TRACK*>(item)->Type() == PCB_VIA_T) )
+        {
+            msg = AddHotkeyName( _("Create Via Array" ), g_Board_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
+            AddMenuItem( aPopMenu, ID_POPUP_PCB_CREATE_VIA_ARRAY, msg, KiBitmap( via_xpm ) );
+        }
+        
+        aPopMenu->AppendSeparator();
+#endif
+
         break;
 
     case ID_PCB_CIRCLE_BUTT:
@@ -673,12 +685,6 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                  _( "Select Track Width" ), KiBitmap( width_track_xpm ) );
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    if( !flags && (Track->Type() == PCB_VIA_T) )
-    {
-        msg = AddHotkeyName( _("Create Via Array" ), g_Board_Editor_Hokeys_Descr, HK_CREATE_ARRAY );
-        AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_VIA_ARRAY, msg, KiBitmap( via_xpm ) );
-    }
-    
     if( !flags )
         GetBoard()->TrackItems()->Popup_PickTrackOrViaWidth( PopMenu, Track );
     if(((Track->Type() == PCB_VIA_T) && dynamic_cast<VIA*>(Track)->GetThermalCode()))

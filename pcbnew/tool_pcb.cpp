@@ -446,6 +446,9 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_TRACK_BUTT, wxEmptyString, KiBitmap( add_tracks_xpm ),
                             _( "Add tracks and vias" ), wxITEM_CHECK );
 
+    m_drawToolBar->AddTool( ID_PCB_DRAW_VIA_BUTT, wxEmptyString, KiBitmap( add_via_xpm ),
+                            _( "Add vias" ), wxITEM_CHECK );
+
     m_drawToolBar->AddTool( ID_PCB_ZONES_BUTT, wxEmptyString, KiBitmap( add_zone_xpm ),
                             _( "Add filled zones" ), wxITEM_CHECK );
 
