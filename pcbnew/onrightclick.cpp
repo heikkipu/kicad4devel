@@ -414,8 +414,8 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         }
         break;
 
-    case ID_PCB_DRAW_VIA_BUTT:
 #ifdef PCBNEW_WITH_TRACKITEMS
+    case ID_PCB_DRAW_VIA_BUTT:
         aPopMenu->AppendSeparator();
         //Via Stitching thermal vias.
         msg = AddHotkeyName( _( "Place Through Via" ), g_Board_Editor_Hokeys_Descr,
@@ -447,9 +447,9 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         }
         
         aPopMenu->AppendSeparator();
-#endif
 
         break;
+#endif
 
     case ID_PCB_CIRCLE_BUTT:
     case ID_PCB_ARC_BUTT:

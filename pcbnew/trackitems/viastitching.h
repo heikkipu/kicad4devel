@@ -80,14 +80,14 @@ public:
     bool SelectLayerPair( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
     
     void ConnectThermalViasToZones( void );
-
+    
 protected:
     VIASTITCHING(){};
     
 private:
     const BOARD* m_board;
     
-    VIATYPE_T m_viatype{VIA_THROUGH};
+    //VIATYPE_T m_viatype{VIA_THROUGH};
     int m_via_array_netcode{0};
     std::vector<D_PAD*> m_via_array_netcode_pads{nullptr};
 
@@ -112,11 +112,52 @@ private:
 
     TRACK* ViaBreakTrack( const TRACK* aStartingTrack, const VIA* aVia );
 
+//-----------------------------------------------------------------------------------------------------/
+// Show wia in via tool mode.
+//-----------------------------------------------------------------------------------------------------/
+public:
+    void StartDrawingVia(const PCB_EDIT_FRAME* aEditFrame, const EDA_DRAW_PANEL* aPanel, wxDC* aDC);
+    
+struct VIA_SETTINGS
+{
+    COLOR4D color;
+    int rad{0};
+    int hole_rad{0};
+    int clearance_rad{0};
+    
+    wxString text{""};
+};
+    VIA_SETTINGS GetDrawViaSettings(void) const {return m_current_settings;}
+    void SetDrawViaSettings(const VIA_SETTINGS aSettings){m_current_settings = aSettings;}
+    
+    wxPoint GetDrawViaPrevPos(void) const { return m_via_prev_pos; }
+    void SetDrawViaPrevPos(wxPoint aPos) { m_via_prev_pos = aPos; }
+    
+private:
+    PCB_EDIT_FRAME* m_EditFrame; 
+    EDA_DRAW_PANEL* m_draw_panel;
+    wxDC* m_dc;
+    
+    wxPoint m_via_prev_pos{0,0};
+    VIA_SETTINGS m_current_settings;
+//-----------------------------------------------------------------------------------------------------/
+
 }; //VIASTITCHING
 
 
 namespace ViaStitching
 {
+//-----------------------------------------------------------------------------------------------------/
+// Show wia in via tool mode mouse capture.
+//-----------------------------------------------------------------------------------------------------/
+void DrawMovingVia(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase);
+void StopDrawingVia(EDA_DRAW_PANEL* aPanel, wxDC* aDC);
+
+void DrawViaText(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, COLOR4D aColor, const wxString& aText, const int aViaSize);
+void DrawViaCircles(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, COLOR4D aColor, const int aViaRad, const int aViaHoleRad, const int aViaClearanceRad);
+VIASTITCHING::VIA_SETTINGS GetCurrentViaSettings(const PCB_EDIT_FRAME* aEditFrame);
+
+//-----------------------------------------------------------------------------------------------------/
 
 const int MIN_THERMALVIA_ZONES = 1;
 

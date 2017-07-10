@@ -30,18 +30,19 @@ using namespace ViaStitching;
 //Legacy canvas add.
 void VIASTITCHING::AddThermalVia( const PCB_EDIT_FRAME* aEditFrame, const int aViaType_ID ) 
 {
+    BOARD_DESIGN_SETTINGS* d_settings = &aEditFrame->GetBoard()->GetDesignSettings();
     if(aViaType_ID != ID_POPUP_PCB_PLACE_ZONE_CURRENTTYPE_VIA)
     {
-        m_viatype = VIA_THROUGH;
+        d_settings->m_CurrentViaType = VIA_THROUGH;
         if( ( aViaType_ID == ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA ) || 
             ( aViaType_ID ==  ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA ) )
-            m_viatype = VIA_BLIND_BURIED;
+            d_settings->m_CurrentViaType = VIA_BLIND_BURIED;
     }
 
     bool select_layer = ( aViaType_ID == ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA ) || 
                         ( aViaType_ID == ID_POPUP_PCB_SEL_LAYER_AND_PLACE_ZONE_THROUGH_VIA );
 
-    AddThermalVia( aEditFrame, m_viatype, select_layer );
+    AddThermalVia( aEditFrame, d_settings->m_CurrentViaType, select_layer );
     const_cast<PCB_EDIT_FRAME*>(aEditFrame)->GetCanvas()->Refresh( true );
 }
 
@@ -77,17 +78,17 @@ void VIASTITCHING::AddThermalVia(const PCB_EDIT_FRAME* aEditFrame, const VIATYPE
         PCB_LAYER_ID pairTop = aEditFrame->GetScreen()->m_Route_Layer_TOP;
         PCB_LAYER_ID pairBottom = aEditFrame->GetScreen()->m_Route_Layer_BOTTOM;
 
-        if( ( aViaType == VIA_BLIND_BURIED ) && ( pairTop == pairBottom ) )
+        if((aViaType == VIA_BLIND_BURIED ) && ((pairTop == pairBottom) || ((currentLayer != pairTop) && (currentLayer != pairBottom))))
             return;
 
-        if( ( currentLayer != pairTop ) && ( currentLayer != pairBottom ) )
+        /*
+        if(( currentLayer != pairTop ) && ( currentLayer != pairBottom ) )
         {
             const_cast<PCB_EDIT_FRAME*>(aEditFrame)->SetActiveLayer( ToLAYER_ID( pairTop ) );
         }
+        */
 
-        PCB_LAYER_ID layer = aEditFrame->GetActiveLayer();
-        //wxPoint pos = wxPoint( start_snap_point.x, start_snap_point.y );
-        ZONE_CONTAINER* zone = board->HitTestForAnyFilledArea( pos, layer, layer, -1 );
+        ZONE_CONTAINER* zone = board->HitTestForAnyFilledArea( pos, currentLayer, currentLayer, -1 );
         if( zone )
         {
             int netcode = zone->GetNetCode();
@@ -781,6 +782,111 @@ ZONE_CONTAINER* ViaStitching::HitTestZone( const BOARD* aPcb, const wxPoint aPos
     return nullptr;
 }
 
+
+//-----------------------------------------------------------------------------------------------------/
+// Show wia in via tool mode.
+//-----------------------------------------------------------------------------------------------------/
+void VIASTITCHING::StartDrawingVia(const PCB_EDIT_FRAME* aEditFrame, const EDA_DRAW_PANEL* aPanel, wxDC* aDC)
+{
+    m_EditFrame = const_cast<PCB_EDIT_FRAME*>(aEditFrame); 
+    m_draw_panel = const_cast<EDA_DRAW_PANEL*>(aPanel);
+    m_dc = const_cast<wxDC*>(aDC);
+    m_draw_panel->SetMouseCapture(ViaStitching::DrawMovingVia, ViaStitching::StopDrawingVia);
+    
+    m_draw_panel->CallMouseCapture( aDC, wxDefaultPosition, false );
+}
+
+VIASTITCHING::VIA_SETTINGS ViaStitching::GetCurrentViaSettings(const PCB_EDIT_FRAME* aEditFrame)
+{
+    BOARD_DESIGN_SETTINGS* d_settings = &aEditFrame->GetBoard()->GetDesignSettings();
+    VIASTITCHING::VIA_SETTINGS via_settings;
+    via_settings.rad = d_settings->GetCurrentViaSize() / 2;
+    via_settings.hole_rad = d_settings->GetCurrentViaDrill() / 2;
+    
+    via_settings.clearance_rad = 0;
+    via_settings.color = YELLOW;
+    via_settings.text = "";
+    
+    PCB_LAYER_ID currentLayer = aEditFrame->GetActiveLayer();
+    PCB_LAYER_ID pairTop = aEditFrame->GetScreen()->m_Route_Layer_TOP;
+    PCB_LAYER_ID pairBottom = aEditFrame->GetScreen()->m_Route_Layer_BOTTOM;
+
+    if(!((d_settings->m_CurrentViaType == VIA_BLIND_BURIED ) && ((pairTop == pairBottom) || ((currentLayer != pairTop) && (currentLayer != pairBottom)))))
+    {
+        PCB_LAYER_ID layer = aEditFrame->GetActiveLayer();
+        wxPoint pos = aEditFrame->GetCrossHairPosition();
+        ZONE_CONTAINER* zone = aEditFrame->GetBoard()->HitTestForAnyFilledArea( pos, layer, layer, -1 );
+        if( zone )
+        {
+            NETINFO_ITEM* net = zone->GetNet();
+            via_settings.text = net->GetShortNetname();
+            via_settings.color = aEditFrame->GetBoard()->GetLayerColor(currentLayer);
+        }
+    }   
+    return via_settings;
+}
+
+void ViaStitching::DrawViaText(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, COLOR4D aColor, const wxString& aText, const int aViaSize)
+{
+    int length = aText.Len();
+    if(length > 0)
+    {
+        int txt_size = (aViaSize / length) * 7 / 10;
+        if( aDC->LogicalToDeviceXRel(txt_size) >= MIN_TEXT_SIZE )
+        {
+            GRSetDrawMode(aDC, GR_XOR);
+            EDA_RECT* panelCB = aPanel->GetClipBox();
+            DrawGraphicHaloText( panelCB, aDC, aPosition, aColor, WHITE, BLACK, aText, 0, wxSize(txt_size, txt_size), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, txt_size / 7, false, false );
+        }
+    }
+}
+
+void ViaStitching::DrawViaCircles(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, COLOR4D aColor, const int aViaRad, const int aViaHoleRad, const int aViaClearanceRad)
+{
+    GRSetDrawMode(aDC, GR_XOR);
+    EDA_RECT* panelCB = aPanel->GetClipBox();
+    GRCircle(panelCB, aDC, aPosition.x, aPosition.y, aViaRad, aColor);
+    if(aViaRad / 10000 != aViaHoleRad / 10000)
+        GRCircle(panelCB, aDC, aPosition.x, aPosition.y, aViaHoleRad, aColor);
+    GRCircle(panelCB, aDC, aPosition.x, aPosition.y, aViaClearanceRad, aColor);
+}
+
+void ViaStitching::DrawMovingVia(EDA_DRAW_PANEL* aPanel, wxDC* aDC,const wxPoint& aPosition, bool aErase)
+{
+    PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
+    VIASTITCHING::VIA_SETTINGS via_settings = frame->GetBoard()->ViaStitching()->GetDrawViaSettings();
+    wxPoint position = frame->GetBoard()->ViaStitching()->GetDrawViaPrevPos();
+    
+    if(aErase)
+    {
+        DrawViaCircles(aPanel, aDC, position, via_settings.color, via_settings.rad, via_settings.hole_rad, via_settings.clearance_rad);
+        DrawViaText(aPanel, aDC, position, via_settings.color, via_settings.text, via_settings.rad<<1);
+    }
+    
+    via_settings = ViaStitching::GetCurrentViaSettings(static_cast<PCB_EDIT_FRAME*>(frame));
+    position = frame->GetCrossHairPosition();
+    
+    DrawViaCircles(aPanel, aDC, position, via_settings.color, via_settings.rad, via_settings.hole_rad, via_settings.clearance_rad);
+    DrawViaText(aPanel, aDC, position, via_settings.color, via_settings.text, via_settings.rad<<1);
+    
+    frame->GetBoard()->ViaStitching()->SetDrawViaSettings(via_settings);
+    frame->GetBoard()->ViaStitching()->SetDrawViaPrevPos(position);
+}
+
+void ViaStitching::StopDrawingVia(EDA_DRAW_PANEL* aPanel, wxDC* aDC)
+{
+    PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
+    VIASTITCHING::VIA_SETTINGS via_settings = frame->GetBoard()->ViaStitching()->GetDrawViaSettings();
+    wxPoint position = frame->GetBoard()->ViaStitching()->GetDrawViaPrevPos();
+    DrawViaCircles(aPanel, aDC, position, via_settings.color, via_settings.rad, via_settings.hole_rad, via_settings.clearance_rad);
+    DrawViaText(aPanel, aDC, position, via_settings.color, via_settings.text, via_settings.rad<<1);
+}
+
+//-----------------------------------------------------------------------------------------------------/
+
+//-----------------------------------------------------------------------------------------------------/
+//Via layer selector
+//-----------------------------------------------------------------------------------------------------/
 THROUGH_VIA_LAYER_SELECTOR::THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos ) :
     VS_LAYER_SELECTOR( aEditFrame->GetBoard() ),
     DIALOG_LAYER_SELECTION_BASE( static_cast<wxWindow*>(aEditFrame) )
@@ -1047,4 +1153,5 @@ void BURIEDBLIND_VIA_LAYER_SELECTOR::OnCancelClick( wxCommandEvent& event )
     EndModal( wxID_CANCEL );
 }
 
+//-----------------------------------------------------------------------------------------------------/
 
