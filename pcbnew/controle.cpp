@@ -364,6 +364,13 @@ bool PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     if( aHotKey )
     {
         eventHandled = OnHotKey( aDC, aHotKey, aPosition );
+#ifdef PCBNEW_WITH_TRACKITEMS
+        if(!eventHandled && aHotKey == 27) //ESC
+        {
+            if(GetToolId() == ID_PCB_DRAW_VIA_BUTT)
+                m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        }
+#endif
     }
 
     UpdateStatusBar();    // Display new cursor coordinates

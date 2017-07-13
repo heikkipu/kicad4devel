@@ -205,9 +205,17 @@ void VIASTITCHING::SetNetcodes( const std::unordered_map<const VIA*, int>& aVias
                 const_cast<VIA*>( via )->SetNetCode( thermalcode );
         }
         else
+        {
             // Set thermalcode unconnected via inside zone.
+#ifdef NEWCONALGO
+            auto connity = m_board->GetConnectivity();
+            auto via_tracks = connity->GetConnectedTracks(via);
+            if( ( netcode_was && !netcode ) || 
+                ( netcode_was && netcode && ( netcode_was == netcode ) && via_tracks.empty() )  )
+#else
             if( ( netcode_was && !netcode ) || 
                 ( netcode_was && netcode && ( netcode_was == netcode ) && !via->m_TracksConnected.size() )  )
+#endif
             {
                 std::vector<ZONE_CONTAINER*> zones;
                 Collect_Zones_Hit_Via( zones, via, netcode_was );
@@ -217,6 +225,7 @@ void VIASTITCHING::SetNetcodes( const std::unordered_map<const VIA*, int>& aVias
                     const_cast<VIA*>( via )->SetThermalCode( netcode_was );
                 }
             }
+        }
     }
 }
 
@@ -230,10 +239,19 @@ void VIASTITCHING::SetNetcodes( void )
     for( TRACK* t = m_board->m_Track;  t;  t = t->Next() )
     {
          const VIA* via = dynamic_cast<const VIA*>( t );
+#ifdef NEWCONALGO
+        auto connity = m_board->GetConnectivity();
+        auto via_tracks = connity->GetConnectedTracks(via);
+         if( via  && ( dynamic_cast<const VIA*>(via)->GetThermalCode() 
+                       || ( t->GetNetCode() 
+                            && via_tracks.empty() 
+                            && !dynamic_cast<const VIA*>(via)->GetThermalCode() ) ) )
+#else
          if( via  && ( dynamic_cast<const VIA*>(via)->GetThermalCode() 
                        || ( t->GetNetCode() 
                             && !via->m_TracksConnected.size() 
                             && !dynamic_cast<const VIA*>(via)->GetThermalCode() ) ) )
+#endif
             collected_vias.insert( std::pair<const VIA*, int> ( via, t->GetNetCode() ) );
     }
     SetNetcodes( collected_vias );
@@ -821,6 +839,9 @@ VIASTITCHING::VIA_SETTINGS ViaStitching::GetCurrentViaSettings(const PCB_EDIT_FR
             NETINFO_ITEM* net = zone->GetNet();
             via_settings.text = net->GetShortNetname();
             via_settings.color = aEditFrame->GetBoard()->GetLayerColor(currentLayer);
+            NETCLASSPTR netclass = net->GetNetClass();
+            if(netclass)
+                via_settings.clearance_rad = via_settings.rad + netclass->GetClearance();
         }
     }   
     return via_settings;

@@ -29,12 +29,15 @@
 #ifndef VIASTITCHING_H
 #define VIASTITCHING_H
 
-#include "connect.h"
-#include "pcbnew_id.h"
-#include "drc_stuff.h"
-#include "ratsnest_data.h"
-#include "router/router_tool.h"
-#include "board_commit.h"
+#ifndef NEWCONALGO
+#include <connect.h>
+#include <pcbnew_id.h>
+#endif
+
+#include <drc_stuff.h>
+#include <ratsnest_data.h>
+#include <router/router_tool.h>
+#include <board_commit.h>
 
 #include <tool/tool_manager.h>
 #include <view/view.h>

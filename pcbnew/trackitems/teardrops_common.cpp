@@ -24,6 +24,9 @@
 #include "trackitems.h"
 
 #include <view/view.h> //Gal canvas
+#ifdef NEWCONALGO
+#include <connectivity.h>
+#endif
 
 using namespace TrackNodeItem;
 using namespace TrackNodeItems;
@@ -185,6 +188,20 @@ TEARDROP* TEARDROPS::Add(const TRACK* aTrackSegTo, const wxPoint& aCurPosAt)
         D_PAD* item_pad = nullptr;
         unsigned int min_dist = std::numeric_limits<unsigned int>::max();
 
+#ifdef NEWCONALGO
+        auto connity = m_Board->GetConnectivity();
+        auto pads = connity->GetConnectedPads(const_cast<TRACK*>(aTrackSegTo));
+        for(auto pad : pads)
+        {
+            wxPoint pad_pos = pad->GetPosition();
+            unsigned int dist = hypot(abs(pad_pos.y - aCurPosAt.y) , abs(pad_pos.x - aCurPosAt.x));
+            if(dist < min_dist)
+            {
+                min_dist = dist;
+                item_pad = pad;
+            }
+        }
+#else
         for(unsigned int n = 0; n<aTrackSegTo->m_PadsConnected.size(); ++n)
         {
             wxPoint pad_pos = aTrackSegTo->m_PadsConnected.at(n)->GetPosition();
@@ -195,6 +212,7 @@ TEARDROP* TEARDROPS::Add(const TRACK* aTrackSegTo, const wxPoint& aCurPosAt)
                 item_pad = aTrackSegTo->m_PadsConnected.at(n);
             }
         }
+#endif
             
         for(unsigned int n = 0; n < 2; ++n)
         {
@@ -391,7 +409,11 @@ void TEARDROPS::Add(const MODULE* aModuleTo)
 {
     if(aModuleTo)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = aModuleTo->PadsList();
+#else
         D_PAD* pad = aModuleTo->Pads();
+#endif
         if(pad)
         {
             PICKED_ITEMS_LIST undoredo_items;
@@ -664,7 +686,11 @@ void TEARDROPS::Remove(const MODULE* aModuleFrom, PICKED_ITEMS_LIST* aUndoRedoLi
     if(aModuleFrom)
         if(aModuleFrom->Type() == PCB_MODULE_T)
         {
+#ifdef NEWCONALGO
+            D_PAD* pad = aModuleFrom->PadsList();
+#else
             D_PAD* pad = aModuleFrom->Pads();
+#endif
             if(pad)
             {
                 m_recreate_list->clear();
@@ -915,7 +941,11 @@ void TEARDROPS::Recreate(const MODULE* aModuleTo, PICKED_ITEMS_LIST* aUndoRedoLi
     if(aModuleTo)
         if(aModuleTo->Type() == PCB_MODULE_T)
         {
+#ifdef NEWCONALGO
+            D_PAD* pad = aModuleTo->PadsList();
+#else
             D_PAD* pad = aModuleTo->Pads();
+#endif
             while(pad)
             {
                 Recreate(pad, aUndoRedoList);
@@ -1125,7 +1155,11 @@ void TEARDROPS::Lock(const MODULE* aModuleAt)
 {
     if(aModuleAt)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = aModuleAt->PadsList();
+#else
         D_PAD* pad = aModuleAt->Pads();
+#endif
         if(pad)
         {
             while(pad)
@@ -1165,7 +1199,11 @@ void TEARDROPS::Unlock(const MODULE* aModuleAt)
 {
     if(aModuleAt)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = aModuleAt->PadsList();
+#else
         D_PAD* pad = aModuleAt->Pads();
+#endif
         if(pad)
         {
             while(pad)
@@ -1345,7 +1383,11 @@ bool TEARDROPS::Empty(const MODULE* aModuleTo) const
 {
     if(aModuleTo)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = aModuleTo->PadsList();
+#else
         D_PAD* pad = aModuleTo->Pads();
+#endif
         while(pad)
         {
             if(Empty(pad))
@@ -1368,6 +1410,24 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
     {
         //Teardrops of Pads.
         if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_TEARDROPS_T))
+        {
+#ifdef NEWCONALGO
+            auto connity = m_Parent->GetBoard()->GetConnectivity();
+            auto pads = connity->GetConnectedPads(aTrackSeg);
+            for(auto pad : pads)
+            {
+                wxPoint pad_pos = pad->GetPosition();
+                if((aTrackSeg->GetStart() == pad_pos) || (aTrackSeg->GetEnd() == pad_pos))
+                {
+                    TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos));
+                    if(!tear)
+                    {
+                        m_result_value = true;
+                        return true;
+                    }
+                }
+            }
+#else
             for(unsigned int m = 0; m < aTrackSeg->m_PadsConnected.size(); ++m)
             {
                 wxPoint pad_pos = aTrackSeg->m_PadsConnected.at(m)->GetPosition();
@@ -1381,7 +1441,8 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
                     }
                 }
             }
-        
+#endif
+        }
         //T-Junctoins and Junctions of Traces.
         if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_TJUNCTIONS_T)|| (m_type_todo == ONLY_JUNCTIONS_T) || (m_type_todo == JUNCTIONS_AND_TJUNCTIONS_T))
         {
@@ -1527,7 +1588,11 @@ int TEARDROPS::Contains(const MODULE* aModuleAt, int& aNumLocked) const
     aNumLocked = 0;
     if(aModuleAt)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = aModuleAt->PadsList();
+#else
         D_PAD* pad = aModuleAt->Pads();
+#endif
         while(pad)
         {
             int num_pad_locked = 0;
@@ -1553,6 +1618,24 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
     {
         //Teardrops of Pads.
         if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_TEARDROPS_T))
+        {
+#ifdef NEWCONALGO
+            auto connity = m_Parent->GetBoard()->GetConnectivity();
+            auto pads = connity->GetConnectedPads(aTrackSeg);
+            for(auto pad : pads)
+            {
+                wxPoint pad_pos = pad->GetPosition();
+                if((aTrackSeg->GetStart() == pad_pos) || (aTrackSeg->GetEnd() == pad_pos))
+                {
+                    TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos));
+                    if(tear)
+                    {
+                        m_result_value = true;
+                        return true;
+                    }
+                }
+            }
+#else
             for(unsigned int m = 0; m < aTrackSeg->m_PadsConnected.size(); ++m)
             {
                 wxPoint pad_pos = aTrackSeg->m_PadsConnected.at(m)->GetPosition();
@@ -1566,6 +1649,8 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
                     }
                 }
             }
+#endif
+        }
         
         //T-Junctions and Junctions of Traces.
         if((m_type_todo == ALL_TYPES_T) || (m_type_todo == ONLY_JUNCTIONS_T) || (m_type_todo == ONLY_TJUNCTIONS_T) || (m_type_todo == JUNCTIONS_AND_TJUNCTIONS_T))
@@ -1799,6 +1884,14 @@ TEARDROPS::NET_SCAN_PAD_BASE::NET_SCAN_PAD_BASE(const D_PAD* aPad, const TEARDRO
         
 void TEARDROPS::NET_SCAN_PAD_BASE::Execute(void)
 {
+#ifdef NEWCONALGO
+    auto connity = m_Parent->GetBoard()->GetConnectivity();
+    auto tracks = connity->GetConnectedTracks(m_pad);
+    for(auto track : tracks)
+        if(!m_only_exact_connected || (m_only_exact_connected && m_Parent->IsConnected(m_pad, track)))
+            if(ExecuteAt(track))
+                return;
+#else
     for(unsigned int n = 0; n < m_pad->m_TracksConnected.size(); ++n)
     {
         TRACK* track_seg = static_cast<TRACK*>(m_pad->m_TracksConnected.at(n));
@@ -1806,6 +1899,7 @@ void TEARDROPS::NET_SCAN_PAD_BASE::Execute(void)
             if(ExecuteAt(track_seg))
                 return;
     }
+#endif
 }
 
 TEARDROPS::NET_SCAN_PAD_UPDATE::NET_SCAN_PAD_UPDATE(const D_PAD* aPad, const TEARDROPS* aParent) : NET_SCAN_PAD_BASE(aPad, aParent)
@@ -1844,7 +1938,11 @@ void TEARDROPS::Update(const MODULE* aModuleAt)
 {
     if(aModuleAt)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = aModuleAt->PadsList();
+#else
         D_PAD* pad = aModuleAt->Pads();
+#endif
         while(pad)
         {
             Update(pad);
@@ -1920,16 +2018,27 @@ void TEARDROPS::Update(TRACK* aTrackSegAt, EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR
 
 void TEARDROPS::Update(D_PAD* aPadAt, EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase)
 {
+#ifdef NEWCONALGO
+    auto connity = m_Parent->GetBoard()->GetConnectivity();
+    auto tracks = connity->GetConnectedTracks(aPadAt);
+    for(auto track : tracks)
+        Update(track, aPanel, aDC, aDrawMode, aErase);
+#else
     if(aPadAt)
         for(unsigned int n = 0; n < aPadAt->m_TracksConnected.size(); ++n)
             Update(static_cast<TRACK*>(aPadAt->m_TracksConnected.at(n)), aPanel, aDC, aDrawMode, aErase);
+#endif
 }
 
 void TEARDROPS::Update(MODULE* aModuleAt, EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase)
 {
     if(aModuleAt)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = aModuleAt->PadsList();
+#else
         D_PAD* pad = aModuleAt->Pads();
+#endif
         while(pad)
         {
             Update(pad, aPanel, aDC, aDrawMode, aErase);
@@ -2254,7 +2363,11 @@ void TEARDROPS::ChangePad(TEARDROP* atTeardrop, const MODULE* inModule)
 {
     if(inModule)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = inModule->PadsList();
+#else
         D_PAD* pad = inModule->Pads();
+#endif
         while(pad)
         {
             if((atTeardrop->GetEnd() == pad->GetPosition()) && pad->IsOnLayer(atTeardrop->GetLayer()))

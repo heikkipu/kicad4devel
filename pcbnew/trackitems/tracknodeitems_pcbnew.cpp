@@ -132,7 +132,11 @@ unsigned int MODULES_PROGRESS::ExecuteItem(const BOARD_ITEM* aItemAt)
     MODULE* module = dynamic_cast<MODULE*>(const_cast<BOARD_ITEM*>(aItemAt));
     if(module)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = module->PadsList();
+#else
         D_PAD* pad = module->Pads();
+#endif
         while(pad)
         {
             operations_count += DoAtPad(pad);

@@ -231,7 +231,9 @@ static EDA_HOTKEY HkTrackDisplayMode( _HKI( "Track Display Mode" ),
 
 static EDA_HOTKEY HkAddModule( _HKI( "Add Footprint" ), HK_ADD_MODULE, 'O' );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
 static EDA_HOTKEY HkGotoNextMarker( _HKI( "Goto Next Marker" ), HK_GOTO_NEXT_MARKER, 'G' + GR_KB_CTRL );
+#endif
 
 // These hotkeys work only in GAL canvas, because the legacy canvas using wxDC does not know
 // the transparency (alpha channel)

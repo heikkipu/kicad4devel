@@ -164,7 +164,9 @@ void ROUNDEDTRACKSCORNERS::RemoveArcedSegments(std::set<TRACK*>* aTracksArced, P
         Remove(track, aUndoRedoList, true );
         
         GetBoard()->Remove(track);
+#ifndef NEWCONALGO
         GetBoard()->GetRatsnest()->Remove(track);
+#endif
         deleted_picker.SetItem(track);
         aUndoRedoList->PushItem(deleted_picker);
     }

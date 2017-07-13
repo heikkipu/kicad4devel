@@ -25,6 +25,9 @@
 
 #include <class_marker_pcb.h>
 #include <view/view.h>
+#ifdef NEWCONALGO
+#include <connectivity.h>
+#endif
 
 using namespace TrackNodeItem;
 using namespace TrackItems;
@@ -183,9 +186,19 @@ D_PAD* TRACKITEMS::GetPad(const TRACK* aTrackSegAt, const wxPoint aPosAt) const
     if(aTrackSegAt && ((aTrackSegAt->GetStart() == aPosAt) || (aTrackSegAt->GetEnd() == aPosAt)))
     {
         if(aTrackSegAt->Type() == PCB_TRACE_T)
+        {
+#ifdef NEWCONALGO
+            auto connity = m_Board->GetConnectivity();
+            auto pads = connity->GetConnectedPads(const_cast<TRACK*>(aTrackSegAt));
+            for(auto pad : pads)
+                if(pad->GetPosition() == aPosAt)
+                    return pad;
+#else
             for(unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
                 if(aTrackSegAt->m_PadsConnected.at(n)->GetPosition() == aPosAt)
                     return aTrackSegAt->m_PadsConnected.at(n);
+#endif
+        }
     }
     return nullptr;
 }
@@ -195,9 +208,19 @@ D_PAD* TRACKITEMS::NextPad(const TRACK* aTrackSegAt) const
     if(aTrackSegAt)
     {
         if(aTrackSegAt->Type() == PCB_TRACE_T)
+        {
+#ifdef NEWCONALGO
+            auto connity = m_Board->GetConnectivity();
+            auto pads = connity->GetConnectedPads(const_cast<TRACK*>(aTrackSegAt));
+            for(auto pad : pads)
+                if(aTrackSegAt->GetEnd() == pad->GetPosition())
+                    return pad;
+#else
             for(unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
                 if(aTrackSegAt->GetEnd() == aTrackSegAt->m_PadsConnected.at(n)->GetPosition())
                     return aTrackSegAt->m_PadsConnected.at(n);
+#endif
+        }
     }
     return nullptr;
 }
@@ -207,9 +230,19 @@ D_PAD* TRACKITEMS::BackPad(const TRACK* aTrackSegAt) const
     if(aTrackSegAt)
     {
         if(aTrackSegAt->Type() == PCB_TRACE_T)
+        {
+#ifdef NEWCONALGO
+            auto connity = m_Board->GetConnectivity();
+            auto pads = connity->GetConnectedPads(const_cast<TRACK*>(aTrackSegAt));
+            for(auto pad : pads)
+                if(aTrackSegAt->GetStart() == pad->GetPosition())
+                    return pad;
+#else
             for(unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n)
                 if(aTrackSegAt->GetStart() == aTrackSegAt->m_PadsConnected.at(n)->GetPosition())
                     return aTrackSegAt->m_PadsConnected.at(n);
+#endif
+        }
     }
     return nullptr;
 }
@@ -252,7 +285,11 @@ void PADS_SCAN_BASE::Execute(void)
     MODULE* module = m_first_module;
     while(module)
     {
+#ifdef NEWCONALGO
+        D_PAD* pad = module->PadsList();
+#else
         D_PAD* pad = module->Pads();
+#endif
         while(pad)
         {
             if(ExecutePad(pad))

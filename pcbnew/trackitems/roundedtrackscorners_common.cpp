@@ -238,13 +238,17 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert(TRACK* aTrack, PICKED_ITEMS_LI
             //Add created.
             picker_new.SetItem(created_track);
             aUndoRedoList->PushItem(picker_new);
+#ifndef NEWCONALGO
             m_Board->GetRatsnest()->Add(created_track);
+#endif
             m_Board->m_Track.Insert(created_track, aTrack);
             
             //Remove old.
             picker_deleted.SetItem(aTrack);
             aUndoRedoList->PushItem(picker_deleted);
+#ifndef NEWCONALGO
             m_Board->GetRatsnest()->Remove(aTrack);
+#endif
             m_Board->Remove(aTrack);
 
             //If teardrops add them.

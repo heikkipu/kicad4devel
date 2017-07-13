@@ -24,6 +24,9 @@
 #include "trackitems.h"
 
 #include <geometry/seg.h>
+#ifdef NEWCONALGO
+#include <connectivity.h>
+#endif
 
 using namespace TrackNodeItem;
 
@@ -516,6 +519,17 @@ unsigned int TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::DoAtPad(const D_PAD* aPa
     unsigned int num_marks = 0;
     if(aPadAt)
     {
+#ifdef NEWCONALGO
+        auto connity = m_Parent->GetBoard()->GetConnectivity();
+        auto tracks = connity->GetConnectedTracks(aPadAt);
+        for(unsigned int n = 0; n < tracks.size(); ++n)
+        {
+            TRACK* track_seg = static_cast<TRACK*>(tracks.at(n));
+            bool same_seg = false;
+            for(unsigned int m = 0 ; m < n; ++m)
+                if(tracks.at(m) == track_seg)
+                    same_seg = true;
+#else
         for(unsigned int n = 0; n < aPadAt->m_TracksConnected.size(); ++n)
         {
             TRACK* track_seg = static_cast<TRACK*>(aPadAt->m_TracksConnected.at(n));
@@ -523,6 +537,7 @@ unsigned int TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::DoAtPad(const D_PAD* aPa
             for(unsigned int m = 0 ; m < n; ++m)
                 if(aPadAt->m_TracksConnected.at(m) == track_seg)
                     same_seg = true;
+#endif
             wxPoint pad_pos = aPadAt->GetPosition();
             if(!same_seg)
             {
