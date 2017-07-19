@@ -138,6 +138,11 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create(const TRACK* aTrackSegTo, cons
                                 if(tear)
                                     m_EditFrame->GetGalCanvas()->GetView()->Update(tear, KIGFX::GEOMETRY);
                         }
+                        
+#ifdef NEWCONALGO
+                        //New connectivity algo add
+                        m_Board->GetConnectivity()->Add(corner);
+#endif
                     }
                 }
             }
@@ -163,6 +168,11 @@ void ROUNDEDTRACKSCORNERS::Delete(ROUNDEDTRACKSCORNER* aCorner, DLIST<TRACK>*aTr
                GalRemovedListAdd(aCorner);
                m_EditFrame->GetGalCanvas()->GetView()->Remove(aCorner);
             }
+            
+#ifdef NEWCONALGO
+            //New connectivity algo remove
+            m_Board->GetConnectivity()->Remove(aCorner);
+#endif
 
             aCorner->ResetVisibleEndpoints();
             aCorner->ReleaseTrackSegs();
@@ -238,7 +248,9 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert(TRACK* aTrack, PICKED_ITEMS_LI
             //Add created.
             picker_new.SetItem(created_track);
             aUndoRedoList->PushItem(picker_new);
-#ifndef NEWCONALGO
+#ifdef NEWCONALGO
+            m_Board->GetConnectivity()->Add(created_track);
+#else
             m_Board->GetRatsnest()->Add(created_track);
 #endif
             m_Board->m_Track.Insert(created_track, aTrack);
@@ -246,7 +258,9 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert(TRACK* aTrack, PICKED_ITEMS_LI
             //Remove old.
             picker_deleted.SetItem(aTrack);
             aUndoRedoList->PushItem(picker_deleted);
-#ifndef NEWCONALGO
+#ifdef NEWCONALGO
+            m_Board->GetConnectivity()->Remove(aTrack);
+#else
             m_Board->GetRatsnest()->Remove(aTrack);
 #endif
             m_Board->Remove(aTrack);

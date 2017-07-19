@@ -78,15 +78,9 @@ void VIASTITCHING::AddThermalVia(const PCB_EDIT_FRAME* aEditFrame, const VIATYPE
         PCB_LAYER_ID pairTop = aEditFrame->GetScreen()->m_Route_Layer_TOP;
         PCB_LAYER_ID pairBottom = aEditFrame->GetScreen()->m_Route_Layer_BOTTOM;
 
+
         if((aViaType == VIA_BLIND_BURIED ) && ((pairTop == pairBottom) || ((currentLayer != pairTop) && (currentLayer != pairBottom))))
             return;
-
-        /*
-        if(( currentLayer != pairTop ) && ( currentLayer != pairBottom ) )
-        {
-            const_cast<PCB_EDIT_FRAME*>(aEditFrame)->SetActiveLayer( ToLAYER_ID( pairTop ) );
-        }
-        */
 
         ZONE_CONTAINER* zone = board->HitTestForAnyFilledArea( pos, currentLayer, currentLayer, -1 );
         if( zone )
@@ -238,11 +232,11 @@ void VIASTITCHING::SetNetcodes( void )
 
     for( TRACK* t = m_board->m_Track;  t;  t = t->Next() )
     {
-         const VIA* via = dynamic_cast<const VIA*>( t );
+        const VIA* via = dynamic_cast<const VIA*>( t );
 #ifdef NEWCONALGO
         auto connity = m_board->GetConnectivity();
         auto via_tracks = connity->GetConnectedTracks(via);
-         if( via  && ( dynamic_cast<const VIA*>(via)->GetThermalCode() 
+        if( via  && ( dynamic_cast<const VIA*>(via)->GetThermalCode() 
                        || ( t->GetNetCode() 
                             && via_tracks.empty() 
                             && !dynamic_cast<const VIA*>(via)->GetThermalCode() ) ) )
@@ -829,21 +823,34 @@ VIASTITCHING::VIA_SETTINGS ViaStitching::GetCurrentViaSettings(const PCB_EDIT_FR
     PCB_LAYER_ID pairTop = aEditFrame->GetScreen()->m_Route_Layer_TOP;
     PCB_LAYER_ID pairBottom = aEditFrame->GetScreen()->m_Route_Layer_BOTTOM;
 
-    if(!((d_settings->m_CurrentViaType == VIA_BLIND_BURIED ) && ((pairTop == pairBottom) || ((currentLayer != pairTop) && (currentLayer != pairBottom)))))
+    if((d_settings->m_CurrentViaType == VIA_BLIND_BURIED) && ((pairTop == pairBottom) || ((currentLayer != pairTop) && (currentLayer != pairBottom))))
     {
-        PCB_LAYER_ID layer = aEditFrame->GetActiveLayer();
-        wxPoint pos = aEditFrame->GetCrossHairPosition();
-        ZONE_CONTAINER* zone = aEditFrame->GetBoard()->HitTestForAnyFilledArea( pos, layer, layer, -1 );
-        if( zone )
+        d_settings->m_CurrentViaType = VIA_THROUGH;
+        if(currentLayer != B_Cu)
         {
-            NETINFO_ITEM* net = zone->GetNet();
-            via_settings.text = net->GetShortNetname();
-            via_settings.color = aEditFrame->GetBoard()->GetLayerColor(currentLayer);
-            NETCLASSPTR netclass = net->GetNetClass();
-            if(netclass)
-                via_settings.clearance_rad = via_settings.rad + netclass->GetClearance();
+            aEditFrame->GetScreen()->m_Route_Layer_TOP = currentLayer;
+            aEditFrame->GetScreen()->m_Route_Layer_BOTTOM = B_Cu;
         }
-    }   
+        else
+        {
+            aEditFrame->GetScreen()->m_Route_Layer_BOTTOM = currentLayer;
+            aEditFrame->GetScreen()->m_Route_Layer_TOP = F_Cu;
+        }
+    }
+            
+    PCB_LAYER_ID layer = aEditFrame->GetActiveLayer();
+    wxPoint pos = aEditFrame->GetCrossHairPosition();
+    ZONE_CONTAINER* zone = aEditFrame->GetBoard()->HitTestForAnyFilledArea( pos, layer, layer, -1 );
+    if( zone )
+    {
+        NETINFO_ITEM* net = zone->GetNet();
+        via_settings.text = net->GetShortNetname();
+        via_settings.color = aEditFrame->GetBoard()->GetLayerColor(currentLayer);
+        NETCLASSPTR netclass = net->GetNetClass();
+        if(netclass)
+            via_settings.clearance_rad = via_settings.rad + netclass->GetClearance();
+    }
+    
     return via_settings;
 }
 

@@ -111,7 +111,12 @@ TEARDROP* TEARDROPS::Create(const TRACK* aTrackSegTo, const BOARD_CONNECTED_ITEM
                     //GAL View addition.
                     if(m_EditFrame)
                         if( m_EditFrame->IsGalCanvasActive() )
-                            m_EditFrame->GetGalCanvas()->GetView()->Add( tear );
+                            m_EditFrame->GetGalCanvas()->GetView()->Add(tear);
+                        
+#ifdef NEWCONALGO
+                    //New connectivity algo add
+                    m_Board->GetConnectivity()->Add(tear);
+#endif
                 }
             }
         }
@@ -134,6 +139,11 @@ void TEARDROPS::Delete( TEARDROP* aTeardrop, DLIST<TRACK>*aTrackListAt, PICKED_I
                 GalRemovedListAdd(aTeardrop);
                 m_EditFrame->GetGalCanvas()->GetView()->Remove(aTeardrop);
             }
+            
+#ifdef NEWCONALGO
+            //New connectivity algo remove
+            m_Board->GetConnectivity()->Remove(aTeardrop);
+#endif
 
             aTrackListAt->Remove(aTeardrop);
             picker.SetItem(aTeardrop);
