@@ -34,6 +34,7 @@
 
 #include <list>
 #include <dlist.h>
+#include <core/iterators.h>
 #include <layers_id_colors_and_visibility.h>       // ALL_LAYERS definition.
 #include <class_board_item.h>
 #include <board_item_container.h>
@@ -132,6 +133,11 @@ public:
 
     DLIST<D_PAD>& Pads()                        { return m_Pads; }
     const DLIST<D_PAD>& Pads() const            { return m_Pads; }
+
+    DLIST_ITERATOR_WRAPPER<D_PAD> Pads_itW()
+    {
+         return DLIST_ITERATOR_WRAPPER<D_PAD>( m_Pads );
+    }
 
     DLIST<BOARD_ITEM>& GraphicalItems()         { return m_Drawings; }
     const DLIST<BOARD_ITEM>& GraphicalItems() const { return m_Drawings; }

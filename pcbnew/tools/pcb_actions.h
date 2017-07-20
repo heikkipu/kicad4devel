@@ -139,6 +139,9 @@ public:
     /// Activation of the drawing tool (drawing a ZONE)
     static TOOL_ACTION drawZone;
 
+    /// Activation of the drawing tool (drawing a VIA)
+    static TOOL_ACTION drawVia;
+
     /// Activation of the drawing tool (drawing a keepout area)
     static TOOL_ACTION drawZoneKeepout;
 
@@ -356,6 +359,7 @@ public:
     static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showHelp;
+    static TOOL_ACTION showLocalRatsnest;
     static TOOL_ACTION toBeDone;
 
     /// Find an item

@@ -32,6 +32,7 @@
 
 
 #include <dlist.h>
+#include <core/iterators.h>
 
 #include <common.h>                         // PAGE_INFO
 #include <layers_id_colors_and_visibility.h>
@@ -261,6 +262,11 @@ public:
     DLIST<MODULE>               m_Modules;               // linked list of MODULEs
     DLIST<TRACK>                m_Track;                 // linked list of TRACKs and VIAs
     DLIST<SEGZONE>              m_Zone;                  // linked list of SEGZONEs
+
+    DLIST_ITERATOR_WRAPPER<TRACK> Tracks() { return DLIST_ITERATOR_WRAPPER<TRACK>(m_Track); }
+    DLIST_ITERATOR_WRAPPER<MODULE> Modules() { return DLIST_ITERATOR_WRAPPER<MODULE>(m_Modules); }
+    DLIST_ITERATOR_WRAPPER<BOARD_ITEM> Drawings() { return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>(m_Drawings); }
+    ZONE_CONTAINERS& Zones() { return m_ZoneDescriptorList; }
 
     /// Ratsnest list for the BOARD
     std::vector<RATSNEST_ITEM>  m_FullRatsnest;
