@@ -224,8 +224,10 @@ MODULE& MODULE::operator=( const MODULE& aOther )
         {
             if( pad_t->GetIDNumber() == pad_s->GetIDNumber() )
             {
-                hit = true;
+                EDA_ITEM* parent = pad_t->GetParent();
                 *pad_t = *pad_s;
+                pad_t->SetParent( parent );
+                hit = true;
                 break;
             }
         }
