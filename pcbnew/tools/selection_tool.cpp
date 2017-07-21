@@ -897,7 +897,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     std::list<int> netcodeList;
     for( MODULE* mmod : modList )
     {
-        for( D_PAD* pad = mmod->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( D_PAD* pad = mmod->PadsList().GetFirst(); pad; pad = pad->Next() )
         {
             if( pad->IsConnected() )
             {

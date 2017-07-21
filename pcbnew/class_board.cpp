@@ -2684,7 +2684,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             continue;
 
         // At this point, the component footprint is updated.  Now update the nets.
-        for( D_PAD* pad = footprint->Pads();  pad;  pad = pad->Next() )
+        for( D_PAD* pad = footprint->PadsList();  pad;  pad = pad->Next() )
         {
             COMPONENT_NET net = component->GetNet( pad->GetPadName() );
 

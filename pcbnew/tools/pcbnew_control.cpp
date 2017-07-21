@@ -293,7 +293,7 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 
     for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
             getView()->Update( pad, KIGFX::GEOMETRY );
     }
 

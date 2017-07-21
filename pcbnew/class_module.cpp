@@ -281,7 +281,7 @@ void MODULE::ClearAllNets()
 {
     // Force the ORPHANED dummy net info for all pads.
     // ORPHANED dummy net does not depend on a board
-    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
         pad->SetNetCode( NETINFO_LIST::ORPHANED );
 }
 
@@ -416,7 +416,7 @@ void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
         aModule->SetThermalGap( GetThermalGap() );
     }
 
-    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->PadsList();  pad;  pad = pad->Next() )
     {
         // Fix me: if aCopyLocalSettings == true, for "multiple" pads
         // (set of pads having the same name/number) this is broken
@@ -769,7 +769,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
     std::set<wxUint32> usedNames;
 
     // Create a set of used pad numbers
-    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
     {
         // Skip pads not on copper layers (used to build complex
         // solder paste shapes for instance)
@@ -1117,7 +1117,7 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
     m_Value->SetDrawCoord();
 
     // Update the pad local coordinates.
-    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
     {
         pad->SetPos0( pad->GetPos0() + moveVector );
         pad->SetDrawCoord();
@@ -1202,7 +1202,7 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
         new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
 
         if( aAddToModule )
-            Pads().PushBack( new_pad );
+            PadsList().PushBack( new_pad );
 
         new_item = new_pad;
         break;
@@ -1263,7 +1263,7 @@ wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
     std::set<int> usedNumbers;
 
     // Create a set of used pad numbers
-    for( D_PAD* pad = Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
     {
         int padNumber = getTrailingInt( pad->GetPadName() );
         usedNumbers.insert( padNumber );

@@ -285,11 +285,7 @@ void PADS_SCAN_BASE::Execute(void)
     MODULE* module = m_first_module;
     while(module)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = module->PadsList();
-#else
-        D_PAD* pad = module->Pads();
-#endif
         while(pad)
         {
             if(ExecutePad(pad))

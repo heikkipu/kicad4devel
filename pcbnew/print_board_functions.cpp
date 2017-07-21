@@ -318,7 +318,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt )
 {
     // Print pads
-    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->PadsList();  pad;  pad = pad->Next() )
     {
         if( !( pad->GetLayerSet() & aMask ).any() )
             continue;

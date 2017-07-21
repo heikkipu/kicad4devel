@@ -295,7 +295,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
             if( Module )
             {
                 SetMsgPanel( Module );
-                pt_pad = Module->Pads();
+                pt_pad = Module->PadsList();
 
                 for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
                 {

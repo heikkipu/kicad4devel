@@ -816,7 +816,7 @@ VIASTITCHING::VIA_SETTINGS ViaStitching::GetCurrentViaSettings(const PCB_EDIT_FR
     via_settings.hole_rad = d_settings->GetCurrentViaDrill() / 2;
     
     via_settings.clearance_rad = 0;
-    via_settings.color = YELLOW;
+    via_settings.color = WHITE;
     via_settings.text = "";
     
     PCB_LAYER_ID currentLayer = aEditFrame->GetActiveLayer();

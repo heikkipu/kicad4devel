@@ -877,7 +877,7 @@ void RN_DATA::AddSimple( const BOARD_ITEM* aItem )
     {
         const MODULE* module = static_cast<const MODULE*>( aItem );
 
-        for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( const D_PAD* pad = module->PadsList().GetFirst(); pad; pad = pad->Next() )
             AddSimple( pad );
     }
 }
@@ -902,7 +902,7 @@ void RN_DATA::AddBlocked( const BOARD_ITEM* aItem )
     {
         const MODULE* module = static_cast<const MODULE*>( aItem );
 
-        for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( const D_PAD* pad = module->PadsList().GetFirst(); pad; pad = pad->Next() )
             AddBlocked( pad );
     }
 }
@@ -1073,7 +1073,7 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
     {
         const MODULE* module = static_cast<const MODULE*>( aItem );
 
-        for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( const D_PAD* pad = module->PadsList().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNetCode();
 
@@ -1145,7 +1145,7 @@ bool RN_DATA::Remove( const BOARD_ITEM* aItem )
     {
         const MODULE* module = static_cast<const MODULE*>( aItem );
 
-        for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( const D_PAD* pad = module->PadsList().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNetCode();
 
@@ -1223,7 +1223,7 @@ void RN_DATA::ProcessBoard()
     // Iterate over all items that may need to be connected
     for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( D_PAD* pad = module->PadsList().GetFirst(); pad; pad = pad->Next() )
         {
             netCode = pad->GetNetCode();
 

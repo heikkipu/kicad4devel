@@ -547,7 +547,7 @@ void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
     pad_fill_tmp = displ_opts->m_DisplayPadFill;
     displ_opts->m_DisplayPadFill = true;
 
-    pt_pad = Pads();
+    pt_pad = PadsList();
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         pt_pad->Draw( panel, DC, GR_XOR, aMoveVector );

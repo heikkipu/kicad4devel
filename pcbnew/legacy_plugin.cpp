@@ -1609,7 +1609,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             pad->SetPosition( padpos + aModule->GetPosition() );
 
-            aModule->Pads().PushBack( pad.release() );
+            aModule->PadsList().PushBack( pad.release() );
             return;     // preferred exit
         }
     }

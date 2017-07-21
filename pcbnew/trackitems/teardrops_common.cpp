@@ -419,11 +419,7 @@ void TEARDROPS::Add(const MODULE* aModuleTo)
 {
     if(aModuleTo)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = aModuleTo->PadsList();
-#else
-        D_PAD* pad = aModuleTo->Pads();
-#endif
         if(pad)
         {
             PICKED_ITEMS_LIST undoredo_items;
@@ -696,11 +692,7 @@ void TEARDROPS::Remove(const MODULE* aModuleFrom, PICKED_ITEMS_LIST* aUndoRedoLi
     if(aModuleFrom)
         if(aModuleFrom->Type() == PCB_MODULE_T)
         {
-#ifdef NEWCONALGO
             D_PAD* pad = aModuleFrom->PadsList();
-#else
-            D_PAD* pad = aModuleFrom->Pads();
-#endif
             if(pad)
             {
                 m_recreate_list->clear();
@@ -951,11 +943,7 @@ void TEARDROPS::Recreate(const MODULE* aModuleTo, PICKED_ITEMS_LIST* aUndoRedoLi
     if(aModuleTo)
         if(aModuleTo->Type() == PCB_MODULE_T)
         {
-#ifdef NEWCONALGO
             D_PAD* pad = aModuleTo->PadsList();
-#else
-            D_PAD* pad = aModuleTo->Pads();
-#endif
             while(pad)
             {
                 Recreate(pad, aUndoRedoList);
@@ -1165,11 +1153,7 @@ void TEARDROPS::Lock(const MODULE* aModuleAt)
 {
     if(aModuleAt)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = aModuleAt->PadsList();
-#else
-        D_PAD* pad = aModuleAt->Pads();
-#endif
         if(pad)
         {
             while(pad)
@@ -1209,11 +1193,7 @@ void TEARDROPS::Unlock(const MODULE* aModuleAt)
 {
     if(aModuleAt)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = aModuleAt->PadsList();
-#else
-        D_PAD* pad = aModuleAt->Pads();
-#endif
         if(pad)
         {
             while(pad)
@@ -1393,11 +1373,7 @@ bool TEARDROPS::Empty(const MODULE* aModuleTo) const
 {
     if(aModuleTo)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = aModuleTo->PadsList();
-#else
-        D_PAD* pad = aModuleTo->Pads();
-#endif
         while(pad)
         {
             if(Empty(pad))
@@ -1598,11 +1574,7 @@ int TEARDROPS::Contains(const MODULE* aModuleAt, int& aNumLocked) const
     aNumLocked = 0;
     if(aModuleAt)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = aModuleAt->PadsList();
-#else
-        D_PAD* pad = aModuleAt->Pads();
-#endif
         while(pad)
         {
             int num_pad_locked = 0;
@@ -1948,11 +1920,7 @@ void TEARDROPS::Update(const MODULE* aModuleAt)
 {
     if(aModuleAt)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = aModuleAt->PadsList();
-#else
-        D_PAD* pad = aModuleAt->Pads();
-#endif
         while(pad)
         {
             Update(pad);
@@ -2044,11 +2012,7 @@ void TEARDROPS::Update(MODULE* aModuleAt, EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_
 {
     if(aModuleAt)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = aModuleAt->PadsList();
-#else
-        D_PAD* pad = aModuleAt->Pads();
-#endif
         while(pad)
         {
             Update(pad, aPanel, aDC, aDrawMode, aErase);
@@ -2373,11 +2337,7 @@ void TEARDROPS::ChangePad(TEARDROP* atTeardrop, const MODULE* inModule)
 {
     if(inModule)
     {
-#ifdef NEWCONALGO
         D_PAD* pad = inModule->PadsList();
-#else
-        D_PAD* pad = inModule->Pads();
-#endif
         while(pad)
         {
             if((atTeardrop->GetEnd() == pad->GetPosition()) && pad->IsOnLayer(atTeardrop->GetLayer()))

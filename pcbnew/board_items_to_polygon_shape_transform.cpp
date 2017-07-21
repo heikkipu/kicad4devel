@@ -133,7 +133,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
                         double                 aCorrectionFactor,
                         bool                   aSkipNPTHPadsWihNoCopper ) const
 {
-    D_PAD* pad = Pads();
+    D_PAD* pad = PadsList();
 
     wxSize margin;
     for( ; pad != NULL; pad = pad->Next() )

@@ -62,6 +62,11 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             // Delete the current trace
             ShowNewTrackWhenMovingCursor( m_canvas, DC, wxDefaultPosition, false );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+            GetBoard()->TrackItems()->Teardrops()->RouteCreate_Stop();
+            GetBoard()->TrackItems()->RoundedTracksCorners()->RouteCreate_Stop();
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Remove(g_CurrentTrackSegment->Back(), false, true);
+#endif
             // delete the most recently entered
             delete g_CurrentTrackList.PopBack();
 
@@ -116,6 +121,11 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
                 if( m_canvas->IsMouseCaptured() )
                     m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+                GetBoard()->TrackItems()->RoundedTracksCorners()->Add(g_CurrentTrackSegment->Back());
+                GetBoard()->TrackItems()->Teardrops()->RouteCreate_Start();
+                GetBoard()->TrackItems()->RoundedTracksCorners()->RouteCreate_Start();
+#endif
                 return g_CurrentTrackSegment;
             }
         }

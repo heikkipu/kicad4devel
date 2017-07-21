@@ -233,7 +233,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                         loc_item = loc_item->Next() )
                     loc_item->ClearFlags();
 
-                for( D_PAD* pad = clone->Pads(); pad; pad = pad->Next() )
+                for( D_PAD* pad = clone->PadsList(); pad; pad = pad->Next() )
                     pad->ClearFlags();
 
                 clone->Reference().ClearFlags();

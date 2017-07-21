@@ -145,6 +145,9 @@ protected:
     ///> Flag determining if net names should be visible for tracks
     bool    m_netNamesOnTracks;
 
+    ///> Flag determining if net names should be visible for vias
+    bool    m_netNamesOnVias = true;
+
     ///> Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;
 

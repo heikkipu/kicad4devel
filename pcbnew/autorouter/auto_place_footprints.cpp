@@ -594,7 +594,7 @@ void genModuleOnRoutingMatrix( MODULE* Module )
                           CELL_is_MODULE, WRITE_OR_CELL );
 
     // Trace pads + clearance areas.
-    for( Pad = Module->Pads(); Pad != NULL; Pad = Pad->Next() )
+    for( Pad = Module->PadsList(); Pad != NULL; Pad = Pad->Next() )
     {
         int margin = (RoutingMatrix.m_GridRouting / 2) + Pad->GetClearance();
         ::PlacePad( Pad, CELL_is_MODULE, margin, WRITE_OR_CELL );
@@ -667,7 +667,7 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
     {
         LSET    other( aModule->GetLayer() == B_Cu  ? F_Cu : B_Cu );
 
-        for( D_PAD* pad = aModule->Pads(); pad; pad = pad->Next() )
+        for( D_PAD* pad = aModule->PadsList(); pad; pad = pad->Next() )
         {
             if( !( pad->GetLayerSet() & other ).any() )
                 continue;

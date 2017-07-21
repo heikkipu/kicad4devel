@@ -455,7 +455,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
         BOARD* board = GetBoard();
         for( MODULE* module = board->m_Modules; module; module = module->Next() )
         {
-            for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+            for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
                 view->Update( pad, KIGFX::GEOMETRY );
         }
     }

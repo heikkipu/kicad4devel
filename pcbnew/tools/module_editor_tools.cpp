@@ -188,7 +188,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 {
-    if( !m_board->m_Modules || !m_board->m_Modules->Pads() )
+    if( !m_board->m_Modules || !m_board->m_Modules->PadsList() )
         return 0;
 
     Activate();
@@ -316,7 +316,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( D_PAD* p = m_board->m_Modules->Pads(); p; p = p->Next() )
+    for( D_PAD* p = m_board->m_Modules->PadsList(); p; p = p->Next() )
     {
         p->ClearSelected();
         view->Update( p );
@@ -473,7 +473,7 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
             // MODULE::RunOnChildren is infeasible here: we need to create copies of items, do not
             // directly modify them
 
-            for( D_PAD* pad = pastedModule->Pads(); pad; pad = pad->Next() )
+            for( D_PAD* pad = pastedModule->PadsList(); pad; pad = pad->Next() )
             {
                 D_PAD* clone = static_cast<D_PAD*>( pad->Clone() );
                 commit.Add( clone );

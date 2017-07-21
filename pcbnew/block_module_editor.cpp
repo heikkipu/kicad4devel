@@ -413,7 +413,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                 }
             }
 
-            D_PAD* pad = currentModule->Pads();
+            D_PAD* pad = currentModule->PadsList();
 
             for( ; pad != NULL; pad = pad->Next() )
             {
@@ -452,7 +452,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
             }
         }
 
-        D_PAD* pad = currentModule->Pads();
+        D_PAD* pad = currentModule->PadsList();
 
         for( ; pad != NULL; pad = pad->Next() )
         {
@@ -477,7 +477,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement )
     module->Reference().ClearFlags();
     module->Value().ClearFlags();
 
-    for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
+    for( D_PAD* pad = module->PadsList();  pad;  pad = pad->Next() )
     {
         if( !pad->IsSelected() )
             continue;
@@ -486,7 +486,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement )
         D_PAD* NewPad = new D_PAD( *pad );
         NewPad->SetParent( module );
         NewPad->SetFlags( SELECTED );
-        module->Pads().PushFront( NewPad );
+        module->PadsList().PushFront( NewPad );
 
         if( aIncrement )
             NewPad->IncrementPadName( true, true );
@@ -526,7 +526,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
     if( module->Value().IsSelected() )
         module->Value().Move( offset );
 
-    D_PAD* pad = module->Pads();
+    D_PAD* pad = module->PadsList();
 
     for( ; pad != NULL; pad = pad->Next() )
     {
@@ -579,7 +579,7 @@ void DeleteMarkedItems( MODULE* module )
     D_PAD*      next_pad;
     BOARD*      board = module->GetBoard();
 
-    for( D_PAD* pad = module->Pads();  pad;  pad = next_pad )
+    for( D_PAD* pad = module->PadsList();  pad;  pad = next_pad )
     {
         next_pad = pad->Next();
 
@@ -628,7 +628,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
     if( module->Value().IsSelected() || force_all )
         module->Value().Mirror( offset, false );
 
-    for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
+    for( D_PAD* pad = module->PadsList();  pad;  pad = pad->Next() )
     {
         // Skip pads not selected, i.e. not inside the block to mirror:
         if( !pad->IsSelected() && !force_all )
@@ -693,7 +693,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all )
     if( module->Value().IsSelected() || force_all )
         module->Value().Rotate( offset, 900 );
 
-    for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
+    for( D_PAD* pad = module->PadsList();  pad;  pad = pad->Next() )
     {
         if( !pad->IsSelected() && !force_all )
             continue;
@@ -745,7 +745,7 @@ void ClearMarkItems( MODULE* module )
         item->ClearFlags();
     }
 
-    item = module->Pads();
+    item = module->PadsList();
 
     for( ; item != NULL; item = item->Next() )
     {
@@ -773,7 +773,7 @@ void MoveMarkedItemsExactly( MODULE* module, const wxPoint& centre,
         module->Value().Move( translation );
     }
 
-    D_PAD* pad = module->Pads();
+    D_PAD* pad = module->PadsList();
 
     for( ; pad != NULL; pad = pad->Next() )
     {
@@ -857,7 +857,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
         ItemsCount++;
     }
 
-    pad = module->Pads();
+    pad = module->PadsList();
 
     for( ; pad != NULL; pad = pad->Next() )
     {

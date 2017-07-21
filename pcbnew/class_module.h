@@ -131,10 +131,10 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    DLIST<D_PAD>& Pads()                        { return m_Pads; }
-    const DLIST<D_PAD>& Pads() const            { return m_Pads; }
+    DLIST<D_PAD>& PadsList()                        { return m_Pads; }
+    const DLIST<D_PAD>& PadsList() const            { return m_Pads; }
 
-    DLIST_ITERATOR_WRAPPER<D_PAD> Pads_itW()
+    DLIST_ITERATOR_WRAPPER<D_PAD> Pads()
     {
          return DLIST_ITERATOR_WRAPPER<D_PAD>( m_Pads );
     }
