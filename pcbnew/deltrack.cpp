@@ -65,7 +65,15 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 #ifdef PCBNEW_WITH_TRACKITEMS
             GetBoard()->TrackItems()->Teardrops()->RouteCreate_Stop();
             GetBoard()->TrackItems()->RoundedTracksCorners()->RouteCreate_Stop();
-            GetBoard()->TrackItems()->RoundedTracksCorners()->Remove(g_CurrentTrackSegment->Back(), false, true);
+            for( TRACK* track = g_FirstTrackSegment; track;  )
+            {
+                TRACK* next_t = track->Next();
+                if(track->Type() == PCB_ROUNDEDTRACKSCORNER_T)
+                    GetBoard()->TrackItems()->RoundedTracksCorners()->Remove(track, false, true);
+                if(track->Type() == PCB_TEARDROP_T)
+                    GetBoard()->TrackItems()->Teardrops()->Remove(track, false, true);
+                track = next_t;
+            }
 #endif
             // delete the most recently entered
             delete g_CurrentTrackList.PopBack();
@@ -118,14 +126,22 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             }
             else
             {
-                if( m_canvas->IsMouseCaptured() )
-                    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
 #ifdef PCBNEW_WITH_TRACKITEMS
-                GetBoard()->TrackItems()->RoundedTracksCorners()->Add(g_CurrentTrackSegment->Back());
+                PICKED_ITEMS_LIST aUndoRedoTempList;
+                TRACK* track = g_CurrentTrackSegment->Back();
+                while( track )
+                {
+                    GetBoard()->TrackItems()->Teardrops()->Add(track, &aUndoRedoTempList);
+                    track = track->Back();
+                    if(track)
+                        GetBoard()->TrackItems()->RoundedTracksCorners()->Add(track);
+                }
                 GetBoard()->TrackItems()->Teardrops()->RouteCreate_Start();
                 GetBoard()->TrackItems()->RoundedTracksCorners()->RouteCreate_Start();
 #endif
+                if( m_canvas->IsMouseCaptured() )
+                    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+
                 return g_CurrentTrackSegment;
             }
         }

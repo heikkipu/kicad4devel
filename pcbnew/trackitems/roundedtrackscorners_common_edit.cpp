@@ -72,13 +72,7 @@ void ROUNDEDTRACKSCORNERS::RouteCreate_Stop(void)
 {
     m_can_edit = false;
     ToggleEdit(EDIT_NULL_T);
-    if(m_track_edit_corner)
-    {
-        m_track_edit_corner->ResetVisibleEndpoints();
-        m_track_edit_corner->ReleaseTrackSegs();
-        delete m_track_edit_corner;
-        m_track_edit_corner = nullptr;
-    }
+    DestroyRouteEdit();
 }
 
 void ROUNDEDTRACKSCORNERS::DrawEditParams(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset) const

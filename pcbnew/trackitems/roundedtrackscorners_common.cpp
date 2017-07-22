@@ -230,52 +230,55 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert(TRACK* aTrack, PICKED_ITEMS_LI
         ITEM_PICKER picker_new(nullptr, UR_NEW);
         ITEM_PICKER picker_deleted(nullptr, UR_DELETED);
         ROUNDEDCORNERTRACK* created_track = nullptr;
-
-        if(!dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack)))
+        DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>(aTrack->GetList());
+        if(tracks_list)
         {
-            created_track = new ROUNDEDCORNERTRACK(m_Board, const_cast<TRACK*>(aTrack));
-            rounded_track = created_track;
-        }
-        else
-            rounded_track = static_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack));
-
-        if(created_track)
-        {
-            //If teardrops save them.
-            m_Parent->Teardrops()->ToMemory(aTrack);
-            m_Parent->Teardrops()->Remove(aTrack, aUndoRedoList, true);            
-            
-            //Add created.
-            picker_new.SetItem(created_track);
-            aUndoRedoList->PushItem(picker_new);
-#ifdef NEWCONALGO
-            m_Board->GetConnectivity()->Add(created_track);
-#else
-            m_Board->GetRatsnest()->Add(created_track);
-#endif
-            m_Board->m_Track.Insert(created_track, aTrack);
-            
-            //Remove old.
-            picker_deleted.SetItem(aTrack);
-            aUndoRedoList->PushItem(picker_deleted);
-#ifdef NEWCONALGO
-            m_Board->GetConnectivity()->Remove(aTrack);
-#else
-            m_Board->GetRatsnest()->Remove(aTrack);
-#endif
-            m_Board->Remove(aTrack);
-
-            //If teardrops add them.
-            m_Parent->Teardrops()->FromMemory(created_track, aUndoRedoList);
-            m_Parent->Teardrops()->Update( created_track->GetNetCode(), created_track);            
-
-            //GAL remove and add
-            if(m_EditFrame)
+            if(!dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack)))
             {
-                if( m_EditFrame->IsGalCanvasActive() )
+                created_track = new ROUNDEDCORNERTRACK(m_Board, const_cast<TRACK*>(aTrack));
+                rounded_track = created_track;
+            }
+            else
+                rounded_track = static_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack));
+
+            if(created_track)
+            {
+                //If teardrops save them.
+                m_Parent->Teardrops()->ToMemory(aTrack);
+                m_Parent->Teardrops()->Remove(aTrack, aUndoRedoList, true);            
+                
+                //Add created.
+                picker_new.SetItem(created_track);
+                aUndoRedoList->PushItem(picker_new);
+#ifdef NEWCONALGO
+                m_Board->GetConnectivity()->Add(created_track);
+#else
+                m_Board->GetRatsnest()->Add(created_track);
+#endif
+                tracks_list->Insert(created_track, aTrack);
+                
+                //Remove old.
+                picker_deleted.SetItem(aTrack);
+                aUndoRedoList->PushItem(picker_deleted);
+#ifdef NEWCONALGO
+                m_Board->GetConnectivity()->Remove(aTrack);
+#else
+                m_Board->GetRatsnest()->Remove(aTrack);
+#endif
+                tracks_list->Remove(aTrack);
+
+                //If teardrops add them.
+                m_Parent->Teardrops()->FromMemory(created_track, aUndoRedoList);
+                m_Parent->Teardrops()->Update( created_track->GetNetCode(), created_track);            
+
+                //GAL remove and add
+                if(m_EditFrame)
                 {
-                    m_EditFrame->GetGalCanvas()->GetView()->Remove(aTrack);
-                    m_EditFrame->GetGalCanvas()->GetView()->Add(created_track);
+                    if( m_EditFrame->IsGalCanvasActive() )
+                    {
+                        m_EditFrame->GetGalCanvas()->GetView()->Remove(aTrack);
+                        m_EditFrame->GetGalCanvas()->GetView()->Add(created_track);
+                    }
                 }
             }
         }

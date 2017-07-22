@@ -380,8 +380,10 @@ void TEARDROPS::Add(const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList)
 {
     if(aTrackSegTo && aUndoRedoList)
     {
-        Add(aTrackSegTo, m_Board->GetViaByPosition(aTrackSegTo->GetStart(), aTrackSegTo->GetLayer()), aUndoRedoList);
-        Add(aTrackSegTo, m_Board->GetViaByPosition(aTrackSegTo->GetEnd(), aTrackSegTo->GetLayer()), aUndoRedoList);
+        //Add(aTrackSegTo, m_Board->GetViaByPosition(aTrackSegTo->GetStart(), aTrackSegTo->GetLayer()), aUndoRedoList);
+        //Add(aTrackSegTo, m_Board->GetViaByPosition(aTrackSegTo->GetEnd(), aTrackSegTo->GetLayer()), aUndoRedoList);
+        Add(aTrackSegTo, m_Parent->NextVia(aTrackSegTo), aUndoRedoList);
+        Add(aTrackSegTo, m_Parent->BackVia(aTrackSegTo), aUndoRedoList);
         Add(aTrackSegTo, m_Board->GetPadFast(aTrackSegTo->GetStart(), LSET(aTrackSegTo->GetLayer())), aUndoRedoList);
         Add(aTrackSegTo, m_Board->GetPadFast(aTrackSegTo->GetEnd(), LSET(aTrackSegTo->GetLayer())), aUndoRedoList);
     }
