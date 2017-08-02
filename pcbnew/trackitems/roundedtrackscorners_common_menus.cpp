@@ -34,7 +34,7 @@ void ROUNDEDTRACKSCORNERS::CreateMenu(wxMenu* aMenu) const
             wxString add_s;
             add_s.Printf(_("Add %s"), GetChars(ParamsTxtToMenu(GetParams())));
             AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_PLACE_ALL, add_s, KiBitmap(add_arc_xpm));
-            AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_DELETE_ALL, _("Remove"), KiBitmap(delete_arc_xpm));
+            AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_DELETE_ALL, _("Remove"), KiBitmap(delete_xpm));
             aMenu->AppendSeparator();
         }
         Menu_ChangeSize(aMenu);

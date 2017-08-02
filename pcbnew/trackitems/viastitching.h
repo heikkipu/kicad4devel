@@ -76,13 +76,13 @@ public:
 
     void RuleCheck( const TRACK* aTrack, DRC* aDRC );
     
-    bool DestroyConflictingThermalVia( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame );
-    bool CleanThermalVias( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit );
+    bool DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame );
+    bool Clean( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit );
 
     bool SelectLayer( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
     bool SelectLayerPair( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
     
-    void ConnectThermalViasToZones( void );
+    void ConnectToZones( void );
     
 protected:
     VIASTITCHING(){};

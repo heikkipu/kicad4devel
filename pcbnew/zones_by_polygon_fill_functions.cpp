@@ -187,7 +187,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
             progressDialog->Update( progressCount, _( "Calculate copper pour connections..." ) );
 
         //Via Stitching: Recalclate vias zones connections after fill. 
-        n? GetBoard()->ViaStitching()->SetNetcodes() : GetBoard()->ViaStitching()->ConnectThermalViasToZones();
+        n? GetBoard()->ViaStitching()->SetNetcodes() : GetBoard()->ViaStitching()->ConnectToZones();
     }
     Compile_Ratsnest( nullptr, false );
 

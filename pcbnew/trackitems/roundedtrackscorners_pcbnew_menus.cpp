@@ -84,7 +84,7 @@ void ROUNDEDTRACKSCORNERS::Menu_RemoveFromTrack(wxMenu* aMenu, const TRACK* aTra
             ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(aTrackSeg, aPos));
             if(corner)
             {
-                AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE, _("Remove Corner"), KiBitmap(delete_arc_xpm));
+                AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE, _("Remove Corner"), KiBitmap(delete_xpm));
             }
         }
     }
@@ -142,7 +142,7 @@ void ROUNDEDTRACKSCORNERS::Menu_RemoveFromNet(wxMenu* aMenu, const TRACK* aTrack
         {
             wxString msg;
             msg.Printf(_("Remove Corners from NET: %s"), GetChars(m_Board->FindNet(aTrackSeg->GetNetCode())->GetShortNetname()));
-            AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE_NET, msg, KiBitmap(delete_arc_xpm));
+            AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE_NET, msg, KiBitmap(delete_xpm));
         }
     }
 }

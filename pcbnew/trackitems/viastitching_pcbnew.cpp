@@ -111,7 +111,7 @@ void VIASTITCHING::AddThermalVia(const PCB_EDIT_FRAME* aEditFrame, const VIATYPE
             via->SetNetCode( netcode );
             via->SetPosition( pos );
             const_cast<VIA*>(dynamic_cast<const VIA*>(via))->SetThermalCode( netcode );
-            if( !DestroyConflictingThermalVia( via, const_cast<PCB_EDIT_FRAME*>(aEditFrame) ) )
+            if( !DestroyConflicts( via, const_cast<PCB_EDIT_FRAME*>(aEditFrame) ) )
             {
                 BOARD_COMMIT commit( const_cast<PCB_EDIT_FRAME*>(aEditFrame) );
                 commit.Add( via );
@@ -252,7 +252,7 @@ void VIASTITCHING::SetNetcodes( void )
 }
 
 //Set real zone polygon connections to thermal vias.
-void VIASTITCHING::ConnectThermalViasToZones( void )
+void VIASTITCHING::ConnectToZones( void )
 {
     //Connect unconnected single vias in copper pours. 
     if( m_board->GetAreaCount() )
@@ -578,7 +578,7 @@ void VIASTITCHING::RuleCheck( const TRACK* aTrack, DRC* aDRC )
 }
 
 
-bool VIASTITCHING::CleanThermalVias( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit )
+bool VIASTITCHING::Clean( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit )
 {
     BOARD* board = aEditFrame->GetBoard();
     std::set<TRACK*> vias_remove;
@@ -733,7 +733,7 @@ TRACK* VIASTITCHING::ViaBreakTrack( const TRACK* aStartingTrack,
 }
 
 //Do not add thermal vias in array add. if no zone in current layer. And use DRC if it is ON.
-bool VIASTITCHING::DestroyConflictingThermalVia( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame )
+bool VIASTITCHING::DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame )
 {
     if( aItem->Type() == PCB_VIA_T )
     {

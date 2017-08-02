@@ -148,7 +148,7 @@ void PCB_EDIT_FRAME::Clean_Pcb()
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     bool modified = false;
-    modified |= GetBoard()->ViaStitching()->CleanThermalVias( this, &commit );
+    modified |= GetBoard()->ViaStitching()->Clean( this, &commit );
     Fill_All_Zones( this, false );
 
     modified |= cleaner.CleanupBoard( dlg.m_deleteShortCircuits, dlg.m_cleanVias,

@@ -128,6 +128,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             {
 #ifdef PCBNEW_WITH_TRACKITEMS
                 PICKED_ITEMS_LIST aUndoRedoTempList;
+                GetBoard()->TrackItems()->Teardrops()->Add(g_CurrentTrackSegment, &aUndoRedoTempList);
                 TRACK* track = g_CurrentTrackSegment->Back();
                 while( track )
                 {
