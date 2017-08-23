@@ -392,7 +392,11 @@ void TRACKITEMS::Angles(const TRACK* aTrackSeg, const wxPoint aPosition, EDA_DRA
     double track_angle = TrackSegAngle(aTrackSeg, op_pos);
     
     int angle_track_mils_int = Rad2MilsInt(track_angle);
+#ifdef NEWCONALGO
+    COLOR4D color = m_Board->Colors().GetLayerColor(aTrackSeg->GetLayer());
+#else
     COLOR4D color = m_Board->GetLayerColor(aTrackSeg->GetLayer());
+#endif
     
     int width = aTrackSeg->GetWidth();
 
@@ -527,7 +531,11 @@ void TRACKITEMS::Angles(const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList, c
     }
           
     TRACK* track_seg = aDragSegmentList->at(0).m_Track;
+#ifdef NEWCONALGO
+    COLOR4D color = m_Board->Colors().GetLayerColor(track_seg->GetLayer());
+#else
     COLOR4D color = m_Board->GetLayerColor(track_seg->GetLayer());
+#endif
     int line_width = track_seg->GetWidth() / 40;
     
     //angle 45 degrees multiples versus another track in current pos.
@@ -628,7 +636,11 @@ void TRACKITEMS::Target(const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList, c
         
         EDA_RECT* eRect = aPanel->GetClipBox();
         int radi = track_seg->GetWidth()>>2;
+#ifdef NEWCONALGO
+        COLOR4D color = m_Board->Colors().GetLayerColor(track_seg->GetLayer());
+#else
         COLOR4D color = m_Board->GetLayerColor(track_seg->GetLayer());
+#endif
         int line_width = radi / 8;
         
         //erase

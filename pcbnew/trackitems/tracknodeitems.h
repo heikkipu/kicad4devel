@@ -62,6 +62,7 @@ namespace TrackNodeItems
 
         virtual unsigned int ExecuteItem(const BOARD_ITEM* aItemAt)=0; 
         virtual void ExecuteEnd(void) {};
+        BOARD_ITEM* m_nextItem{nullptr}; //Can be changed in ExecuteItem.
 
         PICKED_ITEMS_LIST* m_undoredo_items;
 

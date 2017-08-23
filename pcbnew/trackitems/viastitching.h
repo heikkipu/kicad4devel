@@ -195,7 +195,11 @@ protected:
     }
 
     COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override {
+#ifdef NEWCONALGO
+        return m_brd->Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
+#else
         return m_brd->GetLayerColor( ToLAYER_ID( aLayer ) );
+#endif
     }
 
     wxString GetLayerName( LAYER_NUM aLayer ) const override {

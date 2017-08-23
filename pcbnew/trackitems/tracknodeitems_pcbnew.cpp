@@ -48,7 +48,7 @@ ITEMS_PROGRESS_BASE::ITEMS_PROGRESS_BASE(const PCB_EDIT_FRAME* aFrame, const BOA
     }
 
     m_can_cancel = true;
-    
+
     m_progress_title.Printf(_("Progressing..."));
 }
 
@@ -91,8 +91,9 @@ unsigned int ITEMS_PROGRESS_BASE::Execute(void)
             unsigned int update_count = 0;
             while(item)
             {
-                BOARD_ITEM* next_item = item->Next();
+                m_nextItem = item->Next();
                 operations_count += ExecuteItem(item);
+                item = m_nextItem;
                 if(++update_count > update_val)
                 {
                     update_count = 0;
@@ -107,7 +108,6 @@ unsigned int ITEMS_PROGRESS_BASE::Execute(void)
                 }
                 if(++progress_count >= m_items_to_count)
                     progress_count = m_items_to_count;
-                item = next_item;
             }
             UpdateProgress(m_progress_to_count, operations_count);
             ExecuteEnd();

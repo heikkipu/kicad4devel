@@ -93,7 +93,11 @@ void ROUNDEDCORNERTRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& a
 void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aOffset )
 {
     BOARD* brd = GetBoard();
+#ifdef NEWCONALGO
+    COLOR4D color = brd->Colors().GetLayerColor( m_Layer );
+#else
     COLOR4D color = brd->GetLayerColor( m_Layer );
+#endif
 
     if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
         return;

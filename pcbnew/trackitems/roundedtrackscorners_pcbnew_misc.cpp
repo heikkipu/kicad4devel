@@ -59,7 +59,7 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, const bool
         m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_CHANGED);
 }
 
-void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList)
+bool ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList)
 {
     std::unique_ptr<NET_SCAN_TRACK_COLLECT_SAMELENGTH> samelengt_tracks(new NET_SCAN_TRACK_COLLECT_SAMELENGTH(aTrackFrom, this, aUndoRedoList));
     if(samelengt_tracks)
@@ -79,10 +79,12 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITE
             
             if(tracks_connected2arced.size() == 2) //Only two segments are acceptable.
             {
-                CreateCorner(&tracks_arced, &tracks_connected2arced, aUndoRedoList);
+                if(CreateCorner(&tracks_arced, &tracks_connected2arced, aUndoRedoList))
+                    return true;
             }
         }
     }
+    return false;
 }
 
 void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(const int aNetCode, const bool aUndo)
@@ -97,29 +99,9 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(const int aNetCode, const boo
         track_seg = tracks_list->GetFirst()->GetStartNetCode(aNetCode);
         do
         {
-            std::unique_ptr<NET_SCAN_TRACK_COLLECT_SAMELENGTH> samelengt_tracks(new NET_SCAN_TRACK_COLLECT_SAMELENGTH(track_seg, this, &undoredo_items));
-            if(samelengt_tracks)
-            {
-                samelengt_tracks->Execute();
-                std::set<TRACK*>* tracks_samelength = samelengt_tracks->GetSamelengthSegments();
-                std::set<TRACK*>* tracks_other = samelengt_tracks->GetAnotherSegments();
-                
-                //Find same length segments connected to aTrackFrom.
-                std::set<TRACK*> tracks_arced = CollectSameLengthConnected(track_seg, tracks_samelength);
-                
-                //Create rounded tracks corner
-                if(tracks_arced.size() > 5) //Bunch of segments not only one or two.
-                {
-                    //Find two endpoint segments connected with arced segments.
-                    std::map<TRACK*, bool> tracks_connected2arced = FindSegmentsBothSidesOfArced(&tracks_arced, tracks_other);
-                    
-                    if(tracks_connected2arced.size() == 2) //Only two segments are acceptable.
-                    {
-                        if(CreateCorner(&tracks_arced, &tracks_connected2arced, &undoredo_items))
-                            created = true;
-                    }
-                }
-            }
+            if(ConvertSegmentedCorners(track_seg, &undoredo_items))
+                created = true;
+            
             track_seg = track_seg->Next();
             if(track_seg && (track_seg->GetNetCode() != aNetCode))
                 track_seg = nullptr;

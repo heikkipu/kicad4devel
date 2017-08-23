@@ -106,6 +106,14 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS::ROUNDEDTRACK
 
 unsigned int ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS::ExecuteItem(const BOARD_ITEM* aItemAt)
 {
+    while(m_nextItem)
+    {
+        if(m_nextItem->Type() != PCB_TRACE_T)
+            m_nextItem = m_nextItem->Next();
+        else
+            break;
+    }
+    
     if(aItemAt->Type() == PCB_TRACE_T)
     {
         TRACK* track = static_cast<TRACK*>(const_cast<BOARD_ITEM*>(aItemAt));

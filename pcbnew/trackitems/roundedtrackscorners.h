@@ -260,7 +260,7 @@ private:
 //-----------------------------------------------------------------------------------------------------/
 public:
     void ConvertSegmentedCorners(TRACK* aTrackFrom, const bool aUndo);
-    void ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
+    bool ConvertSegmentedCorners(TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList);
     void ConvertSegmentedCorners(const int aNetCode, const bool aUndo);
     
 private:

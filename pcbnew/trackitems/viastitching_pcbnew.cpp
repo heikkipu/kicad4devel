@@ -125,7 +125,11 @@ void VIASTITCHING::AddViaArrayPrepare( const PCB_EDIT_FRAME* aEditFrame, const V
 {
     m_via_array_netcode_pads.clear();
     m_via_array_netcode = aVia->GetNetCode();
+#ifdef NEWCONALGO
+    if(const_cast<PCB_EDIT_FRAME*>(aEditFrame)->Settings().m_legacyDrcOn)
+#else
     if(g_Drc_On)
+#endif
     {
         //Do not add pads in same netcode
         m_via_array_netcode_pads = m_board->TrackItems()->GetPads(m_via_array_netcode);
@@ -747,7 +751,11 @@ bool VIASTITCHING::DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame )
             
             aItem->SetFlags( IS_NEW );
             bool hit_drc = false;
+#ifdef NEWCONALGO
+            if(aFrame->Settings().m_legacyDrcOn)
+#else
             if(g_Drc_On)
+#endif
                 hit_drc = dynamic_cast<PCB_EDIT_FRAME*>(aFrame)->GetDrcController()->Drc( static_cast<TRACK*>(aItem), m_board->m_Track );
                 
             if( !zones.size() || hit_drc )
@@ -845,7 +853,11 @@ VIASTITCHING::VIA_SETTINGS ViaStitching::GetCurrentViaSettings(const PCB_EDIT_FR
     {
         NETINFO_ITEM* net = zone->GetNet();
         via_settings.text = net->GetShortNetname();
+#ifdef NEWCONALGO
+        via_settings.color = aEditFrame->GetBoard()->Colors().GetLayerColor(currentLayer);
+#else
         via_settings.color = aEditFrame->GetBoard()->GetLayerColor(currentLayer);
+#endif
         NETCLASSPTR netclass = net->GetNetClass();
         if(netclass)
             via_settings.clearance_rad = via_settings.rad + netclass->GetClearance();
