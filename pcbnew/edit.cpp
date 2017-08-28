@@ -2175,6 +2175,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->MoveCursorToCrossHair();
             GetBoard()->TrackItems()->RoundedTracksCorners()->ConvertSegmentedCorners( static_cast<TRACK*>(GetCurItem()),
                                                                                        true );
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(GetCurItem())->GetNetCode() );
             if( static_cast<TRACK*>(GetCurItem())->GetNetCode() > 0 )
                 TestNetConnection( nullptr, static_cast<TRACK*>(GetCurItem())->GetNetCode() );
             OnModify();
@@ -2186,6 +2187,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             m_canvas->MoveCursorToCrossHair();
             GetBoard()->TrackItems()->RoundedTracksCorners()->ConvertSegmentedCorners( static_cast<TRACK*>(GetCurItem())->GetNetCode(), true );
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(GetCurItem())->GetNetCode() );
             if( static_cast<TRACK*>(GetCurItem())->GetNetCode() > 0 )
                 TestNetConnection( nullptr, static_cast<TRACK*>(GetCurItem())->GetNetCode() );
             OnModify();

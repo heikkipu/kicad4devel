@@ -768,6 +768,26 @@ void ROUNDEDTRACKSCORNERS::Update(TRACK* aTrackSegAt, EDA_DRAW_PANEL* aPanel, wx
     }
 }    
 
+void ROUNDEDTRACKSCORNERS::Update(const int aNetCode)
+{
+    DLIST<TRACK>* tracks_list = &m_Board->m_Track; 
+    TRACK* track = tracks_list->GetFirst()->GetStartNetCode(aNetCode);
+    UpdateListClear();
+    while(track)
+    {
+        TRACK* next_track = track->Next();
+        
+        if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
+            UpdateListAdd(track);
+        
+        if(next_track && next_track->GetNetCode() != aNetCode)
+            track = nullptr;
+        else
+            track = next_track;
+    }
+    UpdateListDo();
+}
+
 void ROUNDEDTRACKSCORNERS::ToMemory(const TRACK* aTrackSegFrom)
 {
     m_next_corner_in_memory = nullptr;

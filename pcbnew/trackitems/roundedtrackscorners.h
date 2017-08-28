@@ -158,6 +158,7 @@ private:
 //-----------------------------------------------------------------------------------------------------/
 public:
     void Update(const BOARD_ITEM* aItemAt);
+    void Update(const int aNetCode);
     void Update(const TRACK* aTrackSegAt);
     void Update(TRACK* aTrackSegAt, EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase);
     

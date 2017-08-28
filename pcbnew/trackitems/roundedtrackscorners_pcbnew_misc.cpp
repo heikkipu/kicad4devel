@@ -110,7 +110,6 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners(const int aNetCode, const boo
     }
     while(created);
     
-    Repopulate(aNetCode, &undoredo_items);
     if(m_EditFrame && aUndo && undoredo_items.GetCount() )
         m_EditFrame->SaveCopyInUndoList(undoredo_items, UR_CHANGED);
 }
@@ -319,6 +318,4 @@ bool ROUNDEDTRACKSCORNERS::CreateCorner(std::set<TRACK*>* aTracksArced, const st
 }
 
 //-----------------------------------------------------------------------------------------------------/
-
-
 

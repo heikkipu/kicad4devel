@@ -347,6 +347,7 @@ if( PCBNEW_WITH_TRACKITEMS )
         trackitems/roundedtrackscorners_pcbnew_DRC.cpp
         trackitems/roundedtrackscorners_pcbnew_menus.cpp
         trackitems/roundedtrackscorners_pcbnew_misc.cpp
+        trackitems/roundedtrackscorners_pcbnew_todolist.cpp
 
         trackitems/trackitems_pcbnew.cpp
 
