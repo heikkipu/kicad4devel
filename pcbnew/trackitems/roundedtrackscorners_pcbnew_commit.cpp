@@ -54,16 +54,9 @@ void ROUNDEDTRACKSCORNERS::GalCommitPushPrepare(void)
 
 void ROUNDEDTRACKSCORNERS::GalCommitPushFinish(PICKED_ITEMS_LIST* aUndoRedoList)
 {
-    std::set<TRACK*> converted_tracks;
     for(TRACK* track : m_gal_commit_tracks)
-    {
-        track = Convert(track, aUndoRedoList);
-        converted_tracks.insert(track);
-    }
-    
-    for(TRACK* track : converted_tracks)
         Add(track, aUndoRedoList);
-
+    
     m_gal_removed_list->clear();
     m_gal_commit_tracks.clear();
 }

@@ -311,6 +311,22 @@ bool ROUNDEDTRACKSCORNERS::CreateCorner(std::set<TRACK*>* aTracksArced, const st
         else
             second_track->SetEnd(common_point);
         
+        //Jos meni pieleen ;)
+        double new_angle_btw_tracks = InnerAngle(AngleBtwTracks(first_track, common_point, second_track, common_point));
+        if(Rad2MilsInt(new_angle_btw_tracks) != Rad2MilsInt(angle_btw_tracks))
+        {
+            common_point = GetPoint(second_track_opposite_pos, second_track_angle, second_track_full_length);
+            if(is_first_track_connected_at_startpoint)
+                first_track->SetStart(common_point);
+            else
+                first_track->SetEnd(common_point);
+
+            if(is_second_track_connected_at_startpoint)
+                second_track->SetStart(common_point);
+            else
+                second_track->SetEnd(common_point);
+        }
+        
         Add(first_track, common_point, second_track_full_length - second_track_length, aUndoRedoList);
         okay = true;
     }
