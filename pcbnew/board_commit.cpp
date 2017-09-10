@@ -159,6 +159,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
 #ifdef PCBNEW_WITH_TRACKITEMS
                     board->TrackItems()->Teardrops()->GalCommitPushRemove( boardItem, &undoList );
                     board->TrackItems()->RoundedTracksCorners()->GalCommitPushRemove( boardItem, &undoList );
+                    if( (boardItem->Type() != PCB_ROUNDEDTRACKSCORNER_T) && (boardItem->Type() != PCB_TEARDROP_T) )
 #endif
                     undoList.PushItem( ITEM_PICKER( boardItem, UR_DELETED ) );
                 }
@@ -219,6 +220,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                 }
 
                 // Board items
+#ifdef PCBNEW_WITH_TRACKITEMS
+                case PCB_TEARDROP_T:
+                case PCB_ROUNDEDTRACKSCORNER_T:
+                    if( aCreateUndoEntry )
+                        break;
+#endif
                 case PCB_LINE_T:                // a segment not on copper layers
                 case PCB_TEXT_T:                // a text on a layer
                 case PCB_TRACE_T:               // a track segment (segment on a copper layer)
@@ -228,10 +235,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                 case PCB_MARKER_T:              // a marker used to show something
                 case PCB_ZONE_T:                // SEG_ZONE items are now deprecated
                 case PCB_ZONE_AREA_T:
-#ifdef PCBNEW_WITH_TRACKITEMS
-                case PCB_TEARDROP_T:
-                case PCB_ROUNDEDTRACKSCORNER_T:
-#endif
                     view->Remove( boardItem );
 
                     if( !( changeFlags & CHT_DONE ) )
