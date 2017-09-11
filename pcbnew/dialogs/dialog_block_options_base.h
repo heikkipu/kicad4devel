@@ -3,6 +3,7 @@
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
+// Sorry, edited. hp
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_BLOCK_OPTIONS_BASE_H__
@@ -42,6 +43,9 @@ class DIALOG_BLOCK_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_IncludeLockedModules;
 		wxCheckBox* m_Include_Draw_Items;
 		wxCheckBox* m_Include_Tracks;
+#ifdef PCBNEW_WITH_TRACKITEMS
+		wxCheckBox* m_Include_ThermalVias;
+#endif
 		wxCheckBox* m_Include_Edges_Items;
 		wxCheckBox* m_Include_Zones;
 		wxCheckBox* m_DrawBlockItems;

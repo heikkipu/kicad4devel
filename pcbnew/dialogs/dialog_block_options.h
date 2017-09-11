@@ -41,6 +41,9 @@ public:
         bool includeModules     = true;
         bool includeLockedModules = true;
         bool includeTracks      = true;
+#ifdef PCBNEW_WITH_TRACKITEMS
+        bool includeThermalVias = true;
+#endif
         bool includeZones       = true;
         bool includeItemsOnTechLayers  = true;
         bool includeBoardOutlineLayer = true;

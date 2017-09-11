@@ -47,6 +47,9 @@ DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent,
         m_IncludeLockedModules->Disable();
 
     m_Include_Tracks->SetValue( m_options.includeTracks );
+#ifdef PCBNEW_WITH_TRACKITEMS
+    m_Include_ThermalVias->SetValue( m_options.includeThermalVias );
+#endif
     m_Include_Zones->SetValue( m_options.includeZones );
     m_Include_Draw_Items->SetValue( m_options.includeItemsOnTechLayers );
     m_Include_Edges_Items->SetValue( m_options.includeBoardOutlineLayer );
@@ -75,6 +78,9 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
     m_options.includeModules     = m_Include_Modules->GetValue();
     m_options.includeLockedModules = m_IncludeLockedModules->GetValue();
     m_options.includeTracks      = m_Include_Tracks->GetValue();
+#ifdef PCBNEW_WITH_TRACKITEMS
+    m_options.includeThermalVias = m_Include_ThermalVias->GetValue();
+#endif
     m_options.includeZones       = m_Include_Zones->GetValue();
     m_options.includeItemsOnTechLayers  = m_Include_Draw_Items->GetValue();
     m_options.includeBoardOutlineLayer = m_Include_Edges_Items->GetValue();

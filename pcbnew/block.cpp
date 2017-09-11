@@ -341,6 +341,9 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     {
         for( TRACK* track = m_Pcb->m_Track; track != NULL; track = track->Next() )
         {
+#ifdef PCBNEW_WITH_TRACKITEMS
+            if( !((track->Type() == PCB_VIA_T) && dynamic_cast<VIA*>(track)->GetThermalCode()) )
+#endif
             if( track->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
             {
                 if( blockOpts.includeItemsOnInvisibleLayers
@@ -353,6 +356,25 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         }
     }
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    if( blockOpts.includeThermalVias )
+    {
+        for( TRACK* track = m_Pcb->m_Track; track != NULL; track = track->Next() )
+        {
+            if( ((track->Type() == PCB_VIA_T) && dynamic_cast<VIA*>(track)->GetThermalCode()) )
+                if( track->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete ) )
+                {
+                    if( blockOpts.includeItemsOnInvisibleLayers
+                    || m_Pcb->IsLayerVisible( track->GetLayer() ) )
+                    {
+                        picker.SetItem( track );
+                        itemsList->PushItem( picker );
+                    }
+                }
+        }
+    }
+#endif
+    
     // Add graphic items
     layerMask = LSET( Edge_Cuts );
 
