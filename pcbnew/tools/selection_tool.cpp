@@ -1151,6 +1151,18 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
                         && aTechnlLayerMask[layer];
             break;
         }
+#ifdef PCBNEW_WITH_TRACKITEMS
+        case PCB_VIA_T:
+        {
+            VIA* via = static_cast<VIA*>(const_cast<BOARD_ITEM*>(&aItem));
+            if( dynamic_cast<VIA*>(via)->GetThermalCode() )
+                include = aBlockOpts.includeThermalVias; //Thermal Via.
+            else
+                include = aBlockOpts.includeTracks; //Tracks via.
+            
+            break;
+        }
+#endif
         default:
         {
             // no filterering, just select it
