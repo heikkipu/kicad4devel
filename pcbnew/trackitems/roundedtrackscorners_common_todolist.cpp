@@ -98,7 +98,11 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo(void)
                 corner->ResetVisibleEndpoints();
         for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
             if(corner)
+            {
                 corner->Update();
+                if(m_EditFrame && m_EditFrame->IsGalCanvasActive())
+                    m_EditFrame->GetGalCanvas()->GetView()->Update(corner);
+            }
     }
 }
 

@@ -22,6 +22,7 @@
  */
 
 #include "teardrops.h"
+#include <view/view.h>
 
 using namespace TrackNodeItem;
 
@@ -53,7 +54,11 @@ void TEARDROPS::UpdateListDo(void)
 {
     if(m_update_list)
         for(TEARDROP* tear : *m_update_list)
+        {
             tear->Update();
+            if(m_EditFrame && m_EditFrame->IsGalCanvasActive())
+                m_EditFrame->GetGalCanvas()->GetView()->Update(tear);
+        }
 }
 
 void TEARDROPS::UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase)

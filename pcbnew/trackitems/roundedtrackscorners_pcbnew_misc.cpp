@@ -278,6 +278,9 @@ bool ROUNDEDTRACKSCORNERS::CreateCorner(std::set<TRACK*>* aTracksArced, const st
         added_picker.SetItem(new_track);
         aUndoRedoList->PushItem(added_picker);
         GetBoard()->m_Track.Insert(new_track, second_track);
+#ifdef NEWCONALGO
+        GetBoard()->GetConnectivity()->Add(new_track);
+#endif
         
         Add(new_track, half_dist_btw_tracks + 10, aUndoRedoList);
         okay = true;

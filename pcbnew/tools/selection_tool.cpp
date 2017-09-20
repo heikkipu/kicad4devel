@@ -1162,6 +1162,9 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
             
             break;
         }
+        case PCB_TEARDROP_T:
+        case PCB_ROUNDEDTRACKSCORNER_T:
+            break;
 #endif
         default:
         {
@@ -1453,6 +1456,10 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     // These are not selectable
     case NOT_USED:
     case TYPE_NOT_INIT:
+#ifdef PCBNEW_WITH_TRACKITEMS
+    case PCB_TEARDROP_T:
+    case PCB_ROUNDEDTRACKSCORNER_T:
+#endif
         return false;
 
     default:    // Suppress warnings

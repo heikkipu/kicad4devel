@@ -72,6 +72,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
 #ifdef PCBNEW_WITH_TRACKITEMS
     board->TrackItems()->Teardrops()->GalCommitPushPrepare();
     board->TrackItems()->RoundedTracksCorners()->GalCommitPushPrepare();
+    board->TrackItems()->Teardrops()->UpdateListClear();
+    board->TrackItems()->RoundedTracksCorners()->UpdateListClear();
 #endif
 
     for( COMMIT_LINE& ent : m_changes )
@@ -285,6 +287,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                     module->RunOnChildren( [&view] ( BOARD_ITEM* aItem ) { view->Update( aItem ); } );
                 }
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+                if(dynamic_cast<TRACK*>(static_cast<BOARD_ITEM*>( boardItem )))
+                {
+                    board->TrackItems()->Teardrops()->UpdateListAdd(static_cast<TRACK*>( boardItem ));
+                    if(dynamic_cast<ROUNDEDCORNERTRACK*>(static_cast<BOARD_ITEM*>( boardItem )))
+                        board->TrackItems()->RoundedTracksCorners()->UpdateListAdd(static_cast<ROUNDEDCORNERTRACK*>( boardItem ));
+                }
+#endif
                 view->Update ( boardItem );
                 ratsnest->Update( boardItem );
                 break;
@@ -297,6 +307,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
     }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
+    board->TrackItems()->RoundedTracksCorners()->UpdateListDo();
+    board->TrackItems()->Teardrops()->UpdateListDo();
     board->TrackItems()->RoundedTracksCorners()->GalCommitPushFinish( &undoList );
     board->TrackItems()->Teardrops()->GalCommitPushFinish( &undoList );
 #endif
@@ -338,6 +350,11 @@ void BOARD_COMMIT::Revert()
     BOARD* board = (BOARD*) m_toolMgr->GetModel();
     RN_DATA* ratsnest = board->GetRatsnest();
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    board->TrackItems()->Teardrops()->UpdateListClear();
+    board->TrackItems()->RoundedTracksCorners()->UpdateListClear();
+#endif
+    
     for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
     {
         COMMIT_LINE& ent = *it;
@@ -380,6 +397,14 @@ void BOARD_COMMIT::Revert()
             view->Remove( item );
             ratsnest->Remove( item );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+            if(dynamic_cast<TRACK*>(static_cast<BOARD_ITEM*>( item )))
+            {
+                board->TrackItems()->Teardrops()->UpdateListAdd(static_cast<TRACK*>( item ));
+                if(dynamic_cast<ROUNDEDCORNERTRACK*>(static_cast<BOARD_ITEM*>( item )))
+                    board->TrackItems()->RoundedTracksCorners()->UpdateListAdd(static_cast<ROUNDEDCORNERTRACK*>( item ));
+            }
+#endif
             item->SwapData( copy );
 
             item->ClearFlags( SELECTED );
@@ -404,6 +429,11 @@ void BOARD_COMMIT::Revert()
             break;
         }
     }
+
+#ifdef PCBNEW_WITH_TRACKITEMS
+    board->TrackItems()->RoundedTracksCorners()->UpdateListDo();
+    board->TrackItems()->Teardrops()->UpdateListDo();
+#endif
 
     ratsnest->Recalculate();
 

@@ -961,7 +961,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
     {
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if( ViaStitching::IsThermalVia( t ) )
+        if( (t->Type() == PCB_VIA_T) && dynamic_cast<VIA*>(t)->GetThermalCode() )
             continue;
 #endif
 
@@ -973,7 +973,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
     {
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if( ViaStitching::IsThermalVia( t ) )
+        if( (t->Type() == PCB_VIA_T) && dynamic_cast<VIA*>(t)->GetThermalCode() )
             continue;
 #endif
 
@@ -992,7 +992,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
         {
 #ifdef PCBNEW_WITH_TRACKITEMS
-            if( ViaStitching::IsThermalVia( t ) )
+            if( (t->Type() == PCB_VIA_T) && dynamic_cast<VIA*>(t)->GetThermalCode() )
                 continue;
 #endif
 

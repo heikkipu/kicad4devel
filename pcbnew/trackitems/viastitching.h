@@ -164,12 +164,6 @@ VIASTITCHING::VIA_SETTINGS GetCurrentViaSettings(const PCB_EDIT_FRAME* aEditFram
 
 const int MIN_THERMALVIA_ZONES = 1;
 
-inline int IsThermalVia(const TRACK* aItem ) {
-    if( aItem->Type() == PCB_VIA_T )
-        return dynamic_cast<VIA*>(static_cast<TRACK*>(const_cast<TRACK*>(aItem)))->GetThermalCode();
-    return 0;
-}
-
 ZONE_CONTAINER* HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer );
 
 //-----------------------------------------------------------------------------------------------------/

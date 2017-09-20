@@ -796,14 +796,14 @@ void ROUNDEDTRACKSCORNERS::ToMemory(const TRACK* aTrackSegFrom)
     m_back_corner_in_memory = dynamic_cast<ROUNDEDTRACKSCORNER*>(Back(aTrackSegFrom));
 }
 
-void ROUNDEDTRACKSCORNERS::FromMemory(const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aItemsListPicker)
+void ROUNDEDTRACKSCORNERS::FromMemory(const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList)
 {
     ROUNDEDTRACKSCORNER::PARAMS corner_params = GetParams();
     if(m_next_corner_in_memory) //Recreate next corner.
     {   
         ROUNDEDTRACKSCORNER::PARAMS params = m_next_corner_in_memory->GetParams();
         SetParams(params);
-        ROUNDEDTRACKSCORNER* added_corner = Add(const_cast<TRACK*>(aTrackSegTo), m_next_corner_in_memory->GetEnd(), aItemsListPicker);
+        ROUNDEDTRACKSCORNER* added_corner = Add(const_cast<TRACK*>(aTrackSegTo), m_next_corner_in_memory->GetEnd(), aUndoRedoList);
         if(added_corner)
             added_corner->SetLocked(m_next_corner_in_memory->IsLocked());
     }
@@ -811,7 +811,7 @@ void ROUNDEDTRACKSCORNERS::FromMemory(const TRACK* aTrackSegTo, PICKED_ITEMS_LIS
     {   
         ROUNDEDTRACKSCORNER::PARAMS params = m_back_corner_in_memory->GetParams();
         SetParams(params);
-        ROUNDEDTRACKSCORNER* added_corner = Add(const_cast<TRACK*>(aTrackSegTo), m_back_corner_in_memory->GetEnd(), aItemsListPicker);
+        ROUNDEDTRACKSCORNER* added_corner = Add(const_cast<TRACK*>(aTrackSegTo), m_back_corner_in_memory->GetEnd(), aUndoRedoList);
         if(added_corner)
             added_corner->SetLocked(m_back_corner_in_memory->IsLocked());
     }
@@ -821,8 +821,8 @@ void ROUNDEDTRACKSCORNERS::FromMemory(const TRACK* aTrackSegTo, PICKED_ITEMS_LIS
 
 void ROUNDEDTRACKSCORNERS::FromMemory(const TRACK* aTrackSegTo)
 {
-    PICKED_ITEMS_LIST itemsListPicker;
-    FromMemory(aTrackSegTo, &itemsListPicker);
+    PICKED_ITEMS_LIST undoredo_list;
+    FromMemory(aTrackSegTo, &undoredo_list);
 }
 
 void ROUNDEDTRACKSCORNERS::FromMemory(const TRACK* aTrackSegTo, BOARD_COMMIT& aCommit)

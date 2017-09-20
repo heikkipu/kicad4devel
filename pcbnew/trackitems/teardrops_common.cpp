@@ -933,10 +933,10 @@ void TEARDROPS::Recreate(const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList)
 
 void TEARDROPS::Recreate(const int aNetCodeTo, const bool aUndo)
 {
-    PICKED_ITEMS_LIST pickedItemsList;
-    Recreate(aNetCodeTo, &pickedItemsList);
+    PICKED_ITEMS_LIST undoredo_list;
+    Recreate(aNetCodeTo, &undoredo_list);
     if(aUndo && m_EditFrame)
-        m_EditFrame->SaveCopyInUndoList(pickedItemsList, UR_NEW);
+        m_EditFrame->SaveCopyInUndoList(undoredo_list, UR_NEW);
 }
 
 //move, rotate, flip, drag modules for.
@@ -959,10 +959,10 @@ void TEARDROPS::Recreate(const MODULE* aModuleTo, const bool aUndo)
     if(aModuleTo)
         if(aModuleTo->Type() == PCB_MODULE_T)
         {
-            PICKED_ITEMS_LIST pickedItemsList;
-            Recreate(aModuleTo, &pickedItemsList);
+            PICKED_ITEMS_LIST undoredo_list;
+            Recreate(aModuleTo, &undoredo_list);
             if(aUndo && m_EditFrame)
-                m_EditFrame->SaveCopyInUndoList(pickedItemsList, UR_NEW);
+                m_EditFrame->SaveCopyInUndoList(undoredo_list, UR_NEW);
         }
 }
 
@@ -1022,10 +1022,10 @@ void TEARDROPS::Recreate(const D_PAD* aPadTo, const bool aUndo)
 {
     if(aPadTo)
     {
-        PICKED_ITEMS_LIST pickedItemsList;
-        Recreate(aPadTo, &pickedItemsList);
+        PICKED_ITEMS_LIST undoredo_list;
+        Recreate(aPadTo, &undoredo_list);
         if(aUndo && m_EditFrame)
-            m_EditFrame->SaveCopyInUndoList(pickedItemsList, UR_NEW);
+            m_EditFrame->SaveCopyInUndoList(undoredo_list, UR_NEW);
     }
 }
 

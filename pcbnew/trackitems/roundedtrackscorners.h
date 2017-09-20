@@ -119,7 +119,7 @@ private:
 public:
     //Save 
     void ToMemory(const TRACK* aTrackSegFrom);
-    void FromMemory(const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aItemsListPicker);
+    void FromMemory(const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList);
     void FromMemory(const TRACK* aTrackSegTo);
     void FromMemory(const TRACK* aTrackSegTo, BOARD_COMMIT& aCommit);
 

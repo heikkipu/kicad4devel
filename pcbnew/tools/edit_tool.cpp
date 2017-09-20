@@ -68,6 +68,10 @@ using namespace std::placeholders;
 
 #include <board_commit.h>
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+#include <trackitems/trackitems.h>
+#endif
+
 // Edit tool actions
 TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
@@ -297,10 +301,27 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 totalMovement += movement;
 
                 // Drag items to the current cursor position
+#ifdef PCBNEW_WITH_TRACKITEMS
+                editFrame->GetBoard()->TrackItems()->Teardrops()->UpdateListClear();
+                editFrame->GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListClear();
+                for( auto item : selection )
+                {
+                    if(dynamic_cast<TRACK*>(static_cast<BOARD_ITEM*>( item )))
+                    {
+                        editFrame->GetBoard()->TrackItems()->Teardrops()->UpdateListAdd(static_cast<TRACK*>( item ));
+                        if(dynamic_cast<ROUNDEDCORNERTRACK*>(static_cast<BOARD_ITEM*>( item )))
+                            editFrame->GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListAdd(static_cast<ROUNDEDCORNERTRACK*>( item ));
+                    }
+                    static_cast<BOARD_ITEM*>( item )->Move( movement + m_offset );
+                }
+                editFrame->GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListDo();
+                editFrame->GetBoard()->TrackItems()->Teardrops()->UpdateListDo();
+#else
                 for( auto item : selection )
                 {
                     static_cast<BOARD_ITEM*>( item )->Move( movement + m_offset );
                 }
+#endif
             }
             else if( !m_dragging )    // Prepare to start dragging
             {
