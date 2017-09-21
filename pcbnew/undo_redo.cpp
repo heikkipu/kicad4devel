@@ -556,6 +556,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             {
                 dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(item)->ConnectTrackSegs();
                 dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(item)->ResetVisibleEndpoints();
+                GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListAdd( static_cast<TRACK*>(item) );
             }
 #endif
             view->Add( item );

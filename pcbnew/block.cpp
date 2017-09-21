@@ -845,7 +845,7 @@ void PCB_EDIT_FRAME::Block_Move()
     }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo();
+    m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo_RemoveBroken(itemsList);
     m_Pcb->TrackItems()->Teardrops()->UpdateListDo();
 #endif
 

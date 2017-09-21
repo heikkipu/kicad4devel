@@ -137,6 +137,7 @@ public:
     void UpdateListClear(void);
     void UpdateListAdd(const TRACK* aTrackSegFrom);
     void UpdateListDo(void);
+    void UpdateListDo_RemoveBroken(PICKED_ITEMS_LIST* aUndoRedoList);
     void UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase);
     void UpdateListDo_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase);
     void UpdateListDo_UndoRedo(void);

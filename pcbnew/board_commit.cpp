@@ -307,7 +307,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
     }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    board->TrackItems()->RoundedTracksCorners()->UpdateListDo();
+    board->TrackItems()->RoundedTracksCorners()->UpdateListDo_RemoveBroken( &undoList );
     board->TrackItems()->Teardrops()->UpdateListDo();
     board->TrackItems()->RoundedTracksCorners()->GalCommitPushFinish( &undoList );
     board->TrackItems()->Teardrops()->GalCommitPushFinish( &undoList );

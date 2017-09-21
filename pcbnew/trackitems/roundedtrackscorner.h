@@ -94,6 +94,8 @@ namespace TrackNodeItem
         void ReleaseTrackSegs(void);
         void ConnectTrackSegs(void);
         void ResetVisibleEndpoints(void);
+        bool AreTracksConnected(void);
+        
         TRACK* GetTrackSegSecond(void) const { return m_trackseg_second; }
         wxPoint GetPointInArc(const wxPoint aFromPos, const double aLength) const;
 

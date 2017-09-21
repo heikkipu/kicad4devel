@@ -152,6 +152,34 @@ void ROUNDEDTRACKSCORNER::SetTracksVisibleEndpoints(void)
     }
 }
 
+bool ROUNDEDTRACKSCORNER::AreTracksConnected(void)
+{
+    if(m_trackseg && m_trackseg_second)
+    {
+        wxPoint trackseg_pos;
+        wxPoint trackseg_second_pos;
+        if(dynamic_cast<ROUNDEDCORNERTRACK*>(m_trackseg))
+        {
+            if(m_trackstartpos_is_pos)
+                trackseg_pos = m_trackseg->GetStart();
+            else
+                trackseg_pos = m_trackseg->GetEnd();
+        }
+        if(dynamic_cast<ROUNDEDCORNERTRACK*>(m_trackseg_second))
+        {
+            if(m_trackseg_second_startpos_is_pos)
+                trackseg_second_pos = m_trackseg_second->GetStart();
+            else
+                trackseg_second_pos = m_trackseg_second->GetEnd();
+        }
+        
+        if((trackseg_pos == trackseg_second_pos) && (m_trackseg->GetLayer() == m_trackseg_second->GetLayer()))
+            return true;
+    }
+    
+    return false;
+}
+
 bool ROUNDEDTRACKSCORNER::Update(void)
 {
     if(!TRACKNODEITEM::Update() || !m_trackseg_second)
@@ -166,7 +194,7 @@ bool ROUNDEDTRACKSCORNER::Update(void)
     m_angle_btw_tracks = AngleBtwTracks(m_trackseg, m_connected_pos, m_trackseg_second, m_connected_pos);
     m_angle_inner_btw_tracks = InnerAngle(m_angle_btw_tracks);
     m_angle_inner_half = m_angle_inner_btw_tracks / 2.0;
-    if((m_angle_btw_tracks == M_PI) || (Rad2MilsInt(m_angle_inner_btw_tracks) < RAD_90_MILS_INT))
+    if((m_angle_btw_tracks == M_PI) || (Rad2MilsInt(m_angle_inner_btw_tracks) < RAD_90_MILS_INT) || !AreTracksConnected())
     {
         SetNotOKValues();
         return false;
@@ -184,7 +212,7 @@ void ROUNDEDTRACKSCORNER::SetNotOKValues(void)
     m_pos_end = m_connected_pos;
     m_pos_start = m_connected_pos;
     m_mid_pos = m_connected_pos;
-    SetTracksVisibleEndpoints();
+    ResetVisibleEndpoints();
 }
 
 void ROUNDEDTRACKSCORNER::SetArc(void)

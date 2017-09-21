@@ -104,6 +104,10 @@ void TEARDROPS::UpdateListDo_UndoRedo(void)
         {
             tear->SetTrackEndpoint();
             tear->Update();
+            
+            //GAL
+            if( m_EditFrame && m_EditFrame->IsGalCanvasActive() )
+                m_EditFrame->GetGalCanvas()->GetView()->Update(tear);
         }
 }
 

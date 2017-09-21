@@ -106,6 +106,21 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo(void)
     }
 }
 
+void ROUNDEDTRACKSCORNERS::UpdateListDo_RemoveBroken(PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    //Modifiesd and connected tracks connection point is different.
+    for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
+        if(corner)
+        {
+            if(!corner->AreTracksConnected())
+            {
+                Remove(corner, aUndoRedoList, false, true);
+            }
+        }
+        
+    UpdateListDo();
+}
+
 void ROUNDEDTRACKSCORNERS::UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase)
 {
     if(m_update_tracks_list)
@@ -140,7 +155,11 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_UndoRedo(void)
     {
         for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
             if(corner)
+            {
+                corner->ConnectTrackSegs();
                 corner->ResetVisibleEndpoints();
+            }
+            
         for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
         {
             if(corner)
@@ -153,11 +172,16 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_UndoRedo(void)
     }
     
     //GAL
-    if(m_EditFrame)
-        if( m_EditFrame->IsGalCanvasActive() )
-            if(m_update_tracks_list)
-                for(auto r_t: *m_update_tracks_list )
-                    m_EditFrame->GetGalCanvas()->GetView()->Update(r_t, KIGFX::GEOMETRY);
+    if( m_EditFrame && m_EditFrame->IsGalCanvasActive() )
+    {
+        if(m_update_tracks_list)
+            for(auto r_t: *m_update_tracks_list )
+                m_EditFrame->GetGalCanvas()->GetView()->Update(r_t, KIGFX::GEOMETRY);
+        for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
+            if(corner)
+                m_EditFrame->GetGalCanvas()->GetView()->Update(corner);
+            
+    }
 }
 
 void ROUNDEDTRACKSCORNERS::UpdateListDo_BlockDuplicate(const wxPoint aMoveVector, PICKED_ITEMS_LIST* aUndoRedoList)
