@@ -36,12 +36,12 @@ void ROUNDEDTRACKSCORNERS::AddToDragList(const TRACK* aTrackFrom, std::vector<DR
     {
         for(int n = 0; n < 2; ++n)
         {
-            ROUNDEDTRACKSCORNER* corner = nullptr;
-            n? corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Back(aTrackFrom)) : corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Next(aTrackFrom));
+            TRACKNODEITEM* item = nullptr;
+            n? item = Back(aTrackFrom) : item = Next(aTrackFrom);
 
-            if(corner)
+            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
             {
-                DRAG_SEGM_PICKER wrapper(corner);
+                DRAG_SEGM_PICKER wrapper(static_cast<ROUNDEDTRACKSCORNER*>(item));
                 aDragSegList.push_back(wrapper);
             }
         }

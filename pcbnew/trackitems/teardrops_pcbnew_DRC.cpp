@@ -543,9 +543,10 @@ unsigned int TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::DoAtPad(const D_PAD* aPa
             {
                 if((track_seg->Type() == PCB_TRACE_T) && ((track_seg->GetEnd() == pad_pos) || (track_seg->GetStart() == pad_pos)))
                 {
-                    TEARDROP* tear = dynamic_cast<TEARDROP*>(m_Parent->Get(track_seg, pad_pos));
-                    if(tear)
+                    TRACKNODEITEM* item = m_Parent->Get(track_seg, pad_pos);
+                    if(item && dynamic_cast<TEARDROP*>(item))
                     {
+                        TEARDROP* tear = static_cast<TEARDROP*>(item);
                         if(!tear->IsLocked()) //Warn only unlocked.
                         {
                             //Trimmed
@@ -575,9 +576,11 @@ unsigned int TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::DoAtPad(const D_PAD* aPa
                             wxPoint opp_seg_pos = track_seg->GetEnd();
                             if(track_seg->GetEnd() == tear->GetEnd())
                                 opp_seg_pos = track_seg->GetStart();
-                            TEARDROP* opp_tear = dynamic_cast<TEARDROP*>(m_Parent->Get(track_seg, opp_seg_pos));
-                            if(opp_tear)
+                            
+                            TRACKNODEITEM* t_item = m_Parent->Get(track_seg, opp_seg_pos);
+                            if(t_item && dynamic_cast<TEARDROP*>(t_item))
                             {
+                                TEARDROP* opp_tear = static_cast<TEARDROP*>(t_item);
                                 if(opp_tear->GetShape() != TEARDROP::ZERO_T)
                                 {
                                     int tears_lengths = tear->GetRealLength();
@@ -791,9 +794,10 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_WARNINGS::ExecuteItem(const BOARD_I
                 wxPoint opp_seg_pos = tears_track_seg->GetEnd();
                 if(tears_track_seg->GetEnd() == tear->GetEnd())
                     opp_seg_pos = tears_track_seg->GetStart();
-                TEARDROP* opp_tear = dynamic_cast<TEARDROP*>(m_Parent->Get(tears_track_seg, opp_seg_pos));
-                if(opp_tear)
+                TRACKNODEITEM* item = m_Parent->Get(tears_track_seg, opp_seg_pos);
+                if(item && dynamic_cast<TEARDROP*>(item))
                 {
+                    TEARDROP* opp_tear = static_cast<TEARDROP*>(item);
                     if(opp_tear->GetShape() != TEARDROP::ZERO_T)
                     {
                         int tears_lengths = tear->GetRealLength();

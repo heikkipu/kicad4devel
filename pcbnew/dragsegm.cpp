@@ -303,8 +303,7 @@ void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC )
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         TRACK* track = g_DragSegmentList[ii].m_Track;
-        if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
-            pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( track );
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( track );
     }
     pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks( panel, DC, GR_XOR );
 #endif

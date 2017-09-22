@@ -179,10 +179,10 @@ bool TEARDROPS::Clean(const DLIST<TRACK>* aTracksAt)
 void TEARDROPS::Lock(const TRACK* aTrackSegAt, const wxPoint& aCurPosAt, const DLIST<TRACK>* aTracksAt)
 {
     wxPoint track_pos = TrackSegNearestEndpoint(aTrackSegAt, aCurPosAt);
-    TEARDROP* tear = dynamic_cast<TEARDROP*>(Get(aTrackSegAt, track_pos));
-    if(tear)
+    TRACKNODEITEM* item = Get(aTrackSegAt, track_pos);
+    if(item && dynamic_cast<TEARDROP*>(item))
     {
-        std::unique_ptr<TRACKS_PROGRESS_LOCK_SAME> to_lock(new TRACKS_PROGRESS_LOCK_SAME(this, aTracksAt, tear->GetParams()));
+        std::unique_ptr<TRACKS_PROGRESS_LOCK_SAME> to_lock(new TRACKS_PROGRESS_LOCK_SAME(this, aTracksAt, static_cast<TEARDROP*>(item)->GetParams()));
         if(to_lock)
             to_lock->Execute();
     }
@@ -191,10 +191,10 @@ void TEARDROPS::Lock(const TRACK* aTrackSegAt, const wxPoint& aCurPosAt, const D
 void TEARDROPS::Unlock(const TRACK* aTrackSegAt, const wxPoint& aCurPosAt, const DLIST<TRACK>* aTracksAt)
 {
     wxPoint track_pos = TrackSegNearestEndpoint(aTrackSegAt, aCurPosAt);
-    TEARDROP* tear = dynamic_cast<TEARDROP*>(Get(aTrackSegAt, track_pos));
-    if(tear)
+    TRACKNODEITEM* item = Get(aTrackSegAt, track_pos);
+    if(item && dynamic_cast<TEARDROP*>(item))
     {
-        std::unique_ptr<TRACKS_PROGRESS_UNLOCK_SAME> to_unlock(new TRACKS_PROGRESS_UNLOCK_SAME(this, aTracksAt, tear->GetParams()));
+        std::unique_ptr<TRACKS_PROGRESS_UNLOCK_SAME> to_unlock(new TRACKS_PROGRESS_UNLOCK_SAME(this, aTracksAt, static_cast<TEARDROP*>(item)->GetParams()));
         if(to_unlock)
             to_unlock->Execute();
     }

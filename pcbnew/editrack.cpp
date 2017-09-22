@@ -706,8 +706,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
         {
             GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListClear();
             for( auto tr : added_tracksegs )
-                if(dynamic_cast<ROUNDEDCORNERTRACK*>(tr))
-                    GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
+                GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
             GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListDo( m_canvas, aDC, GR_OR, false );
             GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks( m_canvas, aDC, GR_XOR );
             GetBoard()->TrackItems()->Teardrops()->UpdateListClear();
@@ -905,10 +904,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     pcb->TrackItems()->RoundedTracksCorners()->UpdateListClear();
     int tcount = g_CurrentTrackList.GetCount();
     for( TRACK* tr = g_CurrentTrackList; tcount > 0 && tr; tcount--, tr = tr->Next() )
-    {
-        if(dynamic_cast<ROUNDEDCORNERTRACK*>(tr))
-            pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
-    }
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
 #endif
     if( aErase )
     {
@@ -1005,8 +1001,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         pcb->TrackItems()->RoundedTracksCorners()->UpdateListClear();
         tcount = g_CurrentTrackList.GetCount();
         for( TRACK* tr = g_CurrentTrackList; tcount > 0 && tr; tcount--, tr = tr->Next() )
-            if(dynamic_cast<ROUNDEDCORNERTRACK*>(tr))
-                pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
+            pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
         pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo_Route( aPanel, aDC, aErase );
         pcb->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(arc_cor));
         pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks_Route( aPanel, aDC, false );

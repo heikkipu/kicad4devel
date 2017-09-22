@@ -288,12 +288,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                 }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-                if(dynamic_cast<TRACK*>(static_cast<BOARD_ITEM*>( boardItem )))
-                {
-                    board->TrackItems()->Teardrops()->UpdateListAdd(static_cast<TRACK*>( boardItem ));
-                    if(dynamic_cast<ROUNDEDCORNERTRACK*>(static_cast<BOARD_ITEM*>( boardItem )))
-                        board->TrackItems()->RoundedTracksCorners()->UpdateListAdd(static_cast<ROUNDEDCORNERTRACK*>( boardItem ));
-                }
+                board->TrackItems()->Teardrops()->UpdateListAdd( boardItem );
+                board->TrackItems()->RoundedTracksCorners()->UpdateListAdd( boardItem );
 #endif
                 view->Update ( boardItem );
                 ratsnest->Update( boardItem );
@@ -398,12 +394,8 @@ void BOARD_COMMIT::Revert()
             ratsnest->Remove( item );
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-            if(dynamic_cast<TRACK*>(static_cast<BOARD_ITEM*>( item )))
-            {
-                board->TrackItems()->Teardrops()->UpdateListAdd(static_cast<TRACK*>( item ));
-                if(dynamic_cast<ROUNDEDCORNERTRACK*>(static_cast<BOARD_ITEM*>( item )))
-                    board->TrackItems()->RoundedTracksCorners()->UpdateListAdd(static_cast<ROUNDEDCORNERTRACK*>( item ));
-            }
+            board->TrackItems()->Teardrops()->UpdateListAdd( item );
+            board->TrackItems()->RoundedTracksCorners()->UpdateListAdd( item );
 #endif
             item->SwapData( copy );
 

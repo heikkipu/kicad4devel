@@ -53,8 +53,7 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
     for( unsigned jj=0 ; jj < g_DragSegmentList.size(); jj++ )
     {
         TRACK* tr = g_DragSegmentList[jj].m_Track;
-        if(dynamic_cast<ROUNDEDCORNERTRACK*>(tr))
-            pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
     }
 #endif
     
@@ -109,8 +108,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         TRACK* tr = g_DragSegmentList[ii].m_Track;
-        if(dynamic_cast<ROUNDEDCORNERTRACK*>(tr))
-            pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
+        pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
     }
     pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks( aPanel, aDC, GR_XOR );
 #endif

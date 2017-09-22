@@ -41,16 +41,26 @@ void ROUNDEDTRACKSCORNERS::UpdateListAdd(const ROUNDEDTRACKSCORNER* aCorner)
         
         //Must collect connected tracks corners too.
         TRACK* track = aCorner->GetTrackSeg();
-        m_update_list->insert(dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(track, track->GetStart())));
-        m_update_list->insert(dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(track, track->GetEnd())));
-        //aUpdatedTracks.insert(static_cast<ROUNDEDCORNERTRACK*>(track));
         m_update_tracks_list->insert(static_cast<ROUNDEDCORNERTRACK*>(track));
         
+        TRACKNODEITEM* item = Get(track, track->GetStart());
+        if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+        m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
+        
+        item = Get(track, track->GetEnd());
+        if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+        m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
+        
         track = aCorner->GetTrackSegSecond();
-        m_update_list->insert(dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(track, track->GetStart())));
-        m_update_list->insert(dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(track, track->GetEnd())));
-        //aUpdatedTracks.insert(static_cast<ROUNDEDCORNERTRACK*>(track));
         m_update_tracks_list->insert(static_cast<ROUNDEDCORNERTRACK*>(track));
+
+        item = Get(track, track->GetStart());
+        if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+        m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
+        
+        item = Get(track, track->GetEnd());
+        if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+        m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
     }
 }
 
@@ -66,17 +76,24 @@ void ROUNDEDTRACKSCORNERS::UpdateListAdd(const TRACK* aTrackSegFrom)
         {
             m_update_tracks_list->insert(static_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSegFrom)));
             
-            ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Next(aTrackSegFrom));
-            if(corner)
-                UpdateListAdd(corner); 
+            TRACKNODEITEM* item = Next(aTrackSegFrom);
+            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+                UpdateListAdd(static_cast<ROUNDEDTRACKSCORNER*>(item)); 
 
-            corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Back(aTrackSegFrom));
-            if(corner)
-                UpdateListAdd(corner); 
+            item = Back(aTrackSegFrom);
+            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+                UpdateListAdd(static_cast<ROUNDEDTRACKSCORNER*>(item)); 
         }
     }
 }
 
+void ROUNDEDTRACKSCORNERS::UpdateListAdd(const BOARD_ITEM* aBoardItem)
+{
+    if(dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aBoardItem)))
+        if(dynamic_cast<ROUNDEDCORNERTRACK*>(static_cast<BOARD_ITEM*>(const_cast<BOARD_ITEM*>(aBoardItem))))
+            UpdateListAdd(static_cast<ROUNDEDCORNERTRACK*>(const_cast<BOARD_ITEM*>(aBoardItem)));
+}
+                
 void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode)
 {
     if(m_update_tracks_list)
@@ -111,12 +128,8 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_RemoveBroken(PICKED_ITEMS_LIST* aUndoRed
     //Modifiesd and connected tracks connection point is different.
     for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
         if(corner)
-        {
             if(!corner->AreTracksConnected())
-            {
                 Remove(corner, aUndoRedoList, false, true);
-            }
-        }
         
     UpdateListDo();
 }

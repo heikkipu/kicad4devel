@@ -50,6 +50,12 @@ void TEARDROPS::UpdateListAdd(const ROUNDEDTRACKSCORNERS::RoundedCornerTrack_Con
         UpdateListAdd( track );
 }
 
+void TEARDROPS::UpdateListAdd(const BOARD_ITEM* aBoardItem)
+{
+    if(dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aBoardItem)))
+        UpdateListAdd(static_cast<TRACK*>(const_cast<BOARD_ITEM*>(aBoardItem)));
+}
+
 void TEARDROPS::UpdateListDo(void)
 {
     if(m_update_list)
@@ -182,12 +188,12 @@ void TEARDROPS::AddToDoList(const TRACK* aTrackSegFrom, Teardrop_Container* aLis
         if(aTrackSegFrom->Type() == PCB_TEARDROP_T)
             aListToAdd->insert(static_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSegFrom))); 
         
-        TEARDROP* tear = dynamic_cast<TEARDROP*>(Next(aTrackSegFrom));
-        if(tear)
-            aListToAdd->insert(tear); 
+        TRACKNODEITEM* item = Next(aTrackSegFrom);
+        if(item && dynamic_cast<TEARDROP*>(item))
+            aListToAdd->insert(static_cast<TEARDROP*>(item)); 
 
-        tear = dynamic_cast<TEARDROP*>(Back(aTrackSegFrom));
-        if(tear)
-            aListToAdd->insert(tear); 
+        item = Back(aTrackSegFrom);
+        if(item && dynamic_cast<TEARDROP*>(item))
+            aListToAdd->insert(static_cast<TEARDROP*>(item)); 
     }
 }

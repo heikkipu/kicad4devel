@@ -35,19 +35,11 @@ void TEARDROPS::AddToDragList(const TRACK* aTrackFrom, std::vector<DRAG_SEGM_PIC
     {
         for(int n = 0; n < 2; ++n)
         {
-            TEARDROP* tear = nullptr;
-            switch(n)
+            TRACKNODEITEM* item = nullptr;
+            n? item = Back(aTrackFrom) : item = Next(aTrackFrom);
+            if(item && dynamic_cast<TEARDROP*>(item))
             {
-                case 0:
-                    tear = dynamic_cast<TEARDROP*>(Next(aTrackFrom));
-                    break;
-                case 1:
-                    tear = dynamic_cast<TEARDROP*>(Back(aTrackFrom));
-                    break;
-            }
-            if(tear)
-            {
-                DRAG_SEGM_PICKER wrapper(tear);
+                DRAG_SEGM_PICKER wrapper(static_cast<TEARDROP*>(item));
                 aDragSegList.push_back(wrapper);
             }
         }

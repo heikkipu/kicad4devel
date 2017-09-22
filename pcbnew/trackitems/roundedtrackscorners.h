@@ -136,6 +136,7 @@ public:
     using RoundedCornerTrack_Container = std::set<ROUNDEDCORNERTRACK*>;
     void UpdateListClear(void);
     void UpdateListAdd(const TRACK* aTrackSegFrom);
+    void UpdateListAdd(const BOARD_ITEM* aBoardItem);
     void UpdateListDo(void);
     void UpdateListDo_RemoveBroken(PICKED_ITEMS_LIST* aUndoRedoList);
     void UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase);

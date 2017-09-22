@@ -100,13 +100,14 @@ void TEARDROPS::CollectCommit(const TRACK* aTrackSegFrom, std::set<TRACK*>* aCom
 {
     if(aTrackSegFrom && aCommitContainer)
     {
-        TEARDROP* tear = nullptr;
         for(unsigned int n = 0; n < 2; ++n)
         {
-            n? tear = dynamic_cast<TEARDROP*>(Next(aTrackSegFrom)) : tear = dynamic_cast<TEARDROP*>(Back(aTrackSegFrom));
+            TRACKNODEITEM* item = nullptr;
+            n? item = Next(aTrackSegFrom) : item = Back(aTrackSegFrom);
             
-            if(tear)
+            if(item && dynamic_cast<TEARDROP*>(item))
             {
+                TEARDROP* tear = static_cast<TEARDROP*>(item);
                 if(aLockedToo || (!aLockedToo && !tear->IsLocked()))
                 {
                     if(tear->GetTrackSeg() == aTrackSegFrom)

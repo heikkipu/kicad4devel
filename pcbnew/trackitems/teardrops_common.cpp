@@ -550,14 +550,15 @@ void TEARDROPS::Remove(const BOARD_CONNECTED_ITEM* aItemFrom, PICKED_ITEMS_LIST*
                 }
                 else
                 {
-                    TEARDROP* tear = nullptr;
                     for(unsigned int n = 0; n < 2; ++n)
                     {
-                        n? tear = dynamic_cast<TEARDROP*>(Next(static_cast<TRACK*>(const_cast<BOARD_CONNECTED_ITEM*>(aItemFrom)))) :
-                            tear = dynamic_cast<TEARDROP*>(Back(static_cast<TRACK*>(const_cast<BOARD_CONNECTED_ITEM*>(aItemFrom))));
+                        TRACKNODEITEM* item = nullptr;
+                        n? item = Next(static_cast<TRACK*>(const_cast<BOARD_CONNECTED_ITEM*>(aItemFrom))) :
+                           item = Back(static_cast<TRACK*>(const_cast<BOARD_CONNECTED_ITEM*>(aItemFrom)));
 
-                        if(tear)
+                        if(item && dynamic_cast<TEARDROP*>(item))
                         {
+                            TEARDROP* tear = static_cast<TEARDROP*>(item);
                             if(aLockedToo || (!aLockedToo && !tear->IsLocked()))
                             {
                                 if(tear->GetTrackSeg() == static_cast<TRACK*>(const_cast<BOARD_CONNECTED_ITEM*>(aItemFrom)))
@@ -1067,8 +1068,14 @@ void TEARDROPS::ToMemory(const TRACK* aTrackSegFrom)
 {
     m_next_tear_in_memory = nullptr;
     m_back_tear_in_memory = nullptr;
-    m_next_tear_in_memory = dynamic_cast<TEARDROP*>(Get(aTrackSegFrom, aTrackSegFrom->GetEnd()));
-    m_back_tear_in_memory = dynamic_cast<TEARDROP*>(Get(aTrackSegFrom, aTrackSegFrom->GetStart()));
+    
+    TRACKNODEITEM* item = Get(aTrackSegFrom, aTrackSegFrom->GetEnd());
+    if(item && dynamic_cast<TEARDROP*>(item))
+        m_next_tear_in_memory = static_cast<TEARDROP*>(item);
+
+    item = Get(aTrackSegFrom, aTrackSegFrom->GetStart());
+    if(item && dynamic_cast<TEARDROP*>(item))
+        m_back_tear_in_memory = static_cast<TEARDROP*>(item);
 }
 
 void TEARDROPS::FromMemory(const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList)
@@ -1122,9 +1129,12 @@ void TEARDROPS::FromMemory(const TRACK* aTrackSegTo, BOARD_COMMIT& aCommit)
 void TEARDROPS::LockToggle(const TRACK* aTrackSegAt, const wxPoint& aCurPosAt)
 {
     wxPoint track_pos = TrackSegNearestEndpoint(aTrackSegAt, aCurPosAt);
-    TEARDROP* tear = dynamic_cast<TEARDROP*>(Get(aTrackSegAt, track_pos));
-    if(tear)
+    TRACKNODEITEM* item = Get(aTrackSegAt, track_pos);
+    if(item && dynamic_cast<TEARDROP*>(item))
+    {
+        TEARDROP* tear = static_cast<TEARDROP*>(item);
         tear->SetLocked(!tear->IsLocked());
+    }
 }
 
 TEARDROPS::NET_SCAN_PAD_LOCK::NET_SCAN_PAD_LOCK(const D_PAD* aPad, const TEARDROPS* aParent) : NET_SCAN_PAD_BASE(aPad, aParent)
@@ -1312,7 +1322,10 @@ TEARDROPS::NET_SCAN_PAD_EMPTY::NET_SCAN_PAD_EMPTY(const D_PAD* aPad, const TEARD
 
 bool TEARDROPS::NET_SCAN_PAD_EMPTY::ExecuteAt(TRACK* aTrackSeg)
 {
-    TEARDROP* tear = dynamic_cast<TEARDROP*>(m_Parent->Get(aTrackSeg, m_pad_pos));
+    TRACKNODEITEM* item = m_Parent->Get(aTrackSeg, m_pad_pos);
+    TEARDROP* tear = nullptr;
+    if(item && dynamic_cast<TEARDROP*>(item))
+        tear = static_cast<TEARDROP*>(item);
     if(!tear)
     {
         ++m_num_tears;
@@ -1407,7 +1420,10 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
                 wxPoint pad_pos = pad->GetPosition();
                 if((aTrackSeg->GetStart() == pad_pos) || (aTrackSeg->GetEnd() == pad_pos))
                 {
-                    TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos));
+                    TEARDROP* tear = nullptr;
+                    TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos);
+                    if(item && dynamic_cast<TEARDROP*>(item))
+                        tear = static_cast<TEARDROP*>(item);
                     if(!tear)
                     {
                         m_result_value = true;
@@ -1421,7 +1437,10 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
                 wxPoint pad_pos = aTrackSeg->m_PadsConnected.at(m)->GetPosition();
                 if((aTrackSeg->GetStart() == pad_pos) || (aTrackSeg->GetEnd() == pad_pos))
                 {
-                    TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos));
+                    TEARDROP* tear = nullptr;
+                    TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos);
+                    if(item && dynamic_cast<TEARDROP*>(item))
+                        tear = static_cast<TEARDROP*>(item);
                     if(!tear)
                     {
                         m_result_value = true;
@@ -1448,7 +1467,10 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
                         TRACK* track_back = nullptr;
                         if(Find_T_Tracks(aTrackSeg, track_pos, track_next, track_back))
                         {
-                            TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, track_pos));
+                            TEARDROP* tear = nullptr;
+                            TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, track_pos);
+                            if(item && dynamic_cast<TEARDROP*>(item))
+                                tear = static_cast<TEARDROP*>(item);
                             if(!tear)
                             {
                                 m_result_value = true;
@@ -1463,7 +1485,10 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt(TRACK* aTrackSeg)
                         if(tracks_list.size())
                             if(TrackNodeItem::GetMaxWidth(tracks_list) > aTrackSeg->GetWidth())
                             {
-                                TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, track_pos));
+                                TEARDROP* tear = nullptr;
+                                TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, track_pos);
+                                if(item && dynamic_cast<TEARDROP*>(item))
+                                    tear = static_cast<TEARDROP*>(item);
                                 if(!tear)
                                 {
                                     m_result_value = true;
@@ -1611,7 +1636,10 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
                 wxPoint pad_pos = pad->GetPosition();
                 if((aTrackSeg->GetStart() == pad_pos) || (aTrackSeg->GetEnd() == pad_pos))
                 {
-                    TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos));
+                    TEARDROP* tear = nullptr;
+                    TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos);
+                    if(item && dynamic_cast<TEARDROP*>(item))
+                        tear = static_cast<TEARDROP*>(item);
                     if(tear)
                     {
                         m_result_value = true;
@@ -1625,7 +1653,10 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
                 wxPoint pad_pos = aTrackSeg->m_PadsConnected.at(m)->GetPosition();
                 if((aTrackSeg->GetStart() == pad_pos) || (aTrackSeg->GetEnd() == pad_pos))
                 {
-                    TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos));
+                    TEARDROP* tear = nullptr;
+                    TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, pad_pos);
+                    if(item && dynamic_cast<TEARDROP*>(item))
+                        tear = static_cast<TEARDROP*>(item);
                     if(tear)
                     {
                         m_result_value = true;
@@ -1652,7 +1683,10 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
                     TRACK* track_back = nullptr;
                     if(Find_T_Tracks(aTrackSeg, track_pos, track_next, track_back))
                     {
-                        TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, track_pos));
+                        TEARDROP* tear = nullptr;
+                        TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, track_pos);
+                        if(item && dynamic_cast<TEARDROP*>(item))
+                            tear = static_cast<TEARDROP*>(item);
                         if(tear)
                         {
                             m_result_value = true;
@@ -1667,7 +1701,10 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt(TRACK* aTrackSeg)
                     if(tracks_list.size())
                         if(TrackNodeItem::GetMaxWidth(tracks_list) > aTrackSeg->GetWidth())
                         {
-                            TEARDROP* tear = dynamic_cast<TEARDROP*>(dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, track_pos));
+                            TEARDROP* tear = nullptr;
+                            TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>(m_Parent)->Get(aTrackSeg, track_pos);
+                            if(item && dynamic_cast<TEARDROP*>(item))
+                                tear = static_cast<TEARDROP*>(item);
                             if(tear)
                             {
                                 m_result_value = true;
@@ -1712,11 +1749,16 @@ bool TEARDROPS::IsTrimmed(const TRACK* aTrackSeg) const
         if(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSeg)))
             t_length = dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrackSeg))->GetLengthVisible();
         
-        tear = dynamic_cast<TEARDROP*>(Next(aTrackSeg));
+        TEARDROP* tear = nullptr;
+        TRACKNODEITEM* item = Next(aTrackSeg);
+        if(item && dynamic_cast<TEARDROP*>(item))
+            tear = static_cast<TEARDROP*>(item);
         if(tear && (tear->GetCalcLength() >= t_length))
             return true;
         
-        tear = dynamic_cast<TEARDROP*>(Back(aTrackSeg));
+        item = Back(aTrackSeg);
+        if(item && dynamic_cast<TEARDROP*>(item))
+            tear = static_cast<TEARDROP*>(item);
         if(tear && (tear->GetCalcLength() >= t_length))
             return true;
     }
@@ -1897,7 +1939,12 @@ bool TEARDROPS::NET_SCAN_PAD_UPDATE::ExecuteAt(TRACK* aTrackSeg)
     {
         wxPoint pos;
         (n)? pos = aTrackSeg->GetEnd() : pos = aTrackSeg->GetStart();
-        TEARDROP* tear = dynamic_cast<TEARDROP*>(m_Parent->Get(aTrackSeg, pos));
+        
+        TEARDROP* tear = nullptr;
+        TRACKNODEITEM* item = m_Parent->Get(aTrackSeg, pos);
+        if(item && dynamic_cast<TEARDROP*>(item))
+            tear = static_cast<TEARDROP*>(item);
+        
         if(tear)
         {
             tear->Update();
@@ -2210,7 +2257,12 @@ TEARDROP::PARAMS TEARDROPS::CopyCurrentParams(const TRACK* aTrackSegAt, const wx
 {
     TEARDROP::PARAMS tear_params = {TEARDROP::NULL_T, 0, 0, 0};
     wxPoint track_pos = TrackSegNearestEndpoint(aTrackSegAt, aCurPosAt);
-    TEARDROP* tear = dynamic_cast<TEARDROP*>(Get(aTrackSegAt, track_pos));
+    
+    TEARDROP* tear = nullptr;
+    TRACKNODEITEM* item = Get(aTrackSegAt, track_pos);
+    if(item && dynamic_cast<TEARDROP*>(item))
+        tear = static_cast<TEARDROP*>(item);
+    
     if(tear)
     {
         tear_params = tear->GetParams();
@@ -2238,7 +2290,6 @@ bool TEARDROPS::NET_SCAN_GET_NEXT_TEARDROP::ExecuteAt(TRACK* aTrackSeg)
     return false;
 }
 
-//TEARDROP* TEARDROPS::NextTeardrop(const TRACK* aTrackSegAt) const
 TRACKNODEITEM* TEARDROPS::Next(const TRACK* aTrackSegAt) const
 {
     TEARDROP* result_tear = nullptr;
@@ -2272,7 +2323,6 @@ bool TEARDROPS::NET_SCAN_GET_BACK_TEARDROP::ExecuteAt(TRACK* aTrackSeg)
     return false;
 }
 
-//TEARDROP* TEARDROPS::BackTeardrop(const TRACK* aTrackSegAt) const
 TRACKNODEITEM* TEARDROPS::Back(const TRACK* aTrackSegAt) const
 {
     TEARDROP* result_tear = nullptr;

@@ -306,12 +306,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 editFrame->GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListClear();
                 for( auto item : selection )
                 {
-                    if(dynamic_cast<TRACK*>(static_cast<BOARD_ITEM*>( item )))
-                    {
-                        editFrame->GetBoard()->TrackItems()->Teardrops()->UpdateListAdd(static_cast<TRACK*>( item ));
-                        if(dynamic_cast<ROUNDEDCORNERTRACK*>(static_cast<BOARD_ITEM*>( item )))
-                            editFrame->GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListAdd(static_cast<ROUNDEDCORNERTRACK*>( item ));
-                    }
+                    editFrame->GetBoard()->TrackItems()->Teardrops()->UpdateListAdd( static_cast<BOARD_ITEM*>( item ) );
+                    editFrame->GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListAdd( static_cast<BOARD_ITEM*>( item ) );
                     static_cast<BOARD_ITEM*>( item )->Move( movement + m_offset );
                 }
                 editFrame->GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListDo();

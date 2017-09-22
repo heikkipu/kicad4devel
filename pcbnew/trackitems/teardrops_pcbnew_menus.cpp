@@ -66,11 +66,16 @@ void TEARDROPS::Menu_TrackAdd(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoi
         else
         {
             bool end_nearest = EndPosNearest(aTrackSeg, aPos);
-            TEARDROP* tear = dynamic_cast<TEARDROP*>(Get(aTrackSeg, aPos));
             wxPoint track_pos = TrackSegNearestEndpoint(aTrackSeg, aPos);
             TRACK* seg_next;
             TRACK* seg_back;
             bool at_t = Find_T_Tracks(aTrackSeg, track_pos, seg_next, seg_back);
+            
+            TEARDROP* tear = nullptr;
+            TRACKNODEITEM* item = Get(aTrackSeg, aPos);
+            if(item && dynamic_cast<TEARDROP*>(item))
+                tear = static_cast<TEARDROP*>(item);
+            
             if(tear)
             {
                 TEARDROP::PARAMS tear_params = tear->GetParams();

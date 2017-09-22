@@ -34,9 +34,13 @@ void ROUNDEDTRACKSCORNERS::Popup(wxMenu* aMenu, const TRACK* aTrackSeg, const wx
     if(aTrackSeg && aMenu)
     {
         wxString msg;
-        wxPoint track_nearest_endpoint = TrackNodeItem::TrackSegNearestEndpoint(aTrackSeg, aPos); 
-        ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(aTrackSeg, track_nearest_endpoint));
+        wxPoint track_nearest_endpoint = TrackNodeItem::TrackSegNearestEndpoint(aTrackSeg, aPos);
         msg.Printf(_("Rounded Corners"));
+
+        ROUNDEDTRACKSCORNER* corner = nullptr;
+        TRACKNODEITEM* item = Get(aTrackSeg, track_nearest_endpoint);
+        if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+            corner = static_cast<ROUNDEDTRACKSCORNER*>(item);
 
         wxMenu* corner_menu = new wxMenu;
         AddMenuItem(aMenu, corner_menu, ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_COMMON_MNU, msg, KiBitmap(add_tracks_xpm));
@@ -81,8 +85,8 @@ void ROUNDEDTRACKSCORNERS::Menu_RemoveFromTrack(wxMenu* aMenu, const TRACK* aTra
     {
         if(aTrackSeg->Type() == PCB_TRACE_T)
         {
-            ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(aTrackSeg, aPos));
-            if(corner)
+            TRACKNODEITEM* item = Get(aTrackSeg, aPos);
+            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
             {
                 AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE, _("Remove Corner"), KiBitmap(delete_xpm));
             }
@@ -96,8 +100,8 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeFromTrack(wxMenu* aMenu, const TRACK* aTra
     {
         if(aTrackSeg->Type() == PCB_TRACE_T)
         {
-            ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(aTrackSeg, aPos));
-            if(corner)
+            TRACKNODEITEM* item = Get(aTrackSeg, aPos);
+            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
             {
                 wxString msg;
                 msg.Printf(_("Change Corner %s"), GetChars(ParamsTxtToMenu(GetParams())));
@@ -113,11 +117,12 @@ void ROUNDEDTRACKSCORNERS::Menu_CopyParamsToCurrent(wxMenu* aMenu, const TRACK* 
     {
         if(aTrackSeg->Type() == PCB_TRACE_T)
         {
-            ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(aTrackSeg, aPos));
-            if(corner)
+            TRACKNODEITEM* item = Get(aTrackSeg, aPos);
+            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
             {
                 wxString msg;
-                msg.Printf(_("Copy Corner Settings %s to Current"), GetChars(ParamsTxtToMenu(corner->GetParams())));
+                msg.Printf(_("Copy Corner Settings %s to Current"),
+                           GetChars(ParamsTxtToMenu(static_cast<ROUNDEDTRACKSCORNER*>(item)->GetParams())));
                 AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT, msg, KiBitmap(tools_xpm));
             }
         }

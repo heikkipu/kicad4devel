@@ -305,6 +305,7 @@ public:
     void UpdateListAdd(const TRACK* aTrackSegFrom);
     void UpdateListAdd(const TrackNodeItem::TEARDROP* aTear);
     void UpdateListAdd(const ROUNDEDTRACKSCORNERS::RoundedCornerTrack_Container* aRoundedTracks);
+    void UpdateListAdd(const BOARD_ITEM* aBoardItem);
     void UpdateListDo(void);
     void UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase);
     void UpdateListDo_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase);

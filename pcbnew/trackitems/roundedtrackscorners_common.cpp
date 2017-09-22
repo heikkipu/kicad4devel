@@ -460,13 +460,14 @@ void ROUNDEDTRACKSCORNERS::Remove(const TRACK* aTrackItemFrom, PICKED_ITEMS_LIST
         else
             if(aTrackItemFrom->Type() == PCB_TRACE_T)
             {
-                ROUNDEDTRACKSCORNER* corner = nullptr;
+                TRACKNODEITEM* item = nullptr;
                 for(unsigned int n = 0; n < 2; ++n)
                 {
-                    n? corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Next(const_cast<TRACK*>(aTrackItemFrom))) : corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Back(const_cast<TRACK*>(aTrackItemFrom)));
+                    n? item = Next(const_cast<TRACK*>(aTrackItemFrom)) : item = Back(const_cast<TRACK*>(aTrackItemFrom));
 
-                    if(corner)
+                    if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
                     {
+                        ROUNDEDTRACKSCORNER* corner = static_cast<ROUNDEDTRACKSCORNER*>(item);
                         if(aLockedToo || (!aLockedToo && !corner->IsLocked()))
                         {
                             if((corner->GetTrackSeg() == const_cast<TRACK*>(aTrackItemFrom)) || corner->GetTrackSegSecond() == const_cast<TRACK*>(aTrackItemFrom))
@@ -662,10 +663,10 @@ ROUNDEDTRACKSCORNER::PARAMS ROUNDEDTRACKSCORNERS::CopyCurrentParams(const TRACK*
 {
     ROUNDEDTRACKSCORNER::PARAMS corner_params = {0,0,10};
     wxPoint track_pos = TrackSegNearestEndpoint(aTrackSegAt, aCurPosAt);
-    ROUNDEDTRACKSCORNER* corner = dynamic_cast<ROUNDEDTRACKSCORNER*>(Get(aTrackSegAt, track_pos));
-    if(corner)
+    TRACKNODEITEM* item = Get(aTrackSegAt, track_pos);
+    if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
     {
-        corner_params = corner->GetParams();
+        corner_params = static_cast<ROUNDEDTRACKSCORNER*>(item)->GetParams();
         SetParams(corner_params);
         RecreateMenu();
     }
@@ -792,8 +793,14 @@ void ROUNDEDTRACKSCORNERS::ToMemory(const TRACK* aTrackSegFrom)
 {
     m_next_corner_in_memory = nullptr;
     m_back_corner_in_memory = nullptr;
-    m_next_corner_in_memory = dynamic_cast<ROUNDEDTRACKSCORNER*>(Next(aTrackSegFrom));
-    m_back_corner_in_memory = dynamic_cast<ROUNDEDTRACKSCORNER*>(Back(aTrackSegFrom));
+    
+    TRACKNODEITEM* item = Next(aTrackSegFrom);
+    if(item)
+        m_next_corner_in_memory = dynamic_cast<ROUNDEDTRACKSCORNER*>(item);
+    
+    item = Back(aTrackSegFrom);
+    if(item)
+        m_back_corner_in_memory = dynamic_cast<ROUNDEDTRACKSCORNER*>(item);
 }
 
 void ROUNDEDTRACKSCORNERS::FromMemory(const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList)
