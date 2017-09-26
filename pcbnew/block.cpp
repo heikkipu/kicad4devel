@@ -650,6 +650,10 @@ void PCB_EDIT_FRAME::Block_Rotate()
 
         // Move and rotate the track segments
         case PCB_TRACE_T:       // a track segment (segment on a copper layer)
+#ifdef PCBNEW_WITH_TRACKITEMS
+            m_Pcb->TrackItems()->Teardrops()->UpdateListAdd( static_cast<TRACK*>(item) );
+            m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( static_cast<TRACK*>(item) );
+#endif
         case PCB_VIA_T:         // a via (like track segment on a copper layer)
             m_Pcb->m_Status_Pcb = 0;
             break;
@@ -683,6 +687,10 @@ void PCB_EDIT_FRAME::Block_Rotate()
         }
     }
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo_BlockRotate(itemsList);
+#endif
+    
     // Save all the block items in there current state before applying the rotation.
     SaveCopyInUndoList( *itemsList, UR_CHANGED, centre );
 
@@ -738,6 +746,10 @@ void PCB_EDIT_FRAME::Block_Flip()
 
         case PCB_TRACE_T:
         case PCB_VIA_T:
+#ifdef PCBNEW_WITH_TRACKITEMS
+            m_Pcb->TrackItems()->Teardrops()->UpdateListAdd( static_cast<TRACK*>(item) );
+            m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( static_cast<TRACK*>(item) );
+#endif
             m_Pcb->m_Status_Pcb = 0;
             break;
 
@@ -771,7 +783,7 @@ void PCB_EDIT_FRAME::Block_Flip()
     }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo();
+    m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo_RemoveBroken(itemsList);
     m_Pcb->TrackItems()->Teardrops()->UpdateListDo();
 #endif
 
@@ -812,6 +824,10 @@ void PCB_EDIT_FRAME::Block_Move()
         // Move track segments
         case PCB_TRACE_T:       // a track segment (segment on a copper layer)
         case PCB_VIA_T:         // a via (like a track segment on a copper layer)
+#ifdef PCBNEW_WITH_TRACKITEMS
+            m_Pcb->TrackItems()->Teardrops()->UpdateListAdd( static_cast<TRACK*>(item) );
+            m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( static_cast<TRACK*>(item) );
+#endif
             m_Pcb->m_Status_Pcb = 0;
             break;
 

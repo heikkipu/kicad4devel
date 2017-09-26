@@ -179,9 +179,9 @@ void ROUNDEDTRACKSCORNERS::Delete(ROUNDEDTRACKSCORNER* aCorner, DLIST<TRACK>*aTr
             Update(first_track);
             Update(second_track);
 
-            aTrackListAt->Remove(aCorner);
             picker.SetItem(aCorner);
             aUndoRedoList->PushItem(picker);
+            aTrackListAt->Remove(aCorner);
 
             m_Parent->Teardrops()->Update(first_track);
             m_Parent->Teardrops()->Update(second_track);

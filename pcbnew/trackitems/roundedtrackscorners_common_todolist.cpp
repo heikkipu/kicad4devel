@@ -45,22 +45,22 @@ void ROUNDEDTRACKSCORNERS::UpdateListAdd(const ROUNDEDTRACKSCORNER* aCorner)
         
         TRACKNODEITEM* item = Get(track, track->GetStart());
         if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
-        m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
+            m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
         
         item = Get(track, track->GetEnd());
         if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
-        m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
+            m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
         
         track = aCorner->GetTrackSegSecond();
         m_update_tracks_list->insert(static_cast<ROUNDEDCORNERTRACK*>(track));
 
         item = Get(track, track->GetStart());
         if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
-        m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
+            m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
         
         item = Get(track, track->GetEnd());
         if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
-        m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
+            m_update_list->insert(static_cast<ROUNDEDTRACKSCORNER*>(item));
     }
 }
 
@@ -121,17 +121,6 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo(void)
                     m_EditFrame->GetGalCanvas()->GetView()->Update(corner);
             }
     }
-}
-
-void ROUNDEDTRACKSCORNERS::UpdateListDo_RemoveBroken(PICKED_ITEMS_LIST* aUndoRedoList)
-{
-    //Modifiesd and connected tracks connection point is different.
-    for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
-        if(corner)
-            if(!corner->AreTracksConnected())
-                Remove(corner, aUndoRedoList, false, true);
-        
-    UpdateListDo();
 }
 
 void ROUNDEDTRACKSCORNERS::UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase)
@@ -195,6 +184,42 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_UndoRedo(void)
                 m_EditFrame->GetGalCanvas()->GetView()->Update(corner);
             
     }
+}
+
+void ROUNDEDTRACKSCORNERS::UpdateListDo_RemoveBroken(PICKED_ITEMS_LIST* aUndoRedoList)
+{
+    for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
+        if(corner)
+            if(!corner->AreTracksConnected())
+                Remove(corner, aUndoRedoList, false, true);
+        
+    UpdateListDo();
+}
+
+void ROUNDEDTRACKSCORNERS::UpdateListDo_BlockRotate(PICKED_ITEMS_LIST* aItemsList)
+{
+    for(ROUNDEDTRACKSCORNER* corner : *m_update_list)
+        if(corner)
+        {
+            for(int n = 0; n < 2; ++n)
+            {
+                TRACK* trackseg = nullptr;
+                n? trackseg = corner->GetTrackSegSecond() : trackseg = corner->GetTrackSeg();
+                bool corners_segment = false;
+                for( unsigned ii = 0; ii < aItemsList->GetCount(); ii++ )
+                {
+                    BOARD_ITEM* item = (BOARD_ITEM*) aItemsList->GetPickedItem( ii );
+                    if(item && (item->Type() == PCB_TRACE_T))
+                        if(static_cast<TRACK*>(item) == trackseg)
+                            corners_segment = true;
+                }
+                if(!corners_segment)
+                {
+                    Remove(corner, aItemsList, false, true);
+            
+                }
+            }
+        }
 }
 
 void ROUNDEDTRACKSCORNERS::UpdateListDo_BlockDuplicate(const wxPoint aMoveVector, PICKED_ITEMS_LIST* aUndoRedoList)

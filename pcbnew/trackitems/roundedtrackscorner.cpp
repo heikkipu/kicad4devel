@@ -156,8 +156,8 @@ bool ROUNDEDTRACKSCORNER::AreTracksConnected(void)
 {
     if(m_trackseg && m_trackseg_second)
     {
-        wxPoint trackseg_pos;
-        wxPoint trackseg_second_pos;
+        wxPoint trackseg_pos{0,0};
+        wxPoint trackseg_second_pos{1,1};
         if(dynamic_cast<ROUNDEDCORNERTRACK*>(m_trackseg))
         {
             if(m_trackstartpos_is_pos)

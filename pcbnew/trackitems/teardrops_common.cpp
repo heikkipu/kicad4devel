@@ -145,9 +145,9 @@ void TEARDROPS::Delete( TEARDROP* aTeardrop, DLIST<TRACK>*aTrackListAt, PICKED_I
             m_Board->GetConnectivity()->Remove(aTeardrop);
 #endif
 
-            aTrackListAt->Remove(aTeardrop);
             picker.SetItem(aTeardrop);
             aUndoRedoList->PushItem(picker);
+            aTrackListAt->Remove(aTeardrop);
 
             if(m_EditFrame)
                 m_EditFrame->GetCanvas()->RefreshDrawingRect(aTeardrop->GetBoundingBox());
