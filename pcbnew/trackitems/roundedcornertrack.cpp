@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Heikki Pulkkinen.
+ * Copyright (C) 2017- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,8 @@
 using namespace TrackNodeItem;
 
 
-ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK(const ROUNDEDCORNERTRACK& aTrack) : TRACK(aTrack)
+ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const ROUNDEDCORNERTRACK& aTrack ) : 
+    TRACK( aTrack )
 {
     m_StartVisible = m_Start;
     m_EndVisible = m_End;
@@ -39,7 +40,8 @@ ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK(const ROUNDEDCORNERTRACK& aTrack) : TRACK
 }
 
 //Create a new rounded corner track.
-ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK(const BOARD_ITEM* aParent) : TRACK(const_cast<BOARD_ITEM*>(aParent))
+ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent ) :
+    TRACK( const_cast<BOARD_ITEM*>( aParent ) )
 {
     m_StartVisible = m_Start;
     m_EndVisible = m_End;
@@ -47,15 +49,16 @@ ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK(const BOARD_ITEM* aParent) : TRACK(const_
     m_EndPointCorner = nullptr;
 }
 
-//Copy (Convert) old normal track.
-ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK(const BOARD_ITEM* aParent, const TRACK* aTrack) : TRACK(const_cast<BOARD_ITEM*>(aParent), aTrack->Type())
+//Copy ( Convert ) old normal track.
+ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent, const TRACK* aTrack ) :
+    TRACK( const_cast<BOARD_ITEM*>( aParent ), aTrack->Type() )
 {
-    SetStart(aTrack->GetStart());
-    SetEnd(aTrack->GetEnd());
-    SetWidth(aTrack->GetWidth());
-    SetLayer(aTrack->GetLayer());
-    SetNetCode(aTrack->GetNetCode());
-    SetStatus(aTrack->GetStatus());
+    SetStart( aTrack->GetStart() );
+    SetEnd( aTrack->GetEnd() );
+    SetWidth( aTrack->GetWidth() );
+    SetLayer( aTrack->GetLayer() );
+    SetNetCode( aTrack->GetNetCode() );
+    SetStatus( aTrack->GetStatus() );
     
     m_StartVisible = m_Start;
     m_EndVisible = m_End;
@@ -63,34 +66,41 @@ ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK(const BOARD_ITEM* aParent, const TRACK* a
     m_EndPointCorner = nullptr;
 }
 
-void ROUNDEDCORNERTRACK::ResetVisibleEndpoints(void)
+void ROUNDEDCORNERTRACK::ResetVisibleEndpoints( void )
 {
     m_StartVisible = m_Start;
     m_EndVisible = m_End;
 }
 
-TrackNodeItem::ROUNDEDTRACKSCORNER* ROUNDEDCORNERTRACK::Contains(const wxPoint& aPos) const
+TrackNodeItem::ROUNDEDTRACKSCORNER* ROUNDEDCORNERTRACK::Contains( const wxPoint& aPos ) const
 {
-    if(aPos == m_Start)
+    if( aPos == m_Start )
         return m_StartPointCorner;
-    if(aPos == m_End)
+    if( aPos == m_End )
         return m_EndPointCorner;
     return nullptr;
 }
 
 void ROUNDEDCORNERTRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               int             aClearanceValue,
-                                               int             aCircleToSegmentsCount,
-                                               double          aCorrectionFactor ) const
+                                                               int aClearanceValue,
+                                                               int aCircleToSegmentsCount,
+                                                               double aCorrectionFactor
+                                                             ) const
 {
     ::TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                              m_StartVisible, m_EndVisible,
-                                              aCircleToSegmentsCount,
-                                              m_Width + ( 2 * aClearanceValue) );
+                                            m_StartVisible,
+                                            m_EndVisible,
+                                            aCircleToSegmentsCount,
+                                            m_Width + ( 2 * aClearanceValue )
+                                          );
 }
 
 //Copy from class_track.cpp and made modifications.
-void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aOffset )
+void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel,
+                               wxDC* aDC,
+                               GR_DRAWMODE aDrawMode,
+                               const wxPoint& aOffset
+                             )
 {
     BOARD* brd = GetBoard();
 #ifdef NEWCONALGO
@@ -104,15 +114,15 @@ void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aD
 
 #ifdef USE_WX_OVERLAY
     // If dragged not draw in OnPaint otherwise remains impressed in wxOverlay
-    if( (m_Flags & IS_DRAGGED) && aDC->IsKindOf(wxCLASSINFO(wxPaintDC)))
+    if( ( m_Flags & IS_DRAGGED ) && aDC->IsKindOf( wxCLASSINFO( wxPaintDC ) ) )
       return;
 #endif
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) aPanel->GetDisplayOptions();
+    DISPLAY_OPTIONS* displ_opts = ( DISPLAY_OPTIONS* ) aPanel->GetDisplayOptions();
 
     if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
     {
-        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) aPanel->GetScreen() )->m_Active_Layer;
+        PCB_LAYER_ID curr_layer = ( ( PCB_SCREEN* ) aPanel->GetScreen() )->m_Active_Layer;
 
         if( !IsOnLayer( curr_layer ) )
             color = COLOR4D( DARKDARKGRAY );
@@ -129,48 +139,118 @@ void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aD
     
     if( aDC->LogicalToDeviceXRel( m_Width ) <= 1 )
     {
-        GRLine( clip_box, aDC, m_StartVisible + aOffset, m_EndVisible + aOffset, 0, color );
+        GRLine( clip_box,
+                aDC,
+                m_StartVisible + aOffset,
+                m_EndVisible + aOffset,
+                0,
+                color
+              );
         return;
     }
 
-    double angle = AngleRad(m_StartVisible, m_EndVisible);
+    double angle = AngleRad( m_StartVisible, m_EndVisible );
 
     if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
     {
-        wxPoint op_start_A = GetPoint(m_StartVisible, angle + M_PI_2, l_trace);
-        wxPoint op_start_B = GetPoint(m_StartVisible, angle - M_PI_2, l_trace);
-        wxPoint op_end_A = GetPoint(m_EndVisible, angle + M_PI_2, l_trace);
-        wxPoint op_end_B = GetPoint(m_EndVisible, angle - M_PI_2, l_trace);
-        
-        GRLine( clip_box, aDC, op_start_A + aOffset, op_end_A + aOffset, 0, color );
-        GRLine( clip_box, aDC, op_start_B + aOffset, op_end_B + aOffset, 0, color );
+        wxPoint op_start_A = GetPoint( m_StartVisible, angle + M_PI_2, l_trace );
+        wxPoint op_start_B = GetPoint( m_StartVisible, angle - M_PI_2, l_trace );
+        wxPoint op_end_A = GetPoint( m_EndVisible, angle + M_PI_2, l_trace );
+        wxPoint op_end_B = GetPoint( m_EndVisible, angle - M_PI_2, l_trace );
 
-        GRArc1(clip_box, aDC, op_start_A + aOffset, op_start_B + aOffset, m_StartVisible + aOffset, 0, color);
-        GRArc1(clip_box, aDC, op_end_B + aOffset, op_end_A + aOffset, m_EndVisible + aOffset, 0, color);
+        GRLine( clip_box,
+                aDC, 
+                op_start_A + aOffset,
+                op_end_A + aOffset,
+                0,
+                color
+              );
+
+        GRLine( clip_box,
+                aDC,
+                op_start_B + aOffset,
+                op_end_B + aOffset,
+                0,
+                color
+              );
+
+        GRArc1( clip_box,
+                aDC, 
+                op_start_A + aOffset,
+                op_start_B + aOffset,
+                m_StartVisible + aOffset,
+                0,
+                color
+              );
+
+        GRArc1( clip_box,
+                aDC,
+                op_end_B + aOffset,
+                op_end_A + aOffset,
+                m_EndVisible + aOffset,
+                0,
+                color
+              );
 
     }
     else
     {
-        GRFillCSegm( clip_box, aDC, m_StartVisible.x + aOffset.x,m_StartVisible.y + aOffset.y, m_EndVisible.x + aOffset.x, m_EndVisible.y + aOffset.y, m_Width, color );
+        GRFillCSegm( clip_box,
+                     aDC,
+                     m_StartVisible.x + aOffset.x,
+                     m_StartVisible.y + aOffset.y,
+                     m_EndVisible.x + aOffset.x,
+                     m_EndVisible.y + aOffset.y,
+                     m_Width,
+                     color
+                   );
     }
 
     // Show clearance for tracks, not for zone segments
-    if( IsCopperLayer( GetLayer() ) && ( ( displ_opts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS && ( IsDragging() || IsMoving() || IsNew() ) ) || ( displ_opts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ) ))
+    if( IsCopperLayer( GetLayer() ) && 
+        ( ( displ_opts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+        ( IsDragging() || IsMoving() || IsNew() ) ) ||
+        ( displ_opts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ) )
+    )
     {
         l_trace += GetClearance();
 
-        wxPoint op_start_A = GetPoint(m_StartVisible, angle + M_PI_2, l_trace);
-        wxPoint op_start_B = GetPoint(m_StartVisible, angle - M_PI_2, l_trace);
-        wxPoint op_end_A = GetPoint(m_EndVisible, angle + M_PI_2, l_trace);
-        wxPoint op_end_B = GetPoint(m_EndVisible, angle - M_PI_2, l_trace);
-        
-        GRLine( clip_box, aDC, op_start_A + aOffset, op_end_A + aOffset, 0, color );
-        GRLine( clip_box, aDC, op_start_B + aOffset, op_end_B + aOffset, 0, color );
-        
-        GRArc1(clip_box, aDC, op_start_A + aOffset, op_start_B + aOffset, m_StartVisible + aOffset, 0, color);
-        GRArc1(clip_box, aDC, op_end_B + aOffset, op_end_A + aOffset, m_EndVisible + aOffset, 0, color);
+        wxPoint op_start_A = GetPoint( m_StartVisible, angle + M_PI_2, l_trace );
+        wxPoint op_start_B = GetPoint( m_StartVisible, angle - M_PI_2, l_trace );
+        wxPoint op_end_A = GetPoint( m_EndVisible, angle + M_PI_2, l_trace );
+        wxPoint op_end_B = GetPoint( m_EndVisible, angle - M_PI_2, l_trace );
+
+        GRLine( clip_box,
+                aDC,
+                op_start_A + aOffset,
+                op_end_A + aOffset,
+                0,
+                color
+              );
+        GRLine( clip_box,
+                aDC,
+                op_start_B + aOffset,
+                op_end_B + aOffset,
+                0,
+                color
+              );
+        GRArc1( clip_box,
+                aDC,
+                op_start_A + aOffset,
+                op_start_B + aOffset,
+                m_StartVisible + aOffset,
+                0,
+                color
+              );
+        GRArc1( clip_box,
+                aDC,
+                op_end_B + aOffset,
+                op_end_A + aOffset,
+                m_EndVisible + aOffset,
+                0,
+                color
+              );
     }
-    
+
     DrawShortNetname( aPanel, aDC, aDrawMode, color );
 }
-

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2017- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,35 +27,34 @@ using namespace TrackNodeItem;
 
 
 //Gal canvas add when drag and route tracks.
-void ROUNDEDTRACKSCORNERS::GalCommitPushAdd(BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList)
+void ROUNDEDTRACKSCORNERS::GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList )
 {
-    if(aItem)
+    if( aItem )
     {
-        if(aItem->Type() == PCB_TRACE_T)
+        if( aItem->Type() == PCB_TRACE_T )
         {
-            m_gal_commit_tracks.insert(static_cast<TRACK*>(aItem));
-
+            m_gal_commit_tracks.insert( static_cast<TRACK*>( aItem ) );
         }
     }
 }
 
 //Gal canva remove when drag and route tracks.
-void ROUNDEDTRACKSCORNERS::GalCommitPushRemove(BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList)
+void ROUNDEDTRACKSCORNERS::GalCommitPushRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList )
 {
-    if( dynamic_cast<ROUNDEDCORNERTRACK*>(aItemFrom) )
-        Remove( static_cast<ROUNDEDCORNERTRACK*>(aItemFrom), aUndoRedoList, true );
+    if( dynamic_cast<ROUNDEDCORNERTRACK*>( aItemFrom ) )
+        Remove( static_cast<ROUNDEDCORNERTRACK*>( aItemFrom ), aUndoRedoList, true );
 }
 
-void ROUNDEDTRACKSCORNERS::GalCommitPushPrepare(void)
+void ROUNDEDTRACKSCORNERS::GalCommitPushPrepare( void )
 {
     m_gal_removed_list->clear();
     m_gal_commit_tracks.clear();
 }
 
-void ROUNDEDTRACKSCORNERS::GalCommitPushFinish(PICKED_ITEMS_LIST* aUndoRedoList)
+void ROUNDEDTRACKSCORNERS::GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList )
 {
-    for(TRACK* track : m_gal_commit_tracks)
-        Add(track, aUndoRedoList);
+    for( TRACK* track : m_gal_commit_tracks )
+        Add( track, aUndoRedoList );
     
     m_gal_removed_list->clear();
     m_gal_commit_tracks.clear();

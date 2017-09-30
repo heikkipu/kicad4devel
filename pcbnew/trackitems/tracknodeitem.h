@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2012- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ namespace TrackNodeItem
 {
     constexpr double M_PIx2 = M_PI * 2.0;
     constexpr double M_PI_4x3 = M_PI_4 * 3.0;
-    constexpr inline int Rad2MilsInt(const double aRadAngle);
+    constexpr inline int Rad2MilsInt( const double aRadAngle );
     using Tracks_Container = std::set<TRACK*>;
 
     //Base class to make polygons to TRACK endpoints.
@@ -60,35 +60,54 @@ namespace TrackNodeItem
     {
     public:
         ~TRACKNODEITEM(){};
-        bool IsCreatedOK(void) const { return m_created_ok; }
-        void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override; //override TRACK.
-        void Draw( KIGFX::GAL* aGal, const KIGFX::PCB_RENDER_SETTINGS* aPcbSettings, const float aOutlineWidth, int aLayer); //Gal draw.
+        bool IsCreatedOK( void ) const { return m_created_ok; }
 
-        TRACK* GetTrackSeg(void) const { return m_trackseg; }
-        double GetTrackSegAngle(void) const { return m_trackseg_angle; }
-        
-        void SetTrackEndpoint(void); //Sometimes when update need to set. (undo redo)
-        bool IsTrackEndpointStart(void) const {return m_trackstartpos_is_pos;}
-        bool IsTrackEndpointEnd(void) const {return !m_trackstartpos_is_pos;}
+        void Draw( EDA_DRAW_PANEL* aPanel,
+                   wxDC* aDC,
+                   GR_DRAWMODE aDrawMode,
+                   const wxPoint& aOffset = ZeroOffset
+                 ) override; //override TRACK.
 
-        wxPoint GetPolyPoint(const unsigned int aPoint) const;
-        unsigned int GetPolyPointsNum(void) const { return m_seg_points.size(); }
-        unsigned int GetPolySegmentWidth(void) const {return m_poly_seg_width; }
+        void Draw( KIGFX::GAL* aGal,
+                   const KIGFX::PCB_RENDER_SETTINGS* aPcbSettings,
+                   const float aOutlineWidth,
+                   int aLayer
+                 ); //Gal draw.
 
-        virtual unsigned int GetBoundingRad(void) const = 0;
-        virtual bool Update(void);
+        TRACK* GetTrackSeg( void ) const { return m_trackseg; }
+        double GetTrackSegAngle( void ) const { return m_trackseg_angle; }
 
-        virtual void AddTo3DContainer(CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits) = 0;    
-        
+        void SetTrackEndpoint( void ); //Sometimes when update need to set. ( undo redo )
+        bool IsTrackEndpointStart( void ) const {return m_trackstartpos_is_pos;}
+        bool IsTrackEndpointEnd( void ) const {return !m_trackstartpos_is_pos;}
+
+        wxPoint GetPolyPoint( const unsigned int aPoint ) const;
+        unsigned int GetPolyPointsNum( void ) const { return m_seg_points.size(); }
+        unsigned int GetPolySegmentWidth( void ) const {return m_poly_seg_width; }
+
+        virtual unsigned int GetBoundingRad( void ) const = 0;
+        virtual bool Update( void );
+
+        virtual void AddTo3DContainer( CBVHCONTAINER2D* aContainer,
+                                       const double aBiuTo3Dunits
+                                     ) = 0;
+
     protected:
-        TRACKNODEITEM(const BOARD_ITEM* aParent, KICAD_T aID_Type);
+        TRACKNODEITEM( const BOARD_ITEM* aParent, KICAD_T aID_Type );
+
         //CallConstruct must be call from derived class constructor or overloaded CallConsttructor.
-        bool CallConstructor(const TRACK* aTrackSeg, const bool aCheckNullTrack);
-        virtual void DrawItem(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const COLOR4D aColor, const wxPoint& aOffset, const DISPLAY_OPTIONS* aDisplOpts)=0;
+        bool CallConstructor( const TRACK* aTrackSeg, const bool aCheckNullTrack );
+
+        virtual void DrawItem( EDA_DRAW_PANEL* aPanel,
+                               wxDC* aDC,
+                               const COLOR4D aColor,
+                               const wxPoint& aOffset,
+                               const DISPLAY_OPTIONS* aDisplOpts
+                             ) = 0;
         //Gal draw
-        virtual void DrawItem(KIGFX::GAL* aGal, const bool aIsSketch )=0;
+        virtual void DrawItem( KIGFX::GAL* aGal, const bool aIsSketch ) = 0;
         
-        bool SetTrackSeg(const TRACK* aTrackSeg, const bool aCheckNullTrack);
+        bool SetTrackSeg( const TRACK* aTrackSeg, const bool aCheckNullTrack );
         TRACK* m_trackseg; //Track segment where polygon belongs to.
         bool m_trackstartpos_is_pos;
         double m_trackseg_angle;
@@ -97,7 +116,7 @@ namespace TrackNodeItem
         unsigned int m_trackseg_length;
         //base class m_Width = m_trackseg width
 
-        void SetConnectedPos(void);
+        void SetConnectedPos( void );
         wxPoint m_connected_pos{0,0};   //Tracks connected position. Via, Pad, track endpoint or node.
         wxPoint m_opposite_pos{0,0};    //Tracks opposite pos of connected pos.
         
@@ -114,47 +133,50 @@ namespace TrackNodeItem
     };
 
 
-    inline double cathete(const unsigned long aHyp, const unsigned long aCath) 
+    inline double cathete( const unsigned long aHyp, const unsigned long aCath ) 
     {
-        return sqrt(pow(aHyp, 2) - pow(aCath, 2));
+        return sqrt( pow( aHyp, 2 ) - pow( aCath, 2 ) );
     }
 
-    inline long double CosineAlpha(const unsigned long long a, const unsigned long long b, const unsigned long long c)
+    inline long double CosineAlpha( const unsigned long long a,
+                                    const unsigned long long b,
+                                    const unsigned long long c
+                                  )
     {
         unsigned long long x = b * b + c * c - a * a;
         unsigned long long y = 2 * b * c;
-        return acos((long double)x / (long double)y);
+        return acos( ( long double )x / ( long double )y );
     }
     
-    inline double AngleRad(const wxPoint aPos1, const wxPoint aPos2)
+    inline double AngleRad( const wxPoint aPos1, const wxPoint aPos2 )
     {
-        if(aPos1.x != aPos2.x)
+        if( aPos1.x != aPos2.x )
         {
-            double slope = double(abs(aPos1.y - aPos2.y)) / double(abs(aPos1.x - aPos2.x));
-            double angle = atan(slope);
+            double slope = double( abs( aPos1.y - aPos2.y ) ) / double( abs( aPos1.x - aPos2.x ) );
+            double angle = atan( slope );
             if( aPos1.x > aPos2.x ) 
             {   
-                if(aPos1.y < aPos2.y)
+                if( aPos1.y < aPos2.y )
                     return M_PI + angle;
                 return M_PI - angle;
             }
             else
-                if(aPos1.y < aPos2.y)
+                if( aPos1.y < aPos2.y )
                     return M_PIx2 - angle;
         
             return angle;
         }
         else
         {
-            if(aPos1.y > aPos2.y)
+            if( aPos1.y > aPos2.y )
                 return M_PI_2;
             return M_PI + M_PI_2;        
         } 
     }
 
-    inline double Rad2DeciDegRnd(const double aRadAngle)
+    inline double Rad2DeciDegRnd( const double aRadAngle )
     {
-        return round(RAD2DECIDEG(aRadAngle) / 10.0) * 10.0;
+        return round( RAD2DECIDEG( aRadAngle ) / 10.0 ) * 10.0;
     }
     
     constexpr int ANGLE_0 = 0;
@@ -169,114 +191,145 @@ namespace TrackNodeItem
             
     //Rounding angle rads to integer with it's desimal places.
     //Accuracy using angle when compre angles with radius representation.
-    constexpr inline int Rad2MilsInt(const double aRadAngle)
+    constexpr inline int Rad2MilsInt( const double aRadAngle )
     {
-        return round(1000.0 * aRadAngle);
+        return round( 1000.0 * aRadAngle );
     }
     
     constexpr int RAD_0_MILS_INT = 0;
-    constexpr int RAD_45_MILS_INT = Rad2MilsInt(M_PI_4);
-    constexpr int RAD_90_MILS_INT = Rad2MilsInt(M_PI_2);
-    constexpr int RAD_135_MILS_INT = Rad2MilsInt((M_PI_2 + M_PI_4));
-    constexpr int RAD_180_MILS_INT = Rad2MilsInt(M_PI);
-    constexpr int RAD_225_MILS_INT = Rad2MilsInt(M_PI + M_PI_4);
-    constexpr int RAD_270_MILS_INT = Rad2MilsInt(M_PI + M_PI_2);
-    constexpr int RAD_315_MILS_INT = Rad2MilsInt(M_PI + M_PI_2 + M_PI_4);
-    constexpr int RAD_360_MILS_INT = Rad2MilsInt(M_PIx2);
+    constexpr int RAD_45_MILS_INT = Rad2MilsInt( M_PI_4 );
+    constexpr int RAD_90_MILS_INT = Rad2MilsInt( M_PI_2 );
+    constexpr int RAD_135_MILS_INT = Rad2MilsInt( ( M_PI_2 + M_PI_4 ) );
+    constexpr int RAD_180_MILS_INT = Rad2MilsInt( M_PI );
+    constexpr int RAD_225_MILS_INT = Rad2MilsInt( M_PI + M_PI_4 );
+    constexpr int RAD_270_MILS_INT = Rad2MilsInt( M_PI + M_PI_2 );
+    constexpr int RAD_315_MILS_INT = Rad2MilsInt( M_PI + M_PI_2 + M_PI_4 );
+    constexpr int RAD_360_MILS_INT = Rad2MilsInt( M_PIx2 );
 
-    inline wxPoint GetPoint(const wxPoint aStartPoint, const double aAngle, const long aLengthFromStart)
+    inline wxPoint GetPoint( const wxPoint aStartPoint, const double aAngle, const long aLengthFromStart )
     {
-        long x = aStartPoint.x + aLengthFromStart * cos(aAngle);
-        long y = aStartPoint.y - aLengthFromStart * sin(aAngle);
-        return wxPoint(x, y); 
+        long x = aStartPoint.x + aLengthFromStart * cos( aAngle );
+        long y = aStartPoint.y - aLengthFromStart * sin( aAngle );
+        return wxPoint( x, y ); 
     }
 
 
-    template <typename T> inline T NormAngle(const T aAngle, const T aMinNorm, const T aMaxNorm, const T aNorm)
+    template <typename T> inline T NormAngle( const T aAngle,
+                                              const T aMinNorm,
+                                              const T aMaxNorm,
+                                              const T aNorm
+                                            )
     {
         T angle = aAngle;
-        while(angle < aMinNorm)
+        while( angle < aMinNorm )
             angle += aNorm;
-        while(angle >= aMaxNorm)
+        while( angle >= aMaxNorm )
             angle -= aNorm;
         return angle;
     }
 
-    inline double TrackSegAngle(const TRACK* aTrackSeg, const wxPoint aPointWith)
+    inline double TrackSegAngle( const TRACK* aTrackSeg, const wxPoint aPointWith )
     {
         double angle;
-        (aTrackSeg->GetStart() == aPointWith)? angle = AngleRad(aTrackSeg->GetStart(), aTrackSeg->GetEnd()) : angle = AngleRad(aTrackSeg->GetEnd(), aTrackSeg->GetStart());
+        ( aTrackSeg->GetStart() == aPointWith )?
+            angle = AngleRad( aTrackSeg->GetStart(), aTrackSeg->GetEnd() ) :
+            angle = AngleRad( aTrackSeg->GetEnd(), aTrackSeg->GetStart() );
+
         return angle;
     }
-    
-    inline double AngleBtwTracks(const TRACK* aTrackSegA, const wxPoint aPosSegA, const TRACK* aTrackSegB, const wxPoint aPosSegB)
+
+    inline double AngleBtwTracks( const TRACK* aTrackSegA,
+                                  const wxPoint aPosSegA,
+                                  const TRACK* aTrackSegB,
+                                  const wxPoint aPosSegB
+                                )
     {
         double angle_ret = M_PIx2 + M_PI_4; //Return value over 360 degerees if not ok.
-        if(((aPosSegA == aTrackSegA->GetStart()) || (aPosSegA == aTrackSegA->GetEnd())) && ((aPosSegB == aTrackSegB->GetStart()) || (aPosSegB == aTrackSegB->GetEnd())))
+        if( ( ( aPosSegA == aTrackSegA->GetStart() ) || ( aPosSegA == aTrackSegA->GetEnd() ) ) &&
+            ( ( aPosSegB == aTrackSegB->GetStart() ) || ( aPosSegB == aTrackSegB->GetEnd() ) ) )
         {
-            double angle_cmp = TrackSegAngle(aTrackSegA, aPosSegA) - TrackSegAngle(aTrackSegB, aPosSegB);
-            angle_ret = NormAngle(angle_cmp, 0.0, M_PIx2, M_PIx2);
+            double angle_cmp = TrackSegAngle( aTrackSegA, aPosSegA ) - TrackSegAngle( aTrackSegB, aPosSegB );
+            angle_ret = NormAngle( angle_cmp, 0.0, M_PIx2, M_PIx2 );
         }
         return angle_ret;
     }
 
-    inline double InnerAngle(const double aAngle)
+    inline double InnerAngle( const double aAngle )
     {
         double angle_ret = aAngle;
-        if(angle_ret > M_PI)
+        if( angle_ret > M_PI )
             angle_ret = M_PIx2 - angle_ret;
         return angle_ret;
     }
     
-    inline bool IsSharpAngle(const double aAngle, const bool aRoundedCorner)
+    inline bool IsSharpAngle( const double aAngle, const bool aRoundedCorner )
     {
-        int angle_cmp = Rad2MilsInt(aAngle);
-        if(aRoundedCorner)
+        int angle_cmp = Rad2MilsInt( aAngle );
+        if( aRoundedCorner )
         {
-            constexpr int angle_min_rounded = Rad2MilsInt(M_PI_2);
-            constexpr int angle_max_rounded = Rad2MilsInt(M_PI + M_PI_2);
-            if((angle_cmp < angle_min_rounded) || (angle_cmp > angle_max_rounded))
+            constexpr int angle_min_rounded = Rad2MilsInt( M_PI_2 );
+            constexpr int angle_max_rounded = Rad2MilsInt( M_PI + M_PI_2 );
+            if( ( angle_cmp < angle_min_rounded ) || ( angle_cmp > angle_max_rounded ) )
                 return true;
         }
         else
         {
-            constexpr int angle_min = Rad2MilsInt(M_PI_2 + M_PI_4);
-            constexpr int angle_max = Rad2MilsInt(M_PI + M_PI_4);
-            if((angle_cmp < angle_min) || (angle_cmp > angle_max))
+            constexpr int angle_min = Rad2MilsInt( M_PI_2 + M_PI_4 );
+            constexpr int angle_max = Rad2MilsInt( M_PI + M_PI_4 );
+            if( ( angle_cmp < angle_min ) || ( angle_cmp > angle_max ) )
                 return true;
         }
         return false;
     }
     
-    inline bool IsSharpAngle(const TRACK* aTrackSegA, const TRACK* aTrackSegB, const wxPoint aCommonPos, const bool aRoundedCorner)
+    inline bool IsSharpAngle( const TRACK* aTrackSegA,
+                              const TRACK* aTrackSegB,
+                              const wxPoint aCommonPos,
+                              const bool aRoundedCorner
+                            )
     {
-        return IsSharpAngle(AngleBtwTracks(aTrackSegA, aCommonPos, aTrackSegB, aCommonPos), aRoundedCorner);
+        return IsSharpAngle( AngleBtwTracks( aTrackSegA, aCommonPos, aTrackSegB, aCommonPos ), aRoundedCorner );
     }
     
-    void Collect(const TRACK* aTrackSeg, const wxPoint aPosAt, Tracks_Container& aTracksList);
-    int GetMaxWidth(Tracks_Container& aTracksList);
-    TRACK* GetMaxWidthTrack(Tracks_Container& aTracksList);
+    void Collect( const TRACK* aTrackSeg, const wxPoint aPosAt, Tracks_Container& aTracksList );
+    int GetMaxWidth( Tracks_Container& aTracksList );
+    TRACK* GetMaxWidthTrack( Tracks_Container& aTracksList );
+
     //Tracks addresses T connected with atTrackSeg are returned aTrackSegNext and aTrackSegBack.
-    bool Find_T_Tracks(const TRACK* aTrackSegAt, const wxPoint aPosAt, TRACK* &aTrackSegNext, TRACK* &aTrackSegBack);
+    bool Find_T_Tracks( const TRACK* aTrackSegAt,
+                        const wxPoint aPosAt,
+                        TRACK* &aTrackSegNext,
+                        TRACK* &aTrackSegBack
+                      );
 
     constexpr double ALPHA_INC = M_PIx2 / 64;
-    void DrawArc(KIGFX::GAL* aGal, const wxPoint& aCenterPoint, const double aStartAngle, const double aEndAngle, const double aRad);
-    void DrawArc(KIGFX::GAL* aGal, const wxPoint& aCenterPoint, const wxPoint& aStartPoint, const wxPoint& aEndPoint, const double aRad);
+    void DrawArc( KIGFX::GAL* aGal,
+                  const wxPoint& aCenterPoint,
+                  const double aStartAngle,
+                  const double aEndAngle,
+                  const double aRad
+                );
+    void DrawArc( KIGFX::GAL* aGal,
+                  const wxPoint& aCenterPoint,
+                  const wxPoint& aStartPoint,
+                  const wxPoint& aEndPoint,
+                  const double aRad
+                );
 
     class SCAN_NET_BASE
     {
     public:
         virtual ~SCAN_NET_BASE(){};
-        
-        void Execute(void);
-        
+
+        void Execute( void );
+
     protected:
         SCAN_NET_BASE(){};
-        SCAN_NET_BASE(const TRACK* aNetStartSeg);
-        virtual bool ExecuteAt(TRACK* aTrackSeg)=0;
-        
+        SCAN_NET_BASE( const TRACK* aNetStartSeg );
+        virtual bool ExecuteAt( TRACK* aTrackSeg ) = 0;
+
         TRACK* m_net_start_seg{nullptr};
-        
+
         bool m_reverse{false};
         bool m_return_at_break{true};
     };
@@ -284,26 +337,35 @@ namespace TrackNodeItem
     class SCAN_NET_COLLECT : public SCAN_NET_BASE
     {
     public:
-        SCAN_NET_COLLECT(const TRACK* aTrackSeg, const wxPoint aPosAt, Tracks_Container* aTracksList);
+        SCAN_NET_COLLECT( const TRACK* aTrackSeg,
+                          const wxPoint aPosAt,
+                          Tracks_Container* aTracksList
+                        );
+
         ~SCAN_NET_COLLECT(){};
-        
+
     protected:
-        bool ExecuteAt(TRACK* aTrackSeg) override;
+        bool ExecuteAt( TRACK* aTrackSeg ) override;
         wxPoint m_pos{0,0};
         PCB_LAYER_ID m_layer;
         Tracks_Container* m_tracks_list{nullptr};
     };
-    
+
     class SCAN_NET_FIND_T_TRACKS : public SCAN_NET_COLLECT
     {
     public:
-        SCAN_NET_FIND_T_TRACKS(const TRACK* aTrackSeg, const wxPoint aPosAt, Tracks_Container* aTracksList);
+        SCAN_NET_FIND_T_TRACKS( const TRACK* aTrackSeg,
+                                const wxPoint aPosAt,
+                                Tracks_Container* aTracksList
+                              );
+
         ~SCAN_NET_FIND_T_TRACKS(){};
-        
-        TRACK* GetResultTrack(bool aFirstSecond) const;
-        
+
+        TRACK* GetResultTrack( bool aFirstSecond ) const;
+
     protected:
-        bool ExecuteAt(TRACK* aTrackSeg) override;
+        bool ExecuteAt( TRACK* aTrackSeg ) override;
+
     private:
         double m_angle_next;
         double m_angle_back;
@@ -312,11 +374,11 @@ namespace TrackNodeItem
         TRACK* m_result_track_0;
         TRACK* m_result_track_1;
     };
-    
-    bool EndPosNearest(const TRACK* aTrackSegAt, const wxPoint aPos);
-    bool StartPosNearest(const TRACK* aTrackSegAt, const wxPoint aPos);
-    wxPoint TrackSegNearestEndpoint(const TRACK* aTrackSegAt, const wxPoint aPos);
-    wxPoint TracksCommonPos(const TRACK* aTrackSegFirst, const TRACK* aTrackSegSecond);
+
+    bool EndPosNearest( const TRACK* aTrackSegAt, const wxPoint aPos );
+    bool StartPosNearest( const TRACK* aTrackSegAt, const wxPoint aPos );
+    wxPoint TrackSegNearestEndpoint( const TRACK* aTrackSegAt, const wxPoint aPos );
+    wxPoint TracksCommonPos( const TRACK* aTrackSegFirst, const TRACK* aTrackSegSecond );
 }//namespace TrackNodeItem
 
 #endif //TRACKNODEITEM_H

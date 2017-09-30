@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Heikki Pulkkinen.
+ * Copyright (C) 2016- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 using namespace ViaStitching;
 
 
-VIASTITCHING::VIASTITCHING(const BOARD* aBoard)
+VIASTITCHING::VIASTITCHING( const BOARD* aBoard )
 {
     m_board = aBoard;
 }

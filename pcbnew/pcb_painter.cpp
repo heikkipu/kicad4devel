@@ -448,7 +448,11 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
             // Set the text position to the pad shape position (the pad position is not the best place)
             VECTOR2D textpos( 0.0, 0.0 );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
             if( displayNetname && dynamic_cast<VIA*>(const_cast<VIA*>(aVia))->GetThermalCode())
+#else
+            if( displayNetname )
+#endif
             {
                 // calculate the size of net name text:
                 double tsize = 1.5 * size / aVia->GetShortNetname().Length();

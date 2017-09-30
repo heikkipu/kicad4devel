@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2017- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,51 +29,67 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // Save
 //-----------------------------------------------------------------------------------------------------/
-void ROUNDEDTRACKSCORNERS::Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const 
+void ROUNDEDTRACKSCORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel ) const 
 {
     bool corners = false;
     ROUNDEDTRACKSCORNER::PARAMS prev_params = {0, 0};
     for( TRACK* track_seg = m_Board->m_Track;  track_seg; track_seg = track_seg->Next() )
     {
-        if(track_seg->Type() == PCB_ROUNDEDTRACKSCORNER_T)
+        if( track_seg->Type() == PCB_ROUNDEDTRACKSCORNER_T )
         {
-            TRACK* connected_track = dynamic_cast<TRACK*>(dynamic_cast<ROUNDEDTRACKSCORNER*>(track_seg)->GetTrackSeg());
-            if(connected_track && (connected_track->Type() == PCB_TRACE_T))
+            TRACK* connected_track = dynamic_cast<TRACK*>( dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->GetTrackSeg() );
+            if( connected_track && ( connected_track->Type() == PCB_TRACE_T ) )
             {
-                ROUNDEDTRACKSCORNER::PARAMS param = dynamic_cast<ROUNDEDTRACKSCORNER*>(track_seg)->GetParams();
-                if(param != prev_params)
+                ROUNDEDTRACKSCORNER::PARAMS param = dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->GetParams();
+                if( param != prev_params )
                 {
-                    aOut->Print(aNestLevel, "(roundedtrackscorner ");
-                    aOut->Print(0, " (length_set %d) (length_ratio %d) (segments %d)", param.length_set, param.length_ratio, param.num_segments);
-                    aOut->Print( 0, " (parameters))\n" );
+                    aOut->Print( aNestLevel, "( roundedtrackscorner " );
+                    aOut->Print( 0,
+                                 " ( length_set %d ) ( length_ratio %d ) ( segments %d )",
+                                 param.length_set,
+                                 param.length_ratio,
+                                 param.num_segments );
+                    aOut->Print( 0, " ( parameters ) )\n" );
                     prev_params = param;
                 }
-                aOut->Print(aNestLevel, "(roundedtrackscorner ");
-                aOut->Print( 0, " (position %s) (net %d)", FMT_IU(track_seg->GetEnd() ).c_str(), track_seg->GetNetCode());
-                aOut->Print( 0, " (layer %s)", aOut->Quotew(connected_track->GetLayerName()).c_str());
-                aOut->Print(0, " (start %s) (end %s)", FMT_IU(connected_track->GetStart() ).c_str(),  FMT_IU(connected_track->GetEnd() ).c_str());
-                if(dynamic_cast<ROUNDEDTRACKSCORNER*>(track_seg)->IsLocked())
-                    aOut->Print(0, " (locked)");
-                aOut->Print( 0, " (arc))\n");
+                aOut->Print( aNestLevel, "( roundedtrackscorner " );
+                aOut->Print( 0,
+                             " ( position %s ) ( net %d )",
+                             FMT_IU( track_seg->GetEnd() ).c_str(),
+                             track_seg->GetNetCode() );
+                aOut->Print( 0,
+                             " ( layer %s )",
+                             aOut->Quotew( connected_track->GetLayerName() ).c_str() );
+                aOut->Print( 0,
+                             " ( start %s ) ( end %s )",
+                             FMT_IU( connected_track->GetStart() ).c_str(),
+                             FMT_IU( connected_track->GetEnd() ).c_str() );
+                if( dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->IsLocked() )
+                    aOut->Print( 0, " ( locked )" );
+                aOut->Print( 0, " ( arc ) )\n" );
                 corners = true;
             }
         }
     }
     //If no corners, do not save even teardrop parameters.
-    if(corners)
+    if( corners )
     {
         //Save current last. When load, it is current back.
         ROUNDEDTRACKSCORNER::PARAMS cur_params = GetParams();
-        aOut->Print(aNestLevel, "(roundedtrackscorner ");
-        aOut->Print(0, " (length_set %d) (length_ratio %d) (segments %d)", cur_params.length_set, cur_params.length_ratio, cur_params.num_segments);
-        aOut->Print( 0, " (parameters))\n" );
+        aOut->Print( aNestLevel, "( roundedtrackscorner " );
+        aOut->Print( 0,
+                     " ( length_set %d ) ( length_ratio %d ) ( segments %d )",
+                     cur_params.length_set,
+                     cur_params.length_ratio,
+                     cur_params.num_segments );
+        aOut->Print( 0, " ( parameters ) )\n" );
     }
 }
 
 //-----------------------------------------------------------------------------------------------------/
 // Load
 //-----------------------------------------------------------------------------------------------------/
-TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Parse(PCB_PARSER* aParser) 
+TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Parse( PCB_PARSER* aParser ) 
 {
     using namespace PCB_KEYS_T;
     wxCHECK_MSG( aParser->CurTok() == T_roundedtrackscorner, nullptr,
@@ -104,13 +120,13 @@ TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Parse(PCB_PARSER* aParser)
                 locked = true;
                 break;
             case T_length_set:
-                param.length_set = aParser->parseInt("length_set");
+                param.length_set = aParser->parseInt( "length_set" );
                 break;                
             case T_length_ratio:
-                param.length_ratio = aParser->parseInt("length_ratio");
+                param.length_ratio = aParser->parseInt( "length_ratio" );
                 break;
             case T_segments:
-                param.num_segments = aParser->parseInt("segments");
+                param.num_segments = aParser->parseInt( "segments" );
                 break;
             case T_position:
                 pos.x = aParser->parseBoardUnits( "pos x" );
@@ -131,21 +147,21 @@ TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Parse(PCB_PARSER* aParser)
                 track_end.y = aParser->parseBoardUnits( "end y" );
                 break;
             case T_parameters:
-                SetParams(param);
+                SetParams( param );
                 RecreateMenu();
                 break;
             case T_arc:
-                track_seg = GetTrackSegment(track_start, track_end, track_layer_id, net_code);
-                if(track_seg)
-                    ret_corner = Add(track_seg, pos, &picked_items);
+                track_seg = GetTrackSegment( track_start, track_end, track_layer_id, net_code );
+                if( track_seg )
+                    ret_corner = Add( track_seg, pos, &picked_items );
                 break;
             default:
                 aParser->Expecting( "arc, length_set, lengt_ratio, segments, roundedtrackscorner, position, net, layer, start, end, parameters, locked" );
         }
         aParser->NeedRIGHT();
     }
-    if(ret_corner)
-        ret_corner->SetLocked(locked);
+    if( ret_corner )
+        ret_corner->SetLocked( locked );
     return ret_corner;
 }
 

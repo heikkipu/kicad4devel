@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2017- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +25,11 @@
 
 using namespace TrackNodeItem;
 
-void ROUNDEDTRACKSCORNERS::GalRemovedListAdd(const ROUNDEDTRACKSCORNER* aCorner)
+void ROUNDEDTRACKSCORNERS::GalRemovedListAdd( const ROUNDEDTRACKSCORNER* aCorner )
 {
-    if(aCorner)
-        if(aCorner->Type() == PCB_ROUNDEDTRACKSCORNER_T)
-            m_gal_removed_list->insert(const_cast<ROUNDEDTRACKSCORNER*>(aCorner)); 
+    if( aCorner )
+        if( aCorner->Type() == PCB_ROUNDEDTRACKSCORNER_T )
+            m_gal_removed_list->insert( const_cast<ROUNDEDTRACKSCORNER*>( aCorner ) ); 
 }
 
 

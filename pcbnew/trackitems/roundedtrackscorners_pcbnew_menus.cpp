@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2017- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,146 +29,206 @@
 using namespace TrackNodeItem;
 
 
-void ROUNDEDTRACKSCORNERS::Popup(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+void ROUNDEDTRACKSCORNERS::Popup( wxMenu* aMenu,
+                                  const TRACK* aTrackSeg,
+                                  const wxPoint& aPos
+                                ) const
 {
-    if(aTrackSeg && aMenu)
+    if( aTrackSeg && aMenu )
     {
         wxString msg;
-        wxPoint track_nearest_endpoint = TrackNodeItem::TrackSegNearestEndpoint(aTrackSeg, aPos);
-        msg.Printf(_("Rounded Corners"));
+        wxPoint track_nearest_endpoint = TrackNodeItem::TrackSegNearestEndpoint( aTrackSeg, aPos );
+        msg.Printf( _( "Rounded Corners" ) );
 
         ROUNDEDTRACKSCORNER* corner = nullptr;
-        TRACKNODEITEM* item = Get(aTrackSeg, track_nearest_endpoint);
-        if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
-            corner = static_cast<ROUNDEDTRACKSCORNER*>(item);
+        TRACKNODEITEM* item = Get( aTrackSeg, track_nearest_endpoint );
+        if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
+            corner = static_cast<ROUNDEDTRACKSCORNER*>( item );
 
         wxMenu* corner_menu = new wxMenu;
-        AddMenuItem(aMenu, corner_menu, ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_COMMON_MNU, msg, KiBitmap(add_tracks_xpm));
-        if(IsOn())
+        AddMenuItem( aMenu,
+                     corner_menu,
+                     ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_COMMON_MNU,
+                     msg,
+                     KiBitmap( add_tracks_xpm ) );
+
+        if( IsOn() )
         {
-            if(!corner)
-                Menu_AddToTrack(corner_menu, aTrackSeg, track_nearest_endpoint);
-            if(corner)
+            if( !corner )
+                Menu_AddToTrack( corner_menu, aTrackSeg, track_nearest_endpoint );
+            if( corner )
             {
-                if(corner->GetParams() != GetParams())
+                if( corner->GetParams() != GetParams() )
                 {
-                    Menu_CopyParamsToCurrent(corner_menu, aTrackSeg, track_nearest_endpoint);
-                    Menu_ChangeFromTrack(corner_menu, aTrackSeg, track_nearest_endpoint);
+                    Menu_CopyParamsToCurrent( corner_menu, aTrackSeg, track_nearest_endpoint );
+                    Menu_ChangeFromTrack( corner_menu, aTrackSeg, track_nearest_endpoint );
                 }
-                Menu_RemoveFromTrack(corner_menu, aTrackSeg, track_nearest_endpoint);
+                Menu_RemoveFromTrack( corner_menu, aTrackSeg, track_nearest_endpoint );
             }
             corner_menu->AppendSeparator();
-            Menu_AddToNet(corner_menu, aTrackSeg, aPos);
-            Menu_RemoveFromNet(corner_menu, aTrackSeg, aPos);
+            Menu_AddToNet( corner_menu, aTrackSeg, aPos );
+            Menu_RemoveFromNet( corner_menu, aTrackSeg, aPos );
             corner_menu->AppendSeparator();
-            Menu_ConvertSegmentedCorner(corner_menu, aTrackSeg, aPos);
-            Menu_ConvertSegmentedCornersNet(corner_menu, aTrackSeg, aPos);
+            Menu_ConvertSegmentedCorner( corner_menu, aTrackSeg, aPos );
+            Menu_ConvertSegmentedCornersNet( corner_menu, aTrackSeg, aPos );
             corner_menu->AppendSeparator();
         }
-        Menu_ChangeSize(corner_menu);
+        Menu_ChangeSize( corner_menu );
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_AddToTrack(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+void ROUNDEDTRACKSCORNERS::Menu_AddToTrack( wxMenu* aMenu,
+                                            const TRACK* aTrackSeg,
+                                            const wxPoint& aPos
+                                          ) const
 {
-    if(aMenu && aTrackSeg && IsOn())
+    if( aMenu && aTrackSeg && IsOn() )
     {
         wxString msg;
-        msg.Printf(_("Add Corner %s"), GetChars(ParamsTxtToMenu(GetParams())));
-        AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_PLACE, msg, KiBitmap(add_arc_xpm));
+        msg.Printf( _( "Add Corner %s" ), GetChars( ParamsTxtToMenu( GetParams() ) ) );
+        AddMenuItem( aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_PLACE, msg, KiBitmap( add_arc_xpm ) );
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_RemoveFromTrack(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+void ROUNDEDTRACKSCORNERS::Menu_RemoveFromTrack( wxMenu* aMenu,
+                                                 const TRACK* aTrackSeg,
+                                                 const wxPoint& aPos
+                                               ) const
 {
-    if(aMenu && aTrackSeg && IsOn())
+    if( aMenu && aTrackSeg && IsOn() )
     {
-        if(aTrackSeg->Type() == PCB_TRACE_T)
+        if( aTrackSeg->Type() == PCB_TRACE_T )
         {
-            TRACKNODEITEM* item = Get(aTrackSeg, aPos);
-            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+            TRACKNODEITEM* item = Get( aTrackSeg, aPos );
+            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
             {
-                AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE, _("Remove Corner"), KiBitmap(delete_xpm));
+                AddMenuItem( aMenu,
+                             ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE,
+                             _( "Remove Corner" ),
+                             KiBitmap( delete_xpm ) );
             }
         }
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_ChangeFromTrack(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+void ROUNDEDTRACKSCORNERS::Menu_ChangeFromTrack( wxMenu* aMenu,
+                                                 const TRACK* aTrackSeg,
+                                                 const wxPoint& aPos
+                                               ) const
 {
-    if(aMenu && aTrackSeg && IsOn())
+    if( aMenu && aTrackSeg && IsOn() )
     {
-        if(aTrackSeg->Type() == PCB_TRACE_T)
+        if( aTrackSeg->Type() == PCB_TRACE_T )
         {
-            TRACKNODEITEM* item = Get(aTrackSeg, aPos);
-            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
-            {
-                wxString msg;
-                msg.Printf(_("Change Corner %s"), GetChars(ParamsTxtToMenu(GetParams())));
-                AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CHANGE, msg, KiBitmap(add_arc_xpm));
-            }
-        }
-    }
-}
-
-void ROUNDEDTRACKSCORNERS::Menu_CopyParamsToCurrent(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
-{
-    if(aMenu && aTrackSeg && IsOn())
-    {
-        if(aTrackSeg->Type() == PCB_TRACE_T)
-        {
-            TRACKNODEITEM* item = Get(aTrackSeg, aPos);
-            if(item && dynamic_cast<ROUNDEDTRACKSCORNER*>(item))
+            TRACKNODEITEM* item = Get( aTrackSeg, aPos );
+            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
             {
                 wxString msg;
-                msg.Printf(_("Copy Corner Settings %s to Current"),
-                           GetChars(ParamsTxtToMenu(static_cast<ROUNDEDTRACKSCORNER*>(item)->GetParams())));
-                AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT, msg, KiBitmap(tools_xpm));
+                msg.Printf( _( "Change Corner %s" ), GetChars( ParamsTxtToMenu( GetParams() ) ) );
+                AddMenuItem( aMenu,
+                             ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CHANGE,
+                             msg,
+                             KiBitmap( add_arc_xpm ) );
             }
         }
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_AddToNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+void ROUNDEDTRACKSCORNERS::Menu_CopyParamsToCurrent( wxMenu* aMenu,
+                                                     const TRACK* aTrackSeg,
+                                                     const wxPoint& aPos
+                                                   ) const
 {
-    if(aMenu && aTrackSeg && IsOn())
+    if( aMenu && aTrackSeg && IsOn() )
+    {
+        if( aTrackSeg->Type() == PCB_TRACE_T )
+        {
+            TRACKNODEITEM* item = Get( aTrackSeg, aPos );
+            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
+            {
+                wxString msg;
+                msg.Printf( _( "Copy Corner Settings %s to Current" ),
+                            GetChars( ParamsTxtToMenu( static_cast<ROUNDEDTRACKSCORNER*>( item )->GetParams() ) ) );
+                AddMenuItem( aMenu,
+                             ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT,
+                             msg,
+                             KiBitmap( tools_xpm ) );
+            }
+        }
+    }
+}
+
+void ROUNDEDTRACKSCORNERS::Menu_AddToNet( wxMenu* aMenu,
+                                          const TRACK* aTrackSeg,
+                                          const wxPoint& aPos
+                                        ) const
+{
+    if( aMenu && aTrackSeg && IsOn() )
     {
         wxString msg;
-        msg.Printf(_("Add Corners %s to NET: %s"), GetChars(ParamsTxtToMenu(GetParams())), GetChars(m_Board->FindNet(aTrackSeg->GetNetCode())->GetShortNetname()));
-        AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_PLACE_NET, msg, KiBitmap(add_arc_xpm));
+        msg.Printf( _( "Add Corners %s to NET: %s" ),
+                    GetChars( ParamsTxtToMenu( GetParams() ) ),
+                    GetChars( m_Board->FindNet( aTrackSeg->GetNetCode() )->GetShortNetname() ) );
+
+        AddMenuItem( aMenu,
+                     ID_POPUP_PCB_ROUNDEDTRACKSCORNER_PLACE_NET,
+                     msg,
+                     KiBitmap( add_arc_xpm ) );
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_RemoveFromNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+void ROUNDEDTRACKSCORNERS::Menu_RemoveFromNet( wxMenu* aMenu,
+                                               const TRACK* aTrackSeg,
+                                               const wxPoint& aPos
+                                             ) const
 {
-    if(aMenu && aTrackSeg && IsOn())
+    if( aMenu && aTrackSeg && IsOn() )
     {
-        if(aTrackSeg->Type() == PCB_TRACE_T)
+        if( aTrackSeg->Type() == PCB_TRACE_T )
         {
             wxString msg;
-            msg.Printf(_("Remove Corners from NET: %s"), GetChars(m_Board->FindNet(aTrackSeg->GetNetCode())->GetShortNetname()));
-            AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE_NET, msg, KiBitmap(delete_xpm));
+            msg.Printf( _( "Remove Corners from NET: %s" ),
+                        GetChars( m_Board->FindNet( aTrackSeg->GetNetCode() )->GetShortNetname() ) );
+
+            AddMenuItem( aMenu,
+                         ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE_NET,
+                         msg,
+                         KiBitmap( delete_xpm ) );
         }
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCorner(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCorner( wxMenu* aMenu,
+                                                        const TRACK* aTrackSeg,
+                                                        const wxPoint& aPos
+                                                      ) const
 {
-    if(aMenu && aTrackSeg && IsOn())
+    if( aMenu && aTrackSeg && IsOn() )
     {
-        AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED, _("Convert Segments to Corner"), KiBitmap(add_arc_xpm));
+        AddMenuItem( aMenu,
+                     ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED,
+                     _( "Convert Segments to Corner" ),
+                     KiBitmap( add_arc_xpm ) );
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCornersNet(wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos) const
+void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCornersNet( wxMenu* aMenu,
+                                                            const TRACK* aTrackSeg,
+                                                            const wxPoint& aPos
+                                                          ) const
 {
-    if(aMenu && aTrackSeg && IsOn())
+    if( aMenu && aTrackSeg && IsOn() )
     {
-        if(aTrackSeg->Type() == PCB_TRACE_T)
+        if( aTrackSeg->Type() == PCB_TRACE_T )
         {
             wxString msg;
-            msg.Printf(_("Convert Segments to Corner from NET: %s"), GetChars(m_Board->FindNet(aTrackSeg->GetNetCode())->GetShortNetname()));
-            AddMenuItem(aMenu, ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED_NET, msg, KiBitmap(add_arc_xpm));
+            msg.Printf( _( "Convert Segments to Corner from NET: %s" ),
+                        GetChars( m_Board->FindNet( aTrackSeg->GetNetCode() )->GetShortNetname() ) );
+
+            AddMenuItem( aMenu,
+                         ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED_NET,
+                         msg,
+                         KiBitmap( add_arc_xpm ) );
         }
     }
 }

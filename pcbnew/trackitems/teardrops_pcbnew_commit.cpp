@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2012- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,67 +29,71 @@
 using namespace TrackNodeItem;
 
 //Gal canvas add when drag and route tracks.
-void TEARDROPS::GalCommitPushAdd(BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList)
+void TEARDROPS::GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList )
 {
-    if(aItem)
+    if( aItem )
     {
-        if(aItem->Type() == PCB_TRACE_T)
+        if( aItem->Type() == PCB_TRACE_T )
         {
-            m_gal_commit_tracks.push_back(static_cast<TRACK*>(aItem));
+            m_gal_commit_tracks.push_back( static_cast<TRACK*>( aItem ) );
 
             //Routing.
-            if(m_EditFrame)
+            if( m_EditFrame )
             {
                 TOOL_BASE* tool = m_EditFrame->GetToolManager()->FindTool( "pcbnew.InteractiveRouter" );
-                ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>(tool);
-                if(router && (!router->Router()->IsDragging())) 
+                ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>( tool );
+                if( router && ( !router->Router()->IsDragging() ) ) 
                 {
-                    if(dynamic_cast<BOARD_CONNECTED_ITEM*>(aItem)->GetNetCode() == m_current_routed_track_netcode)
-                        Add(static_cast<TRACK*>(aItem), aUndoRedoList);
+                    if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode() == m_current_routed_track_netcode )
+                        Add( static_cast<TRACK*>( aItem ), aUndoRedoList );
                 }
             }
 
             //Dragging and/or pushing when routing.
-            if(m_gal_removed_list->size())
+            if( m_gal_removed_list->size() )
             {
-                for(TEARDROP* tear : *m_gal_removed_list)
+                for( TEARDROP* tear : *m_gal_removed_list )
                 {
                     BOARD_CONNECTED_ITEM* citem = tear->GetConnectedItem();
-                    if(citem)
+                    if( citem )
                     {
                         BOARD_CONNECTED_ITEM* track_item = nullptr;
-                        for(int n = 0; n < 2 ; ++n)
+                        for( int n = 0; n < 2 ; ++n )
                         {
                             wxPoint citem_pos;
-                            if(citem->Type() == PCB_PAD_T)
+                            if( citem->Type() == PCB_PAD_T )
                                 citem_pos = citem->GetPosition();
                             else
-                                if(dynamic_cast<TRACK*>(citem))
-                                    citem_pos = dynamic_cast<TRACK*>(citem)->GetEnd();
-                            if((citem_pos == static_cast<TRACK*>(aItem)->GetStart()) || (citem_pos == static_cast<TRACK*>(aItem)->GetEnd() ))
                             {
-                                if(citem->Type() == PCB_PAD_T)
-                                    n?  track_item = m_Board->GetPadFast(static_cast<TRACK*>(aItem)->GetEnd(), 
-                                                                        LSET(aItem->GetLayer())) :
-                                        track_item = m_Board->GetPadFast(static_cast<TRACK*>(aItem)->GetStart(), 
-                                                                        LSET(aItem->GetLayer()));
-                                else
-                                    if(dynamic_cast<VIA*>(citem))
-                                        n?  track_item = m_Board->GetViaByPosition(static_cast<TRACK*>(aItem)->GetEnd(),
-                                                                                aItem->GetLayer()) : 
-                                            track_item = m_Board->GetViaByPosition(static_cast<TRACK*>(aItem)->GetStart(),
-                                                                                aItem->GetLayer());
+                                if( dynamic_cast<TRACK*>( citem ) )
+                                    citem_pos = dynamic_cast<TRACK*>( citem )->GetEnd();
+                            }
 
-                                if(citem == track_item)
+                            if( ( citem_pos == static_cast<TRACK*>( aItem )->GetStart() ) ||
+                                ( citem_pos == static_cast<TRACK*>( aItem )->GetEnd() ) )
+                            {
+                                if( citem->Type() == PCB_PAD_T )
+                                    n?  track_item = m_Board->GetPadFast( static_cast<TRACK*>( aItem )->GetEnd(),
+                                                                          LSET( aItem->GetLayer() ) ) :
+                                        track_item = m_Board->GetPadFast( static_cast<TRACK*>( aItem )->GetStart(),
+                                                                          LSET( aItem->GetLayer() ) );
+                                else
+                                    if( dynamic_cast<VIA*>( citem ) )
+                                        n?  track_item = m_Board->GetViaByPosition( static_cast<TRACK*>( aItem )->GetEnd(),
+                                                                                    aItem->GetLayer() ) : 
+                                            track_item = m_Board->GetViaByPosition( static_cast<TRACK*>( aItem )->GetStart(),
+                                                                                    aItem->GetLayer() );
+
+                                if( citem == track_item )
                                 {
                                     TEARDROP::PARAMS params = tear->GetParams();
-                                    if(params != GetShapeParams(GetCurrentShape()))
+                                    if( params != GetShapeParams( GetCurrentShape() ) )
                                     {
-                                        SetShapeParams(params);
-                                        SetCurrentShape(params.shape);
+                                        SetShapeParams( params );
+                                        SetCurrentShape( params.shape );
                                     }
-                                    Add(static_cast<TRACK*>(aItem), track_item, aUndoRedoList);
-                                    m_gal_drag_tears_used.insert(tear);
+                                    Add( static_cast<TRACK*>( aItem ), track_item, aUndoRedoList );
+                                    m_gal_drag_tears_used.insert( tear );
                                     break;
                                 }
                             }
@@ -97,50 +101,50 @@ void TEARDROPS::GalCommitPushAdd(BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedo
                     }
                 }
 
-                SetShapeParams(m_teardrop_params_gal);
-                SetShapeParams(m_fillet_params_gal);
-                SetShapeParams(m_subland_params_gal);
-                SetCurrentShape(m_current_shape_gal);
+                SetShapeParams( m_teardrop_params_gal );
+                SetShapeParams( m_fillet_params_gal );
+                SetShapeParams( m_subland_params_gal );
+                SetCurrentShape( m_current_shape_gal );
             }
         }
 
         //Drag via.
-        if(aItem->Type() == PCB_VIA_T)
-            m_gal_drag_vias_added.insert(static_cast<VIA*>(aItem));
+        if( aItem->Type() == PCB_VIA_T )
+            m_gal_drag_vias_added.insert( static_cast<VIA*>( aItem ) );
     }
 }
 
 //Gal canva remove when drag and route tracks.
-void TEARDROPS::GalCommitPushRemove(BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList)
+void TEARDROPS::GalCommitPushRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList )
 {
-    if( dynamic_cast<BOARD_CONNECTED_ITEM*>(aItemFrom) )
-        Remove( static_cast<BOARD_CONNECTED_ITEM*>(aItemFrom), aUndoRedoList, true );
+    if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aItemFrom ) )
+        Remove( static_cast<BOARD_CONNECTED_ITEM*>( aItemFrom ), aUndoRedoList, true );
     else
-        if( dynamic_cast<MODULE*>(aItemFrom) )
-            Remove( static_cast<MODULE*>(aItemFrom), aUndoRedoList, true );
+        if( dynamic_cast<MODULE*>( aItemFrom ) )
+            Remove( static_cast<MODULE*>( aItemFrom ), aUndoRedoList, true );
 }
 
-void TEARDROPS::GalCommitPushPrepare(void)
+void TEARDROPS::GalCommitPushPrepare( void )
 {
     m_gal_removed_list->clear();
     m_current_shape_gal = GetCurrentShape();
-    m_teardrop_params_gal = GetShapeParams(TEARDROP::TEARDROP_T);
-    m_fillet_params_gal = GetShapeParams(TEARDROP::FILLET_T);
-    m_subland_params_gal = GetShapeParams(TEARDROP::SUBLAND_T);
+    m_teardrop_params_gal = GetShapeParams( TEARDROP::TEARDROP_T );
+    m_fillet_params_gal = GetShapeParams( TEARDROP::FILLET_T );
+    m_subland_params_gal = GetShapeParams( TEARDROP::SUBLAND_T );
 
-    if(m_EditFrame)
+    if( m_EditFrame )
     {
         TOOL_BASE* tool = m_EditFrame->GetToolManager()->FindTool( "pcbnew.InteractiveRouter" );
-        ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>(tool);
-        if(router) 
+        ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>( tool );
+        if( router ) 
         {
             PNS::ITEM* start_item = router->GetStartItem();
-            if(start_item)
+            if( start_item )
             {
                 m_current_routed_track_netcode = start_item->Net();
                 m_gal_drag_via_dragged = nullptr;
-                if((start_item->Kind() == PNS::ITEM::VIA_T) && router->Router()->IsDragging())
-                    m_gal_drag_via_dragged = static_cast<VIA*>(start_item->Parent());
+                if( ( start_item->Kind() == PNS::ITEM::VIA_T ) && router->Router()->IsDragging() )
+                    m_gal_drag_via_dragged = static_cast<VIA*>( start_item->Parent() );
                 m_gal_drag_vias_added.clear();
                 m_gal_drag_tears_used.clear();
                 m_gal_commit_tracks.clear();
@@ -149,35 +153,40 @@ void TEARDROPS::GalCommitPushPrepare(void)
     }
 }
 
-void TEARDROPS::GalCommitPushFinish(PICKED_ITEMS_LIST* aUndoRedoList)
+void TEARDROPS::GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList )
 {
     //Add teardrops moved/added vias.
-    for(TEARDROP* tear : *m_gal_removed_list)
+    for( TEARDROP* tear : *m_gal_removed_list )
     {
-        std::set<TEARDROP*>::iterator tear_it = m_gal_drag_tears_used.find(tear);
-        if(tear_it == m_gal_drag_tears_used.end())
+        std::set<TEARDROP*>::iterator tear_it = m_gal_drag_tears_used.find( tear );
+        if( tear_it == m_gal_drag_tears_used.end() )
         {
-            for(VIA* via : m_gal_drag_vias_added)
+            for( VIA* via : m_gal_drag_vias_added )
             {
-                if(tear->GetNetCode() == via->GetNetCode())
+                if( tear->GetNetCode() == via->GetNetCode() )
                 {
-                    for(TRACK* track : m_gal_commit_tracks)
+                    for( TRACK* track : m_gal_commit_tracks )
                     {
-                        if((track->GetNetCode() == via->GetNetCode()) && (track->GetLayer() == tear->GetLayer()) && via->IsOnLayer(track->GetLayer()))
-                            if((track->GetStart() == via->GetEnd()) || (track->GetEnd() == via->GetEnd()))
+                        if( ( track->GetNetCode() == via->GetNetCode() ) &&
+                            ( track->GetLayer() == tear->GetLayer() ) &&
+                            via->IsOnLayer( track->GetLayer() ) )
+                        {
+                            if( ( track->GetStart() == via->GetEnd() ) ||
+                                ( track->GetEnd() == via->GetEnd() ) )
                             {
-                                if(!GetTeardrop(track, via))
+                                if( !GetTeardrop( track, via ) )
                                 {
                                     TEARDROP::PARAMS params = tear->GetParams();
-                                    if(params != GetShapeParams(GetCurrentShape()))
+                                    if( params != GetShapeParams( GetCurrentShape() ) )
                                     {
-                                        SetShapeParams(params);
-                                        SetCurrentShape(params.shape);
+                                        SetShapeParams( params );
+                                        SetCurrentShape( params.shape );
                                     }
-                                    Add(track, via, aUndoRedoList);
+                                    Add( track, via, aUndoRedoList );
                                     break;
                                 }
                             }
+                        }
                     }
                 }
             }
@@ -189,9 +198,9 @@ void TEARDROPS::GalCommitPushFinish(PICKED_ITEMS_LIST* aUndoRedoList)
     m_gal_drag_tears_used.clear();
     m_gal_commit_tracks.clear();
 
-    SetShapeParams(m_teardrop_params_gal);
-    SetShapeParams(m_fillet_params_gal);
-    SetShapeParams(m_subland_params_gal);
-    SetCurrentShape(m_current_shape_gal);
+    SetShapeParams( m_teardrop_params_gal );
+    SetShapeParams( m_fillet_params_gal );
+    SetShapeParams( m_subland_params_gal );
+    SetCurrentShape( m_current_shape_gal );
     RecreateMenu();
 }

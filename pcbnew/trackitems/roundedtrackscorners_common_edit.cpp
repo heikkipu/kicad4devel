@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2017- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,19 +27,19 @@
 using namespace TrackNodeItem;
 
 
-void ROUNDEDTRACKSCORNERS::ToggleEdit(const TO_EDIT_T aEdit)
+void ROUNDEDTRACKSCORNERS::ToggleEdit( const TO_EDIT_T aEdit )
 {
-    if(m_track_edit_corner)  
+    if( m_track_edit_corner )  
     {
-        if(m_can_edit && aEdit)
+        if( m_can_edit && aEdit )
         {
-            if(m_to_edit)
+            if( m_to_edit )
             {
-                switch(m_to_edit)
+                switch( m_to_edit )
                 {
                     case EDIT_LENGTH_SET_T:
                     case EDIT_LENGTH_RATIO_T:
-                        SetParams(m_edit_params);
+                        SetParams( m_edit_params );
                         RecreateMenu();
                     default:
                         m_to_edit = EDIT_NULL_T;
@@ -50,7 +50,7 @@ void ROUNDEDTRACKSCORNERS::ToggleEdit(const TO_EDIT_T aEdit)
             else
             {
                 m_to_edit = aEdit;
-                m_track_edit_corner->SetParams(m_edit_params);
+                m_track_edit_corner->SetParams( m_edit_params );
             }
         }
         else
@@ -58,29 +58,32 @@ void ROUNDEDTRACKSCORNERS::ToggleEdit(const TO_EDIT_T aEdit)
             *m_track45Only = m_track45Only_before_edit;
             m_to_edit = EDIT_NULL_T;
         }
-        if(m_EditFrame)
+        if( m_EditFrame )
             m_EditFrame->GetCanvas()->Refresh();
     }
 }
 
-void ROUNDEDTRACKSCORNERS::RouteCreate_Start(void)
+void ROUNDEDTRACKSCORNERS::RouteCreate_Start( void )
 {
     m_can_edit = true;
 }
 
-void ROUNDEDTRACKSCORNERS::RouteCreate_Stop(void)
+void ROUNDEDTRACKSCORNERS::RouteCreate_Stop( void )
 {
     m_can_edit = false;
-    ToggleEdit(EDIT_NULL_T);
+    ToggleEdit( EDIT_NULL_T );
     DestroyRouteEdit();
 }
 
-void ROUNDEDTRACKSCORNERS::DrawEditParams(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset) const
+void ROUNDEDTRACKSCORNERS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
+                                           wxDC* aDC,
+                                           const wxPoint& aOffset
+                                         ) const
 {
-    if(m_track_edit_corner) 
+    if( m_track_edit_corner ) 
     {
         TRACK* segm = m_track_edit_corner->GetTrackSeg();
-        if(segm)
+        if( segm )
         {
             wxPoint txtpos = m_track_edit_corner->GetEnd();
             int txt_size = m_track_edit_corner->GetWidth();
@@ -91,19 +94,37 @@ void ROUNDEDTRACKSCORNERS::DrawEditParams(EDA_DRAW_PANEL* aPanel, wxDC* aDC, con
             txt_n_pos.y += txt_size;
 
             wxString txt_t, txt_n; 
-            txt_n.Printf( _( "%s" ), m_EditFrame->LengthDoubleToString(m_edit_params.length_set, true));
-            txt_t.Printf( _( "%d%s" ), m_edit_params.length_ratio, _("%"));
-        
+            txt_n.Printf( _( "%s" ), m_EditFrame->LengthDoubleToString( m_edit_params.length_set, true ) );
+            txt_t.Printf( _( "%d%s" ), m_edit_params.length_ratio, _( "%" ) );
+
             EDA_RECT* eRect = aPanel->GetClipBox();
-            DrawGraphicText( eRect, aDC, txt_t_pos, WHITE, txt_t, 0, wxSize( txt_size, txt_size ), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM, txt_size / 7, false, false );
-            DrawGraphicText( eRect, aDC, txt_n_pos, WHITE, txt_n, 0, wxSize( txt_size, txt_size ), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP, txt_size / 7, false, false );
+            DrawGraphicText( eRect,
+                             aDC,
+                             txt_t_pos,
+                             WHITE, txt_t,
+                             0,
+                             wxSize( txt_size, txt_size ),
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
+                             txt_size / 7,
+                             false, 
+                             false );
+            DrawGraphicText( eRect,
+                             aDC,
+                             txt_n_pos,
+                             WHITE, txt_n,
+                             0,
+                             wxSize( txt_size, txt_size ),
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_TOP,
+                             txt_size / 7,
+                             false,
+                             false );
         }
     }
 }
 
-void ROUNDEDTRACKSCORNERS::DestroyRouteEdit(void)
+void ROUNDEDTRACKSCORNERS::DestroyRouteEdit( void )
 {
-    if(m_track_edit_corner)
+    if( m_track_edit_corner )
     {
         m_track_edit_corner->ResetVisibleEndpoints();
         m_track_edit_corner->ReleaseTrackSegs();
@@ -112,28 +133,39 @@ void ROUNDEDTRACKSCORNERS::DestroyRouteEdit(void)
     }
 }
 
-ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const TRACK* aTrack, const TRACK* aTrackSecond, const bool aErase, bool* aTrack45Only)
+ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit( EDA_DRAW_PANEL* aPanel,
+                                                            wxDC* aDC,
+                                                            const TRACK* aTrack,
+                                                            const TRACK* aTrackSecond,
+                                                            const bool aErase,
+                                                            bool* aTrack45Only
+                                                          )
 {
-    if(!aTrack || !aTrackSecond|| GetParent()->Teardrops()->IsEditOn() || const_cast<TRACK*>(aTrack)->IsNull() ||const_cast<TRACK*>(aTrackSecond)->IsNull())
+    if( !aTrack || !aTrackSecond|| GetParent()->Teardrops()->IsEditOn() ||
+        const_cast<TRACK*>( aTrack )->IsNull() || const_cast<TRACK*>( aTrackSecond )->IsNull() )
     {
-        if(m_track_edit_corner)
-            m_track_edit_corner->Draw(aPanel, aDC, GR_XOR, wxPoint(0,0));
+        if( m_track_edit_corner )
+            m_track_edit_corner->Draw( aPanel, aDC, GR_XOR, wxPoint( 0,0 ) );
 
         DestroyRouteEdit();
         return nullptr;
     }
     
-    if(m_can_edit)
+    if( m_can_edit )
     {
         bool erase = aErase;
-        if(!m_track_edit_corner)
+        if( !m_track_edit_corner )
         {
             ROUNDEDTRACKSCORNER::PARAMS params = GetParams();
-            m_track_edit_corner = new ROUNDEDTRACKSCORNER_ROUTE_EDIT(dynamic_cast<PCB_BASE_FRAME*>(aPanel->GetParent())->GetBoard(), aTrack, aTrackSecond, params,  true);
+            BOARD* board = dynamic_cast<PCB_BASE_FRAME*>( aPanel->GetParent() )->GetBoard();
+            m_track_edit_corner = new ROUNDEDTRACKSCORNER_ROUTE_EDIT( board,
+                                                                      aTrack,
+                                                                      aTrackSecond,
+                                                                      params, true );
             m_track45Only = aTrack45Only;
-            if(m_track_edit_corner)
+            if( m_track_edit_corner )
             {
-                if(!m_track_edit_corner->IsCreatedOK())   
+                if( !m_track_edit_corner->IsCreatedOK() )   
                 {
                     delete m_track_edit_corner;
                     m_track_edit_corner = nullptr;
@@ -141,42 +173,44 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit(EDA_DRAW_PANEL* aPane
             }
             erase = false;
         }
-        if(m_track_edit_corner)
+        if( m_track_edit_corner )
         {
-            if(erase)
-                m_track_edit_corner->Draw(aPanel, aDC, GR_XOR, wxPoint(0,0));
-            if(dynamic_cast<ROUNDEDTRACKSCORNER_ROUTE_EDIT*>(m_track_edit_corner)->ChangeTracks(aTrack, aTrackSecond))
+            if( erase )
+                m_track_edit_corner->Draw( aPanel, aDC, GR_XOR, wxPoint( 0,0 ) );
+            if( dynamic_cast<ROUNDEDTRACKSCORNER_ROUTE_EDIT*>( m_track_edit_corner )->ChangeTracks( aTrack, aTrackSecond ) )
             {
-                if(IsEditOn())
+                if( IsEditOn() )
                 {
                     *m_track45Only = true;
-                    int dist = std::min(m_track_edit_corner->GetTrackSeg()->GetLength() / 2, m_track_edit_corner->GetTrackSegSecond()->GetLength() / 2);
-                    if(dist > 0)
+                    int dist = std::min( m_track_edit_corner->GetTrackSeg()->GetLength() / 2,
+                                         m_track_edit_corner->GetTrackSegSecond()->GetLength() / 2 );
+                    if( dist > 0 )
                     {
-                        if(aErase && m_editparams_drawn)
-                            DrawEditParams(aPanel, aDC, wxPoint(0,0));
-                        switch(m_to_edit)
+                        if( aErase && m_editparams_drawn )
+                            DrawEditParams( aPanel, aDC, wxPoint( 0,0 ) );
+
+                        switch( m_to_edit )
                         {
                             case EDIT_LENGTH_SET_T:
                             {
-                                m_edit_params.length_set = double(dist);
+                                m_edit_params.length_set = double( dist );
                                 break;
                             }
                             case EDIT_LENGTH_RATIO_T:
                             {
-                                m_edit_params.length_ratio = double(dist) / 25000.0; 
+                                m_edit_params.length_ratio = double( dist ) / 25000.0; 
                                 break;
                             }
                             default:;
                         }
-                        m_track_edit_corner->SetParams(m_edit_params);
-                        DrawEditParams(aPanel, aDC, wxPoint(0,0));
+                        m_track_edit_corner->SetParams( m_edit_params );
+                        DrawEditParams( aPanel, aDC, wxPoint( 0,0 ) );
                         m_editparams_drawn = true;
                     }
                     else
                     {
-                        if(m_editparams_drawn)
-                            DrawEditParams(aPanel, aDC, wxPoint(0,0));
+                        if( m_editparams_drawn )
+                            DrawEditParams( aPanel, aDC, wxPoint( 0,0 ) );
                         m_editparams_drawn = false;
                     }
                 }
@@ -185,10 +219,10 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit(EDA_DRAW_PANEL* aPane
                     m_track45Only_before_edit = *m_track45Only;
                     m_edit_start_point = aTrack->GetStart();
                     m_edit_params = GetParams();
-                    m_track_edit_corner->SetParams(m_edit_params);
+                    m_track_edit_corner->SetParams( m_edit_params );
                     m_editparams_drawn = false;
                 }
-                m_track_edit_corner->Draw(aPanel, aDC, GR_XOR, wxPoint(0,0));
+                m_track_edit_corner->Draw( aPanel, aDC, GR_XOR, wxPoint( 0,0 ) );
             }
             else
             {

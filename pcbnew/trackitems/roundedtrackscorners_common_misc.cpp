@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2017- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,19 +28,27 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // PLOT
 //-----------------------------------------------------------------------------------------------------/
-void ROUNDEDTRACKSCORNERS::Plot(const TRACKNODEITEM* aTrackNodeItem, PLOTTER* aPlotter, const EDA_DRAW_MODE_T* aPlotMode, void* aData)
+void ROUNDEDTRACKSCORNERS::Plot( const TRACKNODEITEM* aTrackNodeItem,
+                                 PLOTTER* aPlotter,
+                                 const EDA_DRAW_MODE_T* aPlotMode,
+                                 void* aData
+                               )
 {
-    if(aTrackNodeItem && dynamic_cast<ROUNDEDTRACKSCORNER*>(const_cast<TRACKNODEITEM*>(aTrackNodeItem)))
+    if( aTrackNodeItem && dynamic_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACKNODEITEM*>( aTrackNodeItem ) ) )
     {
-        ROUNDEDTRACKSCORNER* corner = static_cast<ROUNDEDTRACKSCORNER*>(const_cast<TRACKNODEITEM*>(aTrackNodeItem));
-        if(corner->IsSetOK())
+        ROUNDEDTRACKSCORNER* corner = static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACKNODEITEM*>( aTrackNodeItem ) );
+        if( corner->IsSetOK() )
         {
             std::vector<wxPoint> corners;
             corners.clear();
-            for(unsigned int n = 0; n < corner->GetPolyPointsNum() - 1; n++)
+            for( unsigned int n = 0; n < corner->GetPolyPointsNum() - 1; n++ )
             {
-                corners.push_back(corner->GetPolyPoint(n));
-                aPlotter->ThickSegment(corner->GetPolyPoint(n), corner->GetPolyPoint(n+1), corner->GetWidth(), *aPlotMode, aData );
+                corners.push_back( corner->GetPolyPoint( n ) );
+                aPlotter->ThickSegment( corner->GetPolyPoint( n ),
+                                        corner->GetPolyPoint( n+1 ),
+                                        corner->GetWidth(),
+                                        *aPlotMode,
+                                        aData );
             }
         }
     }

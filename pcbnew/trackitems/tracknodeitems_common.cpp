@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2012- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,10 +29,10 @@ using namespace TrackNodeItem;
 using namespace TrackNodeItems;
 
 
-TRACKNODEITEMS::TRACKNODEITEMS(const TRACKITEMS* aParent, const BOARD* aBoard)
+TRACKNODEITEMS::TRACKNODEITEMS( const TRACKITEMS* aParent, const BOARD* aBoard )
 {
-    m_Board = const_cast<BOARD*>(aBoard);
-    m_Parent = const_cast<TRACKITEMS*>(aParent);
+    m_Board = const_cast<BOARD*>( aBoard );
+    m_Parent = const_cast<TRACKITEMS*>( aParent );
     m_EditFrame = nullptr;
     m_menu = nullptr;
     
@@ -46,10 +46,10 @@ TRACKNODEITEMS::~TRACKNODEITEMS()
     m_get_list = nullptr;
 }
 
-void TRACKNODEITEMS::SetEditFrame(const PCB_EDIT_FRAME* aEditFrame)
+void TRACKNODEITEMS::SetEditFrame( const PCB_EDIT_FRAME* aEditFrame )
 {
-    m_EditFrame = const_cast<PCB_EDIT_FRAME*>(aEditFrame);
-    if(m_menu)
+    m_EditFrame = const_cast<PCB_EDIT_FRAME*>( aEditFrame );
+    if( m_menu )
     {
         delete m_menu;
         m_menu = nullptr;
@@ -61,9 +61,9 @@ void TRACKNODEITEMS::SetEditFrame(const PCB_EDIT_FRAME* aEditFrame)
 //----------------------------------------------------------------------------------------
 // DRC
 //----------------------------------------------------------------------------------------
-STATUS_FLAGS TRACKNODEITEMS::DRC_Flags(const STATUS_FLAGS aStatus)
+STATUS_FLAGS TRACKNODEITEMS::DRC_Flags( const STATUS_FLAGS aStatus )
 {
-    return aStatus & (IS_CHANGED | IN_EDIT | IS_MOVED | IS_RESIZED | IS_DRAGGED | IS_NEW);
+    return aStatus & ( IS_CHANGED | IN_EDIT | IS_MOVED | IS_RESIZED | IS_DRAGGED | IS_NEW );
 }
 
 //------------------------------------------------------------------------------------
@@ -73,14 +73,18 @@ STATUS_FLAGS TRACKNODEITEMS::DRC_Flags(const STATUS_FLAGS aStatus)
 // PLUGIN PARSE 
 //----------------------------------------------------------------------------------------
 
-TRACK* TRACKNODEITEMS::GetTrackSegment(const wxPoint aStart, const wxPoint aEnd, const int aLayer, const int aNetCode) const
+TRACK* TRACKNODEITEMS::GetTrackSegment( const wxPoint aStart,
+                                        const wxPoint aEnd,
+                                        const int aLayer,
+                                        const int aNetCode
+                                      ) const
 {
     TRACK* track_seg = m_Board->m_Track; //GetTrack();
-    while(track_seg)
+    while( track_seg )
     {
-        if(track_seg->GetNetCode() == aNetCode)
-            if(track_seg->GetLayer() == aLayer)
-                if((track_seg->GetStart() == aStart) && (track_seg->GetEnd() == aEnd))
+        if( track_seg->GetNetCode() == aNetCode )
+            if( track_seg->GetLayer() == aLayer )
+                if( ( track_seg->GetStart() == aStart ) && ( track_seg->GetEnd() == aEnd ) )
                     return track_seg;
         track_seg = track_seg->Next();
     }
@@ -92,22 +96,27 @@ TRACK* TRACKNODEITEMS::GetTrackSegment(const wxPoint aStart, const wxPoint aEnd,
 //------------------------------------------------------------------------------------
 // List add.
 //------------------------------------------------------------------------------------
-TRACKNODEITEM* TRACKNODEITEMS::Get(const TRACK* aTrackSegAt, const wxPoint& aPosAt) const
+TRACKNODEITEM* TRACKNODEITEMS::Get( const TRACK* aTrackSegAt, const wxPoint& aPosAt ) const
 {
     TRACKNODEITEM* result = nullptr;
-    if(aTrackSegAt && aTrackSegAt->Type() == PCB_TRACE_T)
+    if( aTrackSegAt && aTrackSegAt->Type() == PCB_TRACE_T )
     {
-        const_cast<TRACKNODEITEMS*>(this)->AddGetList(aTrackSegAt);
-        if(m_get_list)
+        const_cast<TRACKNODEITEMS*>( this )->AddGetList( aTrackSegAt );
+        if( m_get_list )
         {
             unsigned int min_dist = std::numeric_limits<unsigned int>::max();
-            for(TRACKNODEITEM* item : *m_get_list)
+            for( TRACKNODEITEM* item : *m_get_list )
             {
                 wxPoint center_pos = item->GetPosition(); //Center pos
-                unsigned int dist_center = hypot(abs(center_pos.y - aPosAt.y) , abs(center_pos.x - aPosAt.x));
+                unsigned int dist_center = hypot( abs( center_pos.y - aPosAt.y ),
+                                                  abs( center_pos.x - aPosAt.x ) );
+
                 wxPoint pos = item->GetEnd();
-                unsigned int dist_pos = hypot(abs(pos.y - aPosAt.y) , abs(pos.x - aPosAt.x));
-                if((dist_pos < min_dist) && ((dist_center < item->GetBoundingRad()) || (aPosAt == pos)))
+                unsigned int dist_pos = hypot( abs( pos.y - aPosAt.y ),
+                                               abs( pos.x - aPosAt.x ) );
+
+                if( ( dist_pos < min_dist ) && 
+                    ( ( dist_center < item->GetBoundingRad() ) || ( aPosAt == pos ) ) )
                 {
                     min_dist = dist_pos;
                     result = item;
@@ -118,36 +127,39 @@ TRACKNODEITEM* TRACKNODEITEMS::Get(const TRACK* aTrackSegAt, const wxPoint& aPos
     return result;
 }
 
-TRACKNODEITEM* TRACKNODEITEMS::Get(const TRACK* aTrackSegAt, const wxPoint& aPosAt, const bool aExcactPos) const
+TRACKNODEITEM* TRACKNODEITEMS::Get( const TRACK* aTrackSegAt,
+                                    const wxPoint& aPosAt,
+                                    const bool aExcactPos
+                                  ) const
 {
-    if(aTrackSegAt && aTrackSegAt->Type() == PCB_TRACE_T)
+    if( aTrackSegAt && aTrackSegAt->Type() == PCB_TRACE_T )
     {
-        if(aPosAt == aTrackSegAt->GetStart())
-            return Back(aTrackSegAt);
-        if(aPosAt == aTrackSegAt->GetEnd())
-            return Next(aTrackSegAt);
+        if( aPosAt == aTrackSegAt->GetStart() )
+            return Back( aTrackSegAt );
+        if( aPosAt == aTrackSegAt->GetEnd() )
+            return Next( aTrackSegAt );
     }
     return nullptr;
 }
 
-void TRACKNODEITEMS::AddGetList(const TRACK* aTrackSegFrom)
+void TRACKNODEITEMS::AddGetList( const TRACK* aTrackSegFrom )
 {
-    if(aTrackSegFrom)
+    if( aTrackSegFrom )
     {
         m_get_list->clear();
-        if(aTrackSegFrom->Type() == PCB_TRACE_T)
+        if( aTrackSegFrom->Type() == PCB_TRACE_T )
         {
-            TRACKNODEITEM* item = Next(aTrackSegFrom);
-            if(item)
-                m_get_list->insert(item); 
+            TRACKNODEITEM* item = Next( aTrackSegFrom );
+            if( item )
+                m_get_list->insert( item ); 
 
-            item = Back(aTrackSegFrom);
-            if(item)
-                m_get_list->insert(item); 
+            item = Back( aTrackSegFrom );
+            if( item )
+                m_get_list->insert( item ); 
         }
         else
-            if(dynamic_cast<TRACKNODEITEM*>(const_cast<TRACK*>(aTrackSegFrom)))
-                m_get_list->insert(static_cast<TRACKNODEITEM*>(const_cast<TRACK*>(aTrackSegFrom))); 
+            if( dynamic_cast<TRACKNODEITEM*>( const_cast<TRACK*>( aTrackSegFrom ) ) )
+                m_get_list->insert( static_cast<TRACKNODEITEM*>( const_cast<TRACK*>( aTrackSegFrom ) ) ); 
     }
 }
 //------------------------------------------------------------------------------------
@@ -156,16 +168,16 @@ void TRACKNODEITEMS::AddGetList(const TRACK* aTrackSegFrom)
 // Menus 
 //----------------------------------------------------------------------------------------
 
-void TRACKNODEITEMS::RecreateMenu(void)
+void TRACKNODEITEMS::RecreateMenu( void )
 {
-    if(m_menu)
+    if( m_menu )
     {
         int item_pos = m_menu->GetMenuItemCount();
-        while(--item_pos >= 0)
+        while( --item_pos >= 0 )
         {
-            wxMenuItem* item = m_menu->FindItemByPosition(item_pos);
-            m_menu->Destroy(item);
+            wxMenuItem* item = m_menu->FindItemByPosition( item_pos );
+            m_menu->Destroy( item );
         }
-        CreateMenu(m_menu);
+        CreateMenu( m_menu );
     }
 }

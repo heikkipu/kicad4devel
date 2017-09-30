@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2012- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,16 +32,19 @@ using namespace TrackNodeItems;
 // PROGRESS CLASSES 
 //-----------------------------------------------------------------------------------------------------/
 // BASE item class 
-ITEMS_PROGRESS_BASE::ITEMS_PROGRESS_BASE(const PCB_EDIT_FRAME* aFrame, const BOARD_ITEM* aListFirstItem, PICKED_ITEMS_LIST* aUndoRedo)
+ITEMS_PROGRESS_BASE::ITEMS_PROGRESS_BASE( const PCB_EDIT_FRAME* aFrame,
+                                          const BOARD_ITEM* aListFirstItem,
+                                          PICKED_ITEMS_LIST* aUndoRedo
+                                        )
 {
-    m_frame = const_cast<PCB_EDIT_FRAME*>(aFrame);
+    m_frame = const_cast<PCB_EDIT_FRAME*>( aFrame );
     
     m_undoredo_items = aUndoRedo;
 
     m_progress_to_count = 0;
     m_items_to_count = 0;
-    m_list_first_item = const_cast<BOARD_ITEM*>(aListFirstItem);
-    if(m_list_first_item)
+    m_list_first_item = const_cast<BOARD_ITEM*>( aListFirstItem );
+    if( m_list_first_item )
     {
         m_progress_to_count = m_list_first_item->GetList()->GetCount();
         m_items_to_count = m_progress_to_count - 1;
@@ -49,67 +52,73 @@ ITEMS_PROGRESS_BASE::ITEMS_PROGRESS_BASE(const PCB_EDIT_FRAME* aFrame, const BOA
 
     m_can_cancel = true;
 
-    m_progress_title.Printf(_("Progressing..."));
+    m_progress_title.Printf( _( "Progressing..." ) );
 }
 
 ITEMS_PROGRESS_BASE::~ITEMS_PROGRESS_BASE()
 {
-    if(m_frame && m_undoredo_items && m_undoredo_items->GetCount())
+    if( m_frame && m_undoredo_items && m_undoredo_items->GetCount() )
     {
-        if(m_cancelled)
-            m_frame->PutDataInPreviousState(m_undoredo_items, false, false);
+        if( m_cancelled )
+            m_frame->PutDataInPreviousState( m_undoredo_items, false, false );
     }
-    if(m_progress)
+    if( m_progress )
         m_progress->Destroy();
     
 }
 
-bool ITEMS_PROGRESS_BASE::UpdateProgress(const unsigned int aProgress, const unsigned int aOperations)
+bool ITEMS_PROGRESS_BASE::UpdateProgress( const unsigned int aProgress,
+                                          const unsigned int aOperations
+                                        )
 {
     wxString msg;
-    msg.Printf(_( "Number of: %d" ), aOperations);
+    msg.Printf( _( "Number of: %d" ), aOperations );
     bool skip = false;
-    return m_progress->Update(aProgress, msg, &skip);
+    return m_progress->Update( aProgress, msg, &skip );
 }
 
-unsigned int ITEMS_PROGRESS_BASE::Execute(void)
+unsigned int ITEMS_PROGRESS_BASE::Execute( void )
 {
-    if(m_list_first_item)    
+    if( m_list_first_item )
     {
-        if(m_can_cancel)
+        if( m_can_cancel )
         {
             m_progress_style |= wxPD_CAN_ABORT;
         }
-        m_progress = new wxProgressDialog(m_progress_title, _("******************************************************"), m_progress_to_count, m_frame, m_progress_style);
+        m_progress = new wxProgressDialog( m_progress_title,
+                                           _( "******************************************************" ),
+                                           m_progress_to_count,
+                                           m_frame,
+                                           m_progress_style );
         
-        if(m_progress)
+        if( m_progress )
         {
-            BOARD_ITEM* item = const_cast<BOARD_ITEM*>(m_list_first_item);
+            BOARD_ITEM* item = const_cast<BOARD_ITEM*>( m_list_first_item );
             unsigned int operations_count = 0;
             int progress_count = 0;
             unsigned int update_val = m_list_first_item->GetList()->GetCount() / 100;
             unsigned int update_count = 0;
-            while(item)
+            while( item )
             {
                 m_nextItem = item->Next();
-                operations_count += ExecuteItem(item);
+                operations_count += ExecuteItem( item );
                 item = m_nextItem;
-                if(++update_count > update_val)
+                if( ++update_count > update_val )
                 {
                     update_count = 0;
-                    if(!UpdateProgress(progress_count, operations_count))
+                    if( !UpdateProgress( progress_count, operations_count ) )
                     {
-                        if(m_can_cancel)
+                        if( m_can_cancel )
                         {
                             m_cancelled = true;
                             return 0;
                         }
                     }
                 }
-                if(++progress_count >= m_items_to_count)
+                if( ++progress_count >= m_items_to_count )
                     progress_count = m_items_to_count;
             }
-            UpdateProgress(m_progress_to_count, operations_count);
+            UpdateProgress( m_progress_to_count, operations_count );
             ExecuteEnd();
             return operations_count;
         }
@@ -122,20 +131,24 @@ unsigned int ITEMS_PROGRESS_BASE::Execute(void)
 // MODULES_PROGRESS 
 //-----------------------------------------------------------------------------------------------------/
 // Base modules 
-MODULES_PROGRESS::MODULES_PROGRESS(const PCB_EDIT_FRAME* aFrame, const DLIST<MODULE>* aModules, PICKED_ITEMS_LIST* aUndoRedo) : ITEMS_PROGRESS_BASE(aFrame, aModules->GetFirst(), aUndoRedo)
+MODULES_PROGRESS::MODULES_PROGRESS( const PCB_EDIT_FRAME* aFrame,
+                                    const DLIST<MODULE>* aModules,
+                                    PICKED_ITEMS_LIST* aUndoRedo
+                                  ) :
+    ITEMS_PROGRESS_BASE( aFrame, aModules->GetFirst(), aUndoRedo )
 {
 }
 
-unsigned int MODULES_PROGRESS::ExecuteItem(const BOARD_ITEM* aItemAt)
+unsigned int MODULES_PROGRESS::ExecuteItem( const BOARD_ITEM* aItemAt )
 {
     unsigned int operations_count = 0;
-    MODULE* module = dynamic_cast<MODULE*>(const_cast<BOARD_ITEM*>(aItemAt));
-    if(module)
+    MODULE* module = dynamic_cast<MODULE*>( const_cast<BOARD_ITEM*>( aItemAt ) );
+    if( module )
     {
         D_PAD* pad = module->PadsList();
-        while(pad)
+        while( pad )
         {
-            operations_count += DoAtPad(pad);
+            operations_count += DoAtPad( pad );
             pad = pad->Next();
         }
     }
@@ -146,16 +159,20 @@ unsigned int MODULES_PROGRESS::ExecuteItem(const BOARD_ITEM* aItemAt)
 //-----------------------------------------------------------------------------------------------------/
 // DRC 
 //-----------------------------------------------------------------------------------------------------/
-bool TRACKNODEITEMS::TestSegment(const wxPoint aStartPoint, const wxPoint aEndPoint, const wxPoint aTestPoint, const int aMinDist)
+bool TRACKNODEITEMS::TestSegment( const wxPoint aStartPoint,
+                                  const wxPoint aEndPoint,
+                                  const wxPoint aTestPoint,
+                                  const int aMinDist
+                                )
 {
     //Copyed from drc_clearance_test_functions.cpp
     wxPoint delta = aEndPoint - aStartPoint;
     wxPoint seg_start_point = aTestPoint - aStartPoint;
-    int angle = ArcTangente(delta.y, delta.x );
+    int angle = ArcTangente( delta.y, delta.x );
     RotatePoint( &delta, angle );
     RotatePoint( &seg_start_point, angle );
     
-    if(!m_EditFrame->GetDrcController()->checkMarginToCircle(seg_start_point, aMinDist, delta.x ))
+    if( !m_EditFrame->GetDrcController()->checkMarginToCircle( seg_start_point, aMinDist, delta.x ) )
         return false;
     
     return true;

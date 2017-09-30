@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2012- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,173 +27,188 @@
 using namespace TrackNodeItem;
 
 
-void TEARDROPS::UpdateListClear(void)
+void TEARDROPS::UpdateListClear( void )
 {
     m_update_list->clear();
 }
 
-void TEARDROPS::UpdateListAdd(const TRACK* aTrackSegFrom)
+void TEARDROPS::UpdateListAdd( const TRACK* aTrackSegFrom )
 {
-    AddToDoList(aTrackSegFrom, m_update_list);
+    AddToDoList( aTrackSegFrom, m_update_list );
 }
 
-void TEARDROPS::UpdateListAdd(const TEARDROP* aTear)
+void TEARDROPS::UpdateListAdd( const TEARDROP* aTear )
 {
-    if(aTear)
-        if(aTear->Type() == PCB_TEARDROP_T)
-            m_update_list->insert(const_cast<TEARDROP*>(aTear)); 
+    if( aTear )
+        if( aTear->Type() == PCB_TEARDROP_T )
+            m_update_list->insert( const_cast<TEARDROP*>( aTear ) ); 
 }
 
-void TEARDROPS::UpdateListAdd(const ROUNDEDTRACKSCORNERS::RoundedCornerTrack_Container* aRoundedTracks)
+void TEARDROPS::UpdateListAdd( const ROUNDEDTRACKSCORNERS::RoundedCornerTrack_Container* aRoundedTracks )
 {
-   for(auto track : *aRoundedTracks)
+   for( auto track : *aRoundedTracks )
         UpdateListAdd( track );
 }
 
-void TEARDROPS::UpdateListAdd(const BOARD_ITEM* aBoardItem)
+void TEARDROPS::UpdateListAdd( const BOARD_ITEM* aBoardItem )
 {
-    if(dynamic_cast<TRACK*>(const_cast<BOARD_ITEM*>(aBoardItem)))
-        UpdateListAdd(static_cast<TRACK*>(const_cast<BOARD_ITEM*>(aBoardItem)));
+    if( dynamic_cast<TRACK*>( const_cast<BOARD_ITEM*>( aBoardItem ) ) )
+        UpdateListAdd( static_cast<TRACK*>( const_cast<BOARD_ITEM*>( aBoardItem ) ) );
 }
 
-void TEARDROPS::UpdateListDo(void)
+void TEARDROPS::UpdateListDo( void )
 {
-    if(m_update_list)
-        for(TEARDROP* tear : *m_update_list)
+    if( m_update_list )
+        for( TEARDROP* tear : *m_update_list )
         {
             tear->Update();
-            if(m_EditFrame && m_EditFrame->IsGalCanvasActive())
-                m_EditFrame->GetGalCanvas()->GetView()->Update(tear);
+            if( m_EditFrame && m_EditFrame->IsGalCanvasActive() )
+                m_EditFrame->GetGalCanvas()->GetView()->Update( tear );
         }
 }
 
-void TEARDROPS::UpdateListDo(EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase)
+void TEARDROPS::UpdateListDo( EDA_DRAW_PANEL* aPanel,
+                              wxDC* aDC,
+                              GR_DRAWMODE aDrawMode,
+                              bool aErase
+                            )
 {
-    if(m_update_list)
+    if( m_update_list )
     {
-        for(TEARDROP* tear : *m_update_list)
+        for( TEARDROP* tear : *m_update_list )
         {
-            if(aErase)
-                tear->Draw(aPanel, aDC, aDrawMode);
+            if( aErase )
+                tear->Draw( aPanel, aDC, aDrawMode );
             tear->Update();
-            tear->Draw(aPanel, aDC, aDrawMode);
+            tear->Draw( aPanel, aDC, aDrawMode );
         }
     }
 }
 
-void TEARDROPS::UpdateListDo_Route(EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase)
+void TEARDROPS::UpdateListDo_Route( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aErase )
 {
-    if(m_update_list)
+    if( m_update_list )
     {
-        for(TEARDROP* tear : *m_update_list)
+        for( TEARDROP* tear : *m_update_list )
         {
             TRACK* track_seg = tear->GetTrackSeg();
-            if((track_seg == g_CurrentTrackSegment) || track_seg == g_CurrentTrackSegment->Back()) 
+            if( ( track_seg == g_CurrentTrackSegment ) ||
+                track_seg == g_CurrentTrackSegment->Back() ) 
             {
-                if(aErase)
-                    tear->Draw(aPanel, aDC, GR_XOR);
+                if( aErase )
+                    tear->Draw( aPanel, aDC, GR_XOR );
                 tear->Update();
-                tear->Draw(aPanel, aDC, GR_XOR);
+                tear->Draw( aPanel, aDC, GR_XOR );
             }
             else
-                tear->Draw(aPanel, aDC, GR_OR);
+                tear->Draw( aPanel, aDC, GR_OR );
         }
         
         GRSetDrawMode( aDC, GR_XOR );
     }
 }
 
-void TEARDROPS::UpdateListDo_UndoRedo(void)
+void TEARDROPS::UpdateListDo_UndoRedo( void )
 {
-    if(m_update_list)
-        for(TEARDROP* tear : *m_update_list)
+    if( m_update_list )
+        for( TEARDROP* tear : *m_update_list )
         {
             tear->SetTrackEndpoint();
             tear->Update();
             
             //GAL
             if( m_EditFrame && m_EditFrame->IsGalCanvasActive() )
-                m_EditFrame->GetGalCanvas()->GetView()->Update(tear);
+                m_EditFrame->GetGalCanvas()->GetView()->Update( tear );
         }
 }
 
-void TEARDROPS::UpdateListDo_BlockDuplicate(const wxPoint aMoveVector, PICKED_ITEMS_LIST* aUndoRedoList)
+void TEARDROPS::UpdateListDo_BlockDuplicate( const wxPoint aMoveVector,
+                                             PICKED_ITEMS_LIST* aUndoRedoList
+                                           )
 {
-    if(m_update_list)
+    if( m_update_list )
     {
         TEARDROP::SHAPES_T current_shape = GetCurrentShape();
-        TEARDROP::PARAMS teardrop_params = GetShapeParams(TEARDROP::TEARDROP_T);
-        TEARDROP::PARAMS fillet_params = GetShapeParams(TEARDROP::FILLET_T);
-        TEARDROP::PARAMS subland_params = GetShapeParams(TEARDROP::SUBLAND_T);
-        for(TEARDROP* tear : *m_update_list)
+        TEARDROP::PARAMS teardrop_params = GetShapeParams( TEARDROP::TEARDROP_T );
+        TEARDROP::PARAMS fillet_params = GetShapeParams( TEARDROP::FILLET_T );
+        TEARDROP::PARAMS subland_params = GetShapeParams( TEARDROP::SUBLAND_T );
+        for( TEARDROP* tear : *m_update_list )
         {
             TEARDROP::PARAMS params {TEARDROP::NULL_T, 1, 1, 1};
-            if(tear)
+            if( tear )
             {
                 TEARDROP::PARAMS tear_params = tear->GetParams();
-                if(params != tear_params)
+                if( params != tear_params )
                 {
                     params = tear_params;
-                    SetShapeParams(params);
-                    SetCurrentShape(params.shape);
+                    SetShapeParams( params );
+                    SetCurrentShape( params.shape );
                 }
                 wxPoint track_start = tear->GetTrackSeg()->GetStart() + aMoveVector;
                 wxPoint track_end = tear->GetTrackSeg()->GetEnd() + aMoveVector;
-                TRACK* new_track_seg = GetTrackSegment(track_start, track_end, tear->GetLayer(), tear->GetNetCode());
-                if(new_track_seg)
+                TRACK* new_track_seg = GetTrackSegment( track_start,
+                                                        track_end,
+                                                        tear->GetLayer(),
+                                                        tear->GetNetCode() );
+                if( new_track_seg )
                 {
                     BOARD_CONNECTED_ITEM* tear_item = tear->GetConnectedItem();
-                    if(tear_item)
+                    if( tear_item )
                     {
-                        if(tear_item->Type() == PCB_VIA_T)
+                        if( tear_item->Type() == PCB_VIA_T )
                         {
-                            TEARDROP_VIA* tear_via = static_cast<TEARDROP_VIA*>(tear);
-                            if(tear_via)
+                            TEARDROP_VIA* tear_via = static_cast<TEARDROP_VIA*>( tear );
+                            if( tear_via )
                             {
-                                VIA* via = static_cast<VIA*>(m_Board->GetViaByPosition(tear_via->GetEnd(), tear_via->GetLayer()));
-                                if(via)
-                                    Add(new_track_seg, static_cast<BOARD_CONNECTED_ITEM*>(via), aUndoRedoList);
+                                VIA* via = static_cast<VIA*>( m_Board->GetViaByPosition( tear_via->GetEnd(),
+                                                                                         tear_via->GetLayer() ) );
+                                if( via )
+                                    Add( new_track_seg,
+                                         static_cast<BOARD_CONNECTED_ITEM*>( via ),
+                                         aUndoRedoList );
                             }
                         }
-                        if(tear_item->Type() == PCB_PAD_T)
+                        if( tear_item->Type() == PCB_PAD_T )
                         {
-                            TEARDROP_PAD* tear_pad = static_cast<TEARDROP_PAD*>(tear);
-                            if(tear_pad)
+                            TEARDROP_PAD* tear_pad = static_cast<TEARDROP_PAD*>( tear );
+                            if( tear_pad )
                             {
-                                D_PAD* pad = m_Board->GetPad(tear_pad->GetEnd(), tear_pad->GetLayer());
-                                if(pad)
-                                    Add(new_track_seg, static_cast<BOARD_CONNECTED_ITEM*>(pad), aUndoRedoList);
+                                D_PAD* pad = m_Board->GetPad( tear_pad->GetEnd(), tear_pad->GetLayer() );
+                                if( pad )
+                                    Add( new_track_seg,
+                                         static_cast<BOARD_CONNECTED_ITEM*>( pad ),
+                                         aUndoRedoList );
                             }
                         }
                     }
                     else //Junctions and T-Junctions.
-                        Add(new_track_seg, tear_item, aUndoRedoList, tear->GetEnd());
+                        Add( new_track_seg, tear_item, aUndoRedoList, tear->GetEnd() );
                 }
-                Remove(static_cast<BOARD_CONNECTED_ITEM*>(tear), aUndoRedoList, true);
+                Remove( static_cast<BOARD_CONNECTED_ITEM*>( tear ), aUndoRedoList, true );
             }
         }
-        SetShapeParams(teardrop_params);
-        SetShapeParams(fillet_params);
-        SetShapeParams(subland_params);
-        SetCurrentShape(current_shape);
+        SetShapeParams( teardrop_params );
+        SetShapeParams( fillet_params );
+        SetShapeParams( subland_params );
+        SetCurrentShape( current_shape );
         RecreateMenu();
     }
 }
 
-void TEARDROPS::AddToDoList(const TRACK* aTrackSegFrom, Teardrop_Container* aListToAdd)
+void TEARDROPS::AddToDoList( const TRACK* aTrackSegFrom, Teardrop_Container* aListToAdd )
 {
-    if(aTrackSegFrom)
+    if( aTrackSegFrom )
     {
 
-        if(aTrackSegFrom->Type() == PCB_TEARDROP_T)
-            aListToAdd->insert(static_cast<TEARDROP*>(const_cast<TRACK*>(aTrackSegFrom))); 
+        if( aTrackSegFrom->Type() == PCB_TEARDROP_T )
+            aListToAdd->insert( static_cast<TEARDROP*>( const_cast<TRACK*>( aTrackSegFrom ) ) ); 
         
-        TRACKNODEITEM* item = Next(aTrackSegFrom);
-        if(item && dynamic_cast<TEARDROP*>(item))
-            aListToAdd->insert(static_cast<TEARDROP*>(item)); 
+        TRACKNODEITEM* item = Next( aTrackSegFrom );
+        if( item && dynamic_cast<TEARDROP*>( item ) )
+            aListToAdd->insert( static_cast<TEARDROP*>( item ) ); 
 
-        item = Back(aTrackSegFrom);
-        if(item && dynamic_cast<TEARDROP*>(item))
-            aListToAdd->insert(static_cast<TEARDROP*>(item)); 
+        item = Back( aTrackSegFrom );
+        if( item && dynamic_cast<TEARDROP*>( item ) )
+            aListToAdd->insert( static_cast<TEARDROP*>( item ) ); 
     }
 }

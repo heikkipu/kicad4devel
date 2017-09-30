@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Heikki Pulkkinen.
+ * Copyright (C) 2016- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,54 +62,64 @@
 class VIASTITCHING
 {
 public:
-    VIASTITCHING(const BOARD* aBoard);
+    VIASTITCHING( const BOARD* aBoard );
     ~VIASTITCHING();
 
     void SetNetcodes( const std::unordered_map<const VIA*, int>& aVias );
     void SetNetcodes( void );
 
-    void AddThermalVia( const PCB_EDIT_FRAME* aEditFrame, const int aViaType_ID );//Legacy
-    void AddThermalVia( const PCB_EDIT_FRAME* aEditFrame, const VIATYPE_T aViaType, const bool aSelectLayer ); //GAL
+    void AddThermalVia( const PCB_EDIT_FRAME* aEditFrame,
+                        const int aViaType_ID
+                      );//Legacy
+
+    void AddThermalVia( const PCB_EDIT_FRAME* aEditFrame,
+                        const VIATYPE_T aViaType,
+                        const bool aSelectLayer
+                      ); //GAL
 
     void AddViaArrayPrepare( const PCB_EDIT_FRAME* aEditFrame, const VIA* aVia );
     void AddViaArrayFinnish( void );
 
     void RuleCheck( const TRACK* aTrack, DRC* aDRC );
-    
+
     bool DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame );
     bool Clean( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit );
 
     bool SelectLayer( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
     bool SelectLayerPair( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
-    
+
     void ConnectToZones( void );
-    
+
 protected:
     VIASTITCHING(){};
-    
+
 private:
     const BOARD* m_board;
-    
-    //VIATYPE_T m_viatype{VIA_THROUGH};
-    int m_via_array_netcode{0};
-    std::vector<D_PAD*> m_via_array_netcode_pads{nullptr};
 
-    void Collect_Vias_Zones_Chain( std::unordered_multimap<const VIA*, const SHAPE_POLY_SET::POLYGON*>& aViasPolys,
-                                const int aNetCode,
-                                const SHAPE_POLY_SET::POLYGON* aZonePoly,
-                                std::unordered_map<const VIA*, bool>& aViasAll );
+    //VIATYPE_T m_viatype{VIA_THROUGH};
+    int m_via_array_netcode {0};
+    std::vector<D_PAD*> m_via_array_netcode_pads {nullptr};
+
+    void Collect_Vias_Zones_Chain( std::unordered_multimap<const VIA*,
+                                   const SHAPE_POLY_SET::POLYGON*>& aViasPolys,
+                                   const int aNetCode,
+                                   const SHAPE_POLY_SET::POLYGON* aZonePoly,
+                                   std::unordered_map<const VIA*, bool>& aViasAll
+                                 );
 
     void Collect_Zones_Hit_Via( std::vector<ZONE_CONTAINER*>& aZones,
                                 const VIA* aVia,
                                 const int aNetCode,
-                                const LAYER_NUM aLayerOnly =  UNDEFINED_LAYER );
+                                const LAYER_NUM aLayerOnly =  UNDEFINED_LAYER
+                              );
 
     void Collect_Zones_Hit_Pos( std::vector<ZONE_CONTAINER*>& aZones,
                                 wxPoint aPos,
                                 PCB_LAYER_ID aTopLayer,
                                 PCB_LAYER_ID aBottomLayer,
                                 const int aNetCode,
-                                const LAYER_NUM aLayerOnly = UNDEFINED_LAYER );
+                                const LAYER_NUM aLayerOnly = UNDEFINED_LAYER
+                              );
 
     bool IsTrackConnection( const VIA* aVia, const int aNetcode );
 
@@ -119,29 +129,33 @@ private:
 // Show wia in via tool mode.
 //-----------------------------------------------------------------------------------------------------/
 public:
-    void StartDrawingVia(const PCB_EDIT_FRAME* aEditFrame, const EDA_DRAW_PANEL* aPanel, wxDC* aDC);
-    
+    void StartDrawingVia( const PCB_EDIT_FRAME* aEditFrame,
+                          const EDA_DRAW_PANEL* aPanel,
+                          wxDC* aDC
+                        );
+
 struct VIA_SETTINGS
 {
     COLOR4D color;
     int rad{0};
     int hole_rad{0};
     int clearance_rad{0};
-    
+
     wxString text{""};
 };
-    VIA_SETTINGS GetDrawViaSettings(void) const {return m_current_settings;}
-    void SetDrawViaSettings(const VIA_SETTINGS aSettings){m_current_settings = aSettings;}
-    
-    wxPoint GetDrawViaPrevPos(void) const { return m_via_prev_pos; }
-    void SetDrawViaPrevPos(wxPoint aPos) { m_via_prev_pos = aPos; }
-    
+
+    VIA_SETTINGS GetDrawViaSettings( void ) const { return m_current_settings; }
+    void SetDrawViaSettings( const VIA_SETTINGS aSettings ) { m_current_settings = aSettings; }
+
+    wxPoint GetDrawViaPrevPos( void ) const { return m_via_prev_pos; }
+    void SetDrawViaPrevPos( wxPoint aPos ) { m_via_prev_pos = aPos; }
+
 private:
-    PCB_EDIT_FRAME* m_EditFrame; 
+    PCB_EDIT_FRAME* m_EditFrame;
     EDA_DRAW_PANEL* m_draw_panel;
     wxDC* m_dc;
-    
-    wxPoint m_via_prev_pos{0,0};
+
+    wxPoint m_via_prev_pos {0,0};
     VIA_SETTINGS m_current_settings;
 //-----------------------------------------------------------------------------------------------------/
 
@@ -153,12 +167,27 @@ namespace ViaStitching
 //-----------------------------------------------------------------------------------------------------/
 // Show wia in via tool mode mouse capture.
 //-----------------------------------------------------------------------------------------------------/
-void DrawMovingVia(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase);
-void StopDrawingVia(EDA_DRAW_PANEL* aPanel, wxDC* aDC);
+void DrawMovingVia( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase );
+void StopDrawingVia( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
 
-void DrawViaText(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, COLOR4D aColor, const wxString& aText, const int aViaSize);
-void DrawViaCircles(EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, COLOR4D aColor, const int aViaRad, const int aViaHoleRad, const int aViaClearanceRad);
-VIASTITCHING::VIA_SETTINGS GetCurrentViaSettings(const PCB_EDIT_FRAME* aEditFrame);
+void DrawViaText( EDA_DRAW_PANEL* aPanel,
+                  wxDC* aDC,
+                  const wxPoint& aPosition,
+                  COLOR4D aColor,
+                  const wxString& aText,
+                  const int aViaSize
+                );
+
+void DrawViaCircles( EDA_DRAW_PANEL* aPanel,
+                     wxDC* aDC,
+                     const wxPoint& aPosition,
+                     COLOR4D aColor,
+                     const int aViaRad,
+                     const int aViaHoleRad,
+                     const int aViaClearanceRad
+                   );
+
+VIASTITCHING::VIA_SETTINGS GetCurrentViaSettings( const PCB_EDIT_FRAME* aEditFrame );
 
 //-----------------------------------------------------------------------------------------------------/
 
@@ -167,7 +196,7 @@ const int MIN_THERMALVIA_ZONES = 1;
 ZONE_CONTAINER* HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer );
 
 //-----------------------------------------------------------------------------------------------------/
-//Copy from sel_layer.cpp, because there where no header of this. And I do not want to disturb old code.
+//Copy from sel_layer.cpp, because there where no header of this.
 //-----------------------------------------------------------------------------------------------------/
 #define SELECT_COLNUM       0
 #define COLOR_COLNUM        1
@@ -176,19 +205,21 @@ ZONE_CONTAINER* HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID
 class VS_LAYER_SELECTOR: public LAYER_SELECTOR
 {
 public:
-    VS_LAYER_SELECTOR( BOARD* aBrd ) :
-        LAYER_SELECTOR() {
+    VS_LAYER_SELECTOR( BOARD* aBrd ) : LAYER_SELECTOR()
+    {
         m_brd = aBrd;
     }
 
 protected:
     BOARD*  m_brd;
 
-    bool IsLayerEnabled( LAYER_NUM aLayer ) const override {
+    bool IsLayerEnabled( LAYER_NUM aLayer ) const override
+    {
         return m_brd->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
     }
 
-    COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override {
+    COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override
+    {
 #ifdef NEWCONALGO
         return m_brd->Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
 #else
@@ -196,7 +227,8 @@ protected:
 #endif
     }
 
-    wxString GetLayerName( LAYER_NUM aLayer ) const override {
+    wxString GetLayerName( LAYER_NUM aLayer ) const override
+    {
         return m_brd->GetLayerName( ToLAYER_ID( aLayer ) );
     }
 };
@@ -204,13 +236,13 @@ protected:
 // Through via selection
 class THROUGH_VIA_LAYER_SELECTOR : public VS_LAYER_SELECTOR, public DIALOG_LAYER_SELECTION_BASE
 {
-    PCB_LAYER_ID    m_layerSelected;
-    LSET        m_notAllowedLayersMask;
+    PCB_LAYER_ID m_layerSelected;
+    LSET m_notAllowedLayersMask;
 
     std::vector<PCB_LAYER_ID> m_layersIdLeftColumn;
 
 public:
-    THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos);
+    THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
 
     LAYER_NUM GetLayerSelection() { return m_layerSelected; }
 

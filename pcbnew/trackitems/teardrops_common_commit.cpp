@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2012- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,92 +27,119 @@
 using namespace TrackNodeItem;
 
 
-void TEARDROPS::CollectCommit(TEARDROP* aTeardrop, std::set<TRACK*>* aCommitContainer, const bool aLockedToo)
+void TEARDROPS::CollectCommit( TEARDROP* aTeardrop, std::set<TRACK*>* aCommitContainer,
+                               const bool aLockedToo
+                             )
 {
-    if(aTeardrop && aCommitContainer)
+    if( aTeardrop && aCommitContainer )
     {
-        if(aLockedToo || (!aLockedToo && !aTeardrop->IsLocked()))
+        if( aLockedToo || ( !aLockedToo && !aTeardrop->IsLocked() ) )
         {
-            aCommitContainer->insert(aTeardrop);
+            aCommitContainer->insert( aTeardrop );
         }
     }
 }
 
-TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::NET_SCAN_VIA_COLLECTCOMMIT(const VIA* aVia, const TEARDROPS* aParent, std::set<TRACK*>* aCommitContainer, const bool aLockedToo) : NET_SCAN_VIA_UPDATE(aVia, aParent)
+TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::NET_SCAN_VIA_COLLECTCOMMIT( const VIA* aVia,
+                                                                   const TEARDROPS* aParent,
+                                                                   std::set<TRACK*>* aCommitContainer,
+                                                                   const bool aLockedToo
+                                                                 ) :
+    NET_SCAN_VIA_UPDATE( aVia, aParent )
 {
     m_locked_too = aLockedToo;
     m_commit_container = aCommitContainer;
 }
 
-bool TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::ExecuteAt(TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::ExecuteAt( TRACK* aTrackSeg )
 {    
-    if(aTrackSeg->Type() == PCB_TRACE_T)
+    if( aTrackSeg->Type() == PCB_TRACE_T )
     {
-        TEARDROP* tear = dynamic_cast<TEARDROPS*>(m_Parent)->GetTeardrop(aTrackSeg, m_via);
-        if(tear)
+        TEARDROP* tear = dynamic_cast<TEARDROPS*>( m_Parent )->GetTeardrop( aTrackSeg, m_via );
+        if( tear )
         {
-            if(m_locked_too || (!m_locked_too && !tear->IsLocked()))
+            if( m_locked_too || ( !m_locked_too && !tear->IsLocked() ) )
             {
-                m_commit_container->insert(tear);
+                m_commit_container->insert( tear );
             }
         }
     }
     return false;
 }
 
-void TEARDROPS::CollectCommit(const VIA* aViaFrom, std::set<TRACK*>* aCommitContainer, const bool aLockedToo)
+void TEARDROPS::CollectCommit( const VIA* aViaFrom,
+                               std::set<TRACK*>* aCommitContainer,
+                               const bool aLockedToo
+                             )
 {
-    if(aViaFrom && aCommitContainer)
+    if( aViaFrom && aCommitContainer )
     {
-        std::unique_ptr<NET_SCAN_VIA_COLLECTCOMMIT> via(new NET_SCAN_VIA_COLLECTCOMMIT(aViaFrom, this, aCommitContainer, aLockedToo));
-        if(via)
+        std::unique_ptr<NET_SCAN_VIA_COLLECTCOMMIT> via( new NET_SCAN_VIA_COLLECTCOMMIT( aViaFrom,
+                                                                                         this,
+                                                                                         aCommitContainer,
+                                                                                         aLockedToo ) );
+        if( via )
             via->Execute();
     }
 }
 
-TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::NET_SCAN_PAD_COLLECTCOMMIT(const D_PAD* aPad, const TEARDROPS* aParent, std::set<TRACK*>* aCommitContainer, const bool aLockedToo) : NET_SCAN_PAD_BASE(aPad, aParent)
+TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::NET_SCAN_PAD_COLLECTCOMMIT( const D_PAD* aPad,
+                                                                   const TEARDROPS* aParent,
+                                                                   std::set<TRACK*>* aCommitContainer,
+                                                                   const bool aLockedToo
+                                                                 ) :
+    NET_SCAN_PAD_BASE( aPad, aParent )
 {
     m_locked_too = aLockedToo;
     m_commit_container = aCommitContainer;
 }
 
-bool TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::ExecuteAt(TRACK* aTrackSeg)
+bool TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::ExecuteAt( TRACK* aTrackSeg )
 {
-    TEARDROP* tear = m_Parent->GetTeardrop(aTrackSeg, m_pad);
-    if(tear)
+    TEARDROP* tear = m_Parent->GetTeardrop( aTrackSeg, m_pad );
+    if( tear )
     {
-        if(m_locked_too || (!m_locked_too && !tear->IsLocked()))
+        if( m_locked_too || ( !m_locked_too && !tear->IsLocked() ) )
         {
-            m_commit_container->insert(tear);
+            m_commit_container->insert( tear );
         }
     }
     return false;
 }
 
-void TEARDROPS::CollectCommit(const D_PAD* aPadFrom, std::set<TRACK*>* aCommitContainer, const bool aLockedToo)
+void TEARDROPS::CollectCommit( const D_PAD* aPadFrom,
+                               std::set<TRACK*>* aCommitContainer,
+                               const bool aLockedToo
+                             )
 {
-    std::unique_ptr<NET_SCAN_PAD_COLLECTCOMMIT> pad(new NET_SCAN_PAD_COLLECTCOMMIT(aPadFrom, this, aCommitContainer, aLockedToo));
-    if(pad)
+    std::unique_ptr<NET_SCAN_PAD_COLLECTCOMMIT> pad( new NET_SCAN_PAD_COLLECTCOMMIT( aPadFrom,
+                                                                                     this,
+                                                                                     aCommitContainer,
+                                                                                     aLockedToo ) );
+    if( pad )
         pad->Execute();
 }
 
-void TEARDROPS::CollectCommit(const TRACK* aTrackSegFrom, std::set<TRACK*>* aCommitContainer, const bool aLockedToo)
+void TEARDROPS::CollectCommit( const TRACK* aTrackSegFrom,
+                               std::set<TRACK*>* aCommitContainer,
+                               const bool aLockedToo
+                             )
 {
-    if(aTrackSegFrom && aCommitContainer)
+    if( aTrackSegFrom && aCommitContainer )
     {
-        for(unsigned int n = 0; n < 2; ++n)
+        for( unsigned int n = 0; n < 2; ++n )
         {
             TRACKNODEITEM* item = nullptr;
-            n? item = Next(aTrackSegFrom) : item = Back(aTrackSegFrom);
-            
-            if(item && dynamic_cast<TEARDROP*>(item))
+            n? item = Next( aTrackSegFrom ) : item = Back( aTrackSegFrom );
+
+            if( item && dynamic_cast<TEARDROP*>( item ) )
             {
-                TEARDROP* tear = static_cast<TEARDROP*>(item);
-                if(aLockedToo || (!aLockedToo && !tear->IsLocked()))
+                TEARDROP* tear = static_cast<TEARDROP*>( item );
+                if( aLockedToo || ( !aLockedToo && !tear->IsLocked() ) )
                 {
-                    if(tear->GetTrackSeg() == aTrackSegFrom)
+                    if( tear->GetTrackSeg() == aTrackSegFrom )
                     {
-                        aCommitContainer->insert(tear);
+                        aCommitContainer->insert( tear );
                     }
                 }
             }
@@ -120,10 +147,10 @@ void TEARDROPS::CollectCommit(const TRACK* aTrackSegFrom, std::set<TRACK*>* aCom
     }
 }
 
-void TEARDROPS::GalRemovedListAdd(const TEARDROP* aTear)
+void TEARDROPS::GalRemovedListAdd( const TEARDROP* aTear )
 {
-    if(aTear)
-        if(aTear->Type() == PCB_TEARDROP_T)
-            m_gal_removed_list->insert(const_cast<TEARDROP*>(aTear)); 
+    if( aTear )
+        if( aTear->Type() == PCB_TEARDROP_T )
+            m_gal_removed_list->insert( const_cast<TEARDROP*>( aTear ) ); 
 }
 

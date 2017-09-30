@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2012- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,22 +46,25 @@
 
 namespace TrackNodeItems
 {
-//-----------------------------------------------------------------------------------------------------------   
+//----------------------------------------------------------------------------------------------------------
 // PROGRESS OPERATIONS 
-//-----------------------------------------------------------------------------------------------------------   
+//----------------------------------------------------------------------------------------------------------
     class ITEMS_PROGRESS_BASE
     {
 
     public:
         virtual ~ITEMS_PROGRESS_BASE();
-        unsigned int Execute(void);
+        unsigned int Execute( void );
 
     protected:
         ITEMS_PROGRESS_BASE() {};
-        ITEMS_PROGRESS_BASE(const PCB_EDIT_FRAME* aFrame, const BOARD_ITEM* aListFirstItem, PICKED_ITEMS_LIST* aUndoRedo);
+        ITEMS_PROGRESS_BASE( const PCB_EDIT_FRAME* aFrame,
+                             const BOARD_ITEM* aListFirstItem,
+                             PICKED_ITEMS_LIST* aUndoRedo
+                           );
 
-        virtual unsigned int ExecuteItem(const BOARD_ITEM* aItemAt)=0; 
-        virtual void ExecuteEnd(void) {};
+        virtual unsigned int ExecuteItem( const BOARD_ITEM* aItemAt ) = 0;
+        virtual void ExecuteEnd( void ) {};
         BOARD_ITEM* m_nextItem{nullptr}; //Can be changed in ExecuteItem.
 
         PICKED_ITEMS_LIST* m_undoredo_items;
@@ -76,114 +79,141 @@ namespace TrackNodeItems
         int m_progress_to_count {0};
 
         wxProgressDialog* m_progress {nullptr};
-        inline bool UpdateProgress(const unsigned int aProgress, const unsigned int aOperations);
+        inline bool UpdateProgress( const unsigned int aProgress, const unsigned int aOperations );
 
         const BOARD_ITEM* m_list_first_item{nullptr};
         PCB_EDIT_FRAME* m_frame{nullptr};
     };
 
 
-//-----------------------------------------------------------------------------------------------------------   
-// MODULES_PROGRESS (modules PADs) 
-//-----------------------------------------------------------------------------------------------------------   
+//----------------------------------------------------------------------------------------------------------
+// MODULES_PROGRESS ( modules PADs ) 
+//----------------------------------------------------------------------------------------------------------
     class MODULES_PROGRESS : public ITEMS_PROGRESS_BASE
     {
     public:
-        MODULES_PROGRESS(const PCB_EDIT_FRAME* aFrame, const DLIST<MODULE>* aModules, PICKED_ITEMS_LIST* aUndoRedo);
+        MODULES_PROGRESS( const PCB_EDIT_FRAME* aFrame,
+                          const DLIST<MODULE>* aModules,
+                          PICKED_ITEMS_LIST* aUndoRedo
+                        );
 
     protected:
         MODULES_PROGRESS(){;}
 
-        unsigned int ExecuteItem(const BOARD_ITEM* aItemAt) override;
-        virtual unsigned int DoAtPad(const D_PAD* aPadAt) { return 0; };
+        unsigned int ExecuteItem( const BOARD_ITEM* aItemAt ) override;
+        virtual unsigned int DoAtPad( const D_PAD* aPadAt ) { return 0; };
     };
 
-//-----------------------------------------------------------------------------------------------------------   
+//----------------------------------------------------------------------------------------------------------
 // TRACKS_PROGRESS 
-//-----------------------------------------------------------------------------------------------------------   
+//----------------------------------------------------------------------------------------------------------
     class TRACKS_PROGRESS : public ITEMS_PROGRESS_BASE
     {
     public:
-        TRACKS_PROGRESS(const PCB_EDIT_FRAME* aFrame, const DLIST<TRACK>* aTracks, PICKED_ITEMS_LIST* aUndoRedo) : ITEMS_PROGRESS_BASE(aFrame, aTracks->GetFirst(), aUndoRedo) {;}
-        
+        TRACKS_PROGRESS( const PCB_EDIT_FRAME* aFrame,
+                         const DLIST<TRACK>* aTracks,
+                         PICKED_ITEMS_LIST* aUndoRedo
+                       ) :
+            ITEMS_PROGRESS_BASE( aFrame, aTracks->GetFirst(), aUndoRedo ){};
+
     protected:
-        TRACKS_PROGRESS(){;}
+        TRACKS_PROGRESS(){};
 
     };
 
 
-//-----------------------------------------------------------------------------------------------------------   
+//----------------------------------------------------------------------------------------------------------
 // TRACKNODEITEMS Base 
-//-----------------------------------------------------------------------------------------------------------   
+//----------------------------------------------------------------------------------------------------------
     class TRACKNODEITEMS
     {
     public:
-        TRACKNODEITEMS(const TRACKITEMS* aParent, const BOARD* aBoard);
+        TRACKNODEITEMS( const TRACKITEMS* aParent, const BOARD* aBoard );
         virtual ~TRACKNODEITEMS();
-        void SetEditFrame(const PCB_EDIT_FRAME* aEditFrame);
-        
-        BOARD* GetBoard(void) const { return m_Board; }
-        PCB_EDIT_FRAME* GetEditFrame(void) const { return m_EditFrame; }
-        TRACKITEMS* GetParent(void) const { return m_Parent; }
+        void SetEditFrame( const PCB_EDIT_FRAME* aEditFrame );
 
-        virtual void Plot(const TrackNodeItem::TRACKNODEITEM* aTrackNodeItem, PLOTTER* aPlotter, const EDA_DRAW_MODE_T* aPlotMode, void* aData ) = 0;
+        BOARD* GetBoard( void ) const { return m_Board; }
+        PCB_EDIT_FRAME* GetEditFrame( void ) const { return m_EditFrame; }
+        TRACKITEMS* GetParent( void ) const { return m_Parent; }
+
+        virtual void Plot( const TrackNodeItem::TRACKNODEITEM* aTrackNodeItem,
+                           PLOTTER* aPlotter,
+                           const EDA_DRAW_MODE_T* aPlotMode,
+                           void* aData
+                         ) = 0;
 
     protected:
         TRACKNODEITEMS(){};
-        
+
         BOARD* m_Board;
         PCB_EDIT_FRAME* m_EditFrame;
         TRACKITEMS* m_Parent;
-        
-    //-----------------------------------------------------------------------------------------------------------   
+
+    //----------------------------------------------------------------------------------------------------------
     //Menus
-    //-----------------------------------------------------------------------------------------------------------   
+    //----------------------------------------------------------------------------------------------------------
     public:
-        wxMenu* GetMenu(void) const { return m_menu; }
-        void RecreateMenu(void);
-        
+        wxMenu* GetMenu( void ) const { return m_menu; }
+        void RecreateMenu( void );
+
     protected:
         wxMenu* m_menu;
-        virtual void CreateMenu(wxMenu* aMenu) const = 0;
-    //-----------------------------------------------------------------------------------------------------------   
-        
-    //-----------------------------------------------------------------------------------------------------------   
+        virtual void CreateMenu( wxMenu* aMenu ) const = 0;
+    //----------------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------------------
     // Get item.
-    //-----------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------
     public:
         using TrackNodeItem_Container = std::set<TrackNodeItem::TRACKNODEITEM*>;
-        TrackNodeItem::TRACKNODEITEM* Get(const TRACK* aTrackSegAt, const wxPoint& aPosAt) const;
-        TrackNodeItem::TRACKNODEITEM* Get(const TRACK* aTrackSegAt, const wxPoint& aPosAt, const bool aExcactPos) const;
-        virtual TrackNodeItem::TRACKNODEITEM* Next(const TRACK* aTrackSegAt) const = 0;
-        virtual TrackNodeItem::TRACKNODEITEM* Back(const TRACK* aTrackSegAt) const = 0;
-        
+
+        TrackNodeItem::TRACKNODEITEM* Get( const TRACK* aTrackSegAt,
+                                           const wxPoint& aPosAt
+                                         ) const;
+
+        TrackNodeItem::TRACKNODEITEM* Get( const TRACK* aTrackSegAt,
+                                           const wxPoint& aPosAt,
+                                           const bool aExcactPos
+                                         ) const;
+
+        virtual TrackNodeItem::TRACKNODEITEM* Next( const TRACK* aTrackSegAt ) const = 0;
+        virtual TrackNodeItem::TRACKNODEITEM* Back( const TRACK* aTrackSegAt ) const = 0;
+
     protected:
         TrackNodeItem_Container* m_get_list;
-        void AddGetList(const TRACK* aTrackSegFrom);
-    //-----------------------------------------------------------------------------------------------------------   
+        void AddGetList( const TRACK* aTrackSegFrom );
+    //----------------------------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------------------------   
+    //----------------------------------------------------------------------------------------------------------
     // DRC
-    //-----------------------------------------------------------------------------------------------------------   
+    //----------------------------------------------------------------------------------------------------------
     protected:
-        STATUS_FLAGS DRC_Flags(const STATUS_FLAGS aStatus);
-        bool TestSegment(const wxPoint aStartPoint, const wxPoint aEndPoint, const wxPoint aTestPoint, const int aMinDist);
-    //-----------------------------------------------------------------------------------------------------------   
+        STATUS_FLAGS DRC_Flags( const STATUS_FLAGS aStatus );
+        bool TestSegment( const wxPoint aStartPoint,
+                          const wxPoint aEndPoint,
+                          const wxPoint aTestPoint,
+                          const int aMinDist
+                        );
+    //----------------------------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------------------------   
+    //----------------------------------------------------------------------------------------------------------
     // Save, Load
-    //-----------------------------------------------------------------------------------------------------------   
+    //----------------------------------------------------------------------------------------------------------
     public:
-        virtual void Format(OUTPUTFORMATTER* aOut, const int aNestLevel ) const = 0;
-        virtual TrackNodeItem::TRACKNODEITEM* Parse(PCB_PARSER* aParser) = 0;
-        
+        virtual void Format( OUTPUTFORMATTER* aOut, const int aNestLevel ) const = 0;
+        virtual TrackNodeItem::TRACKNODEITEM* Parse( PCB_PARSER* aParser ) = 0;
+
     protected:
-        TRACK* GetTrackSegment(const wxPoint aStart, const wxPoint aEnd, const int aLayer, const int aNetCode) const;
-    //-----------------------------------------------------------------------------------------------------------   
-    
-    //-----------------------------------------------------------------------------------------------------------   
+        TRACK* GetTrackSegment( const wxPoint aStart,
+                                const wxPoint aEnd,
+                                const int aLayer,
+                                const int aNetCode
+                              ) const;
+    //----------------------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------------------
     // Net scan common
-    //-----------------------------------------------------------------------------------------------------------   
+    //----------------------------------------------------------------------------------------------------------
     protected:
         class NET_SCAN_BASE : public TrackNodeItem::SCAN_NET_BASE
         {
@@ -192,13 +222,17 @@ namespace TrackNodeItems
 
         protected:
             NET_SCAN_BASE() {};
-            NET_SCAN_BASE(const TRACK* aTrackSeg, const TRACKNODEITEMS* aParent) : SCAN_NET_BASE(aTrackSeg) {
-                m_Parent = const_cast<TRACKNODEITEMS*>(aParent);
+            NET_SCAN_BASE( const TRACK* aTrackSeg,
+                           const TRACKNODEITEMS* aParent
+                         ) :
+                SCAN_NET_BASE( aTrackSeg )
+            {
+                m_Parent = const_cast<TRACKNODEITEMS*>( aParent );
             }
 
             TRACKNODEITEMS* m_Parent {nullptr};
         };
-    //-----------------------------------------------------------------------------------------------------------   
+    //----------------------------------------------------------------------------------------------------------
 
     };
 

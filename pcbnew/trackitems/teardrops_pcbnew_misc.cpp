@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) Heikki Pulkkinen.
+ * Copyright (C) 2012- Heikki Pulkkinen.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,18 +29,18 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // DRAG TRACK
 //-----------------------------------------------------------------------------------------------------/
-void TEARDROPS::AddToDragList(const TRACK* aTrackFrom, std::vector<DRAG_SEGM_PICKER>& aDragSegList)
+void TEARDROPS::AddToDragList( const TRACK* aTrackFrom, std::vector<DRAG_SEGM_PICKER>& aDragSegList )
 {
-    if(aTrackFrom->Type() == PCB_TRACE_T)
+    if( aTrackFrom->Type() == PCB_TRACE_T )
     {
-        for(int n = 0; n < 2; ++n)
+        for( int n = 0; n < 2; ++n )
         {
             TRACKNODEITEM* item = nullptr;
-            n? item = Back(aTrackFrom) : item = Next(aTrackFrom);
-            if(item && dynamic_cast<TEARDROP*>(item))
+            n? item = Back( aTrackFrom ) : item = Next( aTrackFrom );
+            if( item && dynamic_cast<TEARDROP*>( item ) )
             {
-                DRAG_SEGM_PICKER wrapper(static_cast<TEARDROP*>(item));
-                aDragSegList.push_back(wrapper);
+                DRAG_SEGM_PICKER wrapper( static_cast<TEARDROP*>( item ) );
+                aDragSegList.push_back( wrapper );
             }
         }
     }
