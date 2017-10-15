@@ -69,7 +69,12 @@ public:
     TEARDROPS* Teardrops( void ) const { return m_Teardrops; }
     ROUNDEDTRACKSCORNERS* RoundedTracksCorners( void ) const { return m_RoundedTracksCorners; }
 
+#ifdef NEWCONALGO
+    void SetEditFrame( const PCB_EDIT_FRAME* aEditFrame );  //Must be done when BOARD is created.
+    void SetMenu( wxMenu* aMenu );
+#else
     void SetEditFrame( const PCB_EDIT_FRAME* aEditFrame, wxMenu* aMenu );  //Must be done when BOARD is created.
+#endif
     PCB_EDIT_FRAME* GetEditFrame( void ) const { return m_EditFrame; }
     BOARD* GetBoard( void ) const { return m_Board; }
     

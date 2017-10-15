@@ -153,11 +153,18 @@ namespace TrackNodeItems
     //Menus
     //----------------------------------------------------------------------------------------------------------
     public:
-        wxMenu* GetMenu( void ) const { return m_menu; }
+#ifdef NEWCONALGO
+        void SetMenu( wxMenu* aToMenu );
+#else
         void RecreateMenu( void );
+#endif
+        wxMenu* GetMenu( void ) const { return m_menu; }
 
     protected:
         wxMenu* m_menu;
+#ifdef NEWCONALGO
+        void RecreateMenu( void );
+#endif
         virtual void CreateMenu( wxMenu* aMenu ) const = 0;
     //----------------------------------------------------------------------------------------------------------
 

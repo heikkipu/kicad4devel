@@ -2023,7 +2023,6 @@ bool TEARDROPS::Contains( const int aNetCodeAt,
 
 bool TEARDROPS::IsTrimmed( const TRACK* aTrackSeg ) const
 {
-    TEARDROP* tear = nullptr;
     if( aTrackSeg && ( aTrackSeg->Type() == PCB_TRACE_T ) )
     {
         unsigned int t_length = aTrackSeg->GetLength();
@@ -2588,12 +2587,12 @@ TEARDROP::PARAMS TEARDROPS::CopyCurrentParams( const TRACK* aTrackSegAt,
 {
     TEARDROP::PARAMS tear_params = {TEARDROP::NULL_T, 0, 0, 0};
     wxPoint track_pos = TrackSegNearestEndpoint( aTrackSegAt, aCurPosAt );
-    
+
     TEARDROP* tear = nullptr;
     TRACKNODEITEM* item = Get( aTrackSegAt, track_pos );
     if( item && dynamic_cast<TEARDROP*>( item ) )
         tear = static_cast<TEARDROP*>( item );
-    
+
     if( tear )
     {
         tear_params = tear->GetParams();

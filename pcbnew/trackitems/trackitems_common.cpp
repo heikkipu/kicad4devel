@@ -54,9 +54,22 @@ TRACKITEMS::~TRACKITEMS()
     m_RoundedTracksCorners = nullptr;
 }
 
+
+#ifdef NEWCONALGO
+void TRACKITEMS::SetEditFrame( const PCB_EDIT_FRAME* aEditFrame )
+#else
 void TRACKITEMS::SetEditFrame( const PCB_EDIT_FRAME* aEditFrame, wxMenu* aMenu )
+#endif
 {
     m_EditFrame = const_cast<PCB_EDIT_FRAME*>( aEditFrame );
+#ifdef NEWCONALGO
+    m_Teardrops->SetEditFrame( aEditFrame );
+    m_RoundedTracksCorners->SetEditFrame( aEditFrame );
+}
+
+void TRACKITEMS::SetMenu( wxMenu* aMenu )
+{
+#endif //Yes it is up here.
     if( aMenu )
     {
         int item_pos = aMenu->GetMenuItemCount();
@@ -66,6 +79,26 @@ void TRACKITEMS::SetEditFrame( const PCB_EDIT_FRAME* aEditFrame, wxMenu* aMenu )
             aMenu->Destroy( item );
         }
 
+#ifdef NEWCONALGO
+        if( m_Teardrops )
+        {
+            m_Teardrops->SetMenu( aMenu );
+            AddMenuItem( aMenu,
+                            m_Teardrops->GetMenu(), ID_POPUP_PCB_TEARDROPS_COMMON_MNU,
+                            TEARDROPS::TXT_TEARDROPS,
+                            KiBitmap( pad_xpm ) );
+        }
+
+        if( m_RoundedTracksCorners )
+        {
+            m_RoundedTracksCorners->SetMenu( aMenu );
+            AddMenuItem( aMenu,
+                        m_RoundedTracksCorners->GetMenu(),
+                        ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_COMMON_MNU,
+                        ROUNDEDTRACKSCORNERS::TXT_ROUNDEDTRACKSCORNERS,
+                        KiBitmap( add_tracks_xpm ) );
+        }
+#else
         m_Teardrops->SetEditFrame( aEditFrame );
         m_RoundedTracksCorners->SetEditFrame( aEditFrame );
 
@@ -80,6 +113,7 @@ void TRACKITEMS::SetEditFrame( const PCB_EDIT_FRAME* aEditFrame, wxMenu* aMenu )
                      ROUNDEDTRACKSCORNERS::TXT_ROUNDEDTRACKSCORNERS,
                      KiBitmap( add_tracks_xpm ) );
         
+#endif
         wxMenu* misc_menu = new wxMenu;
         AddMenuItem( misc_menu,
                      ID_POPUP_PCB_TRACKS_MARK_SHARP_ANGLES,

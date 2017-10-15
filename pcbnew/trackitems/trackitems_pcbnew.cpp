@@ -340,12 +340,12 @@ TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::TRACKS_PROGRESS_FIX_ITEM_CONNEC
     TRACKITEMS_TRACKS_PROGRESS( aParent, aTracks, aUndoRedoList )
 {
     m_progress_title.Printf( _( "Fixing Pad / Via Connections of Tracks" ) );
-    
+
     m_current_shape = m_Parent->Teardrops()->GetCurrentShape();
     m_teardrop_params = m_Parent->Teardrops()->GetShapeParams( TEARDROP::TEARDROP_T );
     m_fillet_params = m_Parent->Teardrops()->GetShapeParams( TEARDROP::FILLET_T );
     m_subland_params = m_Parent->Teardrops()->GetShapeParams( TEARDROP::SUBLAND_T );
-    
+
     aParent->GetBoard()->DeleteMARKERs();
     m_fixed_tracks.clear();
 }
@@ -356,7 +356,7 @@ TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::~TRACKS_PROGRESS_FIX_ITEM_CONNE
     m_Parent->Teardrops()->SetShapeParams( m_fillet_params );
     m_Parent->Teardrops()->SetShapeParams( m_subland_params );
     m_Parent->Teardrops()->SetCurrentShape( m_current_shape );
-    m_Parent->Teardrops()->RecreateMenu();
+    //m_Parent->Teardrops()->RecreateMenu();
     for( auto track_seg : m_fixed_tracks )
         if( dynamic_cast<ROUNDEDCORNERTRACK*>( track_seg ) )
             m_Parent->RoundedTracksCorners()->Update( track_seg );

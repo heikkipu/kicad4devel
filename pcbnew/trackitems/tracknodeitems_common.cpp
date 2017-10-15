@@ -49,13 +49,24 @@ TRACKNODEITEMS::~TRACKNODEITEMS()
 void TRACKNODEITEMS::SetEditFrame( const PCB_EDIT_FRAME* aEditFrame )
 {
     m_EditFrame = const_cast<PCB_EDIT_FRAME*>( aEditFrame );
+#ifdef NEWCONALGO
+}
+
+void TRACKNODEITEMS::SetMenu( wxMenu* aMenu )
+{
+#else //Remember NEWCONALGO is up here.
     if( m_menu )
     {
         delete m_menu;
         m_menu = nullptr;
     }
+#endif
     m_menu = new wxMenu;
+#ifdef NEWCONALGO
+    CreateMenu( m_menu );
+#else
     RecreateMenu();
+#endif
 }
 
 //----------------------------------------------------------------------------------------
@@ -168,8 +179,13 @@ void TRACKNODEITEMS::AddGetList( const TRACK* aTrackSegFrom )
 // Menus 
 //----------------------------------------------------------------------------------------
 
+
 void TRACKNODEITEMS::RecreateMenu( void )
 {
+#ifdef NEWCONALGO
+    if( m_EditFrame )
+        m_EditFrame->ReCreateMenuBar();
+#else
     if( m_menu )
     {
         int item_pos = m_menu->GetMenuItemCount();
@@ -180,4 +196,5 @@ void TRACKNODEITEMS::RecreateMenu( void )
         }
         CreateMenu( m_menu );
     }
+#endif
 }
