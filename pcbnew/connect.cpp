@@ -43,6 +43,7 @@
 #include "trackitems/viastitching.h"
 #include "trackitems/roundedcornertrack.h"
 #include "trackitems/roundedtrackscorner.h"
+#include "trackitems/trackitems.h"
 #endif
 
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb );
@@ -1097,7 +1098,23 @@ static void RebuildTrackChain( BOARD* pcb )
 
     sort( trackList.begin(), trackList.end(), SortTracksByNetCode );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    int prev_netcode = -1;
+#endif
+
     // add them back to the list
     for( int i = 0; i < item_count;  ++i )
+#ifdef PCBNEW_WITH_TRACKITEMS
+    {
         pcb->m_Track.PushBack( trackList[i] );
+
+        if( prev_netcode != trackList[i]->GetNetCode() )
+        {
+            pcb->TrackItems()->BestInsertPointSpeeder()->Insert( trackList[i] );
+            prev_netcode = trackList[i]->GetNetCode();
+        }
+    }
+#else
+        pcb->m_Track.PushBack( trackList[i] );
+#endif
 }

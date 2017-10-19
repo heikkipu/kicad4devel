@@ -43,6 +43,7 @@
 #include <pcbnew_id.h>
 #include <menus_helpers.h>
 #include <drc_stuff.h>
+#include <dlist.h>
 
 namespace TrackNodeItems
 {
@@ -149,6 +150,9 @@ namespace TrackNodeItems
         PCB_EDIT_FRAME* m_EditFrame;
         TRACKITEMS* m_Parent;
 
+        void TracksDList_Insert( DLIST<TRACK>* aTracksList, const TRACK* aInsertItem, const TRACK* aInsertItemBefore );
+        void TracksDList_Remove( DLIST<TRACK>* aTracksList, const TRACK* aRemoveItem );
+ 
     //----------------------------------------------------------------------------------------------------------
     //Menus
     //----------------------------------------------------------------------------------------------------------

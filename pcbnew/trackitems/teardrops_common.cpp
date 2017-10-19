@@ -24,6 +24,7 @@
 #include "trackitems.h"
 
 #include <view/view.h> //Gal canvas
+#include "teardrops.h"
 #ifdef NEWCONALGO
 #include <connectivity.h>
 #endif
@@ -145,7 +146,7 @@ TEARDROP* TEARDROPS::Create( const TRACK* aTrackSegTo,
 
 //All teardrops are removed here.
 void TEARDROPS::Delete( TEARDROP* aTeardrop,
-                        DLIST<TRACK>*aTrackListAt,
+                        DLIST<TRACK>* aTrackListAt,
                         PICKED_ITEMS_LIST* aUndoRedoList
                       )
 {
@@ -169,7 +170,7 @@ void TEARDROPS::Delete( TEARDROP* aTeardrop,
 
             picker.SetItem( aTeardrop );
             aUndoRedoList->PushItem( picker );
-            aTrackListAt->Remove( aTeardrop );
+            TracksDList_Remove( aTrackListAt, aTeardrop );
 
             if( m_EditFrame )
                 m_EditFrame->GetCanvas()->RefreshDrawingRect( aTeardrop->GetBoundingBox() );
@@ -210,7 +211,7 @@ TEARDROP* TEARDROPS::Add( const TRACK* aTrackSegTo,
     
         tear = Create( aTrackSegTo, aViaOrPadTo, aNullTrackCheck );
         if( tear )
-            aTrackListAt->Insert( tear, tear->GetTrackSeg() );
+            TracksDList_Insert( aTrackListAt, tear, tear->GetTrackSeg() );
 
         aTrackSegTo = last_non_teardrop;
     }
@@ -304,7 +305,8 @@ TEARDROP* TEARDROPS::Add( const TRACK* aTrackSegTo, const wxPoint& aCurPosAt )
         {
             DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackSegTo->GetList() );
             if( tracks_list )
-                tracks_list->Insert( tear, tear->GetTrackSeg() );
+                TracksDList_Insert( tracks_list, tear, tear->GetTrackSeg() );
+
             if( m_EditFrame )
             {
                 m_EditFrame->SaveCopyInUndoList( tear, UR_NEW );
@@ -353,7 +355,7 @@ bool TEARDROPS::NET_SCAN_PAD_ADD::ExecuteAt( TRACK* aTrackSeg )
         DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackSeg->GetList() );
         if( tracks_list )
         {
-            tracks_list->Insert( tear, tear->GetTrackSeg() );
+            m_Parent->TracksDList_Insert( tracks_list, tear, tear->GetTrackSeg() );
             picker.SetItem( tear );
             m_picked_items->PushItem( picker );
         }
@@ -396,7 +398,10 @@ bool TEARDROPS::NET_SCAN_VIA_ADD::ExecuteAt( TRACK* aTrackSeg )
                 DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackSeg->GetList() );
                 if( tracks_list )
                 {
-                    tracks_list->Insert( tear, tear->GetTrackSeg() );
+                    m_Parent->GetBoard()->TrackItems()->Teardrops()->TracksDList_Insert( tracks_list,
+                                                                                         tear,
+                                                                                         tear->GetTrackSeg()
+                                                                                       );
                     picker.SetItem( tear );
                     m_picked_items->PushItem( picker );
                 }
@@ -465,7 +470,7 @@ TEARDROP* TEARDROPS::Add( const TRACK* aTrackSegTo,
                 DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackSegTo->GetList() );
                 if( tracks_list )
                 {
-                    tracks_list->Insert( tear, tear->GetTrackSeg() );
+                    TracksDList_Insert( tracks_list, tear, tear->GetTrackSeg() );
                     picker.SetItem( tear );
                     aUndoRedoList->PushItem( picker );
                 }

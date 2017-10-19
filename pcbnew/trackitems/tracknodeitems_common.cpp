@@ -24,6 +24,7 @@
 #include"tracknodeitems.h"
 #include "teardrops.h"
 #include "roundedtrackscorners.h"
+#include "trackitems.h"
 
 using namespace TrackNodeItem;
 using namespace TrackNodeItems;
@@ -67,6 +68,29 @@ void TRACKNODEITEMS::SetMenu( wxMenu* aMenu )
 #else
     RecreateMenu();
 #endif
+}
+
+//Insert node item in tracks list.
+void TRACKNODEITEMS::TracksDList_Insert( DLIST<TRACK>* aTracksList, const TRACK* aInsertItem, const TRACK* aInsertItemBefore )
+{
+    if( aTracksList && aInsertItem && aInsertItemBefore )
+    {
+        aTracksList->Insert( const_cast<TRACK*>( aInsertItem ), const_cast<TRACK*>( aInsertItemBefore ) );
+
+        if( m_Board->m_Track == aTracksList->GetFirst() )
+            m_Board->TrackItems()->BestInsertPointSpeeder()->Insert( aInsertItem );
+    }
+}
+
+void TRACKNODEITEMS::TracksDList_Remove( DLIST<TRACK>* aTracksList, const TRACK* aRemoveItem)
+{
+    if( aTracksList && aRemoveItem )
+    {
+        if( m_Board->m_Track == aTracksList->GetFirst() )
+            m_Board->TrackItems()->BestInsertPointSpeeder()->Remove( aRemoveItem );
+
+        aTracksList->Remove( const_cast<TRACK*>( aRemoveItem ) );
+    }
 }
 
 //----------------------------------------------------------------------------------------

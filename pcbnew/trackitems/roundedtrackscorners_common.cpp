@@ -164,7 +164,7 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackSegTo,
     return corner;
 }
 
-void ROUNDEDTRACKSCORNERS::Delete( ROUNDEDTRACKSCORNER* aCorner, DLIST<TRACK>*aTrackListAt, PICKED_ITEMS_LIST* aUndoRedoList )
+void ROUNDEDTRACKSCORNERS::Delete( ROUNDEDTRACKSCORNER* aCorner, DLIST<TRACK>* aTrackListAt, PICKED_ITEMS_LIST* aUndoRedoList )
 {
     if( aCorner && aTrackListAt )
     {
@@ -194,7 +194,7 @@ void ROUNDEDTRACKSCORNERS::Delete( ROUNDEDTRACKSCORNER* aCorner, DLIST<TRACK>*aT
 
             picker.SetItem( aCorner );
             aUndoRedoList->PushItem( picker );
-            aTrackListAt->Remove( aCorner );
+            TracksDList_Remove( aTrackListAt, aCorner );
 
             m_Parent->Teardrops()->Update( first_track );
             m_Parent->Teardrops()->Update( second_track );
@@ -268,7 +268,7 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert( TRACK* aTrack, PICKED_ITEMS_L
 #else
                 m_Board->GetRatsnest()->Add( created_track );
 #endif
-                tracks_list->Insert( created_track, aTrack );
+                TracksDList_Insert( tracks_list, created_track, aTrack );
 
                 //Remove old.
                 picker_deleted.SetItem( aTrack );
@@ -278,7 +278,7 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert( TRACK* aTrack, PICKED_ITEMS_L
 #else
                 m_Board->GetRatsnest()->Remove( aTrack );
 #endif
-                tracks_list->Remove( aTrack );
+                TracksDList_Remove( tracks_list, aTrack );
 
                 //If teardrops add them.
                 m_Parent->Teardrops()->FromMemory( created_track, aUndoRedoList );
@@ -316,7 +316,7 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackSegTo, const wxPoin
             if( corner )
             {
                 DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackSegTo->GetList() );
-                tracks_list->Insert( corner, corner->GetTrackSeg() );
+                TracksDList_Insert( tracks_list, corner, corner->GetTrackSeg() );
 
                 picker_new.SetItem( corner );
                 aUndoRedoList->PushItem( picker_new );

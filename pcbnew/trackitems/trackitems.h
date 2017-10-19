@@ -434,6 +434,41 @@ private:
     };
 //--------------------------------------------------------------------------------------------------- 
 
+//--------------------------------------------------------------------------------------------------- 
+// Speedup m_Track linked list in get best inserton point in class_track.
+//--------------------------------------------------------------------------------------------------- 
+private:
+
+    class BEST_INSERT_POINT_SPEEDER
+    {
+    public:
+        BEST_INSERT_POINT_SPEEDER( const BOARD* aBoard )
+        { 
+            m_Board = aBoard;
+            m_best_insert_point_items.clear(); 
+        }
+        ~BEST_INSERT_POINT_SPEEDER(){;}
+
+        TRACK* GetItem( const int aNetCode ) const;
+        void Insert( const TRACK* aTrackItem );
+        void Remove( const TRACK* aTrackItem );
+
+    private:
+        BEST_INSERT_POINT_SPEEDER(){;}
+        const BOARD* m_Board{nullptr};
+        std::vector<TRACK*> m_best_insert_point_items;
+
+    };
+
+    BEST_INSERT_POINT_SPEEDER* m_BestInsertPointSpeeder{nullptr};
+
+public:
+    BEST_INSERT_POINT_SPEEDER* BestInsertPointSpeeder( void ) const
+    { 
+        return m_BestInsertPointSpeeder;
+    }
+
+//--------------------------------------------------------------------------------------------------- 
 
 }; //TRACKITEMS
 

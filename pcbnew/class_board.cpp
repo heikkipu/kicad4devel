@@ -918,6 +918,10 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
             m_Track.Insert( (TRACK*) aBoardItem, insertAid );
         }
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+        TrackItems()->BestInsertPointSpeeder()->Insert( (TRACK*) aBoardItem );
+#endif
+
         break;
 
     case PCB_ZONE_T:
@@ -1016,6 +1020,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
 #ifdef PCBNEW_WITH_TRACKITEMS
     case PCB_TEARDROP_T:
     case PCB_ROUNDEDTRACKSCORNER_T:
+        TrackItems()->BestInsertPointSpeeder()->Remove( (TRACK*) aBoardItem );
 #endif
         m_Track.Remove( (TRACK*) aBoardItem );
         break;

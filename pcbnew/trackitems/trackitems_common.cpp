@@ -44,6 +44,7 @@ TRACKITEMS::TRACKITEMS( const BOARD* aBoard )
     m_Board = const_cast<BOARD*>( aBoard );
     m_Teardrops = new TEARDROPS( this, aBoard );
     m_RoundedTracksCorners = new ROUNDEDTRACKSCORNERS( this, aBoard );
+    m_BestInsertPointSpeeder = new BEST_INSERT_POINT_SPEEDER( aBoard );
 }
 
 TRACKITEMS::~TRACKITEMS()
@@ -52,6 +53,8 @@ TRACKITEMS::~TRACKITEMS()
     m_Teardrops = nullptr;
     delete m_RoundedTracksCorners;
     m_RoundedTracksCorners = nullptr;
+    delete m_BestInsertPointSpeeder;
+    m_BestInsertPointSpeeder = nullptr;
 }
 
 
@@ -934,3 +937,85 @@ void TRACKITEMS::SetMsgPanel( const TRACK* aTrack )
         }
     }
 }
+
+
+//--------------------------------------------------------------------------------------------------- 
+// Speedup m_Track linked list in get best inserton point in class_track.
+//--------------------------------------------------------------------------------------------------- 
+
+//Return netcodes first item or first item on netcode less than this.
+//Otherwise returns m_Track first item.
+TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode ) const
+{
+    if(aNetCode)
+    {
+        int netcode = aNetCode - 1;
+        if( m_best_insert_point_items.size() > aNetCode )
+        {
+            TRACK* item = m_best_insert_point_items[aNetCode];
+            if( item )
+                return item;
+        }
+        else
+        {
+            netcode = m_best_insert_point_items.size() - 1;
+        }
+
+        while(netcode > 0)
+        {
+            TRACK* item = m_best_insert_point_items[netcode];
+            if( item )
+                return item;
+            netcode--;
+        }
+    }
+
+    return m_Board->m_Track;
+}
+
+void TRACKITEMS::BEST_INSERT_POINT_SPEEDER::Insert( const TRACK* aTrackItem )
+{
+    if( aTrackItem )
+    {
+        int netcode = aTrackItem->GetNetCode();
+        if( netcode >= m_best_insert_point_items.size() )
+            m_best_insert_point_items.resize( netcode + 1 );
+        TRACK* trackitem = const_cast<TRACK*>( aTrackItem );
+        while( trackitem )
+        {
+            TRACK* trackitem_prev = trackitem->Back();
+            if( ( trackitem_prev && ( trackitem_prev->GetNetCode() != netcode ) ) ||
+                ( !trackitem_prev && ( trackitem->GetNetCode() == netcode ) ) )
+            {
+                m_best_insert_point_items[netcode] = trackitem;
+                break;
+            }
+            trackitem = trackitem_prev;
+        }
+    }
+}
+
+void TRACKITEMS::BEST_INSERT_POINT_SPEEDER::Remove( const TRACK* aTrackItem )
+{
+    if( aTrackItem )
+    {
+        int netcode = aTrackItem->GetNetCode();
+        TRACK* trackitem = const_cast<TRACK*>( aTrackItem );
+        if( trackitem == m_best_insert_point_items[netcode] )
+        {
+            trackitem = const_cast<TRACK*>( aTrackItem )->Back();
+            if( trackitem && ( trackitem->GetNetCode() == netcode ) )
+                m_best_insert_point_items[netcode] = trackitem;
+            else
+            {
+                trackitem = const_cast<TRACK*>( aTrackItem )->Next();
+                if( trackitem && ( trackitem->GetNetCode() == netcode ) )
+                    m_best_insert_point_items[netcode] = trackitem;
+                else
+                    m_best_insert_point_items[netcode] = nullptr;
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------- 

@@ -47,6 +47,10 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+#include "trackitems/trackitems.h"
+#endif
+
 /**
  * Function ShowClearance
  * tests to see if the clearance border is drawn on the given track.
@@ -480,7 +484,13 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
     if( Type() == PCB_ZONE_T )
         track = aPcb->m_Zone;
     else
+#ifdef PCBNEW_WITH_TRACKITEMS
+    {
+        track = aPcb->TrackItems()->BestInsertPointSpeeder()->GetItem(GetNetCode());
+    }
+#else
         track = aPcb->m_Track;
+#endif
 
     for( ; track;  track = track->Next() )
     {

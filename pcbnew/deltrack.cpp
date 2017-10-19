@@ -228,6 +228,8 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
         if(segm && dynamic_cast<VIA*>(segm))
             if( dynamic_cast<VIA*>(segm)->GetThermalCode() )
                 continue;
+
+        GetBoard()->TrackItems()->BestInsertPointSpeeder()->Remove( segm );
 #endif
         GetBoard()->GetRatsnest()->Remove( segm );
         GetBoard()->m_Track.Remove( segm );
@@ -285,6 +287,10 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
         DBG( std::cout << __func__ << ": track " << tracksegment << " status=" \
                      << TO_UTF8( TRACK::ShowState( tracksegment->GetStatus() ) ) \
                      << std::endl; )
+
+#ifdef PCBNEW_WITH_TRACKITEMS
+        GetBoard()->TrackItems()->BestInsertPointSpeeder()->Remove( tracksegment );
+#endif
 
         GetBoard()->GetRatsnest()->Remove( tracksegment );
         GetBoard()->m_Track.Remove( tracksegment );
