@@ -981,16 +981,11 @@ void TRACKITEMS::BEST_INSERT_POINT_SPEEDER::Insert( const TRACK* aTrackItem )
         if( netcode >= m_best_insert_point_items.size() )
             m_best_insert_point_items.resize( netcode + 1 );
         TRACK* trackitem = const_cast<TRACK*>( aTrackItem );
-        while( trackitem )
+        TRACK* trackitem_prev = trackitem->Back();
+        if( ( trackitem_prev && ( trackitem_prev->GetNetCode() < netcode ) ) ||
+            ( !trackitem_prev && ( trackitem->GetNetCode() == netcode ) ) )
         {
-            TRACK* trackitem_prev = trackitem->Back();
-            if( ( trackitem_prev && ( trackitem_prev->GetNetCode() != netcode ) ) ||
-                ( !trackitem_prev && ( trackitem->GetNetCode() == netcode ) ) )
-            {
-                m_best_insert_point_items[netcode] = trackitem;
-                break;
-            }
-            trackitem = trackitem_prev;
+            m_best_insert_point_items[netcode] = trackitem;
         }
     }
 }
