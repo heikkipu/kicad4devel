@@ -37,7 +37,7 @@ namespace TrackNodeItem
     class TEARDROP : public TrackNodeItem::TRACKNODEITEM
     {
     public:
-        
+
         static const int TEARDROP_SEGS_MAX = 10; //Shape Teardrop max num segments.
         static const int TEARDROP_SEGS_MIN = 2; //Shape Teardrop min num segments.
         static const int SUBLAND_SIZE_MAX = 100; //Shape Subland max size.
@@ -46,8 +46,8 @@ namespace TrackNodeItem
         static const int TEARDROPS_LENGTH_MAX = 5000; //common shapes length max.
         static const int TEARDROPS_SIZE_MIN = 1; //common shapes size min.
         static const int TEARDROPS_POS_MIN = 1; //common shapes position min.
-        
-        enum SHAPES_T 
+
+        enum SHAPES_T
         {
             NULL_T = 0,
             TEARDROP_T,
@@ -55,15 +55,15 @@ namespace TrackNodeItem
             SUBLAND_T,
             ZERO_T,
         };
-        
+
         class PARAMS
         {
         public:
             SHAPES_T shape;
             int length_ratio;   //At shape SUBLAND_T max value is 100. Others may have bigger values.
-            int width_ratio;   
+            int width_ratio;
             int num_segments;
-            bool operator==( const PARAMS& aComp ) const 
+            bool operator==( const PARAMS& aComp ) const
             {
                 if( ( shape == aComp.shape ) &&
                     ( length_ratio == aComp.length_ratio ) &&
@@ -74,7 +74,7 @@ namespace TrackNodeItem
                 }
                 return false;
             }
-            bool operator!=( const PARAMS& aComp ) const 
+            bool operator!=( const PARAMS& aComp ) const
             {
                 return !( *this == aComp );
             }
@@ -84,7 +84,7 @@ namespace TrackNodeItem
 
         //Base overrides, overloads, hides ...
         wxString GetClass() const override { return wxT( "TEARDROP" ); }
-        EDA_ITEM* Clone() const override; 
+        EDA_ITEM* Clone() const override;
         const EDA_RECT GetBoundingBox() const override;
 
         void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
@@ -94,16 +94,16 @@ namespace TrackNodeItem
                                                  ) const override;
 
         wxString GetSelectMenuText() const override;
-        void AddTo3DContainer( CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits ) override;        
+        void AddTo3DContainer( CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits ) override;
 
-        const wxPoint& GetPosition() const override { return m_mid_pos; } // Center point of teardrop    
-        void SetPosition( const wxPoint& aPoint ) override {}; 
-        void SetEnd( const wxPoint& aEnd ) {}; 
+        const wxPoint& GetPosition() const override { return m_mid_pos; } // Center point of teardrop
+        void SetPosition( const wxPoint& aPoint ) override {};
+        void SetEnd( const wxPoint& aEnd ) {};
         void SetStart( const wxPoint& aStart ); //Use this, when change position. Same as connected item position.
 
         int GetShape() const { return m_shape; }
 
-        wxString GetShapeName( void ) const; 
+        wxString GetShapeName( void ) const;
 
         bool IsSetOK( void ) const { return m_set_ok; }
 
@@ -137,7 +137,7 @@ namespace TrackNodeItem
             }
             return false;
         }
-        bool operator!=( const TEARDROP& aComp ) const 
+        bool operator!=( const TEARDROP& aComp ) const
         {
             return !( *this == aComp );
         }
@@ -184,14 +184,14 @@ namespace TrackNodeItem
 
         inline void CalcFilletSegs( void );
         inline void CalcTeardropArcs( void );
-        
+
         virtual void SetConnectedItem( void ){};
         BOARD_CONNECTED_ITEM* m_connected_item;
         unsigned int m_connected_item_rad; //Connected item radius. Via, Pad or something else.
         wxPoint m_connected_pos_delta; //Teardrop delta pos from item.
         int m_connected_pos_length_delta; //Distance item to teardrop delta length.
         int m_length_width_corr; //Corrects length to width ratio, maybe ;)
-	
+
         wxPoint m_pos;
         unsigned int m_width_rad;
         unsigned int m_length;
@@ -230,13 +230,13 @@ namespace TrackNodeItem
         static const unsigned int FILLET_POLY_POINTS_NUM = 4;
         static const unsigned int FILLET_OUTER_POLY_POINTS_NUM = 6;
         static const unsigned int FILLET_CLEARANCE_POLY_POINTS_NUM = FILLET_OUTER_POLY_POINTS_NUM;
-        
+
         SHAPES_T m_shape;
         wxPoint m_mid_pos;
 
-        //Own drawing modes. 
+        //Own drawing modes.
         bool m_draw_mode_unfill; //Graphic Edit.
-        
+
         void SetSize( void );
         void SetPoints( void );
         void SetSegments( void );
@@ -284,7 +284,7 @@ namespace TrackNodeItem
 
         wxString GetClass() const override { return wxT( "TEARDROP_EDIT_VIA" ); }
 
-        bool ChangeTrack( const TRACK* aNewTrack );    
+        bool ChangeTrack( const TRACK* aNewTrack );
     };
 
 //-----------------------------------------------------------------------------------------------------/
@@ -341,7 +341,7 @@ namespace TrackNodeItem
     private:
         D_PAD* m_connected_pad;
     };
-      
+
 //-----------------------------------------------------------------------------------------------------/
 // Junction and T-Junction.
 //-----------------------------------------------------------------------------------------------------/

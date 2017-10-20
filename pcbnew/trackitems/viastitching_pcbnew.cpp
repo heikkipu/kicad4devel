@@ -28,20 +28,20 @@ using namespace ViaStitching;
 
 
 //Legacy canvas add.
-void VIASTITCHING::AddThermalVia( const PCB_EDIT_FRAME* aEditFrame, const int aViaType_ID ) 
+void VIASTITCHING::AddThermalVia( const PCB_EDIT_FRAME* aEditFrame, const int aViaType_ID )
 {
     BOARD_DESIGN_SETTINGS* d_settings = &aEditFrame->GetBoard()->GetDesignSettings();
     if( aViaType_ID != ID_POPUP_PCB_PLACE_ZONE_CURRENTTYPE_VIA )
     {
         d_settings->m_CurrentViaType = VIA_THROUGH;
-        if( ( aViaType_ID == ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA ) || 
+        if( ( aViaType_ID == ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA ) ||
             ( aViaType_ID ==  ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA ) )
         {
             d_settings->m_CurrentViaType = VIA_BLIND_BURIED;
         }
     }
 
-    bool select_layer = ( aViaType_ID == ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA ) || 
+    bool select_layer = ( aViaType_ID == ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA ) ||
                         ( aViaType_ID == ID_POPUP_PCB_SEL_LAYER_AND_PLACE_ZONE_THROUGH_VIA );
 
     AddThermalVia( aEditFrame, d_settings->m_CurrentViaType, select_layer );
@@ -161,7 +161,7 @@ bool VIASTITCHING::IsTrackConnection( const VIA* aVia, const int aNetcode )
         for( int n = 0; n < 2; ++n )
         {
             TRACK* track_seg = start_track;
-            if( n ) 
+            if( n )
                 track_seg = start_track->Back();
 
             while( track_seg )
@@ -173,7 +173,7 @@ bool VIASTITCHING::IsTrackConnection( const VIA* aVia, const int aNetcode )
                         if( aVia->IsOnLayer( track_seg->GetLayer() ) )
                         {
                             //Test whole segment length
-                            //if( track_seg->HitTest( aVia->GetEnd() ) ) 
+                            //if( track_seg->HitTest( aVia->GetEnd() ) )
                             //Test only endpoints ( connection points ).
                             if( ( track_seg->GetStart() == aVia->GetEnd() ) ||
                                 ( track_seg->GetEnd() == aVia->GetEnd() ) )
@@ -223,10 +223,10 @@ void VIASTITCHING::SetNetcodes( const std::unordered_map<const VIA*, int>& aVias
 #ifdef NEWCONALGO
             auto connity = m_board->GetConnectivity();
             auto via_tracks = connity->GetConnectedTracks( via );
-            if( ( netcode_was && !netcode ) || 
+            if( ( netcode_was && !netcode ) ||
                 ( netcode_was && netcode && ( netcode_was == netcode ) && via_tracks.empty() ) )
 #else
-            if( ( netcode_was && !netcode ) || 
+            if( ( netcode_was && !netcode ) ||
                 ( netcode_was && netcode && ( netcode_was == netcode ) && !via->m_TracksConnected.size() ) )
 #endif
             {
@@ -278,7 +278,7 @@ void VIASTITCHING::SetNetcodes( void )
 //Set real zone polygon connections to thermal vias.
 void VIASTITCHING::ConnectToZones( void )
 {
-    //Connect unconnected single vias in copper pours. 
+    //Connect unconnected single vias in copper pours.
     if( m_board->GetAreaCount() )
     {
         //Collect all vias that has no netcode and vias with thermal code.
@@ -307,7 +307,7 @@ void VIASTITCHING::ConnectToZones( void )
                     netcode = NETINFO_LIST::UNCONNECTED;
                     const_cast<VIA*>( via )->SetNetCode( netcode );
                 }
-                
+
                 std::vector<ZONE_CONTAINER*> zones;
                 int zonecode = thermalcode? thermalcode : netcode;
                 Collect_Zones_Hit_Via( zones, via, zonecode );
@@ -329,7 +329,7 @@ void VIASTITCHING::ConnectToZones( void )
                             other_zone_vias.push_back( via );
                 }
 
-                const_cast<VIA*>( via )->SetThermalPolysZones( poly_zone ); 
+                const_cast<VIA*>( via )->SetThermalPolysZones( poly_zone );
                 const_cast<VIA*>( via )->SetThermalZones( zones );
 
             }
@@ -350,7 +350,7 @@ void VIASTITCHING::ConnectToZones( void )
                 std::unordered_multimap<const VIA*, const SHAPE_POLY_SET::POLYGON*> vias_polys;
                 vias_polys.clear();
 
-                std::unordered_map<const SHAPE_POLY_SET::POLYGON*, ZONE_CONTAINER*>* via_polyzone 
+                std::unordered_map<const SHAPE_POLY_SET::POLYGON*, ZONE_CONTAINER*>* via_polyzone
                     = const_cast<VIA*>( via_test )->GetThermalPolysZones();
 
                 if( via_polyzone->size() >= MIN_THERMALVIA_ZONES )
@@ -412,7 +412,7 @@ void VIASTITCHING::ConnectToZones( void )
                                     for( int n = 0; n < 2; ++n )
                                     {
                                         TRACK* track_seg = start_track;
-                                        if( n ) 
+                                        if( n )
                                             track_seg = start_track->Back();
 
                                         while( track_seg )
@@ -621,7 +621,7 @@ void VIASTITCHING::RuleCheck( const TRACK* aTrack, DRC* aDRC )
 
             //Warning Do not have at least two pours connected.
             //Locking via disables warning. Is that good?
-            if( ( via_zonepoly.size() < 2 ) && !aTrack->IsLocked() ) 
+            if( ( via_zonepoly.size() < 2 ) && !aTrack->IsLocked() )
             {
                 aDRC->AddMarker( aTrack,
                                  aTrack->GetEnd(),
@@ -639,7 +639,7 @@ void VIASTITCHING::RuleCheck( const TRACK* aTrack, DRC* aDRC )
             }
 
         }
-    }   
+    }
 }
 
 
@@ -682,7 +682,7 @@ bool VIASTITCHING::Clean( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit )
                         bool test_again = true;
                         do
                         {
-                            if( track ) 
+                            if( track )
                             {
                                 //Do not have to remove when thermal via in track with same netcode.
                                 test_again = track->GetNetCode() == thermalcode;
@@ -741,14 +741,14 @@ bool VIASTITCHING::Clean( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit )
             }
         }
     }
-    
+
     for( auto via_remove : vias_remove )
     {
         board->Remove( via_remove );
         aCommit->Removed( via_remove );
         modified = true;
     }
-    
+
     return modified;
 }
 
@@ -886,11 +886,11 @@ void VIASTITCHING::StartDrawingVia( const PCB_EDIT_FRAME* aEditFrame,
                                     wxDC* aDC
                                   )
 {
-    m_EditFrame = const_cast<PCB_EDIT_FRAME*>( aEditFrame ); 
+    m_EditFrame = const_cast<PCB_EDIT_FRAME*>( aEditFrame );
     m_draw_panel = const_cast<EDA_DRAW_PANEL*>( aPanel );
     m_dc = const_cast<wxDC*>( aDC );
     m_draw_panel->SetMouseCapture( ViaStitching::DrawMovingVia, ViaStitching::StopDrawingVia );
-    
+
     m_draw_panel->CallMouseCapture( aDC, wxDefaultPosition, false );
 }
 
@@ -900,11 +900,11 @@ VIASTITCHING::VIA_SETTINGS ViaStitching::GetCurrentViaSettings( const PCB_EDIT_F
     VIASTITCHING::VIA_SETTINGS via_settings;
     via_settings.rad = d_settings->GetCurrentViaSize() / 2;
     via_settings.hole_rad = d_settings->GetCurrentViaDrill() / 2;
-    
+
     via_settings.clearance_rad = 0;
     via_settings.color = WHITE;
     via_settings.text = "";
-    
+
     PCB_LAYER_ID currentLayer = aEditFrame->GetActiveLayer();
     PCB_LAYER_ID pairTop = aEditFrame->GetScreen()->m_Route_Layer_TOP;
     PCB_LAYER_ID pairBottom = aEditFrame->GetScreen()->m_Route_Layer_BOTTOM;
@@ -925,7 +925,7 @@ VIASTITCHING::VIA_SETTINGS ViaStitching::GetCurrentViaSettings( const PCB_EDIT_F
             aEditFrame->GetScreen()->m_Route_Layer_TOP = F_Cu;
         }
     }
-            
+
     PCB_LAYER_ID layer = aEditFrame->GetActiveLayer();
     wxPoint pos = aEditFrame->GetCrossHairPosition();
     ZONE_CONTAINER* zone = aEditFrame->GetBoard()->HitTestForAnyFilledArea( pos,
@@ -945,7 +945,7 @@ VIASTITCHING::VIA_SETTINGS ViaStitching::GetCurrentViaSettings( const PCB_EDIT_F
         if( netclass )
             via_settings.clearance_rad = via_settings.rad + netclass->GetClearance();
     }
-    
+
     return via_settings;
 }
 
@@ -1045,7 +1045,7 @@ void ViaStitching::DrawMovingVia( EDA_DRAW_PANEL* aPanel,
                  via_settings.color,
                  via_settings.text,
                  via_settings.rad<<1 );
-    
+
     frame->GetBoard()->ViaStitching()->SetDrawViaSettings( via_settings );
     frame->GetBoard()->ViaStitching()->SetDrawViaPrevPos( position );
 }
@@ -1100,7 +1100,7 @@ void THROUGH_VIA_LAYER_SELECTOR::buildList( void )
     m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
     m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
     int row = 0;
-    
+
     for( LSEQ ui_seq = m_brd->GetEnabledLayers().UIOrder();  ui_seq;  ++ui_seq )
     {
         PCB_LAYER_ID  layerid = *ui_seq;

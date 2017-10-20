@@ -157,7 +157,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
     GetBoard()->TrackItems()->Teardrops()->Remove( aTrack, &pickedItems, true );
     GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( aTrack, &pickedItems, true );
 #endif
-    
+
     // Remove the segment from list, but do not delete it (it will be stored i n undo list)
     GetBoard()->Remove( aTrack );
 
@@ -258,7 +258,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     int net_code = pt_segm->GetNetCode();
     PICKED_ITEMS_LIST itemsList;
     ITEM_PICKER       picker( NULL, UR_DELETED );
-    //Delete teardrops from whole net. 
+    //Delete teardrops from whole net.
     GetBoard()->TrackItems()->Teardrops()->Remove( net_code, TEARDROPS::ALL_TYPES_T, &itemsList, true);
     GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( net_code, &itemsList, true );
 #endif
@@ -306,7 +306,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     GetBoard()->TrackItems()->Teardrops()->Recreate( net_code, &itemsList );
     GetBoard()->TrackItems()->RoundedTracksCorners()->Recreate( net_code, &itemsList );
 #endif
-    
+
     SaveCopyInUndoList( itemsList, UR_DELETED );
 
     if( net_code > 0 )

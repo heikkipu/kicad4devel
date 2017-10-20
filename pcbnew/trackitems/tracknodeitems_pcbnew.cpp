@@ -29,16 +29,16 @@ using namespace TrackNodeItem;
 using namespace TrackNodeItems;
 
 //-----------------------------------------------------------------------------------------------------/
-// PROGRESS CLASSES 
+// PROGRESS CLASSES
 //-----------------------------------------------------------------------------------------------------/
-// BASE item class 
+// BASE item class
 ITEMS_PROGRESS_BASE::ITEMS_PROGRESS_BASE( const PCB_EDIT_FRAME* aFrame,
                                           const BOARD_ITEM* aListFirstItem,
                                           PICKED_ITEMS_LIST* aUndoRedo
                                         )
 {
     m_frame = const_cast<PCB_EDIT_FRAME*>( aFrame );
-    
+
     m_undoredo_items = aUndoRedo;
 
     m_progress_to_count = 0;
@@ -64,7 +64,7 @@ ITEMS_PROGRESS_BASE::~ITEMS_PROGRESS_BASE()
     }
     if( m_progress )
         m_progress->Destroy();
-    
+
 }
 
 bool ITEMS_PROGRESS_BASE::UpdateProgress( const unsigned int aProgress,
@@ -90,7 +90,7 @@ unsigned int ITEMS_PROGRESS_BASE::Execute( void )
                                            m_progress_to_count,
                                            m_frame,
                                            m_progress_style );
-        
+
         if( m_progress )
         {
             BOARD_ITEM* item = const_cast<BOARD_ITEM*>( m_list_first_item );
@@ -128,9 +128,9 @@ unsigned int ITEMS_PROGRESS_BASE::Execute( void )
 
 
 //-----------------------------------------------------------------------------------------------------/
-// MODULES_PROGRESS 
+// MODULES_PROGRESS
 //-----------------------------------------------------------------------------------------------------/
-// Base modules 
+// Base modules
 MODULES_PROGRESS::MODULES_PROGRESS( const PCB_EDIT_FRAME* aFrame,
                                     const DLIST<MODULE>* aModules,
                                     PICKED_ITEMS_LIST* aUndoRedo
@@ -157,7 +157,7 @@ unsigned int MODULES_PROGRESS::ExecuteItem( const BOARD_ITEM* aItemAt )
 
 
 //-----------------------------------------------------------------------------------------------------/
-// DRC 
+// DRC
 //-----------------------------------------------------------------------------------------------------/
 bool TRACKNODEITEMS::TestSegment( const wxPoint aStartPoint,
                                   const wxPoint aEndPoint,
@@ -171,9 +171,9 @@ bool TRACKNODEITEMS::TestSegment( const wxPoint aStartPoint,
     int angle = ArcTangente( delta.y, delta.x );
     RotatePoint( &delta, angle );
     RotatePoint( &seg_start_point, angle );
-    
+
     if( !m_EditFrame->GetDrcController()->checkMarginToCircle( seg_start_point, aMinDist, delta.x ) )
         return false;
-    
+
     return true;
 }

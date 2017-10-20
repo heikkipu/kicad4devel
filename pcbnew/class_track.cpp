@@ -167,7 +167,7 @@ VIA::VIA( BOARD_ITEM* aParent ) :
     SetDrillDefault();
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    m_thermal = 0; 
+    m_thermal = 0;
     m_thermal_zones.clear();
     m_thermal_polys_zones.clear();
 #endif
@@ -1517,7 +1517,7 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
     {
 #ifdef PCBNEW_WITH_TRACKITEMS
         if( Track->Type() != PCB_TRACE_T ) //All derived classes of TRACK, not only VIA.
-#else            
+#else
         if( Track->Type() == PCB_VIA_T )
 #endif
             continue;

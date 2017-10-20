@@ -29,7 +29,7 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // Save
 //-----------------------------------------------------------------------------------------------------/
-void TEARDROPS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel ) const 
+void TEARDROPS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel ) const
 {
     bool tears = false;
     TEARDROP::PARAMS prev_params = {TEARDROP::NULL_T, 0, 0, 0};
@@ -91,7 +91,7 @@ void TEARDROPS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel ) const
 //-----------------------------------------------------------------------------------------------------/
 // Load
 //-----------------------------------------------------------------------------------------------------/
-TRACKNODEITEM* TEARDROPS::Parse( PCB_PARSER* aParser ) 
+TRACKNODEITEM* TEARDROPS::Parse( PCB_PARSER* aParser )
 {
     using namespace PCB_KEYS_T;
     wxCHECK_MSG( aParser->CurTok() == T_teardrop, nullptr,
@@ -128,7 +128,7 @@ TRACKNODEITEM* TEARDROPS::Parse( PCB_PARSER* aParser )
                 break;
             case T_length_ratio:
                 param.length_ratio = aParser->parseInt( "length_ratio" );
-                break;                
+                break;
             case T_width_ratio:
                 param.width_ratio = aParser->parseInt( "width_ratio" );
                 break;
@@ -155,7 +155,7 @@ TRACKNODEITEM* TEARDROPS::Parse( PCB_PARSER* aParser )
                 break;
             case T_parameters:
                 SetShapeParams( param );
-                SetCurrentShape( param.shape );                
+                SetCurrentShape( param.shape );
                 RecreateMenu();
                 break;
             case T_via:

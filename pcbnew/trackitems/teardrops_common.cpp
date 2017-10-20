@@ -41,33 +41,33 @@ TEARDROPS::TEARDROPS( const TRACKITEMS* aParent, const BOARD* aBoard ) : TRACKNO
     m_menu = nullptr;
 
     m_update_list = new Teardrop_Container;
-    m_update_list->clear(); 
+    m_update_list->clear();
 
     m_recreate_list = new Teardrop_Container;
-    m_recreate_list->clear(); 
+    m_recreate_list->clear();
 
     m_gal_removed_list = new Teardrop_Container;
-    m_gal_removed_list->clear(); 
+    m_gal_removed_list->clear();
 
     LoadDefaultParams( TEARDROP::TEARDROP_T );
     LoadDefaultParams( TEARDROP::FILLET_T );
     LoadDefaultParams( TEARDROP::SUBLAND_T );
     LoadDefaultParams( TEARDROP::ZERO_T );
     m_current_shape = m_teardrop_params.shape;
-    
+
 }
 
 TEARDROPS::~TEARDROPS()
 {
     delete m_update_list;
     m_update_list = nullptr;
-    
+
     delete m_recreate_list;
     m_recreate_list = nullptr;
-    
+
     delete m_gal_removed_list;
     m_gal_removed_list = nullptr;
-    
+
     if( m_track_edit_tear )
     {
         delete m_track_edit_tear;
@@ -77,7 +77,7 @@ TEARDROPS::~TEARDROPS()
 
 //All teardrops are created here.
 //Create JUNCTIONS & T-JUNCTIONS when !aViaOrPadTo && aPosition != 0,0
-TEARDROP* TEARDROPS::Create( const TRACK* aTrackSegTo, 
+TEARDROP* TEARDROPS::Create( const TRACK* aTrackSegTo,
                              const BOARD_CONNECTED_ITEM* aViaOrPadTo,
                              const bool aNullTrackCheck,
                              const wxPoint aPosition
@@ -140,7 +140,7 @@ TEARDROP* TEARDROPS::Create( const TRACK* aTrackSegTo,
                 }
             }
         }
-    }   
+    }
     return tear;
 }
 
@@ -152,7 +152,7 @@ void TEARDROPS::Delete( TEARDROP* aTeardrop,
 {
     if( aTeardrop && aTrackListAt )
     {
-        if( aTeardrop->GetList() == aTrackListAt ) 
+        if( aTeardrop->GetList() == aTrackListAt )
         {
             ITEM_PICKER picker( nullptr, UR_DELETED );
 
@@ -208,7 +208,7 @@ TEARDROP* TEARDROPS::Add( const TRACK* aTrackSegTo,
     if( m_current_shape )
     {
         TRACK*  last_non_teardrop = const_cast<TRACK*>( aTrackSegTo );
-    
+
         tear = Create( aTrackSegTo, aViaOrPadTo, aNullTrackCheck );
         if( tear )
             TracksDList_Insert( aTrackListAt, tear, tear->GetTrackSeg() );
@@ -255,7 +255,7 @@ TEARDROP* TEARDROPS::Add( const TRACK* aTrackSegTo, const wxPoint& aCurPosAt )
             }
         }
 #endif
-            
+
         for( unsigned int n = 0; n < 2; ++n )
         {
             VIA* via;
@@ -409,7 +409,7 @@ bool TEARDROPS::NET_SCAN_VIA_ADD::ExecuteAt( TRACK* aTrackSeg )
                     m_Parent->GetEditFrame()->GetCanvas()->RefreshDrawingRect( tear->GetBoundingBox() );
             }
         }
-    }   
+    }
     return false;
 }
 
@@ -505,7 +505,7 @@ void TEARDROPS::Add( const MODULE* aModuleTo )
 TEARDROPS::NET_SCAN_NET_ADD::NET_SCAN_NET_ADD( const int aNet,
                                                const TEARDROPS* aParent,
                                                PICKED_ITEMS_LIST* aUndoRedoList,
-                                               const TEARDROPS::TEARDROPS_TYPE_TODO aTypeToDo 
+                                               const TEARDROPS::TEARDROPS_TYPE_TODO aTypeToDo
                                              ) :
     NET_SCAN_NET_UPDATE( aNet, nullptr, aParent )
 {
@@ -519,14 +519,14 @@ bool TEARDROPS::NET_SCAN_NET_ADD::ExecuteAt( TRACK* aTrackSeg )
         ( m_type_todo == ONLY_TJUNCTIONS_T ) ||
         ( m_type_todo == JUNCTIONS_AND_TJUNCTIONS_T ) )
     {
-        dynamic_cast<TEARDROPS*>( m_Parent )->Add( aTrackSeg, TJUNCTION_TO_ADD, m_picked_items );    
+        dynamic_cast<TEARDROPS*>( m_Parent )->Add( aTrackSeg, TJUNCTION_TO_ADD, m_picked_items );
     }
 
     if( ( m_type_todo == ALL_TYPES_T ) ||
         ( m_type_todo == ONLY_JUNCTIONS_T ) ||
         ( m_type_todo == JUNCTIONS_AND_TJUNCTIONS_T ) )
     {
-        dynamic_cast<TEARDROPS*>( m_Parent )->Add( aTrackSeg, JUNCTION_TO_ADD, m_picked_items );    
+        dynamic_cast<TEARDROPS*>( m_Parent )->Add( aTrackSeg, JUNCTION_TO_ADD, m_picked_items );
     }
 
     if( ( m_type_todo == ALL_TYPES_T ) || ( m_type_todo == ONLY_TEARDROPS_T ) )
@@ -547,7 +547,7 @@ void TEARDROPS::Add( const int aNetCodeTo, const TEARDROPS::TEARDROPS_TYPE_TODO 
     if( net )
     {
         net->Execute();
-    
+
         if( m_EditFrame )
             m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
     }
@@ -714,7 +714,7 @@ TEARDROPS::NET_SCAN_VIA_REMOVE::NET_SCAN_VIA_REMOVE( const VIA* aVia,
 }
 
 bool TEARDROPS::NET_SCAN_VIA_REMOVE::ExecuteAt( TRACK* aTrackSeg )
-{    
+{
     if( aTrackSeg->Type() == PCB_TRACE_T )
     {
         TEARDROP* tear = dynamic_cast<TEARDROPS*>( m_Parent )->GetTeardrop( aTrackSeg, m_via );
@@ -762,7 +762,7 @@ TEARDROPS::NET_SCAN_PAD_REMOVE::NET_SCAN_PAD_REMOVE( const D_PAD* aPad,
                                                      const TEARDROPS* aParent,
                                                      PICKED_ITEMS_LIST* aUndoRedoList,
                                                      Teardrop_Container* aRecreateList,
-                                                     const bool aLockedToo 
+                                                     const bool aLockedToo
                                                    ) :
     NET_SCAN_PAD_ADD( aPad, aParent, aUndoRedoList )
 {
@@ -884,7 +884,7 @@ TEARDROPS::NET_SCAN_NET_REMOVE::NET_SCAN_NET_REMOVE( const int aNet,
                                                    ) :
     NET_SCAN_NET_ADD( aNet, aParent, aUndoRedoList, aTypeToDo )
 {
-    m_recreate_list = aRecreateList;   
+    m_recreate_list = aRecreateList;
     m_locked_too = aLockedToo;
 }
 
@@ -936,7 +936,7 @@ void TEARDROPS::Remove( const int aNetCodeFrom,
                                                                        aLockedToo ) );
     if( net )
         net->Execute();
-    
+
     for( TEARDROP* tear : *m_recreate_list )
     {
         if( tear )
@@ -1108,7 +1108,7 @@ bool TEARDROPS::NET_SCAN_NET_RECREATE::ExecuteAt( TRACK* aTrackSeg )
                     }
 
                     //if Via is removed do not recreate tears.
-                    if( !( dynamic_cast<VIA*>( citem ) && 
+                    if( !( dynamic_cast<VIA*>( citem ) &&
                         !( citem->Next() || citem->Back() || citem->GetList() ) ) )
                     {
                         TEARDROP* added_tear = dynamic_cast<TEARDROPS*>( m_Parent )->Add( aTrackSeg,
@@ -1220,7 +1220,7 @@ bool TEARDROPS::NET_SCAN_PAD_RECREATE::ExecuteAt( TRACK* aTrackSeg )
 
 void TEARDROPS::Recreate( const D_PAD* aPadTo, PICKED_ITEMS_LIST* aUndoRedoList )
 {
-    if( aPadTo )    
+    if( aPadTo )
     {
         std::unique_ptr<NET_SCAN_PAD_RECREATE> pad( new NET_SCAN_PAD_RECREATE( aPadTo,
                                                                                this,
@@ -1285,7 +1285,7 @@ void TEARDROPS::ToMemory( const TRACK* aTrackSegFrom )
 {
     m_next_tear_in_memory = nullptr;
     m_back_tear_in_memory = nullptr;
-    
+
     TRACKNODEITEM* item = Get( aTrackSegFrom, aTrackSegFrom->GetEnd() );
     if( item && dynamic_cast<TEARDROP*>( item ) )
         m_next_tear_in_memory = static_cast<TEARDROP*>( item );
@@ -1302,7 +1302,7 @@ void TEARDROPS::FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRe
     TEARDROP::PARAMS fillet_params = GetShapeParams( TEARDROP::FILLET_T );
     TEARDROP::PARAMS subland_params = GetShapeParams( TEARDROP::SUBLAND_T );
     if( m_next_tear_in_memory ) //Recreate next teardrop.
-    {   
+    {
         TEARDROP::PARAMS params = m_next_tear_in_memory->GetParams();
         SetShapeParams( params );
         SetCurrentShape( params.shape );
@@ -1314,7 +1314,7 @@ void TEARDROPS::FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRe
             added_tear->SetLocked( m_next_tear_in_memory->IsLocked() );
     }
     if( m_back_tear_in_memory ) //Recreate back teardrop.
-    {   
+    {
         TEARDROP::PARAMS params = m_back_tear_in_memory->GetParams();
         SetShapeParams( params );
         SetCurrentShape( params.shape );
@@ -1342,7 +1342,7 @@ void TEARDROPS::FromMemory( const TRACK* aTrackSegTo, BOARD_COMMIT& aCommit )
 {
     PICKED_ITEMS_LIST undo_redo_list;
     FromMemory( aTrackSegTo, &undo_redo_list );
-    
+
     unsigned int num_added_tears = undo_redo_list.GetCount();
     if( num_added_tears )
         for( unsigned int n = 0; n < num_added_tears; ++n )
@@ -1492,7 +1492,7 @@ bool TEARDROPS::NET_SCAN_VIA_UNLOCK::ExecuteAt( TRACK* aTrackSeg )
         {
             tear->SetLocked( false );
         }
-    }   
+    }
     return false;
 }
 
@@ -1570,7 +1570,7 @@ bool TEARDROPS::NET_SCAN_PAD_EMPTY::ExecuteAt( TRACK* aTrackSeg )
     }
     return false;
 }
-        
+
 bool TEARDROPS::Empty( const D_PAD* aPadTo ) const
 {
     bool result = false;
@@ -1595,7 +1595,7 @@ TEARDROPS::NET_SCAN_VIA_EMPTY::NET_SCAN_VIA_EMPTY( const VIA* aVia,
 }
 
 bool TEARDROPS::NET_SCAN_VIA_EMPTY::ExecuteAt( TRACK* aTrackSeg )
-        
+
 {
     if( aTrackSeg->Type() == PCB_TRACE_T )
     {
@@ -1621,7 +1621,7 @@ bool TEARDROPS::Empty( const VIA* aViaTo ) const
         if( via )
         {
             via->Execute();
-            result = via->NumTeardrops();         
+            result = via->NumTeardrops();
         }
     }
     return result;
@@ -1766,7 +1766,7 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt( TRACK* aTrackSeg )
 
     return false;
 }
-        
+
 
 bool TEARDROPS::Empty( const int aNetCodeTo,
                        const TRACK* aTrackSeg,
@@ -2103,7 +2103,7 @@ bool TEARDROPS::IsSmallTeardrops( const D_PAD* aPadAt ) const
 
 bool TEARDROPS::IsConnected( const D_PAD* aPadAt, const TRACK* aTrackSegTo ) const
 {
-    if( aPadAt && aTrackSegTo )    
+    if( aPadAt && aTrackSegTo )
     {
         wxPoint pad_pos = aPadAt->GetPosition();
         if( ( aTrackSegTo->GetStart() == pad_pos ) || ( aTrackSegTo->GetEnd() == pad_pos ) )
@@ -2116,7 +2116,7 @@ bool TEARDROPS::IsConnected( const D_PAD* aPadAt, const TRACK* aTrackSegTo ) con
 
 void TEARDROPS::Update( const BOARD_ITEM* aItemAt )
 {
-    if( aItemAt )    
+    if( aItemAt )
     {
         if( dynamic_cast<MODULE*> ( const_cast<BOARD_ITEM*> ( aItemAt ) ) )
             Update( static_cast<MODULE*>( const_cast<BOARD_ITEM*>( aItemAt ) ) );
@@ -2160,7 +2160,7 @@ void TEARDROPS::Update( const TRACK* aTrackSegAt )
                 track->Execute();
         }
     }
-} 
+}
 
 TEARDROPS::NET_SCAN_VIA_UPDATE::NET_SCAN_VIA_UPDATE( const VIA* aVia,
                                                      const TEARDROPS* aParent
@@ -2202,7 +2202,7 @@ TEARDROPS::NET_SCAN_PAD_BASE::NET_SCAN_PAD_BASE( const D_PAD* aPad, const TEARDR
     m_pad_pos = m_pad->GetPosition();
     m_only_exact_connected = true;
 }
-        
+
 void TEARDROPS::NET_SCAN_PAD_BASE::Execute( void )
 {
 #ifdef NEWCONALGO
@@ -2237,12 +2237,12 @@ bool TEARDROPS::NET_SCAN_PAD_UPDATE::ExecuteAt( TRACK* aTrackSeg )
     {
         wxPoint pos;
         ( n )? pos = aTrackSeg->GetEnd() : pos = aTrackSeg->GetStart();
-        
+
         TEARDROP* tear = nullptr;
         TRACKNODEITEM* item = m_Parent->Get( aTrackSeg, pos );
         if( item && dynamic_cast<TEARDROP*>( item ) )
             tear = static_cast<TEARDROP*>( item );
-        
+
         if( tear )
         {
             tear->Update();
@@ -2252,7 +2252,7 @@ bool TEARDROPS::NET_SCAN_PAD_UPDATE::ExecuteAt( TRACK* aTrackSeg )
     }
     return false;
 }
-        
+
 void TEARDROPS::Update( const D_PAD* aPadAt )
 {
     if( aPadAt )
@@ -2284,7 +2284,7 @@ TEARDROPS::NET_SCAN_NET_UPDATE::NET_SCAN_NET_UPDATE( const int aNet,
 
 {
     m_Parent = const_cast<TEARDROPS*>( aParent );
-    DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track; 
+    DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track;
     m_net_start_seg = const_cast<TRACK*>( aTrackSeg );
     if( !aTrackSeg )
         m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode( aNet );
@@ -2320,7 +2320,7 @@ TEARDROPS::NET_SCAN_TRACK_DRAW_UPDATE::NET_SCAN_TRACK_DRAW_UPDATE( const TRACK* 
                                                                  ) :
     NET_SCAN_BASE( aTrackSeg, aParent )
 {
-    m_panel = const_cast<EDA_DRAW_PANEL*>( aPanel ); 
+    m_panel = const_cast<EDA_DRAW_PANEL*>( aPanel );
     m_dc = const_cast<wxDC*>( aDC );
     m_draw_mode = aDrawMode;
     m_erase = aErase;
@@ -2336,7 +2336,7 @@ bool TEARDROPS::NET_SCAN_TRACK_DRAW_UPDATE::ExecuteAt( TRACK* aTrackSeg )
             dynamic_cast<TEARDROP*>( const_cast<TRACK*>( aTrackSeg ) )->Update();
             dynamic_cast<TEARDROP*>( const_cast<TRACK*>( aTrackSeg ) )->Draw( m_panel, m_dc, m_draw_mode );
         }
-    return false;    
+    return false;
 }
 
 void TEARDROPS::Update( TRACK* aTrackSegAt,
@@ -2360,7 +2360,7 @@ void TEARDROPS::Update( TRACK* aTrackSegAt,
                 tear->Execute();
         }
     }
-}    
+}
 
 void TEARDROPS::Update( D_PAD* aPadAt,
                         EDA_DRAW_PANEL* aPanel,
@@ -2707,7 +2707,7 @@ bool TEARDROPS::NET_SCAN_GET_TEARDROP::ExecuteAt( TRACK* aTrackSeg )
             }
 
             if( ( m_via_or_pad->Type() == PCB_PAD_T ) &&
-                ( dynamic_cast<TEARDROP_PAD*>( const_cast<TRACK*>( aTrackSeg ) ) ) ) 
+                ( dynamic_cast<TEARDROP_PAD*>( const_cast<TRACK*>( aTrackSeg ) ) ) )
             {
                 D_PAD* connected_pad = dynamic_cast<TEARDROP_PAD*>( const_cast<TRACK*>( aTrackSeg ) )->GetConnectedPad();
                 if( connected_pad == static_cast<D_PAD*>( m_via_or_pad ) )

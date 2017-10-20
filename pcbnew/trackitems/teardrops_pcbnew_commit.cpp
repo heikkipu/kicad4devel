@@ -42,7 +42,7 @@ void TEARDROPS::GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRed
             {
                 TOOL_BASE* tool = m_EditFrame->GetToolManager()->FindTool( "pcbnew.InteractiveRouter" );
                 ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>( tool );
-                if( router && ( !router->Router()->IsDragging() ) ) 
+                if( router && ( !router->Router()->IsDragging() ) )
                 {
                     if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode() == m_current_routed_track_netcode )
                         Add( static_cast<TRACK*>( aItem ), aUndoRedoList );
@@ -80,7 +80,7 @@ void TEARDROPS::GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRed
                                 else
                                     if( dynamic_cast<VIA*>( citem ) )
                                         n?  track_item = m_Board->GetViaByPosition( static_cast<TRACK*>( aItem )->GetEnd(),
-                                                                                    aItem->GetLayer() ) : 
+                                                                                    aItem->GetLayer() ) :
                                             track_item = m_Board->GetViaByPosition( static_cast<TRACK*>( aItem )->GetStart(),
                                                                                     aItem->GetLayer() );
 
@@ -136,7 +136,7 @@ void TEARDROPS::GalCommitPushPrepare( void )
     {
         TOOL_BASE* tool = m_EditFrame->GetToolManager()->FindTool( "pcbnew.InteractiveRouter" );
         ROUTER_TOOL* router = dynamic_cast<ROUTER_TOOL*>( tool );
-        if( router ) 
+        if( router )
         {
             PNS::ITEM* start_item = router->GetStartItem();
             if( start_item )

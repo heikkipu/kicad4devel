@@ -38,7 +38,7 @@ int TEARDROPS::MenuToDo_CalcSizeWidth( const int aMenuID,
                                      )
 {
     int w = ( aMenuID - ID_POPUP_PCB_TEARDROP_SIZE_WIDTH_FIRST + 1 ) * 10;
-    switch( aShape )    
+    switch( aShape )
     {
         case TEARDROP::SUBLAND_T:
             if( w >= TEARDROP::SUBLAND_POS_MAX )
@@ -107,7 +107,7 @@ void TEARDROPS::Menu_ChangeSize( wxMenu* aMenu ) const
                      ID_POPUP_PCB_TEARDROPS_COMMON_MNU,
                      msg,
                      KiBitmap( tools_xpm ) );
-    
+
         for( int n = ID_POPUP_PCB_TEARDROP_SIZE_LENGTH_FIRST; n <= ID_POPUP_PCB_TEARDROP_SIZE_LENGTH_LAST; ++n )
         {
             int size_l = const_cast<TEARDROPS*> ( this )->MenuToDo_CalcSizeLength( n );
@@ -257,7 +257,7 @@ void TEARDROPS::CreateMenu( wxMenu* aMenu ) const
             wxMenu* delete_menu = new wxMenu;
             AddMenuItem( aMenu, delete_menu, ID_POPUP_PCB_TEARDROPS_COMMON_MNU, _( "Remove" ), KiBitmap( delete_pad_xpm ) );
             Menu_SelectToDo( delete_menu, ID_POPUP_PCB_TEARDROPS_DELETE_MODULES_ALL );
-            
+
             aMenu->AppendSeparator();
         }
 
@@ -298,7 +298,7 @@ void TEARDROPS::CreateMenu( wxMenu* aMenu ) const
             //Warnings
             wxMenu* mark_warnings_menu = new wxMenu;
             AddMenuItem( aMenu, mark_warnings_menu, ID_POPUP_PCB_TEARDROPS_COMMON_MNU, _( "Warnings" ), KiBitmap( drc_xpm ) );
-            Menu_SelectToDo( mark_warnings_menu, ID_POPUP_PCB_TEARDROPS_MARK_WARNINGS_MODULES );    
+            Menu_SelectToDo( mark_warnings_menu, ID_POPUP_PCB_TEARDROPS_MARK_WARNINGS_MODULES );
 
         }
     }

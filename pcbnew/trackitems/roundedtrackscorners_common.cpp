@@ -40,16 +40,16 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS( const TRACKITEMS* aParent, const BOA
     m_menu = nullptr;
 
     m_update_list = new RoundedTracksCorner_Container;
-    m_update_list->clear(); 
+    m_update_list->clear();
 
     m_update_tracks_list = new RoundedCornerTrack_Container;;
-    m_update_tracks_list->clear(); 
+    m_update_tracks_list->clear();
 
     m_recreate_list = new RoundedTracksCorner_Container;
     m_recreate_list->clear();
 
     m_gal_removed_list = new RoundedTracksCorner_Container;
-    m_gal_removed_list->clear(); 
+    m_gal_removed_list->clear();
 
     m_to_edit = EDIT_NULL_T;
     m_can_edit = false;
@@ -70,7 +70,7 @@ ROUNDEDTRACKSCORNERS::~ROUNDEDTRACKSCORNERS()
     m_recreate_list = nullptr;
 
     delete m_gal_removed_list;
-    m_gal_removed_list = nullptr;    
+    m_gal_removed_list = nullptr;
 }
 
 ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackSegTo,
@@ -112,8 +112,8 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackSegTo,
             if( aPosition == tracksegsecond->GetEnd() )
                 trackseg_corner_atpos = tracksegsecond->GetEndPointCorner();
 
-            if( !trackseg_corner_atpos && !tracksegsecond_corner_atpos && 
-                !m_Parent->Teardrops()->Get( aTrackSegTo, aPosition, true ) && 
+            if( !trackseg_corner_atpos && !tracksegsecond_corner_atpos &&
+                !m_Parent->Teardrops()->Get( aTrackSegTo, aPosition, true ) &&
                 !m_Parent->Teardrops()->Get( aTrackSegSecond, aPosition, true ) )
             {
 
@@ -168,7 +168,7 @@ void ROUNDEDTRACKSCORNERS::Delete( ROUNDEDTRACKSCORNER* aCorner, DLIST<TRACK>* a
 {
     if( aCorner && aTrackListAt )
     {
-        if( aCorner->GetList() == aTrackListAt ) 
+        if( aCorner->GetList() == aTrackListAt )
         {
             ITEM_PICKER picker( nullptr, UR_DELETED );
 
@@ -258,7 +258,7 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert( TRACK* aTrack, PICKED_ITEMS_L
             {
                 //If teardrops save them.
                 m_Parent->Teardrops()->ToMemory( aTrack );
-                m_Parent->Teardrops()->Remove( aTrack, aUndoRedoList, true );            
+                m_Parent->Teardrops()->Remove( aTrack, aUndoRedoList, true );
 
                 //Add created.
                 picker_new.SetItem( created_track );
@@ -282,7 +282,7 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert( TRACK* aTrack, PICKED_ITEMS_L
 
                 //If teardrops add them.
                 m_Parent->Teardrops()->FromMemory( created_track, aUndoRedoList );
-                m_Parent->Teardrops()->Update( created_track->GetNetCode(), created_track );            
+                m_Parent->Teardrops()->Update( created_track->GetNetCode(), created_track );
 
                 //GAL remove and add
                 if( m_EditFrame )
@@ -414,7 +414,7 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::NET_SCAN_NET_ADD( const int aNet,
     NET_SCAN_BASE( nullptr, aParent )
 {
     m_picked_items = aUndoRedoList;
-    DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track; 
+    DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track;
     m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode( aNet );
 }
 
@@ -552,7 +552,7 @@ void ROUNDEDTRACKSCORNERS::Remove( const TRACK* aTrackItemFrom, BOARD_COMMIT& aC
     {
         PICKED_ITEMS_LIST undoredo_items;
         Remove( aTrackItemFrom, &undoredo_items, aLockedToo );
-        
+
         unsigned int num_removed_corners = undoredo_items.GetCount();
         if( num_removed_corners )
             for( unsigned int n = 0; n < num_removed_corners; ++n )
@@ -569,10 +569,10 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_NET_REMOVE::NET_SCAN_NET_REMOVE( const int aNet,
     NET_SCAN_BASE( nullptr, aParent )
 {
     m_picked_items = aUndoRedoList;
-    m_recreate_list = aRecreateList;   
+    m_recreate_list = aRecreateList;
     m_locked_too = aLockedToo;
-    
-    DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track; 
+
+    DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track;
     m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode( aNet );
 }
 
@@ -694,7 +694,7 @@ void ROUNDEDTRACKSCORNERS::Recreate( const int aNetCodeTo, PICKED_ITEMS_LIST* aU
 
 void ROUNDEDTRACKSCORNERS::Update( const BOARD_ITEM* aItemAt )
 {
-    if( aItemAt )    
+    if( aItemAt )
     {
         if( dynamic_cast<TRACK*> ( const_cast<BOARD_ITEM*> ( aItemAt ) ) )
             Update( static_cast<TRACK*>( const_cast<BOARD_ITEM*>( aItemAt ) ) );
@@ -771,7 +771,7 @@ bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_UPDATE::ExecuteAt( TRACK* aTrackSeg )
 
         if( dynamic_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSeg ) )->GetTrackSegSecond() == m_net_start_seg )
             dynamic_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSeg ) )->Update();
-    }   
+    }
     return false;
 }
 
@@ -792,7 +792,7 @@ void ROUNDEDTRACKSCORNERS::Update( const TRACK* aTrackSegAt )
                 track->Execute();
         }
     }
-} 
+}
 
 void ROUNDEDTRACKSCORNERS::Update( TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
                                    EDA_DRAW_PANEL* aPanel,
@@ -813,7 +813,7 @@ void ROUNDEDTRACKSCORNERS::Update( TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
                     r_t->Draw( aPanel, aDC, aDrawMode );
             aCorner->Draw( aPanel, aDC, aDrawMode );
         }
-        aCorner->Update();        
+        aCorner->Update();
         aCorner->Draw( aPanel, aDC, aDrawMode );
         for( auto r_t: r_tracks )
             if( r_t )
@@ -853,7 +853,7 @@ void ROUNDEDTRACKSCORNERS::Update( TRACK* aTrackSegAt,
 
 void ROUNDEDTRACKSCORNERS::Update( const int aNetCode )
 {
-    DLIST<TRACK>* tracks_list = &m_Board->m_Track; 
+    DLIST<TRACK>* tracks_list = &m_Board->m_Track;
     TRACK* track = tracks_list->GetFirst()->GetStartNetCode( aNetCode );
     UpdateListClear();
     while( track )
@@ -875,11 +875,11 @@ void ROUNDEDTRACKSCORNERS::ToMemory( const TRACK* aTrackSegFrom )
 {
     m_next_corner_in_memory = nullptr;
     m_back_corner_in_memory = nullptr;
-    
+
     TRACKNODEITEM* item = Next( aTrackSegFrom );
     if( item )
         m_next_corner_in_memory = dynamic_cast<ROUNDEDTRACKSCORNER*>( item );
-    
+
     item = Back( aTrackSegFrom );
     if( item )
         m_back_corner_in_memory = dynamic_cast<ROUNDEDTRACKSCORNER*>( item );
@@ -889,7 +889,7 @@ void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LI
 {
     ROUNDEDTRACKSCORNER::PARAMS corner_params = GetParams();
     if( m_next_corner_in_memory ) //Recreate next corner.
-    {   
+    {
         ROUNDEDTRACKSCORNER::PARAMS params = m_next_corner_in_memory->GetParams();
         SetParams( params );
         ROUNDEDTRACKSCORNER* added_corner = Add( const_cast<TRACK*>( aTrackSegTo ),
@@ -899,7 +899,7 @@ void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LI
             added_corner->SetLocked( m_next_corner_in_memory->IsLocked() );
     }
     if( m_back_corner_in_memory ) //Recreate back corner.
-    {   
+    {
         ROUNDEDTRACKSCORNER::PARAMS params = m_back_corner_in_memory->GetParams();
         SetParams( params );
         ROUNDEDTRACKSCORNER* added_corner = Add( const_cast<TRACK*>( aTrackSegTo ),
@@ -922,7 +922,7 @@ void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackSegTo, BOARD_COMMIT& a
 {
     PICKED_ITEMS_LIST undoredo_items;
     FromMemory( aTrackSegTo, &undoredo_items );
-    
+
     unsigned int num_added_corners = undoredo_items.GetCount();
     if( num_added_corners )
         for( unsigned int n = 0; n < num_added_corners; ++n )

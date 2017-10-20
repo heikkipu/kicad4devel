@@ -2289,7 +2289,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 #ifdef PCBNEW_WITH_TRACKITEMS
     if( aSegment->Type() == PCB_ROUNDEDTRACKSCORNER_T )
         return nullptr;
-    
+
     GetBoard()->TrackItems()->Teardrops()->ToMemory( aSegment );
     GetBoard()->TrackItems()->Teardrops()->Remove( aSegment, aList, true );
     GetBoard()->TrackItems()->RoundedTracksCorners()->ToMemory( aSegment );
@@ -2361,7 +2361,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     }
 
     aPosition = lockPoint;
-    
+
 #ifdef PCBNEW_WITH_TRACKITEMS
     GetBoard()->TrackItems()->Teardrops()->FromMemory( newTrack, aList );
     GetBoard()->TrackItems()->Teardrops()->FromMemory( aSegment, aList );

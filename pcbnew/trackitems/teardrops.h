@@ -46,7 +46,7 @@ class TEARDROPS : public TrackNodeItems::TRACKNODEITEMS
 public:
 
     static const wxString TXT_TEARDROPS;
-    
+
     enum TEARDROPS_TYPE_TODO
     {
         ALL_TYPES_T = 1,
@@ -56,7 +56,7 @@ public:
         JUNCTIONS_AND_TJUNCTIONS_T,
         ONLY_PAD_TEARDROPS_T
     };
-    
+
     TEARDROPS( const TRACKITEMS* aParent, const BOARD* aBoard );
     ~TEARDROPS();
 
@@ -92,7 +92,7 @@ public:
     //Junction & T-Junction
     static const bool TJUNCTION_TO_ADD = true;
     static const bool JUNCTION_TO_ADD = false;
-    void Add( const TRACK* aTrackSegTo, const bool aTJunction, PICKED_ITEMS_LIST* aUndoRedoList ); 
+    void Add( const TRACK* aTrackSegTo, const bool aTJunction, PICKED_ITEMS_LIST* aUndoRedoList );
 
     //Remove teardrops when track( s ) or via( s ) are removed. Or remove only teardrop( s ).
     void Remove( const BOARD_CONNECTED_ITEM* aItemFrom, const bool aUndo, const bool aLockedToo );
@@ -197,7 +197,7 @@ public:
     TrackNodeItem::TRACKNODEITEM* Back( const TRACK* aTrackSegAt ) const override;
 
     TrackNodeItem::TEARDROP* GetTeardrop( const TRACK* aTrackSegAt, const BOARD_CONNECTED_ITEM* atViaOrPad ) const;
-    
+
     void ChangePad( TrackNodeItem::TEARDROP* aTeardrop, const MODULE* aModuleAt );
 
     //Plot.
@@ -260,7 +260,7 @@ public:
     wxString GetShapeName( const TrackNodeItem::TEARDROP::SHAPES_T aShape ) const;
     void SetShapeParams( const TrackNodeItem::TEARDROP::PARAMS aShapeParams );
     void SetCurrentShape( const TrackNodeItem::TEARDROP::SHAPES_T aShape );
-    
+
 private:
     TrackNodeItem::TEARDROP::PARAMS SetParamLimits( const TrackNodeItem::TEARDROP::PARAMS aShapeParams );
     TrackNodeItem::TEARDROP::SHAPES_T m_current_shape;
@@ -450,10 +450,10 @@ private:
 
 
 //-----------------------------------------------------------------------------------------------------/
-// Class private NETSCAN OPERATIONS 
+// Class private NETSCAN OPERATIONS
 //-----------------------------------------------------------------------------------------------------/
 private:
-    
+
     class NET_SCAN_GET_TEARDROP : public NET_SCAN_BASE
     {
     public:
@@ -545,7 +545,7 @@ private:
     };
 
 //-----------------------------------------------------------------------------------------------------/
-// Class private VIA OPERATIONS 
+// Class private VIA OPERATIONS
 //-----------------------------------------------------------------------------------------------------/
     //Base class of via operations.
     class NET_SCAN_VIA_UPDATE : public NET_SCAN_BASE
@@ -618,7 +618,7 @@ private:
 
     protected:
         bool ExecuteAt( TRACK* aTrackSeg ) override;
-        
+
     private:
         int m_num_locked{0};
     };
@@ -652,14 +652,14 @@ private:
                                     const bool aLockedToo );
 
         ~NET_SCAN_VIA_COLLECTCOMMIT() {};
-        
+
     protected:
         bool ExecuteAt( TRACK* aTrackSeg ) override;
 
         bool m_locked_too{false};
         std::set<TRACK*>* m_commit_container{nullptr};
     };
-    
+
 //-----------------------------------------------------------------------------------------------------/
 // Class private NET OPERATIONS
 //-----------------------------------------------------------------------------------------------------/
@@ -947,9 +947,9 @@ private:
         bool m_locked_too{false};
         std::set<TRACK*>* m_commit_container{nullptr};
     };
-    
+
 //-----------------------------------------------------------------------------------------------------/
-// PROGRESS 
+// PROGRESS
 //-----------------------------------------------------------------------------------------------------/
     class TEARDROPS_MODULES_PROGRESS : public TrackNodeItems::MODULES_PROGRESS
     {
@@ -1040,7 +1040,7 @@ private:
     };
 
 //-----------------------------------------------------------------------------------------------------/
-// TRACKS_PROGRESS 
+// TRACKS_PROGRESS
 //-----------------------------------------------------------------------------------------------------/
     class TEARDROPS_TRACKS_PROGRESS : public TrackNodeItems::TRACKS_PROGRESS
     {

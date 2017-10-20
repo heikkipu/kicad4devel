@@ -249,7 +249,7 @@ public:
 protected:
     void OnLeftGridCellClick( wxGridEvent& event ) override;
     void OnLeftButtonReleased( wxMouseEvent& event ) override; //Does not work.wxBroblem?
-    
+
 private:
     void buildList();
 

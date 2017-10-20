@@ -30,7 +30,7 @@
 using namespace TrackNodeItem;
 
 
-ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const ROUNDEDCORNERTRACK& aTrack ) : 
+ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const ROUNDEDCORNERTRACK& aTrack ) :
     TRACK( aTrack )
 {
     m_StartVisible = m_Start;
@@ -59,7 +59,7 @@ ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent, const TRACK* 
     SetLayer( aTrack->GetLayer() );
     SetNetCode( aTrack->GetNetCode() );
     SetStatus( aTrack->GetStatus() );
-    
+
     m_StartVisible = m_Start;
     m_EndVisible = m_End;
     m_StartPointCorner = nullptr;
@@ -136,7 +136,7 @@ void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel,
     int l_trace = m_Width / 2;
 
     EDA_RECT* clip_box = aPanel->GetClipBox();
-    
+
     if( aDC->LogicalToDeviceXRel( m_Width ) <= 1 )
     {
         GRLine( clip_box,
@@ -159,7 +159,7 @@ void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel,
         wxPoint op_end_B = GetPoint( m_EndVisible, angle - M_PI_2, l_trace );
 
         GRLine( clip_box,
-                aDC, 
+                aDC,
                 op_start_A + aOffset,
                 op_end_A + aOffset,
                 0,
@@ -175,7 +175,7 @@ void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel,
               );
 
         GRArc1( clip_box,
-                aDC, 
+                aDC,
                 op_start_A + aOffset,
                 op_start_B + aOffset,
                 m_StartVisible + aOffset,
@@ -207,7 +207,7 @@ void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel,
     }
 
     // Show clearance for tracks, not for zone segments
-    if( IsCopperLayer( GetLayer() ) && 
+    if( IsCopperLayer( GetLayer() ) &&
         ( ( displ_opts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
         ( IsDragging() || IsMoving() || IsNew() ) ) ||
         ( displ_opts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ) )

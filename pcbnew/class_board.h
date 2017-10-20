@@ -237,7 +237,7 @@ private:
     VIASTITCHING* m_ViaStitching{nullptr};
     TRACKITEMS* m_TrackItems{nullptr};
 #endif
-    
+
 
 public:
 

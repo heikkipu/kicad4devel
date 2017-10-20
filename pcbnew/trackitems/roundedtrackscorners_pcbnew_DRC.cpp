@@ -59,7 +59,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const ROUNDEDTRACKSCORNER* aCorner
 {
     wxPoint track_start_pos = aTrackSeg->GetStart();
     wxPoint track_end_pos = aTrackSeg->GetEnd();
-    
+
     if( dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) ) )
     {
         track_start_pos = dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetStartVisible();
@@ -72,7 +72,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const ROUNDEDTRACKSCORNER* aCorner
             return false;
     }
 
-    return true;            
+    return true;
 }
 
 bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCornerFirst,
@@ -88,7 +88,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const TrackNodeItem::ROUNDEDTRACKS
     return true;
 }
 
-//Only return DRC error when editing. 
+//Only return DRC error when editing.
 bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner,
                                               const TRACK* aTrackSeg,
                                               const int aMinDist, DRC* aDRC
@@ -97,7 +97,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner
     bool editing = DRC_Flags( aCorner->GetTrackSeg()->GetFlags() );
     editing |= DRC_Flags( aCorner->GetTrackSegSecond()->GetFlags() );
     editing |= DRC_Flags( aTrackSeg->GetFlags() );
-    
+
     if( aTrackSeg->Type() == PCB_VIA_T )
     {
         if( !DRC_ClearanceTest( aCorner, static_cast<VIA*>( const_cast<TRACK*>( aTrackSeg ) ), aMinDist ) )
@@ -115,7 +115,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner
             return true;
         }
     }
-    
+
     if( aTrackSeg->Type() == PCB_TRACE_T )
     {
         if( !DRC_ClearanceTest( aCorner, static_cast<TRACK*>( const_cast<TRACK*>( aTrackSeg ) ), aMinDist ) )
@@ -133,7 +133,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner
             return true;
         }
     }
-    
+
     if( aTrackSeg->Type() == PCB_ROUNDEDTRACKSCORNER_T )
     {
         if( !DRC_ClearanceTest( aCorner, static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSeg ) ), aMinDist ) )
@@ -151,7 +151,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner
             return true;
         }
     }
-    
+
     return true;
 }
 
@@ -196,7 +196,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_DoClearanceTest( const ROUNDEDTRACKSCORNER* aCorn
     wxPoint pad_shape_pos = aPad->ShapePos();
     wxPoint delta;
     bool ret_val = true;
-    
+
     poly_points = aCorner->GetPolyPointsNum();
     for( unsigned int n = 0; n < poly_points -1; ++n )
     {
@@ -208,15 +208,15 @@ bool ROUNDEDTRACKSCORNERS::DRC_DoClearanceTest( const ROUNDEDTRACKSCORNER* aCorn
         if( !aDRC->checkClearanceSegmToPad( aPad, aCorner->GetWidth(), aMinDist ) )
             ret_val = false;
     }
-    
+
     aDRC->m_padToTestPos = saved_pad_to_test_pos;
     aDRC->m_segmEnd = saved_segm_end;
     aDRC->m_segmAngle = saved_segm_angle;
     aDRC->m_segmLength = saved_segm_lengt;
-    return ret_val;            
+    return ret_val;
 }
 
-//Only return DRC error when editing track. 
+//Only return DRC error when editing track.
 bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
                                           const D_PAD* aPad,
                                           const int aMinDist,
@@ -252,7 +252,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
 
 
 //-----------------------------------------------------------------------------------------------------/
-// Roundedtrackscorner -> text clearance 
+// Roundedtrackscorner -> text clearance
 //-----------------------------------------------------------------------------------------------------/
 //Do not return DRC error. Only marks errorplaces.
 void ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
@@ -267,7 +267,7 @@ void ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
         std::vector<wxPoint> text_shape;
         text_shape.clear();
         aText->TransformTextShapeToSegmentList( text_shape );
-        
+
         for( unsigned int n = 0; n < corner->GetPolyPointsNum() - 1; n++ )
         {
             wxPoint segStart = corner->GetPolyPoint( n );

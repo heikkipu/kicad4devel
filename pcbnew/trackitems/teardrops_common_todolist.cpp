@@ -41,7 +41,7 @@ void TEARDROPS::UpdateListAdd( const TEARDROP* aTear )
 {
     if( aTear )
         if( aTear->Type() == PCB_TEARDROP_T )
-            m_update_list->insert( const_cast<TEARDROP*>( aTear ) ); 
+            m_update_list->insert( const_cast<TEARDROP*>( aTear ) );
 }
 
 void TEARDROPS::UpdateListAdd( const ROUNDEDTRACKSCORNERS::RoundedCornerTrack_Container* aRoundedTracks )
@@ -93,7 +93,7 @@ void TEARDROPS::UpdateListDo_Route( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aEra
         {
             TRACK* track_seg = tear->GetTrackSeg();
             if( ( track_seg == g_CurrentTrackSegment ) ||
-                track_seg == g_CurrentTrackSegment->Back() ) 
+                track_seg == g_CurrentTrackSegment->Back() )
             {
                 if( aErase )
                     tear->Draw( aPanel, aDC, GR_XOR );
@@ -103,7 +103,7 @@ void TEARDROPS::UpdateListDo_Route( EDA_DRAW_PANEL* aPanel, wxDC* aDC, bool aEra
             else
                 tear->Draw( aPanel, aDC, GR_OR );
         }
-        
+
         GRSetDrawMode( aDC, GR_XOR );
     }
 }
@@ -115,7 +115,7 @@ void TEARDROPS::UpdateListDo_UndoRedo( void )
         {
             tear->SetTrackEndpoint();
             tear->Update();
-            
+
             //GAL
             if( m_EditFrame && m_EditFrame->IsGalCanvasActive() )
                 m_EditFrame->GetGalCanvas()->GetView()->Update( tear );
@@ -201,14 +201,14 @@ void TEARDROPS::AddToDoList( const TRACK* aTrackSegFrom, Teardrop_Container* aLi
     {
 
         if( aTrackSegFrom->Type() == PCB_TEARDROP_T )
-            aListToAdd->insert( static_cast<TEARDROP*>( const_cast<TRACK*>( aTrackSegFrom ) ) ); 
-        
+            aListToAdd->insert( static_cast<TEARDROP*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
+
         TRACKNODEITEM* item = Next( aTrackSegFrom );
         if( item && dynamic_cast<TEARDROP*>( item ) )
-            aListToAdd->insert( static_cast<TEARDROP*>( item ) ); 
+            aListToAdd->insert( static_cast<TEARDROP*>( item ) );
 
         item = Back( aTrackSegFrom );
         if( item && dynamic_cast<TEARDROP*>( item ) )
-            aListToAdd->insert( static_cast<TEARDROP*>( item ) ); 
+            aListToAdd->insert( static_cast<TEARDROP*>( item ) );
     }
 }

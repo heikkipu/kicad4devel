@@ -48,7 +48,7 @@
 namespace TrackNodeItems
 {
 //----------------------------------------------------------------------------------------------------------
-// PROGRESS OPERATIONS 
+// PROGRESS OPERATIONS
 //----------------------------------------------------------------------------------------------------------
     class ITEMS_PROGRESS_BASE
     {
@@ -88,7 +88,7 @@ namespace TrackNodeItems
 
 
 //----------------------------------------------------------------------------------------------------------
-// MODULES_PROGRESS ( modules PADs ) 
+// MODULES_PROGRESS ( modules PADs )
 //----------------------------------------------------------------------------------------------------------
     class MODULES_PROGRESS : public ITEMS_PROGRESS_BASE
     {
@@ -106,7 +106,7 @@ namespace TrackNodeItems
     };
 
 //----------------------------------------------------------------------------------------------------------
-// TRACKS_PROGRESS 
+// TRACKS_PROGRESS
 //----------------------------------------------------------------------------------------------------------
     class TRACKS_PROGRESS : public ITEMS_PROGRESS_BASE
     {
@@ -124,7 +124,7 @@ namespace TrackNodeItems
 
 
 //----------------------------------------------------------------------------------------------------------
-// TRACKNODEITEMS Base 
+// TRACKNODEITEMS Base
 //----------------------------------------------------------------------------------------------------------
     class TRACKNODEITEMS
     {
@@ -152,7 +152,7 @@ namespace TrackNodeItems
 
         void TracksDList_Insert( DLIST<TRACK>* aTracksList, const TRACK* aInsertItem, const TRACK* aInsertItemBefore );
         void TracksDList_Remove( DLIST<TRACK>* aTracksList, const TRACK* aRemoveItem );
- 
+
     //----------------------------------------------------------------------------------------------------------
     //Menus
     //----------------------------------------------------------------------------------------------------------

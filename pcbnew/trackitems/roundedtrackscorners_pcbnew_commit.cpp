@@ -55,7 +55,7 @@ void ROUNDEDTRACKSCORNERS::GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList
 {
     for( TRACK* track : m_gal_commit_tracks )
         Add( track, aUndoRedoList );
-    
+
     m_gal_removed_list->clear();
     m_gal_commit_tracks.clear();
 }

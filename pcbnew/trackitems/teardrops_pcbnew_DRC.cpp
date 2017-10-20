@@ -126,15 +126,15 @@ bool TEARDROPS::DRC_ClearanceTest( const TEARDROP* aTear, ROUNDEDTRACKSCORNER* a
     return true;
 }
 
-//Only return DRC error when editing. 
+//Only return DRC error when editing.
 bool TEARDROPS::DRC_TestClearance( const TEARDROP* aTear, const TRACK* aTrackSeg, const int aMinDist, DRC* aDRC )
 {
     bool editing = DRC_Flags( aTear->GetTrackSeg()->GetFlags() );
     if( dynamic_cast<TEARDROP_VIA*>( const_cast<TEARDROP*>( aTear ) ) )
-        editing |= DRC_Flags( dynamic_cast<TEARDROP_VIA*>( const_cast<TEARDROP*>( aTear ) )->GetConnectedVia()->GetFlags() ); 
+        editing |= DRC_Flags( dynamic_cast<TEARDROP_VIA*>( const_cast<TEARDROP*>( aTear ) )->GetConnectedVia()->GetFlags() );
     editing |= DRC_Flags( aTrackSeg->GetFlags() );
     if( dynamic_cast<TEARDROP_VIA*>( const_cast<TRACK*>( aTrackSeg ) ) )
-        editing |= DRC_Flags( dynamic_cast<TEARDROP_VIA*>( const_cast<TRACK*>( aTrackSeg ) )->GetConnectedVia()->GetFlags() ); 
+        editing |= DRC_Flags( dynamic_cast<TEARDROP_VIA*>( const_cast<TRACK*>( aTrackSeg ) )->GetConnectedVia()->GetFlags() );
 
     if( aTrackSeg->Type() == PCB_VIA_T )
     {
@@ -297,7 +297,7 @@ bool TEARDROPS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRefFirst,
 
 
 //-----------------------------------------------------------------------------------------------------/
-// Teardrop -> PAD clearance 
+// Teardrop -> PAD clearance
 //-----------------------------------------------------------------------------------------------------/
 //drc_clearance_test_functions.cpp base
 bool TEARDROPS::DRC_DoClearanceTest( const TEARDROP* aTear, const D_PAD* aPad, const int aMinDist, DRC* aDRC )
@@ -338,10 +338,10 @@ bool TEARDROPS::DRC_DoClearanceTest( const TEARDROP* aTear, const D_PAD* aPad, c
     aDRC->m_segmEnd = saved_segm_end;
     aDRC->m_segmAngle = saved_segm_angle;
     aDRC->m_segmLength = saved_segm_lengt;
-    return ret_val;            
+    return ret_val;
 }
 
-//Only return DRC error when editing track. 
+//Only return DRC error when editing track.
 bool TEARDROPS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef, const D_PAD* aPad, const int aMinDist, DRC* aDRC )
 {
     if( aRef->Type() == PCB_TEARDROP_T )
@@ -372,7 +372,7 @@ bool TEARDROPS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef, const D_PAD* aP
 
 
 //-----------------------------------------------------------------------------------------------------/
-// Teardrop -> text clearance 
+// Teardrop -> text clearance
 //-----------------------------------------------------------------------------------------------------/
 //Do not return DRC error. Only marks errorplaces.
 void TEARDROPS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
@@ -433,7 +433,7 @@ void TEARDROPS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
 }
 
 //-----------------------------------------------------------------------------------------------------/
-// Teardrop Rules 
+// Teardrop Rules
 //-----------------------------------------------------------------------------------------------------/
 //Do not return DRC error. Only marks errorplaces.
 void  TEARDROPS::DRC_Rules( const TEARDROP* aTeardrop, DRC* aDRC )
@@ -445,12 +445,12 @@ void  TEARDROPS::DRC_Rules( const TEARDROP* aTeardrop, DRC* aDRC )
         if( dynamic_cast<TEARDROP_VIA*>( const_cast<TEARDROP*>( aTeardrop ) ) )
         {
             TEARDROP_VIA* via_tear = static_cast<TEARDROP_VIA*>( const_cast<TEARDROP*>( aTeardrop ) );
-            editing |= DRC_Flags( via_tear->GetConnectedVia()->GetFlags() ); 
+            editing |= DRC_Flags( via_tear->GetConnectedVia()->GetFlags() );
         }
         if( !editing )
         {
             //Size test
-            if( !aTeardrop->IsSetOK() ) 
+            if( !aTeardrop->IsSetOK() )
             {
                 int error_code = DRCE_TEARDROP_TOO_SMALL;
                 if( dynamic_cast<TEARDROP_JUNCTIONS*>( const_cast<TEARDROP*>( aTeardrop ) ) )
@@ -485,7 +485,7 @@ void  TEARDROPS::DRC_Rules( const TEARDROP* aTeardrop, DRC* aDRC )
 
             if( dynamic_cast<TEARDROP_JUNCTIONS*>( const_cast<TEARDROP*>( aTeardrop ) ) )
             {
-                TRACK* track_next = dynamic_cast<TEARDROP_JUNCTIONS*>( const_cast<TEARDROP*>( aTeardrop ) )->Get_T_SegNext(); 
+                TRACK* track_next = dynamic_cast<TEARDROP_JUNCTIONS*>( const_cast<TEARDROP*>( aTeardrop ) )->Get_T_SegNext();
                 TRACK* track_back = dynamic_cast<TEARDROP_JUNCTIONS*>( const_cast<TEARDROP*>( aTeardrop ) )->Get_T_SegBack();
                 if( track_next && track_back )
                 {
@@ -541,7 +541,7 @@ TEARDROPS::NET_SCAN_MULTI_TEARDROPS::NET_SCAN_MULTI_TEARDROPS( const TEARDROP* a
                                                              ) :
     NET_SCAN_BASE( aTeardrop, aParent )
 {
-    m_result_teardrop = nullptr;    
+    m_result_teardrop = nullptr;
 }
 
 bool TEARDROPS::NET_SCAN_MULTI_TEARDROPS::ExecuteAt( TRACK* aTrackSeg )
@@ -836,7 +836,7 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_WARNINGS::ExecuteItem( const BOARD_
                 if( dynamic_cast<TEARDROP_JUNCTIONS*>( tear ) )
                 {
                     TEARDROP_JUNCTIONS* junction_tear = static_cast<TEARDROP_JUNCTIONS*>( tear );
-                    TRACK* track_next = junction_tear->Get_T_SegNext(); 
+                    TRACK* track_next = junction_tear->Get_T_SegNext();
                     TRACK* track_back = junction_tear->Get_T_SegBack();
                     if( track_next && track_back )
                     {
@@ -980,7 +980,7 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_WARNINGS::ExecuteItem( const BOARD_
         //Segment is trace.
         if( track_seg->Type() == PCB_TRACE_T )
         {
-            for( int n = 0; n < 2; ++n ) 
+            for( int n = 0; n < 2; ++n )
             {
                 wxPoint track_pos;
                 ( n )? track_pos = track_seg->GetStart() : track_pos = track_seg->GetEnd();

@@ -46,7 +46,7 @@ TRACK* TRACKITEMS::DragKeepSlopeSegmentTypeCheck( TRACK* aTrackToPoint,
                                                                                aEndpoint,
                                                                                true,
                                                                                false );
-            if( track_at_point ) 
+            if( track_at_point )
             {
                 if( dynamic_cast<TrackNodeItem::TRACKNODEITEM*>( track_at_point ) )
                 {
@@ -107,7 +107,7 @@ bool TRACKITEMS::DragKeepSlopeSegmentsNumCheck( const bool aCurrentError,
                                                                      aEndpoint,
                                                                      true,
                                                                      false );
-                    if( another_track_at_point ) 
+                    if( another_track_at_point )
                     {
                         if( dynamic_cast<TrackNodeItem::TRACKNODEITEM*>( another_track_at_point ) )
                         {
@@ -141,7 +141,7 @@ bool TRACKITEMS::DragKeepSlopeSegmentsNumCheck( const bool aCurrentError,
 
 
 //-----------------------------------------------------------------------------------------------------/
-// SHARP ANGLES 
+// SHARP ANGLES
 //-----------------------------------------------------------------------------------------------------/
 void TRACKITEMS::MarkSharpAngles( const DLIST<TRACK>* aTracksAt, DRC* aDRC )
 {
@@ -172,9 +172,9 @@ unsigned int TRACKITEMS::TRACKS_PROGRESS_MARK_SHARP_ANGLES::ExecuteItem( const B
         {
             VIA* via = nullptr;
             D_PAD* pad = nullptr;
-            ( n )? via = m_Parent->BackVia( track_seg ) : 
+            ( n )? via = m_Parent->BackVia( track_seg ) :
                  via = m_Parent->NextVia( track_seg );
-            ( n )? pad = m_Parent->BackPad( track_seg ) : 
+            ( n )? pad = m_Parent->BackPad( track_seg ) :
                  pad = m_Parent->NextPad( track_seg );
             if( !via && !pad )
             {
@@ -261,7 +261,7 @@ unsigned int TRACKITEMS::TRACKS_PROGRESS_MARK_SHARP_ANGLES::ExecuteItem( const B
                 }
             }
         }
-    }   
+    }
     return num_marks;
 }
 
@@ -336,7 +336,7 @@ void TRACKITEMS::FixTrackConnectionsInCenter( const DLIST<TRACK>* aTracksAt )
 TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::TRACKS_PROGRESS_FIX_ITEM_CONNECTION( const TRACKITEMS* aParent,
                                                                                       const DLIST<TRACK>* aTracks,
                                                                                       PICKED_ITEMS_LIST* aUndoRedoList
-                                                                                    ) : 
+                                                                                    ) :
     TRACKITEMS_TRACKS_PROGRESS( aParent, aTracks, aUndoRedoList )
 {
     m_progress_title.Printf( _( "Fixing Pad / Via Connections of Tracks" ) );
@@ -512,4 +512,3 @@ void TRACKITEMS::Popup_PickTrackOrViaWidth( wxMenu* aMenu, const TRACK* aTrackSe
         }
     }
 }
-

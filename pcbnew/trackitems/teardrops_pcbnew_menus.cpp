@@ -89,7 +89,7 @@ void TEARDROPS::Menu_TrackAdd( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPo
                     if( !dynamic_cast<TEARDROP_JUNCTIONS*>( tear ) )
                         teardrop_place = true;
                     else
-                        if( at_t )        
+                        if( at_t )
                             msg.replace( msg.find( TXT_TEARDROP ), TXT_TEARDROP.Len(), TXT_TJUNCTION );
                         else
                             msg.replace( msg.find( TXT_TEARDROP ), TXT_TEARDROP.Len(), TXT_JUNCTION );
@@ -108,7 +108,7 @@ void TEARDROPS::Menu_TrackAdd( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPo
                             ( ( m_Parent->NextVia( aTrackSeg ) &&
                             !dynamic_cast<TEARDROP_VIA*>( Next( aTrackSeg ) ) ) ||
                             ( m_Parent->NextPad( aTrackSeg ) &&
-                            !dynamic_cast<TEARDROP_PAD*>( Next( aTrackSeg ) ) ) ) ) ||                        
+                            !dynamic_cast<TEARDROP_PAD*>( Next( aTrackSeg ) ) ) ) ) ||
                             ( !end_nearest && ( ( m_Parent->BackVia( aTrackSeg ) &&
                             !dynamic_cast<TEARDROP_VIA*>( Back( aTrackSeg ) ) ) ||
                             ( m_Parent->BackPad( aTrackSeg ) && !dynamic_cast<TEARDROP_PAD*>( Back( aTrackSeg ) ) ) ) ) )
@@ -238,7 +238,7 @@ void TEARDROPS::Menu_TrackRemove( wxMenu* aMenu, const TRACK* aTrackSeg, const w
                              ID_POPUP_PCB_TEARDROPS_DELETE,
                              _( "Remove Teardrops from Via" ),
                              KiBitmap( delete_pad_xpm ) );
-        } 
+        }
         else
         {
             TEARDROP* tear = dynamic_cast<TEARDROP*>( Get( aTrackSeg, aPos ) );
@@ -559,9 +559,9 @@ void TEARDROPS::Popup( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPo
     if( aTrackSeg && aMenu && IsOn() )
     {
         wxString msg;
-        wxPoint track_nearest_endpoint = TrackSegNearestEndpoint( aTrackSeg, aPos ); 
+        wxPoint track_nearest_endpoint = TrackSegNearestEndpoint( aTrackSeg, aPos );
         TEARDROP* tear = dynamic_cast<TEARDROP*>( Get( aTrackSeg, track_nearest_endpoint ) );
-        bool teardrop_place = IsTeardropPlace( aTrackSeg, track_nearest_endpoint ) || 
+        bool teardrop_place = IsTeardropPlace( aTrackSeg, track_nearest_endpoint ) ||
                               ( aTrackSeg->Type() == PCB_VIA_T ) ||
                               ( dynamic_cast<TEARDROP_VIA*>( tear ) ||
                               dynamic_cast<TEARDROP_PAD*>( tear ) ) ||
@@ -581,7 +581,7 @@ void TEARDROPS::Popup( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPo
             Menu_TrackRemove( tear_menu, aTrackSeg, track_nearest_endpoint );
             if( tear_menu->GetMenuItemCount() > menu_count )
                 tear_menu->AppendSeparator();
-            
+
             menu_count = tear_menu->GetMenuItemCount();
             Menu_NetLock_Teardrops( tear_menu, aTrackSeg, track_nearest_endpoint );
             Menu_NetUnlock_Teardrops( tear_menu, aTrackSeg, track_nearest_endpoint );

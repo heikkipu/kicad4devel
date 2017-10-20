@@ -109,13 +109,13 @@ void TRACKITEMS::SetMenu( wxMenu* aMenu )
                      m_Teardrops->GetMenu(), ID_POPUP_PCB_TEARDROPS_COMMON_MNU,
                      TEARDROPS::TXT_TEARDROPS,
                      KiBitmap( pad_xpm ) );
-        
+
         AddMenuItem( aMenu,
                      m_RoundedTracksCorners->GetMenu(),
                      ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_COMMON_MNU,
                      ROUNDEDTRACKSCORNERS::TXT_ROUNDEDTRACKSCORNERS,
                      KiBitmap( add_tracks_xpm ) );
-        
+
 #endif
         wxMenu* misc_menu = new wxMenu;
         AddMenuItem( misc_menu,
@@ -134,9 +134,9 @@ void TRACKITEMS::SetMenu( wxMenu* aMenu )
     }
 }
 
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 // Get pads and vias
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 TRACKITEMS::NET_SCAN_GET_VIA::NET_SCAN_GET_VIA( const TRACK* aTrackSeg,
                                                 const wxPoint aPos,
                                                 const TRACKITEMS* aParent
@@ -158,7 +158,7 @@ bool TRACKITEMS::NET_SCAN_GET_VIA::ExecuteAt( TRACK* aTrackSeg )
             }
     return false;
 }
-        
+
 VIA* TRACKITEMS::GetVia( const TRACK* aTrackSegAt, const wxPoint aPosAt ) const
 {
     VIA* result = nullptr;
@@ -344,14 +344,14 @@ std::vector<D_PAD*> TRACKITEMS::GetPads( const int aNetCode ) const
     return pads_list;
 }
 
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 // PADs scan base.
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 TrackItems::PADS_SCAN_BASE::PADS_SCAN_BASE( const BOARD* aBoard )
 {
     std::vector<D_PAD*> pads;
     DLIST<MODULE>* modules = &const_cast<BOARD*>( aBoard )->m_Modules;
-    m_first_module = modules->GetFirst(); 
+    m_first_module = modules->GetFirst();
 }
 
 void PADS_SCAN_BASE::Execute( void )
@@ -369,11 +369,11 @@ void PADS_SCAN_BASE::Execute( void )
         module = module->Next();
     }
 }
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 // Pick Vias and track sizes.
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 void TRACKITEMS::PickViaSize( const VIA* aVia )
 {
     VIA_DIMENSION via_dim;
@@ -424,7 +424,7 @@ void TRACKITEMS::PickTrackSize( const TRACK* aTrack )
             }
     }
 }
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 
 
 //----------------------------------------------------------------------------------------
@@ -475,22 +475,22 @@ void TRACKITEMS::Angles( const TRACK* aTrackSeg,
                          const wxPoint& aOffset
                        )
 {
-    
+
     EDA_RECT* e_rect = aPanel->GetClipBox();
     wxPoint track_start = aTrackSeg->GetStart();
     wxPoint track_end = aTrackSeg->GetEnd();
-    
+
     wxPoint op_pos;
     ( track_start == aPosition )? op_pos = track_end : op_pos = track_start;
     double track_angle = TrackSegAngle( aTrackSeg, op_pos );
-    
+
     int angle_track_mils_int = Rad2MilsInt( track_angle );
 #ifdef NEWCONALGO
     COLOR4D color = m_Board->Colors().GetLayerColor( aTrackSeg->GetLayer() );
 #else
     COLOR4D color = m_Board->GetLayerColor( aTrackSeg->GetLayer() );
 #endif
-    
+
     int width = aTrackSeg->GetWidth();
 
     //angle 45 degrees versus grid
@@ -604,7 +604,7 @@ void TRACKITEMS::Angles( const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList,
         for( unsigned int m = n + 1; m < drag_seg_list_size; ++m )
         {
             if( n < drag_seg_list_size - 1 )
-                track_cmp = aDragSegmentList->at( m ).m_Track; 
+                track_cmp = aDragSegmentList->at( m ).m_Track;
             else
                 track_cmp = aDragSegmentList->at( 0 ).m_Track;
 
@@ -715,7 +715,7 @@ void TRACKITEMS::Angles( const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList,
 //----------------------------------------------------------------------------------------
 TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::NET_SCAN_DRAW_TARGET_NODE_POS( const TRACK* aTrackSeg,
                                                                           const wxPoint aPosition,
-                                                                          const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList, 
+                                                                          const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList,
                                                                           const TRACKITEMS* aParent
                                                                         ) :
     NET_SCAN_BASE( aTrackSeg, aParent )
@@ -807,7 +807,7 @@ void TRACKITEMS::Target( const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList,
                       color );
             m_target_pos_drawn = true;
         }
-        
+
         m_target_pos = aPosition;
     }
 }
@@ -939,34 +939,43 @@ void TRACKITEMS::SetMsgPanel( const TRACK* aTrack )
 }
 
 
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 // Speedup m_Track linked list in get best inserton point in class_track.
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------
 
 //Return netcodes first item or first item on netcode less than this.
 //Otherwise returns m_Track first item.
 TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode ) const
 {
-    if(aNetCode)
+    if( aNetCode && m_Board->m_Track )
     {
-        int netcode = aNetCode - 1;
-        if( m_best_insert_point_items.size() > aNetCode )
-        {
-            TRACK* item = m_best_insert_point_items[aNetCode];
-            if( item )
-                return item;
-        }
-        else
-        {
-            netcode = m_best_insert_point_items.size() - 1;
-        }
+        TRACK* item = nullptr;
+        int netcode = aNetCode;
 
-        while(netcode > 0)
+        if( aNetCode >= m_Board->m_Track->GetNetCode() )
         {
-            TRACK* item = m_best_insert_point_items[netcode];
+            if( m_best_insert_point_items.size() > aNetCode )
+            {
+                item = m_best_insert_point_items[aNetCode];
+                if( item )
+                    return item;
+            }
+
+            while( netcode < m_best_insert_point_items.size() )
+            {
+                item = m_best_insert_point_items[netcode];
+                if( item )
+                {
+                    item = item->Back();
+                    if( item )
+                        return item;
+                }
+                netcode++;
+            }
+
+            item = m_Board->m_Track.GetLast();
             if( item )
                 return item;
-            netcode--;
         }
     }
 
@@ -995,22 +1004,25 @@ void TRACKITEMS::BEST_INSERT_POINT_SPEEDER::Remove( const TRACK* aTrackItem )
     if( aTrackItem )
     {
         int netcode = aTrackItem->GetNetCode();
-        TRACK* trackitem = const_cast<TRACK*>( aTrackItem );
-        if( trackitem == m_best_insert_point_items[netcode] )
+        if( netcode < m_best_insert_point_items.size() )
         {
-            trackitem = const_cast<TRACK*>( aTrackItem )->Back();
-            if( trackitem && ( trackitem->GetNetCode() == netcode ) )
-                m_best_insert_point_items[netcode] = trackitem;
-            else
+            TRACK* trackitem = const_cast<TRACK*>( aTrackItem );
+            if( trackitem == m_best_insert_point_items[netcode] )
             {
-                trackitem = const_cast<TRACK*>( aTrackItem )->Next();
+                trackitem = const_cast<TRACK*>( aTrackItem )->Back();
                 if( trackitem && ( trackitem->GetNetCode() == netcode ) )
                     m_best_insert_point_items[netcode] = trackitem;
                 else
-                    m_best_insert_point_items[netcode] = nullptr;
+                {
+                    trackitem = const_cast<TRACK*>( aTrackItem )->Next();
+                    if( trackitem && ( trackitem->GetNetCode() == netcode ) )
+                        m_best_insert_point_items[netcode] = trackitem;
+                    else
+                        m_best_insert_point_items[netcode] = nullptr;
+                }
             }
         }
     }
 }
 
-//--------------------------------------------------------------------------------------------------- 
+//---------------------------------------------------------------------------------------------------

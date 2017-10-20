@@ -108,7 +108,7 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners( const int aNetCode, const bo
         {
             if( ConvertSegmentedCorners( track_seg, &undoredo_items ) )
                 created = true;
-            
+
             track_seg = track_seg->Next();
             if( track_seg && ( track_seg->GetNetCode() != aNetCode ) )
                 track_seg = nullptr;
@@ -116,7 +116,7 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners( const int aNetCode, const bo
         while( track_seg );
     }
     while( created );
-    
+
     if( m_EditFrame && aUndo && undoredo_items.GetCount() )
         m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_CHANGED );
 }
@@ -157,7 +157,7 @@ void ROUNDEDTRACKSCORNERS::RemoveArcedSegments( std::set<TRACK*>* aTracksArced,
     {
         GetBoard()->TrackItems()->Teardrops()->Remove( track, aUndoRedoList, true );
         Remove( track, aUndoRedoList, true );
-        
+
         GetBoard()->Remove( track );
 #ifndef NEWCONALGO
         GetBoard()->GetRatsnest()->Remove( track );
@@ -203,7 +203,7 @@ std::set<TRACK*> ROUNDEDTRACKSCORNERS::CollectSameLengthConnected( const TRACK* 
         }
     }
     while( num_collected != tracks_arced.size() );
-    
+
     return tracks_arced;
 }
 
@@ -262,7 +262,7 @@ bool ROUNDEDTRACKSCORNERS::CreateCorner( std::set<TRACK*>* aTracksArced,
         first_track_opposite_pos = first_track->GetEnd();
     }
     double first_track_angle = TrackSegAngle( first_track, first_track_connected_pos );
-    
+
     connected_tracks_it++;
     TRACK* second_track = connected_tracks_it->first;
     bool is_second_track_connected_at_startpoint = connected_tracks_it->second;
@@ -324,7 +324,7 @@ bool ROUNDEDTRACKSCORNERS::CreateCorner( std::set<TRACK*>* aTracksArced,
         Add( new_track, half_dist_btw_tracks + 10, aUndoRedoList );
         okay = true;
     }
-    else 
+    else
     {
         double angle_btw_tracks = AngleBtwTracks( first_track,
                                                   first_track_connected_pos,

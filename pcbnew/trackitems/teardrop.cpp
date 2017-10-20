@@ -49,7 +49,7 @@ TEARDROP::TEARDROP( const BOARD_ITEM* aParent, const TRACK* aTrackSeg ) :
     m_draw_mode_unfill = false;
 
     m_connected_item = nullptr;
-    m_connected_item_rad = MIN_POLYSEG_WIDTH; 
+    m_connected_item_rad = MIN_POLYSEG_WIDTH;
     m_connected_pos_length_delta = 0;
     m_length_width_corr = 0;
 
@@ -62,7 +62,7 @@ bool TEARDROP::CallConstructor( const TRACK* aTrackSeg,
 {
     if( TRACKNODEITEM::CallConstructor( aTrackSeg, aCheckNullTrack ) )
     {
-        SetParams( aParams );  
+        SetParams( aParams );
         return true;
     }
     return false;
@@ -79,7 +79,7 @@ bool TEARDROP::Update( void )
     m_set_ok = true;
 
     m_connected_pos_delta = m_connected_pos;
-    m_connected_pos_length_delta = 0;    
+    m_connected_pos_length_delta = 0;
     m_can_draw_clearance = true;
 
     SetConnectedItem();
@@ -138,7 +138,7 @@ void TEARDROP::SetPoints( void )
         case SUBLAND_T:
             m_mid_pos = m_pos;
             //With DRC and plot for. Differs TEARDROP and FILLET
-            m_Width = m_width_rad<<1; 
+            m_Width = m_width_rad<<1;
             break;
         case FILLET_T:
             m_mid_pos = GetPoint( m_connected_pos_delta, m_trackseg_angle, m_length / 2 );
@@ -220,11 +220,11 @@ void TEARDROP::CalcFillet( const int aWidthRatio, const int aLengthRatio )
 {
     m_width_rad = CalcFilletWidthRad( aWidthRatio, m_connected_item_rad, m_trackseg_rad );
     m_length = CalcFilletLength( aLengthRatio );
-    
+
     m_length_width_corr = m_connected_item_rad - ( m_width_rad + m_trackseg_rad );
     m_connected_pos_length_delta += m_length_width_corr;
     m_length -= m_length_width_corr;
-    
+
     CalcFilletSegs();
 }
 
@@ -238,13 +238,13 @@ void TEARDROP::SetFilletPoints( void )
     m_seg_points[2] = GetPoint( m_pos, seg_B_pos_angle, seg_rad );
     m_seg_points[0] = GetPoint( m_seg_points[1], m_fillet_seg_A_angle, m_fillet_seg_length );
     m_seg_points[3] = GetPoint( m_seg_points[2], m_fillet_seg_B_angle, m_fillet_seg_length );
-    
+
     //A
     m_seg_outer_points[0] = GetPoint( m_seg_points[0], m_trackseg_angle_inv, m_poly_seg_rad );
     m_seg_outer_points[1] = GetPoint( m_seg_points[0], seg_A_pos_angle, m_poly_seg_rad );
     m_seg_outer_points[2] = GetPoint( m_seg_points[1], seg_A_pos_angle, m_poly_seg_rad );
     //B
-    m_seg_outer_points[3] = GetPoint( m_seg_points[2], seg_B_pos_angle, m_poly_seg_rad );    
+    m_seg_outer_points[3] = GetPoint( m_seg_points[2], seg_B_pos_angle, m_poly_seg_rad );
     m_seg_outer_points[4] = GetPoint( m_seg_points[3], seg_B_pos_angle, m_poly_seg_rad );
     m_seg_outer_points[5] = GetPoint( m_seg_points[3], m_trackseg_angle_inv, m_poly_seg_rad );
 
@@ -255,7 +255,7 @@ void TEARDROP::SetFilletPoints( void )
     m_seg_clearance_points[1] = GetPoint( m_seg_points[0], seg_A_pos_angle, track_clearance_rad );
     m_seg_clearance_points[2] = GetPoint( m_seg_points[1], seg_A_pos_angle, track_clearance_rad );
     //B
-    m_seg_clearance_points[3] = GetPoint( m_seg_points[2], seg_B_pos_angle, track_clearance_rad ); 
+    m_seg_clearance_points[3] = GetPoint( m_seg_points[2], seg_B_pos_angle, track_clearance_rad );
     m_seg_clearance_points[4] = GetPoint( m_seg_points[3], seg_B_pos_angle, track_clearance_rad );
     m_seg_clearance_points[5] = GetPoint( m_seg_points[3], m_trackseg_angle_inv, track_clearance_rad );
 }
@@ -310,7 +310,7 @@ void TEARDROP::SetTeardropPoints( void )
     m_teardrop_arc_B_center_pos = GetPoint( m_pos, m_trackseg_angle + M_PI_2, m_teardrop_segs_arc_rad );
 
     double angle_tan_A = m_trackseg_angle + M_PI_2;
-    double angle_tan_B = m_trackseg_angle - M_PI_2;     
+    double angle_tan_B = m_trackseg_angle - M_PI_2;
     unsigned int arc_outer_rad = m_teardrop_segs_arc_rad - m_trackseg_rad;
     unsigned int arc_rad = arc_outer_rad + m_poly_seg_rad;
 
@@ -322,7 +322,7 @@ void TEARDROP::SetTeardropPoints( void )
     int ppB{0};
     int oc_ppA{0};
     int oc_ppB{0};
-    
+
     for( int n = 0; n <= m_num_arc_segs; ++n )
     {
         ppA = m_num_arc_segs - n;
@@ -341,7 +341,7 @@ void TEARDROP::SetTeardropPoints( void )
 
     m_seg_outer_points[0] = GetPoint( m_seg_points[0], m_trackseg_angle_inv, m_poly_seg_rad );
     m_seg_outer_points[oc_ppB + 1] = GetPoint( m_seg_points[ppB], m_trackseg_angle_inv, m_poly_seg_rad );
-    
+
     m_seg_clearance_points[0] = GetPoint( m_seg_points[0], m_trackseg_angle_inv, track_clearance_rad );
     m_seg_clearance_points[oc_ppB + 1] = GetPoint( m_seg_points[ppB], m_trackseg_angle_inv, track_clearance_rad );
 }
@@ -390,10 +390,10 @@ void TEARDROP::SetNotOKValues( void )
     m_poly_seg_width = m_poly_seg_rad<<1;
     m_Width = m_poly_seg_width;
     m_width_rad = m_connected_item_rad - m_poly_seg_rad;
-    
+
     CalcFilletSegs();
     CalcTeardropArcs();
-    
+
     m_can_draw_clearance = false;
 }
 
@@ -498,7 +498,7 @@ void TEARDROP::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
                 }
                 else
                 {
-                    //Copper areas clearence for. 
+                    //Copper areas clearence for.
                     for( unsigned int n = 0; n < m_seg_points.size() - 1; ++n )
                     {
                         TransformRoundedEndsSegmentToPolygon( aCornerBuffer, m_seg_points[n],
@@ -560,7 +560,7 @@ void TEARDROP::SetParams( const PARAMS aParams )
         m_shape = aParams.shape;
         m_length_ratio = aParams.length_ratio;
         m_width_ratio = aParams.width_ratio;
-        switch( aParams.shape )    
+        switch( aParams.shape )
         {
             case SUBLAND_T:
                 if( m_length_ratio > SUBLAND_POS_MAX )
@@ -568,7 +568,7 @@ void TEARDROP::SetParams( const PARAMS aParams )
                 break;
             case FILLET_T:
                 m_num_arc_segs = 1;
-                m_seg_points.resize( FILLET_POLY_POINTS_NUM ); 
+                m_seg_points.resize( FILLET_POLY_POINTS_NUM );
                 m_seg_outer_points.resize( FILLET_OUTER_POLY_POINTS_NUM );
                 m_seg_clearance_points.resize( FILLET_CLEARANCE_POLY_POINTS_NUM );
                 break;
@@ -577,14 +577,14 @@ void TEARDROP::SetParams( const PARAMS aParams )
                 if( m_num_arc_segs > TEARDROP_SEGS_MAX )
                     m_num_arc_segs = TEARDROP_SEGS_MAX;
                 if( m_num_arc_segs < TEARDROP_SEGS_MIN )
-                    m_num_arc_segs = TEARDROP_SEGS_MIN;      
-                m_seg_points.resize( m_num_arc_segs * 2 + 2 ); 
-                m_seg_outer_points.resize( m_num_arc_segs * 2 + 4 ); 
-                m_seg_clearance_points.resize( m_num_arc_segs * 2 + 4 ); 
+                    m_num_arc_segs = TEARDROP_SEGS_MIN;
+                m_seg_points.resize( m_num_arc_segs * 2 + 2 );
+                m_seg_outer_points.resize( m_num_arc_segs * 2 + 4 );
+                m_seg_clearance_points.resize( m_num_arc_segs * 2 + 4 );
                 break;
             default:;
         }
-        
+
         if( m_length_ratio < TEARDROPS_POS_MIN )
             m_length_ratio = TEARDROPS_POS_MIN;
         if( m_width_ratio < TEARDROPS_SIZE_MIN )
@@ -596,7 +596,7 @@ void TEARDROP::SetParams( const PARAMS aParams )
         m_length_ratio = 0;
         m_width_ratio = 0;
     }
-    
+
     Update();
 }
 
@@ -607,7 +607,7 @@ TEARDROP::PARAMS TEARDROP::GetParams( void ) const
     returnParams.length_ratio = m_length_ratio;
     returnParams.width_ratio = m_width_ratio;
     returnParams.num_segments = m_num_arc_segs;
-    
+
     return returnParams;
 }
 
@@ -704,11 +704,11 @@ void TEARDROP::DrawItem( EDA_DRAW_PANEL* aPanel,
         return;
 
     EDA_RECT* clip_box = aPanel->GetClipBox();
-    bool showClearance = (IsCopperLayer(m_trackseg->GetLayer()) && 
-                         ((aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS && 
-                         ( m_trackseg->IsDragging() || m_trackseg->IsMoving() || m_trackseg->IsNew() ) ) || 
+    bool showClearance = (IsCopperLayer(m_trackseg->GetLayer()) &&
+                         ((aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+                         ( m_trackseg->IsDragging() || m_trackseg->IsMoving() || m_trackseg->IsNew() ) ) ||
                          ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ))) && m_can_draw_clearance;
-    
+
     switch( m_shape )
     {
         case SUBLAND_T:
@@ -737,7 +737,7 @@ void TEARDROP::DrawItem( EDA_DRAW_PANEL* aPanel,
                           aColor );
             break;
         case FILLET_T:
-            if( !aDisplOpts->m_DisplayPcbTrackFill || 
+            if( !aDisplOpts->m_DisplayPcbTrackFill ||
                 GetState( FORCE_SKETCH ) ||
                 m_draw_mode_unfill )
             {
@@ -895,7 +895,7 @@ void TEARDROP::DrawItem( EDA_DRAW_PANEL* aPanel,
                               true,
                               m_poly_seg_width,
                               aColor,
-                              aColor );  
+                              aColor );
 
             if( showClearance )
             {
@@ -977,7 +977,7 @@ void TEARDROP::DrawItem( KIGFX::GAL* aGal, const bool aIsSketch )
 {
     if( !m_trackseg )
         return;
- 
+
     std::deque<VECTOR2D> points;
     points.clear();
 
@@ -1075,7 +1075,7 @@ void TEARDROP::DrawItem( KIGFX::GAL* aGal, const bool aIsSketch )
 }
 
 //-----------------------------------------------------------------------------------------------------/
-// VIA TEARDROP 
+// VIA TEARDROP
 //-----------------------------------------------------------------------------------------------------/
 TEARDROP_VIA::TEARDROP_VIA( const BOARD_ITEM* aParent,
                             const VIA* aVia,
@@ -1090,7 +1090,7 @@ TEARDROP_VIA::TEARDROP_VIA( const BOARD_ITEM* aParent,
         m_connected_via = const_cast<VIA*>( aVia );
         m_connected_item = m_connected_via;
         m_connected_pos = m_connected_via->GetStart();
-        
+
         CallConstructor( aTrackSeg, aParams, aCheckNullTrack );
     }
 }
@@ -1114,13 +1114,13 @@ TEARDROP_EDIT_VIA::TEARDROP_EDIT_VIA( const BOARD_ITEM* aParent,
                                       const PARAMS aParams,
                                       const bool aCheckNullTrack
                                     ) :
-    TEARDROP_VIA( aParent, nullptr, aTrackSeg, aParams, aCheckNullTrack ) 
+    TEARDROP_VIA( aParent, nullptr, aTrackSeg, aParams, aCheckNullTrack )
 {
     m_connected_via = nullptr;
     m_connected_item_rad = aViaRadius;
     if( aTrackSeg )
         m_connected_pos = aTrackSeg->GetEnd();
-    
+
     CallConstructor( aTrackSeg, aParams, aCheckNullTrack );
 }
 
@@ -1136,7 +1136,7 @@ bool TEARDROP_EDIT_VIA::ChangeTrack( const TRACK* aNewTrack )
 
 
 //-----------------------------------------------------------------------------------------------------/
-// PAD TEARDROP 
+// PAD TEARDROP
 //-----------------------------------------------------------------------------------------------------/
 //Rectangular shape teardrop. Edge is stright.
 TEARDROP_RECT::TEARDROP_RECT( const BOARD_ITEM* aParent,
@@ -1154,10 +1154,10 @@ void TEARDROP_RECT::SetConnectedItem( void )
 
 void TEARDROP_RECT::CalcSegment( void )
 {
-    m_poly_seg_rad = m_trackseg_rad>>2; 
+    m_poly_seg_rad = m_trackseg_rad>>2;
     unsigned int sub_rad = m_connected_item_rad - m_trackseg_rad;
     if( m_trackseg_rad > sub_rad )
-        m_poly_seg_rad = sub_rad>>2; 
+        m_poly_seg_rad = sub_rad>>2;
     m_poly_seg_width = m_poly_seg_rad<<1;
 }
 
@@ -1229,7 +1229,7 @@ void TEARDROP_RECT::SetFilletPoints( void )
         m_seg_outer_points[1] = GetPoint( m_seg_points[0], seg_A_pos_angle, m_poly_seg_rad );
         m_seg_outer_points[2] = GetPoint( m_seg_points[1], seg_A_pos_angle, m_poly_seg_rad );
         //B
-        m_seg_outer_points[3] = GetPoint( m_seg_points[2], seg_B_pos_angle, m_poly_seg_rad );    
+        m_seg_outer_points[3] = GetPoint( m_seg_points[2], seg_B_pos_angle, m_poly_seg_rad );
         m_seg_outer_points[4] = GetPoint( m_seg_points[3], seg_B_pos_angle, m_poly_seg_rad );
         m_seg_outer_points[5] = GetPoint( m_seg_points[3], m_trackseg_angle_inv, m_poly_seg_rad );
 
@@ -1240,7 +1240,7 @@ void TEARDROP_RECT::SetFilletPoints( void )
         m_seg_clearance_points[1] = GetPoint( m_seg_points[0], seg_A_pos_angle, track_clearance_rad );
         m_seg_clearance_points[2] = GetPoint( m_seg_points[1], seg_A_pos_angle, track_clearance_rad );
         //B
-        m_seg_clearance_points[3] = GetPoint( m_seg_points[2], seg_B_pos_angle, track_clearance_rad ); 
+        m_seg_clearance_points[3] = GetPoint( m_seg_points[2], seg_B_pos_angle, track_clearance_rad );
         m_seg_clearance_points[4] = GetPoint( m_seg_points[3], seg_B_pos_angle, track_clearance_rad );
         m_seg_clearance_points[5] = GetPoint( m_seg_points[3], m_trackseg_angle_inv, track_clearance_rad );
     }
@@ -1289,7 +1289,7 @@ void TEARDROP_RECT::SetTeardropPoints( void )
         m_teardrop_arc_B_center_pos = GetPoint( m_pos, m_trackseg_angle + M_PI_2, m_teardrop_segs_arc_rad );
 
         double angle_tan_A = m_trackseg_angle + M_PI_2;
-        double angle_tan_B = m_trackseg_angle - M_PI_2;     
+        double angle_tan_B = m_trackseg_angle - M_PI_2;
 
         //Clearance
         unsigned int track_clearance_rad = m_poly_seg_rad + m_clearance;
@@ -1349,7 +1349,7 @@ void TEARDROP_RECT::SetTeardropPoints( void )
                                                            outer_angle_B,
                                                            track_clearance_rad );
             }
-            
+
             oc_ppA = ppA + 1;
             oc_ppB = ppB + 1;
 
@@ -1370,7 +1370,7 @@ void TEARDROP_RECT::SetTeardropPoints( void )
         m_seg_outer_points[oc_ppB] = GetPoint( m_seg_points[ppB], outer_angle_B, m_poly_seg_rad );
         m_seg_outer_points[0] = GetPoint( m_seg_points[0], m_trackseg_angle_inv, m_poly_seg_rad );
         m_seg_outer_points[oc_ppB + 1] = GetPoint( m_seg_points[ppB], m_trackseg_angle_inv, m_poly_seg_rad );
-    
+
         m_seg_clearance_points[oc_ppA] = GetPoint( m_seg_points[ppA], outer_angle_A, track_clearance_rad );
         m_seg_clearance_points[oc_ppB] = GetPoint( m_seg_points[ppB], outer_angle_B, track_clearance_rad );
         m_seg_clearance_points[0] = GetPoint( m_seg_points[0], m_trackseg_angle_inv, track_clearance_rad );
@@ -1398,7 +1398,7 @@ TEARDROP_PAD::TEARDROP_PAD( const BOARD_ITEM* aParent,
         m_connected_pad = const_cast<D_PAD*>( aPad );
         m_connected_item = m_connected_pad;
         m_connected_pos = m_connected_pad->GetPosition();
-    
+
         CallConstructor( aTrackSeg, aParams, aCheckNullTrack );
     }
 }
@@ -1419,7 +1419,7 @@ void TEARDROP_PAD::SetConnectedItem( void )
         if( pad_shape != PAD_SHAPE_CIRCLE )
         {
             int pad_angle = round( m_connected_pad->GetOrientation() / 10.0 ) * 10.0;
-            
+
             int track_deg_angle = Rad2DeciDegRnd( m_trackseg_angle );
             int track_90_angle = track_deg_angle + ANGLE_90;
             NORMALIZE_ANGLE_POS( track_90_angle );
@@ -1427,17 +1427,17 @@ void TEARDROP_PAD::SetConnectedItem( void )
             NORMALIZE_ANGLE_POS( track_180_angle );
             int track_270_angle = track_deg_angle + ANGLE_270;
             NORMALIZE_ANGLE_POS( track_270_angle );
-            
+
             bool hrz_angle = ( track_deg_angle == pad_angle ) || ( track_180_angle == pad_angle );
             bool vrt_angle = ( track_90_angle == pad_angle ) || ( track_270_angle == pad_angle );
-            
+
             if( hrz_angle || vrt_angle )
             {
                 bool hrz_cmp = ( pad_width > pad_height ) && hrz_angle;
                 bool vrt_cmp = ( pad_width < pad_height ) && vrt_angle;
                 if( hrz_cmp || vrt_cmp )
                     m_connected_pos_length_delta = max_rad - m_connected_item_rad;
-                
+
                 switch( pad_shape )
                 {
                     case PAD_SHAPE_OVAL:
@@ -1471,7 +1471,7 @@ void TEARDROP_PAD::SetConnectedItem( void )
                         //TODO
                         radius_ratio = m_connected_pad->GetRoundRectRadiusRatio();
                         //Longest sideline.
-                        if( !m_connected_pos_length_delta ) 
+                        if( !m_connected_pos_length_delta )
                         {
                             m_rect_type = true;
                             unsigned int max_half = max_rad>>1;
@@ -1493,7 +1493,7 @@ void TEARDROP_PAD::SetConnectedItem( void )
                     case PAD_SHAPE_RECT:
                         m_rect_type = true;
                         //Longest sideline.
-                        if( !m_connected_pos_length_delta ) 
+                        if( !m_connected_pos_length_delta )
                         {
                             unsigned int max_half = max_rad>>1;
                             if( max_half > min_rad )
@@ -1517,7 +1517,7 @@ void TEARDROP_PAD::SetConnectedItem( void )
                             {
                                 m_rect_type = true;
 
-                                if( ( ( track_90_angle == pad_angle ) &&  ( delta_size.y > 0 ) ) || 
+                                if( ( ( track_90_angle == pad_angle ) &&  ( delta_size.y > 0 ) ) ||
                                     ( ( track_270_angle == pad_angle ) &&  ( delta_size.y < 0 ) ) )
                                 {
                                     m_connected_item_rad = pad_width>>1;
@@ -1618,7 +1618,7 @@ void TEARDROP_PAD::ChangePad( const D_PAD* aPad )
             m_connected_pad = const_cast<D_PAD*>( aPad );
             m_connected_item = m_connected_pad;
             m_connected_pos = m_connected_pad->GetPosition();
-        
+
             if( !CallConstructor( GetTrackSeg(), GetParams(), false ) )
             {
                 m_connected_pad = oldPad;
@@ -1641,7 +1641,7 @@ TEARDROP_JUNCTIONS::TEARDROP_JUNCTIONS( const BOARD_ITEM* aParent,
                                       ) :
     TEARDROP_RECT( aParent, aTrackSeg )
 {
-    if( aTrackSeg && 
+    if( aTrackSeg &&
         ( ( aTrackSeg->GetStart() == aPosition ) ||
           ( aTrackSeg->GetEnd() == aPosition ) ) )
     {
@@ -1666,17 +1666,17 @@ void TEARDROP_JUNCTIONS::SetConnectedItem( void )
     int max_width = MaxWidthFromTracks();
     BOARD_CONNECTED_ITEM* lock_point = GetBoard()->GetLockPoint( m_connected_pos,
                                                                  GetTrackSeg()->GetLayerSet() );
-    if( max_width > m_Width ) 
+    if( max_width > m_Width )
     {
-        m_connected_item_rad = max_width>>1; 
-        if( m_T_tracks ) 
+        m_connected_item_rad = max_width>>1;
+        if( m_T_tracks )
         {
             //If T-Junction, make it at rect of T.
             m_connected_pos_length_delta += m_connected_item_rad - m_trackseg_rad;
             m_connected_item_rad = m_Width;
         }
         else
-            if( lock_point ) 
+            if( lock_point )
                 if( lock_point->Type() == PCB_PAD_T )
                     if( ( dynamic_cast<D_PAD*>( lock_point )->GetShape() == PAD_SHAPE_RECT ) ||
                         ( dynamic_cast<D_PAD*>( lock_point )->GetShape() == PAD_SHAPE_TRAPEZOID ) )
@@ -1772,7 +1772,7 @@ void TEARDROP_JUNCTIONS::CalcTeardrop( const int aWidthRatio, const int aLengthR
         CalcTeardropArcs();
 
         m_teardrop_segs_arc_rad = m_length;
-        m_teardrop_segs_angle_add = M_PI_2 / double( m_num_arc_segs ); 
+        m_teardrop_segs_angle_add = M_PI_2 / double( m_num_arc_segs );
 
         m_can_draw_clearance = ( m_length > m_connected_pos_length_delta + m_width_rad + m_clearance );
     }
@@ -1794,7 +1794,7 @@ int TEARDROP_JUNCTIONS::MaxWidthFromTracks( void )
     if( m_connected_tracks.size() )
     {
         return TrackNodeItem::GetMaxWidth( m_connected_tracks );
-    }   
+    }
         //return m_connected_tracks[MaxWidthItemNum( m_connected_tracks )]->GetWidth();
     return 0;
 }

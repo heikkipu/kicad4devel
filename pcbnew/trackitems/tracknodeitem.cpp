@@ -68,7 +68,7 @@ void TRACKNODEITEM::SetTrackEndpoint( void )
 bool TRACKNODEITEM::SetTrackSeg( const TRACK* aTrackSeg, const bool aCheckNullTrack )
 {
     if( aTrackSeg && aTrackSeg->Type() == PCB_TRACE_T )
-    {    
+    {
         m_trackseg = nullptr;
         //Try to find first track segment before or after ... hmmmm
         TRACK* track_seg = const_cast<TRACK*>( aTrackSeg );
@@ -77,7 +77,7 @@ bool TRACKNODEITEM::SetTrackSeg( const TRACK* aTrackSeg, const bool aCheckNullTr
         {
             if( track_seg )
             {
-                if( aCheckNullTrack ) 
+                if( aCheckNullTrack )
                     while( ( track_seg->GetStart() == track_seg->GetEnd() ) )
                     {
                         track_seg=track_seg->Back();
@@ -87,7 +87,7 @@ bool TRACKNODEITEM::SetTrackSeg( const TRACK* aTrackSeg, const bool aCheckNullTr
             }
             if( !track_seg )
                 return false;
-            else 
+            else
                 if( !( ( m_connected_pos == track_seg->GetStart() ) ||
                     ( m_connected_pos == track_seg->GetEnd() ) ) )
                 {
@@ -113,7 +113,7 @@ void TRACKNODEITEM::SetConnectedPos( void )
     m_opposite_pos = m_trackseg->GetEnd();
     m_connected_pos = m_trackseg->GetEnd();
     m_trackstartpos_is_pos? m_connected_pos = m_trackseg->GetStart() :
-                            m_opposite_pos = m_trackseg->GetStart();  
+                            m_opposite_pos = m_trackseg->GetStart();
 }
 
 bool TRACKNODEITEM::Update( void )
@@ -226,7 +226,7 @@ void TRACKNODEITEM::Draw( KIGFX::GAL* aGal,
 }
 
 //-----------------------------------------------------------------------------------------------------/
-// MISC 
+// MISC
 //-----------------------------------------------------------------------------------------------------/
 int TrackNodeItem::GetMaxWidth( Tracks_Container& aTracksList )
 {
@@ -503,7 +503,7 @@ void TrackNodeItem::DrawArc( KIGFX::GAL* aGal,
                     VECTOR2D( GetPoint( aCenterPoint, aEndAngle, aRad ) ) );
 }
 
-//Gal canvas arc draw with points. Draw same way as Arc1 in legacy. 
+//Gal canvas arc draw with points. Draw same way as Arc1 in legacy.
 //Radius can set differently than distance to center point from start or end point.
 void TrackNodeItem::DrawArc( KIGFX::GAL* aGal,
                              const wxPoint& aCenterPoint,

@@ -50,7 +50,7 @@ public:
     inline bool IsOn( void ) const { return m_params.length_ratio; }
 
     //One aCorner
-    void Add( TRACK* aTrackSegTo, const wxPoint& aCurPosAt ); 
+    void Add( TRACK* aTrackSegTo, const wxPoint& aCurPosAt );
     TrackNodeItem::ROUNDEDTRACKSCORNER* Add( TRACK* aTrackSegTo,
                                             const wxPoint aPosition,
                                             PICKED_ITEMS_LIST* aUndoRedoList
@@ -137,10 +137,10 @@ private:
     TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS m_params;
 
 //-----------------------------------------------------------------------------------------------------/
-// One track segment corner( s ) memory 
+// One track segment corner( s ) memory
 //-----------------------------------------------------------------------------------------------------/
 public:
-    //Save 
+    //Save
     void ToMemory( const TRACK* aTrackSegFrom );
     void FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList );
     void FromMemory( const TRACK* aTrackSegTo );
@@ -225,7 +225,7 @@ public:
                                                        );
     void DestroyRouteEdit( void );
     TrackNodeItem::ROUNDEDTRACKSCORNER* GetEditCorner( void ) const { return m_track_edit_corner; }
-    
+
 private:
     TrackNodeItem::ROUNDEDTRACKSCORNER* m_track_edit_corner{nullptr};
     TO_EDIT_T m_to_edit;
@@ -367,9 +367,9 @@ private:
     };
 
 //-----------------------------------------------------------------------------------------------------/
-    
+
 //-----------------------------------------------------------------------------------------------------/
-// NETSCAN OPERATIONS 
+// NETSCAN OPERATIONS
 //-----------------------------------------------------------------------------------------------------/
 private:
 
@@ -448,7 +448,7 @@ private:
     };
 
 //-----------------------------------------------------------------------------------------------------/
-// PROGRESS OPERATIONS 
+// PROGRESS OPERATIONS
 //-----------------------------------------------------------------------------------------------------/
 private:
 
@@ -461,7 +461,7 @@ private:
                                      ) :
             TRACKS_PROGRESS( aParent->GetEditFrame(), aTracks, aUndoRedoList )
             {
-                m_parent = const_cast<ROUNDEDTRACKSCORNERS*>( aParent ); 
+                m_parent = const_cast<ROUNDEDTRACKSCORNERS*>( aParent );
             }
 
         ROUNDEDTRACKSCORNERS* m_parent{nullptr};
@@ -510,11 +510,11 @@ private:
     };
 
 //-----------------------------------------------------------------------------------------------------/
-//Clean 
+//Clean
 //-----------------------------------------------------------------------------------------------------/
 public:
     bool Clean( const DLIST<TRACK>* aTracksAt, BOARD_COMMIT& aCommit );
-    
+
 private:
     class ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN : public ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS
     {

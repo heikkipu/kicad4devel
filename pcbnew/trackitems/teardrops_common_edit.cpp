@@ -28,7 +28,7 @@ using namespace TrackNodeItem;
 
 void TEARDROPS::ToggleEdit( const TO_EDIT_T aEdit )
 {
-    if( m_track_edit_tear )  
+    if( m_track_edit_tear )
     {
         if( m_can_edit && aEdit )
         {
@@ -85,7 +85,7 @@ void TEARDROPS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
                                 const wxPoint& aOffset
                               ) const
 {
-    if( m_track_edit_tear ) 
+    if( m_track_edit_tear )
     {
         //Size texts.
         TRACK* segm = m_track_edit_tear->GetTrackSeg();
@@ -99,7 +99,7 @@ void TEARDROPS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
             wxPoint txt_n_pos  = txt_t_pos;
             txt_n_pos.y += txt_size;
 
-            wxString txt_t, txt_n; 
+            wxString txt_t, txt_n;
             switch( m_to_edit )
             {
                 case EDIT_SIZE_LENGTH_T:
@@ -185,12 +185,12 @@ void TEARDROPS::UpdateRouteEdit( EDA_DRAW_PANEL* aPanel,
             m_track_edit_tear = new TEARDROP_EDIT_VIA( dynamic_cast<PCB_BASE_FRAME*>( aPanel->GetParent() )->GetBoard(),
                                                        aViaRad,
                                                        aTrack,
-                                                       params, 
+                                                       params,
                                                        true );
             m_track45Only = aTrack45Only;
             if( m_track_edit_tear )
             {
-                if( m_track_edit_tear->IsCreatedOK() )   
+                if( m_track_edit_tear->IsCreatedOK() )
                 {
                     m_track_edit_tear->SetDrawMode_Unfill( true );
                 }
@@ -260,7 +260,7 @@ void TEARDROPS::UpdateRouteEdit( EDA_DRAW_PANEL* aPanel,
                 m_track_edit_tear->SetParams( m_edit_params );
                 m_editparams_drawn = false;
             }
-            m_track_edit_tear->SetStart( aTrack->GetEnd() );                
+            m_track_edit_tear->SetStart( aTrack->GetEnd() );
             m_track_edit_tear->SetViaRad( aViaRad );
             m_track_edit_tear->Draw( aPanel, aDC, GR_XOR, wxPoint( 0,0 ) );
         }

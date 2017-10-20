@@ -307,7 +307,7 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK* aBegin, TRACK* aEnd)
                 end_point = dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track)->GetEndVisible();
             if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
                 end_point = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetEndVisible();
-            
+
             CONNECTED_POINT candidate2( track, end_point );
             m_candidates.push_back( candidate2 );
         }
@@ -358,7 +358,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK* aTrack )
 #endif
 
     wxPoint position = aTrack->GetStart();
-    
+
 #ifdef PCBNEW_WITH_TRACKITEMS
     if(dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(aTrack)))
         position = dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(aTrack))->GetStartVisible();

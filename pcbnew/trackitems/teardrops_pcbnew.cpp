@@ -47,7 +47,7 @@ void TEARDROPS::Add( const DLIST<TRACK>* aTracksAt, const TEARDROPS::TEARDROPS_T
                 new TRACKS_PROGRESS_ADD_JUNCTIONS( this,
                                                    aTracksAt,
                                                    &undoredo_list ) );
-        
+
     if( tears_add )
     {
         tears_add->Execute();
@@ -105,7 +105,7 @@ void TEARDROPS::Change( const DLIST<MODULE>* aModulesAt )
     PICKED_ITEMS_LIST undoredo_list;
     std::unique_ptr<MODULES_PROGRESS_CHANGE_TEARS> modules_change(
         new MODULES_PROGRESS_CHANGE_TEARS( this,
-                                           aModulesAt, 
+                                           aModulesAt,
                                            m_recreate_list,
                                            &undoredo_list ) );
     if( modules_change )
@@ -167,7 +167,7 @@ void TEARDROPS::Remove( const DLIST<MODULE>* aModulesFrom )
 TEARDROPS::TRACKS_PROGRESS_CLEAN::TRACKS_PROGRESS_CLEAN( const TEARDROPS* aParent,
                                                          const DLIST<TRACK>* aTracks,
                                                          PICKED_ITEMS_LIST* aUndoRedoList
-                                                       ) : 
+                                                       ) :
     TEARDROPS_TRACKS_PROGRESS( aParent, aTracks, aUndoRedoList ),
     TRACKS_PROGRESS_REMOVE_TEARS_VIAS( aParent, aTracks, aUndoRedoList )
 {
@@ -378,7 +378,7 @@ void TEARDROPS::MODULES_PROGRESS_CHANGE_TEARS::ExecuteEnd( void )
 }
 
 TEARDROPS::MODULES_PROGRESS_LOCK_TEARS::MODULES_PROGRESS_LOCK_TEARS( const TEARDROPS* aParent,
-                                                                     const DLIST<MODULE>* aModules 
+                                                                     const DLIST<MODULE>* aModules
                                                                    ) :
     TEARDROPS_MODULES_PROGRESS( aParent, aModules, nullptr )
 {
@@ -413,7 +413,7 @@ unsigned int TEARDROPS::MODULES_PROGRESS_UNLOCK_TEARS::DoAtPad( const D_PAD* aPa
 
 
 //-----------------------------------------------------------------------------------------------------/
-// TRACKS_PROGRESS 
+// TRACKS_PROGRESS
 //-----------------------------------------------------------------------------------------------------/
 TEARDROPS::TRACKS_PROGRESS_ADD_TEARS_VIAS::TRACKS_PROGRESS_ADD_TEARS_VIAS( const TEARDROPS* aParent,
                                                                            const DLIST<TRACK>* aTracks,
@@ -439,7 +439,7 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_ADD_TEARS_VIAS::ExecuteItem( const BOARD
     }
     return num_added;
 }
-    
+
 TEARDROPS::TRACKS_PROGRESS_REMOVE_TEARS_VIAS::TRACKS_PROGRESS_REMOVE_TEARS_VIAS( const TEARDROPS* aParent,
                                                                                  const DLIST<TRACK>* aTracks,
                                                                                  PICKED_ITEMS_LIST* aUndoRedoList
@@ -488,20 +488,20 @@ TEARDROPS::TRACKS_PROGRESS_CHANGE_TEARS_VIAS::TRACKS_PROGRESS_CHANGE_TEARS_VIAS(
                                                                                  const DLIST<TRACK>* aTracks,
                                                                                  PICKED_ITEMS_LIST* aUndoRedoList
                                                                                ) :
-    TEARDROPS_TRACKS_PROGRESS( aParent, aTracks, aUndoRedoList ),  
+    TEARDROPS_TRACKS_PROGRESS( aParent, aTracks, aUndoRedoList ),
     TRACKS_PROGRESS_REMOVE_TEARS_VIAS( aParent, aTracks, aUndoRedoList )
 {
     m_progress_title.Printf( _( "Changing Teardrops of Vias" ) );
 }
-        
+
 void TEARDROPS::TRACKS_PROGRESS_CHANGE_TEARS_VIAS::ExecuteEnd( void )
 {
     TRACKS_PROGRESS_REMOVE_TEARS_VIAS::ExecuteEnd();
-    
+
     for( TEARDROP* tear : *m_remove_tears )
         m_Parent->Add( tear->GetTrackSeg(), tear->GetConnectedItem(), m_undoredo_items, tear->GetEnd() );
 }
-   
+
 TEARDROPS::TRACKS_PROGRESS_ADD_TJUNCTIONS::TRACKS_PROGRESS_ADD_TJUNCTIONS( const TEARDROPS* aParent,
                                                                            const DLIST<TRACK>* aTracks,
                                                                            PICKED_ITEMS_LIST* aUndoRedoList
@@ -520,12 +520,12 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_ADD_TJUNCTIONS::ExecuteItem( const BOARD
     num_added = m_undoredo_items->GetCount() - num_added;
     return num_added;
 }
-    
+
 TEARDROPS::TRACKS_PROGRESS_REMOVE_TJUNCTIONS::TRACKS_PROGRESS_REMOVE_TJUNCTIONS( const TEARDROPS* aParent,
                                                                                  const DLIST<TRACK>* aTracks,
                                                                                  PICKED_ITEMS_LIST* aUndoRedoList
                                                                                ) :
-    TEARDROPS_TRACKS_PROGRESS( aParent, aTracks, aUndoRedoList ), 
+    TEARDROPS_TRACKS_PROGRESS( aParent, aTracks, aUndoRedoList ),
     TRACKS_PROGRESS_REMOVE_TEARS_VIAS( aParent, aTracks, aUndoRedoList )
 {
     m_progress_title.Printf( _( "Removing T-Junctions" ) );
@@ -589,7 +589,7 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_ADD_JUNCTIONS::ExecuteItem( const BOARD_
     num_added = m_undoredo_items->GetCount() - num_added;
     return num_added;
 }
-    
+
 TEARDROPS::TRACKS_PROGRESS_REMOVE_JUNCTIONS::TRACKS_PROGRESS_REMOVE_JUNCTIONS( const TEARDROPS* aParent,
                                                                                const DLIST<TRACK>* aTracks,
                                                                                PICKED_ITEMS_LIST* aUndoRedoList
@@ -643,7 +643,7 @@ void TEARDROPS::TRACKS_PROGRESS_CHANGE_JUNCTIONS::ExecuteEnd( void )
 
 TEARDROPS::TRACKS_PROGRESS_LOCK_SAME::TRACKS_PROGRESS_LOCK_SAME( const TEARDROPS* aParent,
                                                                  const DLIST<TRACK>* aTracks,
-                                                                 const TEARDROP::PARAMS aParams 
+                                                                 const TEARDROP::PARAMS aParams
                                                                ) :
     TEARDROPS_TRACKS_PROGRESS( aParent, aTracks, nullptr )
 {
@@ -664,7 +664,7 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_LOCK_SAME::ExecuteItem( const BOARD_ITEM
     }
     return 0;
 }
-    
+
 TEARDROPS::TRACKS_PROGRESS_UNLOCK_SAME::TRACKS_PROGRESS_UNLOCK_SAME( const TEARDROPS* aParent,
                                                                      const DLIST<TRACK>* aTracks,
                                                                      const TEARDROP::PARAMS aParams
@@ -878,7 +878,7 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_DIFF::ExecuteItem( const BOARD_ITEM
                 hit = true;
                 break;
             }
-        
+
         if( !hit )
         {
             int warning_code = 0;

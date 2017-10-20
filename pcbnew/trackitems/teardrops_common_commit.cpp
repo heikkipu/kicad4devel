@@ -52,7 +52,7 @@ TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::NET_SCAN_VIA_COLLECTCOMMIT( const VIA* aV
 }
 
 bool TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::ExecuteAt( TRACK* aTrackSeg )
-{    
+{
     if( aTrackSeg->Type() == PCB_TRACE_T )
     {
         TEARDROP* tear = dynamic_cast<TEARDROPS*>( m_Parent )->GetTeardrop( aTrackSeg, m_via );
@@ -151,6 +151,6 @@ void TEARDROPS::GalRemovedListAdd( const TEARDROP* aTear )
 {
     if( aTear )
         if( aTear->Type() == PCB_TEARDROP_T )
-            m_gal_removed_list->insert( const_cast<TEARDROP*>( aTear ) ); 
+            m_gal_removed_list->insert( const_cast<TEARDROP*>( aTear ) );
 }
 

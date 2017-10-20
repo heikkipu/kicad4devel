@@ -36,9 +36,9 @@ TRACKNODEITEMS::TRACKNODEITEMS( const TRACKITEMS* aParent, const BOARD* aBoard )
     m_Parent = const_cast<TRACKITEMS*>( aParent );
     m_EditFrame = nullptr;
     m_menu = nullptr;
-    
+
     m_get_list = new TrackNodeItem_Container;
-    m_get_list->clear(); 
+    m_get_list->clear();
 }
 
 TRACKNODEITEMS::~TRACKNODEITEMS()
@@ -105,7 +105,7 @@ STATUS_FLAGS TRACKNODEITEMS::DRC_Flags( const STATUS_FLAGS aStatus )
 
 
 //----------------------------------------------------------------------------------------
-// PLUGIN PARSE 
+// PLUGIN PARSE
 //----------------------------------------------------------------------------------------
 
 TRACK* TRACKNODEITEMS::GetTrackSegment( const wxPoint aStart,
@@ -150,7 +150,7 @@ TRACKNODEITEM* TRACKNODEITEMS::Get( const TRACK* aTrackSegAt, const wxPoint& aPo
                 unsigned int dist_pos = hypot( abs( pos.y - aPosAt.y ),
                                                abs( pos.x - aPosAt.x ) );
 
-                if( ( dist_pos < min_dist ) && 
+                if( ( dist_pos < min_dist ) &&
                     ( ( dist_center < item->GetBoundingRad() ) || ( aPosAt == pos ) ) )
                 {
                     min_dist = dist_pos;
@@ -186,21 +186,21 @@ void TRACKNODEITEMS::AddGetList( const TRACK* aTrackSegFrom )
         {
             TRACKNODEITEM* item = Next( aTrackSegFrom );
             if( item )
-                m_get_list->insert( item ); 
+                m_get_list->insert( item );
 
             item = Back( aTrackSegFrom );
             if( item )
-                m_get_list->insert( item ); 
+                m_get_list->insert( item );
         }
         else
             if( dynamic_cast<TRACKNODEITEM*>( const_cast<TRACK*>( aTrackSegFrom ) ) )
-                m_get_list->insert( static_cast<TRACKNODEITEM*>( const_cast<TRACK*>( aTrackSegFrom ) ) ); 
+                m_get_list->insert( static_cast<TRACKNODEITEM*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
     }
 }
 //------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------
-// Menus 
+// Menus
 //----------------------------------------------------------------------------------------
 
 

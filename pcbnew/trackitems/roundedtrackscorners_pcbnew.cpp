@@ -27,7 +27,7 @@ using namespace TrackNodeItem;
 
 
 //-----------------------------------------------------------------------------------------------------/
-// PROGRESS ( ALL CORNERS ) OPERATIONS 
+// PROGRESS ( ALL CORNERS ) OPERATIONS
 //-----------------------------------------------------------------------------------------------------/
 // Add all teracks
 void ROUNDEDTRACKSCORNERS::Add( const DLIST<TRACK>* aTracksAt )
@@ -54,7 +54,7 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS::ROUNDEDTRACKSCO
     const ROUNDEDTRACKSCORNERS* aParent,
     const DLIST<TRACK>* aTracks,
     PICKED_ITEMS_LIST* aUndoRedoList
-) : 
+) :
     ROUNDEDTRACKSCORNERS_PROGRESS( aParent, aTracks, aUndoRedoList )
 {
     m_progress_title.Printf( _( "Adding Rounded Corners" ) );
@@ -126,7 +126,7 @@ unsigned int ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS:
         else
             break;
     }
-    
+
     if( aItemAt->Type() == PCB_TRACE_T )
     {
         TRACK* track = static_cast<TRACK*>( const_cast<BOARD_ITEM*>( aItemAt ) );
@@ -156,7 +156,7 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS::ROUNDEDTRACK
     const ROUNDEDTRACKSCORNERS* aParent,
     const DLIST<TRACK>* aTracks,
     PICKED_ITEMS_LIST* aUndoRedoList
-) : 
+) :
     ROUNDEDTRACKSCORNERS_PROGRESS( aParent, aTracks, aUndoRedoList )
 {
     m_tracks = const_cast<DLIST<TRACK>*>( aTracks );
@@ -204,8 +204,8 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN::ROUNDEDTRACKSCORNERS_
     const ROUNDEDTRACKSCORNERS* aParent,
     const DLIST<TRACK>* aTracks,
     PICKED_ITEMS_LIST* aUndoRedoList
-) : 
-    ROUNDEDTRACKSCORNERS_PROGRESS( aParent, aTracks, aUndoRedoList ), 
+) :
+    ROUNDEDTRACKSCORNERS_PROGRESS( aParent, aTracks, aUndoRedoList ),
     ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS( aParent, aTracks, aUndoRedoList )
 {
     m_can_cancel = false;

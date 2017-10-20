@@ -549,7 +549,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             m_board->TrackItems()->Teardrops()->Parse( this );
             break;
 #endif
-            
+
         default:
             wxString err;
             err.Printf( _( "unknown token \"%s\"" ), GetChars( FromUTF8() ) );

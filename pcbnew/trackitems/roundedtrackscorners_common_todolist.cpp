@@ -70,7 +70,7 @@ void ROUNDEDTRACKSCORNERS::UpdateListAdd( const TRACK* aTrackSegFrom )
     {
 
         if( aTrackSegFrom->Type() == PCB_ROUNDEDTRACKSCORNER_T )
-            UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSegFrom ) ) ); 
+            UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
 
         if( dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSegFrom ) ) )
         {
@@ -78,11 +78,11 @@ void ROUNDEDTRACKSCORNERS::UpdateListAdd( const TRACK* aTrackSegFrom )
 
             TRACKNODEITEM* item = Next( aTrackSegFrom );
             if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-                UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( item ) ); 
+                UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
 
             item = Back( aTrackSegFrom );
             if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-                UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( item ) ); 
+                UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
         }
     }
 }

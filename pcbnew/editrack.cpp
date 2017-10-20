@@ -73,7 +73,7 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
     pcb->TrackItems()->RoundedTracksCorners()->RouteCreate_Stop();
     pcb->TrackItems()->Edittrack_Clear();
 #endif
-    
+
     if( track )
     {
         // Erase the current drawing
@@ -169,7 +169,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
                 GetBoard()->TrackItems()->RoundedTracksCorners()->Update(trackOnStartPoint, m_canvas, aDC, GR_XOR, true);
                 GetBoard()->TrackItems()->RoundedTracksCorners()->Update(new_track, m_canvas, aDC, GR_XOR, true);
-                
+
                 if( !g_Track_45_Only_Allowed )
                     GetBoard()->TrackItems()->Edittrack_Init(trackOnStartPoint, pos);
 #else
@@ -228,17 +228,17 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         if( g_Track_45_Only_Allowed )
         {
             if( via )
-                GetBoard()->TrackItems()->Teardrops()->Add( g_CurrentTrackSegment, via, 
+                GetBoard()->TrackItems()->Teardrops()->Add( g_CurrentTrackSegment, via,
                                               &g_CurrentTrackList, false );
             if( pad )
             {
-                GetBoard()->TrackItems()->Teardrops()->Add( g_CurrentTrackSegment, pad, 
+                GetBoard()->TrackItems()->Teardrops()->Add( g_CurrentTrackSegment, pad,
                                               &g_CurrentTrackList, false );
                 g_FirstTrackSegment->start = pad;
             }
         }
 #endif
-        
+
         if( g_TwoSegmentTrackBuild )
         {
             // Create 2nd segment
@@ -261,17 +261,17 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         if( !g_Track_45_Only_Allowed )
         {
             if( via )
-               GetBoard()->TrackItems()->Teardrops()->Add( g_CurrentTrackSegment, via, 
+               GetBoard()->TrackItems()->Teardrops()->Add( g_CurrentTrackSegment, via,
                                              &g_CurrentTrackList, false );
             if( pad )
             {
-               GetBoard()->TrackItems()->Teardrops()->Add( g_CurrentTrackSegment, pad, 
+               GetBoard()->TrackItems()->Teardrops()->Add( g_CurrentTrackSegment, pad,
                                              &g_CurrentTrackList, false );
                 g_FirstTrackSegment->start = pad;
             }
         }
 #endif
-        
+
         DBG( g_CurrentTrackList.VerifyListIntegrity(); );
 
         SetMsgPanel( g_CurrentTrackSegment );
@@ -317,7 +317,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             CanCreateNewSegment = false;
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if(!GetBoard()->TrackItems()->RoundedTracksCorners()->IsOn() && 
+        if(!GetBoard()->TrackItems()->RoundedTracksCorners()->IsOn() &&
             g_TwoSegmentTrackBuild && g_CurrentTrackSegment->IsNull())
             CanCreateNewSegment = false;
 #endif
@@ -384,7 +384,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             if( g_Track_45_Only_Allowed && !g_TwoSegmentTrackBuild )
                 if(GetBoard()->TrackItems()->RoundedTracksCorners()->GetEditCorner())
                     GetBoard()->TrackItems()->RoundedTracksCorners()->GetEditCorner()->Draw(m_canvas, aDC, GR_XOR, wxPoint(0,0));
-                
+
             lockPoint = GetBoard()->GetLockPoint( pos, layerMask );
             if( lockPoint )
             {
@@ -615,14 +615,14 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
             wxPoint hp = g_CurrentTrackSegment->GetEnd();
 #ifdef PCBNEW_WITH_TRACKITEMS
             TRACK* n_tr = GetBoard()->CreateLockPoint( hp, (TRACK*) lockPoint, &s_ItemsListPicker );
-            
+
             GetBoard()->TrackItems()->RoundedTracksCorners()->Update(static_cast<TRACK*>(lockPoint), m_canvas, aDC, GR_XOR, true);
             GetBoard()->TrackItems()->RoundedTracksCorners()->Update(n_tr, m_canvas, aDC, GR_XOR, true);
 #else
             lockPoint = GetBoard()->CreateLockPoint( hp, (TRACK*) lockPoint, &s_ItemsListPicker );
 #endif
             g_CurrentTrackSegment->SetEnd(hp);
-            
+
         }
     }
 
@@ -638,7 +638,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
         int    newCount   = g_CurrentTrackList.GetCount();
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        GetBoard()->TrackItems()->Teardrops()->Remove( netcode, TEARDROPS::ALL_TYPES_T, 
+        GetBoard()->TrackItems()->Teardrops()->Remove( netcode, TEARDROPS::ALL_TYPES_T,
                                          &s_ItemsListPicker, true );
         GetBoard()->TrackItems()->RoundedTracksCorners()->Remove( netcode, &s_ItemsListPicker, true );
         std::set<TRACK*> added_tracksegs;
@@ -923,11 +923,11 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
             DrawViaCirclesWhenEditingNewTrack( panelClipBox, aDC, g_CurrentTrackSegment->GetEnd(),
                                                boardViaRadius, viaRadiusWithClearence, color);
         }
-        
+
 #ifdef PCBNEW_WITH_TRACKITEMS
         if( !g_Track_45_Only_Allowed )
-            pcb->TrackItems()->Angles( g_CurrentTrackSegment, 
-                                                               g_CurrentTrackSegment->GetEnd(), 
+            pcb->TrackItems()->Angles( g_CurrentTrackSegment,
+                                                               g_CurrentTrackSegment->GetEnd(),
                                                                aPanel, aDC );
 #endif
     }
@@ -989,8 +989,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     if( !g_Track_45_Only_Allowed )
-        pcb->TrackItems()->Angles( g_CurrentTrackSegment, 
-                                                           g_CurrentTrackSegment->GetEnd(), 
+        pcb->TrackItems()->Angles( g_CurrentTrackSegment,
+                                                           g_CurrentTrackSegment->GetEnd(),
                                                            aPanel, aDC );
     TrackNodeItem::ROUNDEDTRACKSCORNER* arc_cor = nullptr;
     if(pcb->TrackItems()->RoundedTracksCorners()->IsOn())
@@ -1008,7 +1008,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks_Route( aPanel, aDC, false );
         pcb->TrackItems()->Teardrops()->UpdateListClear();
         pcb->TrackItems()->Teardrops()->UpdateListAdd( pcb->TrackItems()->RoundedTracksCorners()->UpdateList_GetUpdatedTracks() );
-        pcb->TrackItems()->Teardrops()->UpdateListDo_Route( aPanel, aDC, aErase );       
+        pcb->TrackItems()->Teardrops()->UpdateListDo_Route( aPanel, aDC, aErase );
     }
     else
         pcb->TrackItems()->Teardrops()->Update(g_CurrentTrackSegment->Back());
@@ -1016,7 +1016,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                                                     g_CurrentTrackSegment,
                                                     boardViaRadius, aErase,
                                                     &g_Track_45_Only_Allowed );
-    
+
     if(!pcb->TrackItems()->RoundedTracksCorners()->IsOn())
 #endif
     DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
@@ -1079,7 +1079,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                 trackLen += dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track)->GetLengthVisible();
             else
                 trackLen += track->GetLength(); //TEARDROPS too. Always 0.
-        
+
     if(arc_cor)
         trackLen += arc_cor->GetLengthVisible();
 #else
@@ -1303,8 +1303,8 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
             firsttrack = track;
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        pcb->TrackItems()->Teardrops()->Remove( oldtrack, false, true ); 
-        pcb->TrackItems()->RoundedTracksCorners()->Remove( oldtrack, false, true ); 
+        pcb->TrackItems()->Teardrops()->Remove( oldtrack, false, true );
+        pcb->TrackItems()->RoundedTracksCorners()->Remove( oldtrack, false, true );
         pcb->TrackItems()->BestInsertPointSpeeder()->Remove( oldtrack );
 #endif
 

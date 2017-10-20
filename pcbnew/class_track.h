@@ -455,17 +455,17 @@ public:
     //Stitch vias
     int GetThermalCode( void ) const { return m_thermal; }
     void SetThermalCode( const int aThermalCode ) { m_thermal = aThermalCode; }
-    std::vector<ZONE_CONTAINER*>* GetThermalZones( void ) { 
+    std::vector<ZONE_CONTAINER*>* GetThermalZones( void ) {
         return &m_thermal_zones;
     }
-    void SetThermalZones( std::vector<ZONE_CONTAINER*>& aZones ) { 
+    void SetThermalZones( std::vector<ZONE_CONTAINER*>& aZones ) {
         m_thermal_zones.swap(aZones);
     }
     std::unordered_map<const SHAPE_POLY_SET::POLYGON*, ZONE_CONTAINER*>* GetThermalPolysZones( void ) {
-        return &m_thermal_polys_zones; 
+        return &m_thermal_polys_zones;
     }
     void SetThermalPolysZones( std::unordered_map<const SHAPE_POLY_SET::POLYGON*, ZONE_CONTAINER*>& aPolyZone ) {
-        m_thermal_polys_zones.swap( aPolyZone ); 
+        m_thermal_polys_zones.swap( aPolyZone );
     }
 #endif
 

@@ -29,7 +29,7 @@
 #ifndef ROUNDEDTRACKSCORNER_H
 #define ROUNDEDTRACKSCORNER_H
 
-#include "tracknodeitem.h" 
+#include "tracknodeitem.h"
 
 
 namespace TrackNodeItem
@@ -50,17 +50,17 @@ namespace TrackNodeItem
             unsigned int length_set; //if 0 m_length_set value depends on m_Width;
             int length_ratio;
             int num_segments;
-            bool operator==( const PARAMS& aComp ) const 
+            bool operator==( const PARAMS& aComp ) const
             {
-                if( ( length_ratio == aComp.length_ratio ) && 
-                    ( num_segments == aComp.num_segments ) && 
+                if( ( length_ratio == aComp.length_ratio ) &&
+                    ( num_segments == aComp.num_segments ) &&
                     ( length_set == aComp.length_set ) )
                 {
                     return true;
                 }
                 return false;
             }
-            bool operator!=( const PARAMS& aComp ) const 
+            bool operator!=( const PARAMS& aComp ) const
             {
                 return !( *this == aComp );
             }
@@ -79,7 +79,7 @@ namespace TrackNodeItem
         wxString GetClass() const override { return wxT( "ROUNDEDTRACKSCORNER" ); } //override TRACK.
         EDA_ITEM* Clone() const override; //override TRACK.
         const EDA_RECT GetBoundingBox() const override; //override TRACK.
-        const wxPoint& GetPosition() const override { return m_mid_pos; } 
+        const wxPoint& GetPosition() const override { return m_mid_pos; }
 
         void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                    int aClearanceValue,
@@ -88,7 +88,7 @@ namespace TrackNodeItem
                                                  ) const override; //override TRACK.
 
         wxString GetSelectMenuText() const override; //override TRACK.
-        void AddTo3DContainer( CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits ) override;        
+        void AddTo3DContainer( CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits ) override;
 
         void SetParams( const PARAMS aParams );
         PARAMS GetParams( void ) const;
@@ -142,7 +142,7 @@ namespace TrackNodeItem
 
         int m_length_ratio;
         int m_num_arc_segs;
-        unsigned int m_length_set; 
+        unsigned int m_length_set;
 
         wxPoint m_pos {0,0};
         wxPoint m_pos_start {0,0};   // = m_seg_points[0]. Arc starting point : m_trackseg side.
@@ -153,7 +153,7 @@ namespace TrackNodeItem
         unsigned int m_trackseg_second_length;
         bool m_trackseg_second_startpos_is_pos;
 
-        //Own drawing modes. 
+        //Own drawing modes.
         bool m_drawmode_unfill {false};     //Graphic Edit.
 
         bool m_set_ok {true};
@@ -162,7 +162,7 @@ namespace TrackNodeItem
         void SetTracksVisibleEndpoints( void );         //Set ROUNDEDCORNERTRACK Visible points:
         int m_num_arc_outer_points;
 
-        unsigned int m_trackseg_arced_length;       //segments arced length 
+        unsigned int m_trackseg_arced_length;       //segments arced length
         double m_angle_btw_tracks;          //Angle between tracks;
         double m_angle_inner_btw_tracks;    //Inner side between tracks angle.
         double m_angle_inner_half;          //Inner half angle;

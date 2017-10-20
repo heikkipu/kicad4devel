@@ -374,7 +374,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         }
     }
 #endif
-    
+
     // Add graphic items
     layerMask = LSET( Edge_Cuts );
 
@@ -592,6 +592,8 @@ void PCB_EDIT_FRAME::Block_Delete()
 #ifdef PCBNEW_WITH_TRACKITEMS
         case PCB_TEARDROP_T:
         case PCB_ROUNDEDTRACKSCORNER_T:
+            if( dynamic_cast<TRACK*>(item) )
+                GetBoard()->TrackItems()->BestInsertPointSpeeder()->Remove( static_cast<TRACK*>(item) );
 #endif
             item->UnLink();
             break;
@@ -690,7 +692,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
 #ifdef PCBNEW_WITH_TRACKITEMS
     m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo_BlockRotate(itemsList);
 #endif
-    
+
     // Save all the block items in there current state before applying the rotation.
     SaveCopyInUndoList( *itemsList, UR_CHANGED, centre );
 
@@ -706,7 +708,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
     m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo();
     m_Pcb->TrackItems()->Teardrops()->UpdateListDo();
 #endif
-    
+
     Compile_Ratsnest( NULL, true );
     m_canvas->Refresh( true );
 }
@@ -728,7 +730,7 @@ void PCB_EDIT_FRAME::Block_Flip()
     m_Pcb->TrackItems()->Teardrops()->UpdateListClear();
     m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListClear();
 #endif
-    
+
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
@@ -806,7 +808,7 @@ void PCB_EDIT_FRAME::Block_Move()
     m_Pcb->TrackItems()->Teardrops()->UpdateListClear();
     m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListClear();
 #endif
-    
+
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
@@ -853,7 +855,7 @@ void PCB_EDIT_FRAME::Block_Move()
             m_Pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( static_cast<TRACK*>(item) );
             break;
 #endif
- 
+
         default:
             wxMessageBox( wxT( "PCB_EDIT_FRAME::Block_Move( ) error: unexpected type" ) );
             break;
@@ -913,7 +915,7 @@ void PCB_EDIT_FRAME::Block_Duplicate( bool aIncrement )
         if( newitem )
         {
             newitem->Move( MoveVector );
-            
+
 #ifdef PCBNEW_WITH_TRACKITEMS
             if( newitem->Type() == PCB_TEARDROP_T )
                 m_Pcb->TrackItems()->Teardrops()->UpdateListAdd( static_cast<TrackNodeItem::TEARDROP*>(newitem) );

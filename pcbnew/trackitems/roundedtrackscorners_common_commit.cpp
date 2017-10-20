@@ -29,7 +29,7 @@ void ROUNDEDTRACKSCORNERS::GalRemovedListAdd( const ROUNDEDTRACKSCORNER* aCorner
 {
     if( aCorner )
         if( aCorner->Type() == PCB_ROUNDEDTRACKSCORNER_T )
-            m_gal_removed_list->insert( const_cast<ROUNDEDTRACKSCORNER*>( aCorner ) ); 
+            m_gal_removed_list->insert( const_cast<ROUNDEDTRACKSCORNER*>( aCorner ) );
 }
 
 

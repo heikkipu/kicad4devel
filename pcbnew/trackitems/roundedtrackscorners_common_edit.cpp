@@ -29,7 +29,7 @@ using namespace TrackNodeItem;
 
 void ROUNDEDTRACKSCORNERS::ToggleEdit( const TO_EDIT_T aEdit )
 {
-    if( m_track_edit_corner )  
+    if( m_track_edit_corner )
     {
         if( m_can_edit && aEdit )
         {
@@ -80,7 +80,7 @@ void ROUNDEDTRACKSCORNERS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
                                            const wxPoint& aOffset
                                          ) const
 {
-    if( m_track_edit_corner ) 
+    if( m_track_edit_corner )
     {
         TRACK* segm = m_track_edit_corner->GetTrackSeg();
         if( segm )
@@ -93,7 +93,7 @@ void ROUNDEDTRACKSCORNERS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
             wxPoint txt_n_pos  = txt_t_pos;
             txt_n_pos.y += txt_size;
 
-            wxString txt_t, txt_n; 
+            wxString txt_t, txt_n;
             txt_n.Printf( _( "%s" ), m_EditFrame->LengthDoubleToString( m_edit_params.length_set, true ) );
             txt_t.Printf( _( "%d%s" ), m_edit_params.length_ratio, _( "%" ) );
 
@@ -106,7 +106,7 @@ void ROUNDEDTRACKSCORNERS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
                              wxSize( txt_size, txt_size ),
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
                              txt_size / 7,
-                             false, 
+                             false,
                              false );
             DrawGraphicText( eRect,
                              aDC,
@@ -150,7 +150,7 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit( EDA_DRAW_PANEL* aPan
         DestroyRouteEdit();
         return nullptr;
     }
-    
+
     if( m_can_edit )
     {
         bool erase = aErase;
@@ -165,7 +165,7 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit( EDA_DRAW_PANEL* aPan
             m_track45Only = aTrack45Only;
             if( m_track_edit_corner )
             {
-                if( !m_track_edit_corner->IsCreatedOK() )   
+                if( !m_track_edit_corner->IsCreatedOK() )
                 {
                     delete m_track_edit_corner;
                     m_track_edit_corner = nullptr;
@@ -198,7 +198,7 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit( EDA_DRAW_PANEL* aPan
                             }
                             case EDIT_LENGTH_RATIO_T:
                             {
-                                m_edit_params.length_ratio = double( dist ) / 25000.0; 
+                                m_edit_params.length_ratio = double( dist ) / 25000.0;
                                 break;
                             }
                             default:;
