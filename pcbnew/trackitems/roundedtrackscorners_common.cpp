@@ -851,7 +851,7 @@ void ROUNDEDTRACKSCORNERS::Update( TRACK* aTrackSegAt,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Update( const int aNetCode )
+void ROUNDEDTRACKSCORNERS::Update( const int aNetCode, const TRACK* aTrackSegAt )
 {
     DLIST<TRACK>* tracks_list = &m_Board->m_Track;
     TRACK* track = tracks_list->GetFirst()->GetStartNetCode( aNetCode );

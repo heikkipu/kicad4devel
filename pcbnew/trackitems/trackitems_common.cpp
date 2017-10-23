@@ -949,11 +949,10 @@ TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode ) cons
 {
     if( aNetCode && m_Board->m_Track )
     {
-        TRACK* item = nullptr;
-        int netcode = aNetCode;
-
         if( aNetCode >= m_Board->m_Track->GetNetCode() )
         {
+            TRACK* item = nullptr;
+
             if( m_best_insert_point_items.size() > aNetCode )
             {
                 item = m_best_insert_point_items[aNetCode];
@@ -961,6 +960,7 @@ TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode ) cons
                     return item;
             }
 
+            int netcode = + 1;
             while( netcode < m_best_insert_point_items.size() )
             {
                 item = m_best_insert_point_items[netcode];

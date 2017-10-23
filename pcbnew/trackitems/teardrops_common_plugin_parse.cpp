@@ -23,6 +23,10 @@
 
 #include "teardrops.h"
 
+#ifdef NEWCONALGO
+#include <unit_format.h>
+#endif
+
 using namespace TrackNodeItem;
 
 

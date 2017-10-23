@@ -949,7 +949,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetBoard()->TrackItems()->Teardrops()->Remove( static_cast<MODULE*>(GetCurItem()), &pickedItems, true );
             picker.SetItem( GetCurItem() );
             pickedItems.PushItem( picker );
-            SaveCopyInUndoList( pickedItems, UR_CHANGED, 
+            SaveCopyInUndoList( pickedItems, UR_CHANGED,
                                 static_cast<MODULE*>(GetCurItem())->GetPosition() );
         }
 #else
@@ -990,7 +990,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetBoard()->TrackItems()->Teardrops()->Remove( static_cast<MODULE*>(GetCurItem()), &pickedItems, true );
             picker.SetItem( GetCurItem() );
             pickedItems.PushItem( picker );
-            SaveCopyInUndoList( pickedItems, UR_CHANGED, 
+            SaveCopyInUndoList( pickedItems, UR_CHANGED,
                                 static_cast<MODULE*>(GetCurItem())->GetPosition() );
         }
 #else
@@ -1031,7 +1031,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetBoard()->TrackItems()->Teardrops()->Remove( static_cast<MODULE*>(GetCurItem()), &pickedItems, true );
             picker.SetItem( GetCurItem() );
             pickedItems.PushItem( picker );
-            SaveCopyInUndoList( pickedItems, UR_FLIPPED, 
+            SaveCopyInUndoList( pickedItems, UR_FLIPPED,
                                 static_cast<MODULE*>(GetCurItem())->GetPosition() );
         }
 #else
@@ -1168,7 +1168,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList( GetCurItem()->GetParent(), UR_CHANGED );
 #endif
         DeletePad( (D_PAD*) GetCurItem() );
-        
+
 #ifdef PCBNEW_WITH_TRACKITEMS
         D_PAD* still_pad = GetBoard()->GetPadFast( pad_data.GetPosition(), pad_data.GetLayerSet() );
         if( still_pad == pad_delete )
@@ -1496,15 +1496,15 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             unsigned int index = 0;
             if( GetCurItem() && GetCurItem()->Type() == PCB_MARKER_T )
             {
-                for( MARKER_PCB* curma : GetBoard()->m_markers ) 
+                for( MARKER_PCB* curma : GetBoard()->m_markers )
                 {
                     index++;
                     if( static_cast<MARKER_PCB*>(GetCurItem()) == curma )
                         break;
                 }
-                        
+
             }
-            
+
             if( index >= GetBoard()->m_markers.size() )
                 index = 0;
 
@@ -1523,7 +1523,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_PLACE_ZONE_BLIND_BURIED_VIA:
     case ID_POPUP_PCB_SEL_LAYERS_AND_PLACE_ZONE_BLIND_BURIED_VIA:
     case ID_POPUP_PCB_SEL_LAYER_AND_PLACE_ZONE_THROUGH_VIA:
-        GetBoard()->ViaStitching()->AddThermalVia( this, id ); 
+        GetBoard()->ViaStitching()->AddThermalVia( this, id );
         break;
 
     case ID_POPUP_PCB_CREATE_VIA_ARRAY:
@@ -1532,13 +1532,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             const VIA* via = static_cast<const VIA*>(GetCurItem());
             if(dynamic_cast<const VIA*>(via)->GetThermalCode())
             {
-                GetBoard()->ViaStitching()->AddViaArrayPrepare( this, via ); 
-                createArray(); 
-                GetBoard()->ViaStitching()->AddViaArrayFinnish(); 
+                GetBoard()->ViaStitching()->AddViaArrayPrepare( this, via );
+                createArray();
+                GetBoard()->ViaStitching()->AddViaArrayFinnish();
             }
         }
         break;
-            
+
     //Teardrops
     case ID_POPUP_PCB_TEARDROP_COPYCURRENT:
         if( GetCurItem() )
@@ -1552,32 +1552,32 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_TEARDROP_LOCK_TOGGLE:
         if( GetCurItem() )
         {
-            GetBoard()->TrackItems()->Teardrops()->LockToggle( static_cast<TRACK*>(GetCurItem()), 
+            GetBoard()->TrackItems()->Teardrops()->LockToggle( static_cast<TRACK*>(GetCurItem()),
                                                                GetCrossHairPosition() );
             OnModify();
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_LOCK_ALL_SAME:
         if( GetCurItem() )
         {
-            GetBoard()->TrackItems()->Teardrops()->Lock( static_cast<TRACK*>(GetCurItem()), 
+            GetBoard()->TrackItems()->Teardrops()->Lock( static_cast<TRACK*>(GetCurItem()),
                                                          GetCrossHairPosition(),
                                                          &GetBoard()->m_Track);
             OnModify();
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_UNLOCK_ALL_SAME:
         if( GetCurItem() )
         {
-            GetBoard()->TrackItems()->Teardrops()->Unlock( static_cast<TRACK*>(GetCurItem()), 
+            GetBoard()->TrackItems()->Teardrops()->Unlock( static_cast<TRACK*>(GetCurItem()),
                                                            GetCrossHairPosition(),
                                                            &GetBoard()->m_Track);
             OnModify();
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_LOCK_NET:
         if( GetCurItem() )
         {
@@ -1589,7 +1589,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_UNLOCK_NET:
         if( GetCurItem() )
         {
@@ -1601,32 +1601,32 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_LOCK_MODULES_ALL:
         GetBoard()->TrackItems()->Teardrops()->Lock(&GetBoard()->m_Modules);
         OnModify();
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_UNLOCK_MODULES_ALL:
         GetBoard()->TrackItems()->Teardrops()->Unlock(&GetBoard()->m_Modules);
         OnModify();
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_LOCK_VIAS_ALL:
         GetBoard()->TrackItems()->Teardrops()->Lock( &GetBoard()->m_Track, TEARDROPS::ONLY_TEARDROPS_T );
         OnModify();
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_UNLOCK_VIAS_ALL:
         GetBoard()->TrackItems()->Teardrops()->Unlock( &GetBoard()->m_Track, TEARDROPS::ONLY_TEARDROPS_T );
         OnModify();
         break;
-        
+
     case  ID_POPUP_PCB_TJUNCTIONS_LOCK_ALL:
         GetBoard()->TrackItems()->Teardrops()->Lock(&GetBoard()->m_Track, TEARDROPS::ONLY_TJUNCTIONS_T);
         OnModify();
         break;
-        
+
     case  ID_POPUP_PCB_TJUNCTIONS_UNLOCK_ALL:
         GetBoard()->TrackItems()->Teardrops()->Unlock(&GetBoard()->m_Track, TEARDROPS::ONLY_TJUNCTIONS_T);
         OnModify();
@@ -1655,7 +1655,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 }
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_UNLOCK_MODULE:
         if( GetCurItem() )
         {
@@ -1678,7 +1678,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             OnModify();
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_UNLOCK:
         if( GetCurItem() )
         {
@@ -1700,7 +1700,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         GetBoard()->TrackItems()->Teardrops()->LoadDefaultParams(
             GetBoard()->TrackItems()->Teardrops()->GetCurrentShape());
         break;
-        
+
     case ID_POPUP_PCB_TEARDROP_SELECT_TEARDROP:
         GetBoard()->TrackItems()->Teardrops()->SelectShape(TrackNodeItem::TEARDROP::TEARDROP_T);
         break;
@@ -1712,11 +1712,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_TEARDROP_SELECT_SUBLAND:
         GetBoard()->TrackItems()->Teardrops()->SelectShape(TrackNodeItem::TEARDROP::SUBLAND_T);
         break;
-        
+
     case ID_POPUP_PCB_TEARDROP_SELECT_ZERO:
         GetBoard()->TrackItems()->Teardrops()->SelectShape(TrackNodeItem::TEARDROP::ZERO_T);
         break;
-        
+
     case ID_POPUP_PCB_TEARDROP_SIZE_LENGTH_FIRST:
     case ID_POPUP_PCB_TEARDROP_SIZE_LENGTH_FIRST + 1:
     case ID_POPUP_PCB_TEARDROP_SIZE_LENGTH_FIRST + 2:
@@ -1749,7 +1749,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_TEARDROP_NUM_SEGMENTS_LAST:
         GetBoard()->TrackItems()->Teardrops()->MenuToDo_ChangeSize( id );
         break;
-    
+
     case ID_POPUP_PCB_TEARDROP_PLACE:
         if( GetCurItem() )
         {
@@ -1787,7 +1787,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             OnModify();
         }
         break;
-    
+
     case ID_POPUP_PCB_TEARDROP_DELETE:
         if( GetCurItem() )
         {
@@ -1807,12 +1807,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             OnModify();
         }
         break;
-    
+
     case ID_POPUP_PCB_TEARDROPS_PLACE_NET:
         if( GetCurItem() )
         {
             m_canvas->MoveCursorToCrossHair();
-            GetBoard()->TrackItems()->Teardrops()->Add( static_cast<TRACK*>(GetCurItem())->GetNetCode(), 
+            GetBoard()->TrackItems()->Teardrops()->Add( static_cast<TRACK*>(GetCurItem())->GetNetCode(),
                                           TEARDROPS::ONLY_TEARDROPS_T );
             OnModify();
         }
@@ -1851,7 +1851,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 }
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_CHANGE_MODULE:
         if( GetCurItem() )
         {
@@ -1865,7 +1865,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 }
         }
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_DELETE_MODULE:
         if( GetCurItem() )
         {
@@ -1879,7 +1879,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 }
         }
         break;
-        
+
     case ID_POPUP_PCB_TJUNCTIONS_PLACE_NET:
         if( GetCurItem() )
         {
@@ -1925,7 +1925,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             m_canvas->MoveCursorToCrossHair();
             GetBoard()->TrackItems()->Teardrops()->Change( static_cast<TRACK*>(GetCurItem())->GetNetCode(),
-                                             TEARDROPS::ONLY_JUNCTIONS_T 
+                                             TEARDROPS::ONLY_JUNCTIONS_T
                                            );
             OnModify();
         }
@@ -1945,37 +1945,37 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         GetBoard()->TrackItems()->Teardrops()->Add(&GetBoard()->m_Modules);
         OnModify();
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_CHANGE_MODULES_ALL:
         GetBoard()->TrackItems()->Teardrops()->Change(&GetBoard()->m_Modules);
         OnModify();
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_DELETE_MODULES_ALL:
         GetBoard()->TrackItems()->Teardrops()->Remove(&GetBoard()->m_Modules);
         OnModify();
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_PLACE_VIAS_ALL:
         GetBoard()->TrackItems()->Teardrops()->Add( &GetBoard()->m_Track, TEARDROPS::ONLY_TEARDROPS_T );
         OnModify();
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_CHANGE_VIAS_ALL:
         GetBoard()->TrackItems()->Teardrops()->Change( &GetBoard()->m_Track, TEARDROPS::ONLY_TEARDROPS_T );
         OnModify();
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_DELETE_VIAS_ALL:
         GetBoard()->TrackItems()->Teardrops()->Remove( &GetBoard()->m_Track, TEARDROPS::ONLY_TEARDROPS_T );
         OnModify();
         break;
-        
+
     case  ID_POPUP_PCB_TJUNCTIONS_PLACE_ALL:
         GetBoard()->TrackItems()->Teardrops()->Add(&GetBoard()->m_Track, TEARDROPS::ONLY_TJUNCTIONS_T);
         OnModify();
         break;
-        
+
     case  ID_POPUP_PCB_TJUNCTIONS_CHANGE_ALL:
         GetBoard()->TrackItems()->Teardrops()->Change(&GetBoard()->m_Track, TEARDROPS::ONLY_TJUNCTIONS_T);
         OnModify();
@@ -2004,33 +2004,33 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_TEARDROPS_MARK_WARNINGS_MODULES:
         GetBoard()->TrackItems()->Teardrops()->MarkWarnings(&GetBoard()->m_Modules, m_drc);
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_MARK_WARNINGS_TEARDROPS_VIAS:
     case ID_POPUP_PCB_TEARDROPS_MARK_WARNINGS_TJUNCTIONS:
     case ID_POPUP_PCB_TEARDROPS_MARK_WARNINGS_JUNCTIONS:
         GetBoard()->TrackItems()->Teardrops()->MarkWarnings(&GetBoard()->m_Track, TEARDROPS::TEARDROPS_TYPE_TODO(TEARDROPS::ONLY_TEARDROPS_T + id - ID_POPUP_PCB_TEARDROPS_MARK_WARNINGS_TEARDROPS_VIAS), m_drc);
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_MARK_DIFF_MODULES:
         GetBoard()->TrackItems()->Teardrops()->MarkDifferent(&GetBoard()->m_Track, TEARDROPS::ONLY_PAD_TEARDROPS_T, m_drc);
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_MARK_DIFF_TEARDROPS_VIAS:
     case ID_POPUP_PCB_TEARDROPS_MARK_DIFF_TJUNCTIONS:
     case ID_POPUP_PCB_TEARDROPS_MARK_DIFF_JUNCTIONS:
         GetBoard()->TrackItems()->Teardrops()->MarkDifferent(&GetBoard()->m_Track, TEARDROPS::TEARDROPS_TYPE_TODO(TEARDROPS::ONLY_TEARDROPS_T + id - ID_POPUP_PCB_TEARDROPS_MARK_DIFF_TEARDROPS_VIAS), m_drc);
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_MARK_CURR_MODULES:
         GetBoard()->TrackItems()->Teardrops()->MarkCurrent(&GetBoard()->m_Track, TEARDROPS::ONLY_PAD_TEARDROPS_T, m_drc);
         break;
-        
+
     case ID_POPUP_PCB_TEARDROPS_MARK_CURR_TEARDROPS_VIAS:
     case ID_POPUP_PCB_TEARDROPS_MARK_CURR_TJUNCTIONS:
     case ID_POPUP_PCB_TEARDROPS_MARK_CURR_JUNCTIONS:
         GetBoard()->TrackItems()->Teardrops()->MarkCurrent(&GetBoard()->m_Track, TEARDROPS::TEARDROPS_TYPE_TODO(TEARDROPS::ONLY_TEARDROPS_T + id - ID_POPUP_PCB_TEARDROPS_MARK_CURR_TEARDROPS_VIAS), m_drc);
         break;
-        
+
     case ID_POPUP_PCB_VIA_PICK_SIZE:
         if(GetCurItem()->Type() == PCB_VIA_T)
         {
@@ -2038,7 +2038,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             updateViaSizeSelectBox();
         }
         break;
-        
+
     case ID_POPUP_PCB_TRACK_PICK_WIDTH:
         if(GetCurItem()->Type() == PCB_TRACE_T)
         {
@@ -2046,11 +2046,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             updateTraceWidthSelectBox();
         }
         break;
-    
+
     case ID_POPUP_PCB_TRACKS_MARK_SHARP_ANGLES:
         GetBoard()->TrackItems()->MarkSharpAngles(&GetBoard()->m_Track, m_drc);
         break;
-        
+
     case ID_POPUP_PCB_TRACKS_CONNECT_CENTER_IN_ITEM:
         GetBoard()->TrackItems()->FixTrackConnectionsInCenter(&GetBoard()->m_Track);
         OnModify();
@@ -2119,10 +2119,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             OnModify();
         }
         break;
-        
+
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CHANGE_ALL:
         break;
-        
+
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT:
         if( GetCurItem() )
         {
@@ -2156,7 +2156,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_RATIO_LAST:
         GetBoard()->TrackItems()->RoundedTracksCorners()->MenuToDo_ChangeSize( id );
         break;
-    
+
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SET_DEFAULT_PARAMS:
         GetBoard()->TrackItems()->RoundedTracksCorners()->LoadDefaultParams();
         break;
@@ -2175,7 +2175,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->MoveCursorToCrossHair();
             GetBoard()->TrackItems()->RoundedTracksCorners()->ConvertSegmentedCorners( static_cast<TRACK*>(GetCurItem()),
                                                                                        true );
-            GetBoard()->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(GetCurItem())->GetNetCode() );
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(GetCurItem())->GetNetCode(),
+                                                                      static_cast<TRACK*>(GetCurItem()) );
             if( static_cast<TRACK*>(GetCurItem())->GetNetCode() > 0 )
                 TestNetConnection( nullptr, static_cast<TRACK*>(GetCurItem())->GetNetCode() );
             OnModify();
@@ -2187,13 +2188,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             m_canvas->MoveCursorToCrossHair();
             GetBoard()->TrackItems()->RoundedTracksCorners()->ConvertSegmentedCorners( static_cast<TRACK*>(GetCurItem())->GetNetCode(), true );
-            GetBoard()->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(GetCurItem())->GetNetCode() );
+            GetBoard()->TrackItems()->RoundedTracksCorners()->Update( static_cast<TRACK*>(GetCurItem())->GetNetCode(),
+                                                                      static_cast<TRACK*>(GetCurItem()) );
             if( static_cast<TRACK*>(GetCurItem())->GetNetCode() > 0 )
                 TestNetConnection( nullptr, static_cast<TRACK*>(GetCurItem())->GetNetCode() );
             OnModify();
         }
         break;
-#endif        
+#endif
 
     default:
         wxString msg;

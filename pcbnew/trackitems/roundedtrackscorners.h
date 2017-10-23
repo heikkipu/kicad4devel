@@ -184,7 +184,7 @@ private:
 //-----------------------------------------------------------------------------------------------------/
 public:
     void Update( const BOARD_ITEM* aItemAt );
-    void Update( const int aNetCode );
+    void Update( const int aNetCode, const TRACK* aTrackSegAt );
     void Update( const TRACK* aTrackSegAt );
     void Update( TRACK* aTrackSegAt,
                  EDA_DRAW_PANEL* aPanel,
