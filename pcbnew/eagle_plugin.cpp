@@ -73,6 +73,9 @@ Load() TODO's
 #include <class_dimension.h>
 
 #include <eagle_plugin.h>
+#ifdef PCBNEW_WITH_TRACKITEMS
+#include "trackitems/trackitems.h"
+#endif
 
 using namespace std;
 
@@ -1698,6 +1701,9 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     t->SetNetCode( netCode );
 
                     m_board->m_Track.Insert( t, NULL );
+#ifdef PCBNEW_WITH_TRACKITEMS
+                    m_board->TrackItems()->BestInsertPointSpeeder()->Insert( t );
+#endif
                 }
                 else
                 {
@@ -1722,6 +1728,9 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     int  drillz = kicad( v.drill );
                     VIA* via = new VIA( m_board );
                     m_board->m_Track.Insert( via, NULL );
+#ifdef PCBNEW_WITH_TRACKITEMS
+                    m_board->TrackItems()->BestInsertPointSpeeder()->Insert( via );
+#endif
 
                     via->SetLayerPair( layer_front_most, layer_back_most );
 

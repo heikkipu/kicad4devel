@@ -47,6 +47,9 @@
 #include <protos.h>
 #include <autorout.h>
 #include <cell.h>
+#ifdef PCBNEW_WITH_TRACKITEMS
+#include <trackitems/trackitems.h>
+#endif
 
 static int Autoroute_One_Track( AUTOROUTER_CONTEXT& ctx,
                                 int             two_sides,
@@ -1322,6 +1325,9 @@ static void AddNewTrace( AUTOROUTER_CONTEXT& ctx )
         ITEM_PICKER picker( track, UR_NEW );
         s_ItemsListPicker.PushItem( picker );
         ctx.board->m_Track.Insert( track, insertBeforeMe );
+#ifdef PCBNEW_WITH_TRACKITEMS
+        ctx.board->TrackItems()->BestInsertPointSpeeder()->Insert( track );
+#endif
     }
 
     DrawTraces( panel, ctx.dc, firstTrack, newCount, GR_OR );
