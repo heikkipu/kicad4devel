@@ -24,6 +24,10 @@
 #include "viastitching.h"
 #include "trackitems.h"
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 using namespace ViaStitching;
 
 
@@ -141,7 +145,7 @@ void VIASTITCHING::AddViaArrayPrepare( const PCB_EDIT_FRAME* aEditFrame, const V
 #endif
     {
         //Do not add pads in same netcode
-        m_via_array_netcode_pads = m_board->TrackItems()->GetPads( m_via_array_netcode );
+        m_via_array_netcode_pads = m_Board->TrackItems()->GetPads( m_via_array_netcode );
         for( auto pad : m_via_array_netcode_pads )
             pad->SetNetCode( 0 ); //Mark them diff netcode
     }
@@ -221,7 +225,7 @@ void VIASTITCHING::SetNetcodes( const std::unordered_map<const VIA*, int>& aVias
         {
             // Set thermalcode unconnected via inside zone.
 #ifdef NEWCONALGO
-            auto connity = m_board->GetConnectivity();
+            auto connity = m_Board->GetConnectivity();
             auto via_tracks = connity->GetConnectedTracks( via );
             if( ( netcode_was && !netcode ) ||
                 ( netcode_was && netcode && ( netcode_was == netcode ) && via_tracks.empty() ) )
@@ -249,11 +253,11 @@ void VIASTITCHING::SetNetcodes( void )
     std::unordered_map<const VIA*, int> collected_vias;
     collected_vias.clear();
 
-    for( TRACK* t = m_board->m_Track;  t;  t = t->Next() )
+    for( TRACK* t = m_Board->m_Track;  t;  t = t->Next() )
     {
         const VIA* via = dynamic_cast<const VIA*>( t );
 #ifdef NEWCONALGO
-        auto connity = m_board->GetConnectivity();
+        auto connity = m_Board->GetConnectivity();
         auto via_tracks = connity->GetConnectedTracks( via );
         if( via  &&
             ( dynamic_cast<const VIA*>( via )->GetThermalCode() ||
@@ -279,7 +283,7 @@ void VIASTITCHING::SetNetcodes( void )
 void VIASTITCHING::ConnectToZones( void )
 {
     //Connect unconnected single vias in copper pours.
-    if( m_board->GetAreaCount() )
+    if( m_Board->GetAreaCount() )
     {
         //Collect all vias that has no netcode and vias with thermal code.
         //Via map with flag that it has been examined.
@@ -290,7 +294,7 @@ void VIASTITCHING::ConnectToZones( void )
         std::vector<const VIA*> other_zone_vias;
         other_zone_vias.clear();
 
-        for( TRACK* t = m_board->m_Track;  t;  t = t->Next() )
+        for( TRACK* t = m_Board->m_Track;  t;  t = t->Next() )
         {
             const VIA* via = dynamic_cast<const VIA*>( t );
             if( via )
@@ -365,7 +369,7 @@ void VIASTITCHING::ConnectToZones( void )
 
                     //Test pad connectivity.
                     bool hit = false;
-                    std::vector<D_PAD*> test_pads = m_board->TrackItems()->GetPads( thermalcode );
+                    std::vector<D_PAD*> test_pads = m_Board->TrackItems()->GetPads( thermalcode );
 
                     for( auto& poly: vias_polys )
                     {
@@ -574,12 +578,12 @@ void VIASTITCHING::Collect_Zones_Hit_Pos( std::vector<ZONE_CONTAINER*>& aZones,
                                           const LAYER_NUM aLayerOnly
                                         )
 {
-    int num_areas = m_board->GetAreaCount();
+    int num_areas = m_Board->GetAreaCount();
     aZones.clear();
 
     for( int area_index = 0; area_index < num_areas; area_index++ )
     {
-        ZONE_CONTAINER* area  = m_board->GetArea( area_index );
+        ZONE_CONTAINER* area  = m_Board->GetArea( area_index );
         if( area )
         {
             LAYER_NUM area_layer = area->GetLayer();
@@ -831,7 +835,7 @@ bool VIASTITCHING::DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame )
             if( g_Drc_On )
 #endif
                 hit_drc = dynamic_cast<PCB_EDIT_FRAME*>( aFrame )->GetDrcController()->Drc( static_cast<TRACK*>( aItem ),
-                                                                                            m_board->m_Track );
+                                                                                            m_Board->m_Track );
 
             if( !zones.size() || hit_drc )
             {
@@ -881,12 +885,10 @@ ZONE_CONTAINER* ViaStitching::HitTestZone( const BOARD* aPcb, const wxPoint aPos
 //-----------------------------------------------------------------------------------------------------/
 // Show wia in via tool mode.
 //-----------------------------------------------------------------------------------------------------/
-void VIASTITCHING::StartDrawingVia( const PCB_EDIT_FRAME* aEditFrame,
-                                    const EDA_DRAW_PANEL* aPanel,
+void VIASTITCHING::StartDrawingVia( const EDA_DRAW_PANEL* aPanel,
                                     wxDC* aDC
                                   )
 {
-    m_EditFrame = const_cast<PCB_EDIT_FRAME*>( aEditFrame );
     m_draw_panel = const_cast<EDA_DRAW_PANEL*>( aPanel );
     m_dc = const_cast<wxDC*>( aDC );
     m_draw_panel->SetMouseCapture( ViaStitching::DrawMovingVia, ViaStitching::StopDrawingVia );
@@ -1070,6 +1072,107 @@ void ViaStitching::StopDrawingVia( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
                  via_settings.color,
                  via_settings.text,
                  via_settings.rad<<1 );
+}
+
+//-----------------------------------------------------------------------------------------------------/
+
+//-----------------------------------------------------------------------------------------------------/
+//Zone filling and stitch via connection.
+//-----------------------------------------------------------------------------------------------------/
+void VIASTITCHING::FillZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame )
+{
+    const_cast<BOARD*>(m_Board)->m_Zone.DeleteAll();
+
+#ifdef NEWCONALGO
+    auto connity = m_Board->GetConnectivity();
+    connity->RecalculateRatsnest();
+    m_Board->ViaStitching()->SetNetcodes();
+#else
+    aEditFrame->Compile_Ratsnest( nullptr, false );
+#endif
+
+    std::vector<ZONE_CONTAINER*> zones;
+    for( int n = 0; n < m_Board->GetAreaCount(); ++n )
+    {
+        ZONE_CONTAINER* zoneContainer = m_Board->GetArea( n );
+        if( !zoneContainer->GetIsKeepout() )
+            zones.push_back(zoneContainer);
+    }
+
+    wxProgressDialog * progressDialog = NULL;
+    if( aActiveWindow )
+        progressDialog = new wxProgressDialog( _( "Fill All Zones" ),
+                                               _("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
+                                               4, aActiveWindow,
+                                               wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
+                                               wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
+
+    if( progressDialog )
+        progressDialog->Update( 1, _( "Filling..." ) );
+
+    for(int n = 0; n < 2; n++)     //Via Stitching: Fill pours twice.
+    {
+#ifndef NEWCONALGO
+#ifdef _OPENMP
+        #pragma omp parallel for schedule(dynamic)
+#endif
+#endif
+        for( int m = 0; m < zones.size(); ++m )
+        {
+            ZONE_CONTAINER* zone = zones[m];
+#ifdef NEWCONALGO
+            if( !n )
+            {
+                zone->ClearFilledPolysList();
+                zone->UnFill();
+                zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board), nullptr, false );
+            }
+            else
+                zone->TestForCopperIslandAndRemoveInsulatedIslands( const_cast<BOARD*>(m_Board) );
+#else
+            zone->ClearFilledPolysList();
+            zone->UnFill();
+            zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board) );
+#endif
+            if( aEditFrame->IsGalCanvasActive() )
+                aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
+#ifdef NEWCONALGO
+            m_Board->GetConnectivity()->Update( zone );
+#else
+            m_Board->GetRatsnest()->Update( zone );
+#endif
+            aEditFrame->OnModify();
+        }
+
+        if( progressDialog )
+           n? progressDialog->Update( 4, _( "Updating ratsnest..." ) ) :
+           progressDialog->Update( 2, _( "Calculate copper pour conneections..." ) );
+
+#ifdef NEWCONALGO
+        if( !n )
+            ConnectToZones();
+        SetNetcodes();
+#else
+        n? SetNetcodes() : ConnectToZones();
+#endif
+
+        if( progressDialog && !n )
+            progressDialog->Update( 3, _( "Cleaning insulated areas..." ) );
+    }
+#ifdef NEWCONALGO
+    connity->RecalculateRatsnest();
+#else
+    aEditFrame->Compile_Ratsnest( nullptr, false );
+#endif
+
+    if( progressDialog )
+    {
+#ifdef __WXMAC__
+        // Work around a dialog z-order issue on OS X
+        aActiveWindow->Raise();
+#endif
+        progressDialog->Destroy();
+    }
 }
 
 //-----------------------------------------------------------------------------------------------------/

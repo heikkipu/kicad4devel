@@ -81,6 +81,7 @@ unsigned int ITEMS_PROGRESS_BASE::Execute( void )
 {
     if( m_list_first_item )
     {
+        m_progress_style |= wxPD_ELAPSED_TIME;
         if( m_can_cancel )
         {
             m_progress_style |= wxPD_CAN_ABORT;

@@ -2399,7 +2399,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 #ifdef PCBNEW_WITH_TRACKITEMS
     case ID_PCB_DRAW_VIA_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Via Stitching" ) );
-        GetBoard()->ViaStitching()->StartDrawingVia( this, m_canvas, &dc );
+        GetBoard()->ViaStitching()->StartDrawingVia( m_canvas, &dc );
         break;
 #endif
 

@@ -28,7 +28,7 @@ using namespace ViaStitching;
 
 VIASTITCHING::VIASTITCHING( const BOARD* aBoard )
 {
-    m_board = aBoard;
+    m_Board = aBoard;
 }
 
 VIASTITCHING::~VIASTITCHING()

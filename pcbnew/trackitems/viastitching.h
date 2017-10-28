@@ -94,7 +94,7 @@ protected:
     VIASTITCHING(){};
 
 private:
-    const BOARD* m_board;
+    const BOARD* m_Board;
 
     //VIATYPE_T m_viatype{VIA_THROUGH};
     int m_via_array_netcode {0};
@@ -124,13 +124,21 @@ private:
     bool IsTrackConnection( const VIA* aVia, const int aNetcode );
 
     TRACK* ViaBreakTrack( const TRACK* aStartingTrack, const VIA* aVia );
+//-----------------------------------------------------------------------------------------------------/
+
+//-----------------------------------------------------------------------------------------------------/
+//Zone filling and stitch via connection.
+//-----------------------------------------------------------------------------------------------------/
+public:
+    void FillZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame );
+//-----------------------------------------------------------------------------------------------------/
+
 
 //-----------------------------------------------------------------------------------------------------/
 // Show wia in via tool mode.
 //-----------------------------------------------------------------------------------------------------/
 public:
-    void StartDrawingVia( const PCB_EDIT_FRAME* aEditFrame,
-                          const EDA_DRAW_PANEL* aPanel,
+    void StartDrawingVia( const EDA_DRAW_PANEL* aPanel,
                           wxDC* aDC
                         );
 
@@ -151,15 +159,15 @@ struct VIA_SETTINGS
     void SetDrawViaPrevPos( wxPoint aPos ) { m_via_prev_pos = aPos; }
 
 private:
-    PCB_EDIT_FRAME* m_EditFrame;
     EDA_DRAW_PANEL* m_draw_panel;
     wxDC* m_dc;
 
     wxPoint m_via_prev_pos {0,0};
     VIA_SETTINGS m_current_settings;
-//-----------------------------------------------------------------------------------------------------/
+
 
 }; //VIASTITCHING
+//-----------------------------------------------------------------------------------------------------/
 
 
 namespace ViaStitching
