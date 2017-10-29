@@ -1103,66 +1103,83 @@ void VIASTITCHING::FillZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFra
     if( aActiveWindow )
         progressDialog = new wxProgressDialog( _( "Fill All Zones" ),
                                                _("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
-                                               4, aActiveWindow,
+                                               5, aActiveWindow,
                                                wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
                                                wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
 
     if( progressDialog )
         progressDialog->Update( 1, _( "Filling..." ) );
 
+#ifdef NEWCONALGO
+#ifdef _OPENMP
+    #pragma omp parallel for schedule(dynamic)
+#endif
+    for( int m = 0; m < zones.size(); ++m )
+    {
+        ZONE_CONTAINER* zone = zones[m];
+        zone->ClearFilledPolysList();
+        zone->UnFill();
+        zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board), nullptr, false );
+    }
+
+    for( auto zone : zones )
+        m_Board->GetConnectivity()->Update( zone );
+
+    if( progressDialog )
+        progressDialog->Update( 2, _( "Calculate copper pour connections..." ) );
+
+    ConnectToZones();
+    SetNetcodes();
+
+    if( progressDialog )
+        progressDialog->Update( 3, _( "Cleaning insulated areas..." ) );
+
+    for( int m = 0; m < zones.size(); ++m )
+    {
+        ZONE_CONTAINER* zone = zones[m];
+        zone->TestForCopperIslandAndRemoveInsulatedIslands( const_cast<BOARD*>(m_Board) );
+        if( aEditFrame->IsGalCanvasActive() )
+            aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
+    }
+
+    if( progressDialog )
+        progressDialog->Update( 4, _( "Updating ratsnest..." ) );
+
+    connity->RecalculateRatsnest();
+
+#else
     for(int n = 0; n < 2; n++)     //Via Stitching: Fill pours twice.
     {
-#ifndef NEWCONALGO
 #ifdef _OPENMP
         #pragma omp parallel for schedule(dynamic)
-#endif
 #endif
         for( int m = 0; m < zones.size(); ++m )
         {
             ZONE_CONTAINER* zone = zones[m];
-#ifdef NEWCONALGO
-            if( !n )
-            {
-                zone->ClearFilledPolysList();
-                zone->UnFill();
-                zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board), nullptr, false );
-            }
-            else
-                zone->TestForCopperIslandAndRemoveInsulatedIslands( const_cast<BOARD*>(m_Board) );
-#else
             zone->ClearFilledPolysList();
             zone->UnFill();
             zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board) );
-#endif
-            if( aEditFrame->IsGalCanvasActive() )
-                aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
-#ifdef NEWCONALGO
-            m_Board->GetConnectivity()->Update( zone );
-#else
-            m_Board->GetRatsnest()->Update( zone );
-#endif
-            aEditFrame->OnModify();
         }
 
-        if( progressDialog )
-           n? progressDialog->Update( 4, _( "Updating ratsnest..." ) ) :
-           progressDialog->Update( 2, _( "Calculate copper pour conneections..." ) );
+        if( n )
+            for( auto zone : zones )
+            {
+                m_Board->GetRatsnest()->Update( zone );
+                if( aEditFrame->IsGalCanvasActive() )
+                    aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
+            }
 
-#ifdef NEWCONALGO
-        if( !n )
-            ConnectToZones();
-        SetNetcodes();
-#else
+        if( progressDialog )
+            n? progressDialog->Update( 4, _( "Updating ratsnest..." ) ) :
+                progressDialog->Update( 2, _( "Calculate copper pour connections..." ) );
+
         n? SetNetcodes() : ConnectToZones();
-#endif
 
         if( progressDialog && !n )
             progressDialog->Update( 3, _( "Cleaning insulated areas..." ) );
     }
-#ifdef NEWCONALGO
-    connity->RecalculateRatsnest();
-#else
     aEditFrame->Compile_Ratsnest( nullptr, false );
+
 #endif
 
     if( progressDialog )
@@ -1173,6 +1190,8 @@ void VIASTITCHING::FillZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFra
 #endif
         progressDialog->Destroy();
     }
+
+    aEditFrame->OnModify();
 }
 
 //-----------------------------------------------------------------------------------------------------/
