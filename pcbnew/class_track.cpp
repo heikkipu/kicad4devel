@@ -512,8 +512,7 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     Track =GetBoard()->TrackItems()->BestInsertPointSpeeder()->GetItem( NetCode );
-    if( ( Track->GetNetCode() < GetNetCode() ) ||
-        ( Track->GetNetCode() > NetCode ) )
+    if( Track->GetNetCode() != NetCode )
         Track = this;
 #endif
 
@@ -551,8 +550,7 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     Track =GetBoard()->TrackItems()->BestInsertPointSpeeder()->GetItem( NetCode );
-    if( ( Track->GetNetCode() < GetNetCode() ) ||
-        ( Track->GetNetCode() > NetCode ) )
+    if( Track->GetNetCode() != NetCode )
         Track = this;
 #endif
 

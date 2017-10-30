@@ -868,7 +868,7 @@ bool VIASTITCHING::SelectLayer( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos )
     return false;
 }
 
-ZONE_CONTAINER* ViaStitching::HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer )
+ZONE_CONTAINER* VIASTITCHING::HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer )
 {
     int num_areas = aPcb->GetAreaCount();
     for( int area_index = 0; area_index < num_areas; area_index++ )
@@ -1079,7 +1079,7 @@ void ViaStitching::StopDrawingVia( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 //-----------------------------------------------------------------------------------------------------/
 //Zone filling and stitch via connection.
 //-----------------------------------------------------------------------------------------------------/
-void VIASTITCHING::FillZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame )
+void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame )
 {
     const_cast<BOARD*>(m_Board)->m_Zone.DeleteAll();
 
@@ -1103,9 +1103,11 @@ void VIASTITCHING::FillZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFra
     if( aActiveWindow )
         progressDialog = new wxProgressDialog( _( "Fill All Zones" ),
                                                _("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
-                                               5, aActiveWindow,
-                                               wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
-                                               wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
+                                               5,
+                                               aActiveWindow,
+                                               wxPD_AUTO_HIDE |
+                                               wxPD_APP_MODAL |
+                                               wxPD_ELAPSED_TIME );
 
     if( progressDialog )
         progressDialog->Update( 1, _( "Filling..." ) );
@@ -1199,9 +1201,9 @@ void VIASTITCHING::FillZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFra
 //-----------------------------------------------------------------------------------------------------/
 //Via layer selector
 //-----------------------------------------------------------------------------------------------------/
-THROUGH_VIA_LAYER_SELECTOR::THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame,
-                                                        const wxPoint aPos
-                                                      ) :
+VIASTITCHING::THROUGH_VIA_LAYER_SELECTOR::THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame,
+                                                                      const wxPoint aPos
+                                                                    ) :
     VS_LAYER_SELECTOR( aEditFrame->GetBoard() ),
     DIALOG_LAYER_SELECTION_BASE( static_cast<wxWindow*>( aEditFrame ) )
 {
@@ -1217,7 +1219,7 @@ THROUGH_VIA_LAYER_SELECTOR::THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFra
     Center();
 }
 
-void THROUGH_VIA_LAYER_SELECTOR::buildList( void )
+void VIASTITCHING::THROUGH_VIA_LAYER_SELECTOR::buildList( void )
 {
     m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
     m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
@@ -1280,7 +1282,7 @@ void THROUGH_VIA_LAYER_SELECTOR::buildList( void )
 }
 
 
-void THROUGH_VIA_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
+void VIASTITCHING::THROUGH_VIA_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
 {
     m_layerSelected = m_layersIdLeftColumn[ event.GetRow() ];
     m_leftGridLayers->SetGridCursor( event.GetRow(), LAYERNAME_COLNUM );
@@ -1292,7 +1294,7 @@ void THROUGH_VIA_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
 
 //This event does never happens. Connected in DIALOG_LAYER_SELECTION_BASE.
 //Mabe other wx version or wxGrid removed in OnLeftGridCellClick at EndModal() before mouse released.
-void THROUGH_VIA_LAYER_SELECTOR::OnLeftButtonReleased( wxMouseEvent& event )
+void VIASTITCHING::THROUGH_VIA_LAYER_SELECTOR::OnLeftButtonReleased( wxMouseEvent& event )
 {
     EndModal( wxID_OK );
 }
@@ -1318,9 +1320,9 @@ bool VIASTITCHING::SelectLayerPair( PCB_EDIT_FRAME* aEditFrame, const wxPoint aP
 }
 
 
-BURIEDBLIND_VIA_LAYER_SELECTOR::BURIEDBLIND_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame,
-                                                                const wxPoint aPos
-                                                              ) :
+VIASTITCHING::BURIEDBLIND_VIA_LAYER_SELECTOR::BURIEDBLIND_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame,
+                                                                              const wxPoint aPos
+                                                                            ) :
     VS_LAYER_SELECTOR( aEditFrame->GetBoard() ),
     DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( static_cast<wxWindow*>( aEditFrame ) )
 {
@@ -1342,7 +1344,7 @@ BURIEDBLIND_VIA_LAYER_SELECTOR::BURIEDBLIND_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* 
 }
 
 
-void BURIEDBLIND_VIA_LAYER_SELECTOR::buildList()
+void VIASTITCHING::BURIEDBLIND_VIA_LAYER_SELECTOR::buildList()
 {
     m_leftGridLayers->SetColSize( COLOR_COLNUM, 20 );
     m_rightGridLayers->SetColSize( COLOR_COLNUM, 20 );
@@ -1389,7 +1391,9 @@ void BURIEDBLIND_VIA_LAYER_SELECTOR::buildList()
                 left_row++;
             }
 
-            zone = HitTestZone( m_frame->GetBoard(), m_pos, layerid );
+            zone = m_frame->GetBoard()->ViaStitching()->HitTestZone( m_frame->GetBoard(),
+                                                                     m_pos,
+                                                                     layerid );
             if( zone || ( layerid == F_Cu ) || ( layerid == B_Cu ) )
             {
                 netname = "";
@@ -1428,9 +1432,9 @@ void BURIEDBLIND_VIA_LAYER_SELECTOR::buildList()
 }
 
 
-void BURIEDBLIND_VIA_LAYER_SELECTOR::SetGridCursor( wxGrid* aGrid, int aRow,
-                                                    bool aEnable
-                                                  )
+void VIASTITCHING::BURIEDBLIND_VIA_LAYER_SELECTOR::SetGridCursor( wxGrid* aGrid, int aRow,
+                                                                  bool aEnable
+                                                                )
 {
     if( aEnable )
     {
@@ -1457,7 +1461,7 @@ void BURIEDBLIND_VIA_LAYER_SELECTOR::SetGridCursor( wxGrid* aGrid, int aRow,
 }
 
 
-void BURIEDBLIND_VIA_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
+void VIASTITCHING::BURIEDBLIND_VIA_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
 {
     int row = event.GetRow();
     PCB_LAYER_ID layer = m_left_layersId[row];
@@ -1472,7 +1476,7 @@ void BURIEDBLIND_VIA_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
 }
 
 
-void BURIEDBLIND_VIA_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
+void VIASTITCHING::BURIEDBLIND_VIA_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 {
     int row = event.GetRow();
     PCB_LAYER_ID layer = m_right_layersId[row];
@@ -1486,12 +1490,12 @@ void BURIEDBLIND_VIA_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
     SetGridCursor( m_rightGridLayers, m_rightRowSelected, true );
 }
 
-void BURIEDBLIND_VIA_LAYER_SELECTOR::OnOkClick( wxCommandEvent& event )
+void VIASTITCHING::BURIEDBLIND_VIA_LAYER_SELECTOR::OnOkClick( wxCommandEvent& event )
 {
     EndModal( wxID_OK );
 }
 
-void BURIEDBLIND_VIA_LAYER_SELECTOR::OnCancelClick( wxCommandEvent& event )
+void VIASTITCHING::BURIEDBLIND_VIA_LAYER_SELECTOR::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( wxID_CANCEL );
 }

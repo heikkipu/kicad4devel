@@ -77,28 +77,20 @@ public:
                         const bool aSelectLayer
                       ); //GAL
 
-    void AddViaArrayPrepare( const PCB_EDIT_FRAME* aEditFrame, const VIA* aVia );
-    void AddViaArrayFinnish( void );
-
     void RuleCheck( const TRACK* aTrack, DRC* aDRC );
 
     bool DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame );
     bool Clean( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit );
-
-    bool SelectLayer( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
-    bool SelectLayerPair( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
-
-    void ConnectToZones( void );
+    ZONE_CONTAINER* HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer );
 
 protected:
     VIASTITCHING(){};
 
 private:
-    const BOARD* m_Board;
+    const int MIN_THERMALVIA_ZONES = 1;
 
-    //VIATYPE_T m_viatype{VIA_THROUGH};
-    int m_via_array_netcode {0};
-    std::vector<D_PAD*> m_via_array_netcode_pads {nullptr};
+
+    const BOARD* m_Board;
 
     void Collect_Vias_Zones_Chain( std::unordered_multimap<const VIA*,
                                    const SHAPE_POLY_SET::POLYGON*>& aViasPolys,
@@ -127,10 +119,133 @@ private:
 //-----------------------------------------------------------------------------------------------------/
 
 //-----------------------------------------------------------------------------------------------------/
+//Array creation
+//-----------------------------------------------------------------------------------------------------/
+public:
+    void AddViaArrayPrepare( const PCB_EDIT_FRAME* aEditFrame, const VIA* aVia );
+    void AddViaArrayFinnish( void );
+
+private:
+    int m_via_array_netcode {0};
+    std::vector<D_PAD*> m_via_array_netcode_pads {nullptr};
+
+//-----------------------------------------------------------------------------------------------------/
+
+//-----------------------------------------------------------------------------------------------------/
+//Layer selector.
+//-----------------------------------------------------------------------------------------------------/
+public:
+    bool SelectLayer( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
+    bool SelectLayerPair( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
+
+private:
+    //Copy from sel_layer.cpp, because there where no header of this.
+    #define SELECT_COLNUM       0
+    #define COLOR_COLNUM        1
+    #define LAYERNAME_COLNUM    2
+
+    class VS_LAYER_SELECTOR: public LAYER_SELECTOR
+    {
+    public:
+        VS_LAYER_SELECTOR( BOARD* aBrd ) : LAYER_SELECTOR()
+        {
+            m_brd = aBrd;
+        }
+
+    protected:
+        BOARD*  m_brd;
+
+        bool IsLayerEnabled( LAYER_NUM aLayer ) const override
+        {
+            return m_brd->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
+        }
+
+        COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override
+        {
+    #ifdef NEWCONALGO
+            return m_brd->Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
+    #else
+            return m_brd->GetLayerColor( ToLAYER_ID( aLayer ) );
+    #endif
+        }
+
+        wxString GetLayerName( LAYER_NUM aLayer ) const override
+        {
+            return m_brd->GetLayerName( ToLAYER_ID( aLayer ) );
+        }
+    };
+
+    // Through via selection
+    class THROUGH_VIA_LAYER_SELECTOR : public VS_LAYER_SELECTOR, public DIALOG_LAYER_SELECTION_BASE
+    {
+        PCB_LAYER_ID m_layerSelected;
+        LSET m_notAllowedLayersMask;
+
+        std::vector<PCB_LAYER_ID> m_layersIdLeftColumn;
+
+    public:
+        THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
+
+        LAYER_NUM GetLayerSelection() { return m_layerSelected; }
+
+    protected:
+        void OnLeftGridCellClick( wxGridEvent& event ) override;
+        void OnLeftButtonReleased( wxMouseEvent& event ) override; //Does not work.wxBroblem?
+
+    private:
+        void buildList();
+
+        wxPoint m_pos{0,0};
+        PCB_EDIT_FRAME* m_frame{nullptr};
+    };
+
+    // Blind / Buried via selection.
+    class BURIEDBLIND_VIA_LAYER_SELECTOR : public VS_LAYER_SELECTOR, public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
+    {
+    private:
+        PCB_LAYER_ID m_frontLayer;
+        PCB_LAYER_ID m_backLayer;
+        int m_leftRowSelected;
+        int m_rightRowSelected;
+
+        std::vector<PCB_LAYER_ID> m_left_layersId;
+        std::vector<PCB_LAYER_ID> m_right_layersId;
+
+    public:
+        BURIEDBLIND_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
+
+        void GetLayerPair( PCB_LAYER_ID& aFrontLayer, PCB_LAYER_ID& aBackLayer )
+        {
+            aFrontLayer = m_frontLayer;
+            aBackLayer = m_backLayer;
+        }
+
+    protected:
+        void OnLeftGridCellClick( wxGridEvent& event ) override;
+        void OnRightGridCellClick( wxGridEvent& event ) override;
+
+        void OnOkClick( wxCommandEvent& event );
+        void OnCancelClick( wxCommandEvent& event ) override;
+
+    private:
+        void buildList();
+        void SetGridCursor( wxGrid* aGrid, int aRow, bool aEnable );
+
+        wxPoint m_pos{0,0};
+        PCB_EDIT_FRAME* m_frame{nullptr};
+    };
+
+//-----------------------------------------------------------------------------------------------------/
+
+//-----------------------------------------------------------------------------------------------------/
 //Zone filling and stitch via connection.
 //-----------------------------------------------------------------------------------------------------/
 public:
-    void FillZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame );
+    void FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame );
+
+private:
+    void ConnectToZones( void );
+
 //-----------------------------------------------------------------------------------------------------/
 
 
@@ -198,109 +313,6 @@ void DrawViaCircles( EDA_DRAW_PANEL* aPanel,
 VIASTITCHING::VIA_SETTINGS GetCurrentViaSettings( const PCB_EDIT_FRAME* aEditFrame );
 
 //-----------------------------------------------------------------------------------------------------/
-
-const int MIN_THERMALVIA_ZONES = 1;
-
-ZONE_CONTAINER* HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer );
-
-//-----------------------------------------------------------------------------------------------------/
-//Copy from sel_layer.cpp, because there where no header of this.
-//-----------------------------------------------------------------------------------------------------/
-#define SELECT_COLNUM       0
-#define COLOR_COLNUM        1
-#define LAYERNAME_COLNUM    2
-
-class VS_LAYER_SELECTOR: public LAYER_SELECTOR
-{
-public:
-    VS_LAYER_SELECTOR( BOARD* aBrd ) : LAYER_SELECTOR()
-    {
-        m_brd = aBrd;
-    }
-
-protected:
-    BOARD*  m_brd;
-
-    bool IsLayerEnabled( LAYER_NUM aLayer ) const override
-    {
-        return m_brd->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
-    }
-
-    COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override
-    {
-#ifdef NEWCONALGO
-        return m_brd->Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
-#else
-        return m_brd->GetLayerColor( ToLAYER_ID( aLayer ) );
-#endif
-    }
-
-    wxString GetLayerName( LAYER_NUM aLayer ) const override
-    {
-        return m_brd->GetLayerName( ToLAYER_ID( aLayer ) );
-    }
-};
-
-// Through via selection
-class THROUGH_VIA_LAYER_SELECTOR : public VS_LAYER_SELECTOR, public DIALOG_LAYER_SELECTION_BASE
-{
-    PCB_LAYER_ID m_layerSelected;
-    LSET m_notAllowedLayersMask;
-
-    std::vector<PCB_LAYER_ID> m_layersIdLeftColumn;
-
-public:
-    THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
-
-    LAYER_NUM GetLayerSelection() { return m_layerSelected; }
-
-protected:
-    void OnLeftGridCellClick( wxGridEvent& event ) override;
-    void OnLeftButtonReleased( wxMouseEvent& event ) override; //Does not work.wxBroblem?
-
-private:
-    void buildList();
-
-    wxPoint m_pos{0,0};
-    PCB_EDIT_FRAME* m_frame{nullptr};
-};
-
-// Blind / Buried via selection.
-class BURIEDBLIND_VIA_LAYER_SELECTOR : public VS_LAYER_SELECTOR, public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
-{
-private:
-    PCB_LAYER_ID m_frontLayer;
-    PCB_LAYER_ID m_backLayer;
-    int m_leftRowSelected;
-    int m_rightRowSelected;
-
-    std::vector<PCB_LAYER_ID> m_left_layersId;
-    std::vector<PCB_LAYER_ID> m_right_layersId;
-
-public:
-    BURIEDBLIND_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos );
-
-    void GetLayerPair( PCB_LAYER_ID& aFrontLayer, PCB_LAYER_ID& aBackLayer )
-    {
-        aFrontLayer = m_frontLayer;
-        aBackLayer = m_backLayer;
-    }
-
-protected:
-    void OnLeftGridCellClick( wxGridEvent& event ) override;
-    void OnRightGridCellClick( wxGridEvent& event ) override;
-
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event ) override;
-
-private:
-    void buildList();
-    void SetGridCursor( wxGrid* aGrid, int aRow, bool aEnable );
-
-    wxPoint m_pos{0,0};
-    PCB_EDIT_FRAME* m_frame{nullptr};
-};
-
 
 } //namespace Via_Stitching
 

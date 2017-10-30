@@ -135,7 +135,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
     int errorLevel = 0;
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    GetBoard()->ViaStitching()->FillZones( aActiveWindow, this );
+    GetBoard()->ViaStitching()->FillAndConnectZones( aActiveWindow, this );
 #else
     int areaCount = GetBoard()->GetAreaCount();
     wxBusyCursor dummyCursor;
