@@ -114,14 +114,20 @@ TRACK* TRACKNODEITEMS::GetTrackSegment( const wxPoint aStart,
                                         const int aNetCode
                                       ) const
 {
-    TRACK* track_seg = m_Board->m_Track; //GetTrack();
-    while( track_seg )
+    //First try to find fast
+    TRACK* track_seg = m_Board->TrackItems()->BestInsertPointSpeeder()->GetItem( aNetCode );
+    for( int n = 0; n < 2; ++n )
     {
-        if( track_seg->GetNetCode() == aNetCode )
-            if( track_seg->GetLayer() == aLayer )
-                if( ( track_seg->GetStart() == aStart ) && ( track_seg->GetEnd() == aEnd ) )
-                    return track_seg;
-        track_seg = track_seg->Next();
+        while( track_seg )
+        {
+            if( track_seg->GetNetCode() == aNetCode )
+                if( track_seg->GetLayer() == aLayer )
+                    if( ( track_seg->GetStart() == aStart ) && ( track_seg->GetEnd() == aEnd ) )
+                        return track_seg;
+            track_seg = track_seg->Next();
+        }
+        //If did not find fast, then very beggining of the list.
+        track_seg = m_Board->m_Track;
     }
     return nullptr;
 }

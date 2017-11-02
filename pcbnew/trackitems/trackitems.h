@@ -449,7 +449,7 @@ private:
         }
         ~BEST_INSERT_POINT_SPEEDER(){;}
 
-        TRACK* GetItem( const int aNetCode ) const;
+        TRACK* GetItem( const int aNetCode );
         void Insert( const TRACK* aTrackItem );
         void Remove( const TRACK* aTrackItem );
 
@@ -457,6 +457,7 @@ private:
         BEST_INSERT_POINT_SPEEDER(){;}
         const BOARD* m_Board{nullptr};
         std::vector<TRACK*> m_best_insert_point_items;
+        TRACK* GetAndSync( const int aNetCode );
 
     };
 
@@ -467,6 +468,17 @@ public:
     {
         return m_BestInsertPointSpeeder;
     }
+
+//---------------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------------
+// Sort tracks by netcode.
+//---------------------------------------------------------------------------------------------------
+public:
+    void SortTracks( void );
+
+private:
+
 
 //---------------------------------------------------------------------------------------------------
 

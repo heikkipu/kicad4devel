@@ -776,7 +776,13 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     // Save the tracks and vias.
     for( TRACK* track = aBoard->m_Track;  track; track = track->Next() )
+#ifdef PCBNEW_WITH_TRACKITEMS
+        //Do not save thermal vias at this time. Save them last.
+        if( !((track->Type() == PCB_VIA_T) && dynamic_cast<VIA*>(track)->GetThermalCode()))
+            Format( track, aNestLevel );
+#else
         Format( track, aNestLevel );
+#endif
 
     if( aBoard->m_Track.GetCount() )
         m_out->Print( 0, "\n" );
@@ -791,6 +797,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 #ifdef PCBNEW_WITH_TRACKITEMS
     aBoard->TrackItems()->RoundedTracksCorners()->Format( m_out, aNestLevel );
     aBoard->TrackItems()->Teardrops()->Format( m_out, aNestLevel );
+    //Seve thermal vias here.
+    for( TRACK* track = aBoard->m_Track;  track; track = track->Next() )
+        if( ((track->Type() == PCB_VIA_T) && dynamic_cast<VIA*>(track)->GetThermalCode()))
+            Format( track, aNestLevel );
 #endif
 }
 
