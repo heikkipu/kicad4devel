@@ -1060,45 +1060,40 @@ void TRACKITEMS::BEST_INSERT_POINT_SPEEDER::Remove( const TRACK* aTrackItem )
 //---------------------------------------------------------------------------------------------------
 // Sort tracks by netcode
 //---------------------------------------------------------------------------------------------------
-//Copy from old connectivity algo.
-static bool SortByNetCode( const TRACK* const & ref, const TRACK* const & compare )
-{
-    // For items having the same Net, keep the order in list
-    if( ref->GetNetCode() == compare->GetNetCode())
-        return ref->m_Param < compare->m_Param;
-
-    return ref->GetNetCode() < compare->GetNetCode();
-}
-
 void TRACKITEMS::SortTracks( void )
 {
     if( m_Board->m_Track )
     {
-        int item_count = m_Board->m_Track.GetCount();
+        int num_items = m_Board->m_Track.GetCount();
 
-        std::vector<TRACK*> trackList;
-        trackList.reserve( item_count );
+        std::vector<TRACK*> tracks;
+        tracks.reserve( num_items );
 
-        for( int ii = 0; ii < item_count; ++ii )
+        for( int n = 0; n < num_items; ++n )
         {
-            m_Board->m_Track->m_Param = ii;
-            trackList.push_back( m_Board->m_Track.PopFront() );
+            m_Board->m_Track->m_Param = n;
+            tracks.push_back( m_Board->m_Track.PopFront() );
         }
 
-        // the list is empty now
-        wxASSERT( m_Board->m_Track == NULL && m_Board->m_Track.GetCount()==0 );
+        auto rule = [] ( const TRACK* ref, const TRACK* cmp )
+        {
+            if( ref->GetNetCode() == cmp->GetNetCode())
+                return ref->m_Param < cmp->m_Param;
 
-        sort( trackList.begin(), trackList.end(), SortByNetCode );
+            return ref->GetNetCode() < cmp->GetNetCode();
+        };
+
+        std::sort( tracks.begin(), tracks.end(), rule );
 
         int prev_netcode = -1;
-        for( int i = 0; i < item_count;  ++i )
+        for( int n = 0; n < num_items;  ++n )
         {
-            m_Board->m_Track.PushBack( trackList[i] );
+            m_Board->m_Track.PushBack( tracks[n] );
 
-            if( prev_netcode != trackList[i]->GetNetCode() )
+            if( prev_netcode != tracks[n]->GetNetCode() )
             {
-                m_Board->TrackItems()->BestInsertPointSpeeder()->Insert( trackList[i] );
-                prev_netcode = trackList[i]->GetNetCode();
+                m_Board->TrackItems()->BestInsertPointSpeeder()->Insert( tracks[n] );
+                prev_netcode = tracks[n]->GetNetCode();
             }
         }
     }
