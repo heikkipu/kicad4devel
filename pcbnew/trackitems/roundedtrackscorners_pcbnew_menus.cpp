@@ -34,7 +34,7 @@ void ROUNDEDTRACKSCORNERS::Popup( wxMenu* aMenu,
                                   const wxPoint& aPos
                                 ) const
 {
-    if( aTrackSeg && aMenu )
+    if( aTrackSeg && aMenu && IsOn() )
     {
         wxString msg;
         wxPoint track_nearest_endpoint = TrackNodeItem::TrackSegNearestEndpoint( aTrackSeg, aPos );

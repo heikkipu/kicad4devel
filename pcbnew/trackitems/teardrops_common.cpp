@@ -46,14 +46,11 @@ TEARDROPS::TEARDROPS( const TRACKITEMS* aParent, const BOARD* aBoard ) : TRACKNO
     m_recreate_list = new Teardrop_Container;
     m_recreate_list->clear();
 
-    m_gal_removed_list = new Teardrop_Container;
-    m_gal_removed_list->clear();
-
     LoadDefaultParams( TEARDROP::TEARDROP_T );
     LoadDefaultParams( TEARDROP::FILLET_T );
     LoadDefaultParams( TEARDROP::SUBLAND_T );
     LoadDefaultParams( TEARDROP::ZERO_T );
-    m_current_shape = m_teardrop_params.shape;
+    m_current_shape = TEARDROP::NULL_T; //Put teardrops to off mode in startup.
 
 }
 
@@ -65,8 +62,10 @@ TEARDROPS::~TEARDROPS()
     delete m_recreate_list;
     m_recreate_list = nullptr;
 
+#if 0
     delete m_gal_removed_list;
     m_gal_removed_list = nullptr;
+#endif //0
 
     if( m_track_edit_tear )
     {
@@ -159,7 +158,6 @@ void TEARDROPS::Delete( TEARDROP* aTeardrop,
             //GAL View removing.
             if( m_EditFrame && m_EditFrame->IsGalCanvasActive() )
             {
-                GalRemovedListAdd( aTeardrop );
                 m_EditFrame->GetGalCanvas()->GetView()->Remove( aTeardrop );
             }
 
@@ -333,7 +331,7 @@ void TEARDROPS::Add( const BOARD_CONNECTED_ITEM* aViaOrPadTo )
              &undoredo_items );
     }
 
-    if( m_EditFrame )
+    if( m_EditFrame && undoredo_items.GetCount() )
         m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
 }
 
@@ -429,7 +427,7 @@ void TEARDROPS::Add( const TRACK* aTrackSegTo )
     {
         PICKED_ITEMS_LIST undoredo_items;
         Add( aTrackSegTo, &undoredo_items );
-        if( m_EditFrame )
+        if( m_EditFrame && undoredo_items.GetCount() )
             m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
     }
 }
@@ -496,7 +494,7 @@ void TEARDROPS::Add( const MODULE* aModuleTo )
                 Add( pad, &undoredo_items );
                 pad = pad->Next();
             }
-            if( m_EditFrame )
+            if( m_EditFrame && undoredo_items.GetCount() )
                 m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
         }
     }
@@ -548,7 +546,7 @@ void TEARDROPS::Add( const int aNetCodeTo, const TEARDROPS::TEARDROPS_TYPE_TODO 
     {
         net->Execute();
 
-        if( m_EditFrame )
+        if( m_EditFrame && undoredo_items.GetCount() )
             m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
     }
 }
@@ -677,6 +675,16 @@ void TEARDROPS::Remove( const BOARD_CONNECTED_ITEM* aItemFrom,
             }
         }
     }
+}
+
+void TEARDROPS::Remove( const BOARD_ITEM* aItemFrom,
+                        PICKED_ITEMS_LIST* aUndoRedoList,
+                        const bool aLockedToo )
+{
+    if( dynamic_cast<BOARD_CONNECTED_ITEM*>( const_cast<BOARD_ITEM*>( aItemFrom ) ) )
+        Remove( static_cast<BOARD_CONNECTED_ITEM*>( const_cast<BOARD_ITEM*>( aItemFrom ) ),
+                aUndoRedoList,
+                aLockedToo );
 }
 
 void TEARDROPS::Remove( TEARDROP* aTeardrop,
@@ -970,7 +978,7 @@ void TEARDROPS::Change( const BOARD_CONNECTED_ITEM* aItemAt )
                     &undoredo_items );
         }
 
-        if( m_EditFrame )
+        if( m_EditFrame && undoredo_items.GetCount() )
             m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_CHANGED );
     }
 }
@@ -1021,7 +1029,7 @@ void TEARDROPS::Change( const int aNetCodeAt, const TEARDROPS::TEARDROPS_TYPE_TO
     for( TEARDROP* tear : *m_recreate_list )
         Add( tear->GetTrackSeg(), tear->GetConnectedItem(), &undoredo_items, tear->GetEnd() );
 
-    if( m_EditFrame )
+    if( m_EditFrame && undoredo_items.GetCount() )
         m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_CHANGED );
 }
 
@@ -1037,7 +1045,7 @@ void TEARDROPS::Change( const MODULE* aModuleAt )
         for( TEARDROP* tear : *m_recreate_list )
             Add( tear->GetTrackSeg(), tear->GetConnectedItem(), &undoredo_items );
 
-        if( m_EditFrame )
+        if( m_EditFrame && undoredo_items.GetCount() )
             m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_CHANGED );
     }
 }
@@ -1139,7 +1147,7 @@ void TEARDROPS::Recreate( const int aNetCodeTo, const bool aUndo )
 {
     PICKED_ITEMS_LIST undoredo_list;
     Recreate( aNetCodeTo, &undoredo_list );
-    if( aUndo && m_EditFrame )
+    if( aUndo && m_EditFrame && undoredo_list.GetCount() )
         m_EditFrame->SaveCopyInUndoList( undoredo_list, UR_NEW );
 }
 
@@ -1165,7 +1173,7 @@ void TEARDROPS::Recreate( const MODULE* aModuleTo, const bool aUndo )
         {
             PICKED_ITEMS_LIST undoredo_list;
             Recreate( aModuleTo, &undoredo_list );
-            if( aUndo && m_EditFrame )
+            if( aUndo && m_EditFrame && undoredo_list.GetCount() )
                 m_EditFrame->SaveCopyInUndoList( undoredo_list, UR_NEW );
         }
 }
@@ -1237,7 +1245,7 @@ void TEARDROPS::Recreate( const D_PAD* aPadTo, const bool aUndo )
     {
         PICKED_ITEMS_LIST undoredo_list;
         Recreate( aPadTo, &undoredo_list );
-        if( aUndo && m_EditFrame )
+        if( aUndo && m_EditFrame && undoredo_list.GetCount() )
             m_EditFrame->SaveCopyInUndoList( undoredo_list, UR_NEW );
     }
 }
@@ -1249,7 +1257,7 @@ void TEARDROPS::Repopulate( const int aNetCodeAt,
 {
     PICKED_ITEMS_LIST undoredo_items;
     Repopulate( aNetCodeAt, aTypeToDo, &undoredo_items );
-    if( m_EditFrame && aUndo )
+    if( m_EditFrame && aUndo && undoredo_items.GetCount())
         m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_DELETED );
 }
 
@@ -1277,7 +1285,7 @@ void TEARDROPS::Repopulate( DLIST<TRACK>* aTracksAll, const bool aUndo )
         }
     }
 
-    if( m_EditFrame && aUndo )
+    if( m_EditFrame && aUndo && undoredo_items.GetCount() )
         m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_DELETED );
 }
 

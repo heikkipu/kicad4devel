@@ -45,37 +45,40 @@ void ROUNDEDTRACKSCORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel )
             if( connected_track && ( connected_track->Type() == PCB_TRACE_T ) )
             {
                 ROUNDEDTRACKSCORNER::PARAMS param = dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->GetParams();
-                if( param != prev_params )
+                if( param.length_ratio ) // do not save null length ratio corners.
                 {
+                    if( param != prev_params )
+                    {
+                        aOut->Print( aNestLevel, "( roundedtrackscorner " );
+                        aOut->Print( 0,
+                                    " ( length_set %d ) ( length_ratio %d ) ( segments %d )",
+                                    param.length_set,
+                                    param.length_ratio,
+                                    param.num_segments );
+                        aOut->Print( 0, " ( parameters ) )\n" );
+                        prev_params = param;
+                    }
                     aOut->Print( aNestLevel, "( roundedtrackscorner " );
                     aOut->Print( 0,
-                                 " ( length_set %d ) ( length_ratio %d ) ( segments %d )",
-                                 param.length_set,
-                                 param.length_ratio,
-                                 param.num_segments );
-                    aOut->Print( 0, " ( parameters ) )\n" );
-                    prev_params = param;
+                                " ( position %s ) ( net %d )",
+                                FMT_IU( track_seg->GetEnd() ).c_str(),
+                                track_seg->GetNetCode() );
+                    aOut->Print( 0,
+                                " ( layer %s )",
+                                aOut->Quotew( connected_track->GetLayerName() ).c_str() );
+                    aOut->Print( 0,
+                                " ( start %s ) ( end %s )",
+                                FMT_IU( connected_track->GetStart() ).c_str(),
+                                FMT_IU( connected_track->GetEnd() ).c_str() );
+                    if( dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->IsLocked() )
+                        aOut->Print( 0, " ( locked )" );
+                    aOut->Print( 0, " ( arc ) )\n" );
+                    corners = true;
                 }
-                aOut->Print( aNestLevel, "( roundedtrackscorner " );
-                aOut->Print( 0,
-                             " ( position %s ) ( net %d )",
-                             FMT_IU( track_seg->GetEnd() ).c_str(),
-                             track_seg->GetNetCode() );
-                aOut->Print( 0,
-                             " ( layer %s )",
-                             aOut->Quotew( connected_track->GetLayerName() ).c_str() );
-                aOut->Print( 0,
-                             " ( start %s ) ( end %s )",
-                             FMT_IU( connected_track->GetStart() ).c_str(),
-                             FMT_IU( connected_track->GetEnd() ).c_str() );
-                if( dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->IsLocked() )
-                    aOut->Print( 0, " ( locked )" );
-                aOut->Print( 0, " ( arc ) )\n" );
-                corners = true;
             }
         }
     }
-    //If no corners, do not save even teardrop parameters.
+    //If no corners, do not save even parameters.
     if( corners )
     {
         //Save current last. When load, it is current back.

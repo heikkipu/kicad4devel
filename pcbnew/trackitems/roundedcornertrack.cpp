@@ -118,7 +118,11 @@ void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel,
       return;
 #endif
 
+#ifdef NEWCONALGO
+    PCB_DISPLAY_OPTIONS* displ_opts = ( PCB_DISPLAY_OPTIONS* ) aPanel->GetDisplayOptions();
+#else
     DISPLAY_OPTIONS* displ_opts = ( DISPLAY_OPTIONS* ) aPanel->GetDisplayOptions();
+#endif
 
     if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
     {
@@ -208,9 +212,17 @@ void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel,
 
     // Show clearance for tracks, not for zone segments
     if( IsCopperLayer( GetLayer() ) &&
+#ifdef NEWCONALGO
+        ( ( displ_opts->m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+#else
         ( ( displ_opts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+#endif
         ( IsDragging() || IsMoving() || IsNew() ) ) ||
+#ifdef NEWCONALGO
+        ( displ_opts->m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS ) )
+#else
         ( displ_opts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ) )
+#endif
     )
     {
         l_trace += GetClearance();

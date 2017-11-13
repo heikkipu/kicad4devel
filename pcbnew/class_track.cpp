@@ -485,9 +485,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
         track = aPcb->m_Zone;
     else
 #ifdef PCBNEW_WITH_TRACKITEMS
-    {
         track = aPcb->TrackItems()->BestInsertPointSpeeder()->GetItem( GetNetCode() );
-    }
 #else
         track = aPcb->m_Track;
 #endif
@@ -511,7 +509,7 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
         NetCode = GetNetCode();
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    Track =GetBoard()->TrackItems()->BestInsertPointSpeeder()->GetItem( NetCode );
+    Track = GetBoard()->TrackItems()->BestInsertPointSpeeder()->GetItem( NetCode );
     if( Track->GetNetCode() != NetCode )
         Track = this;
 #endif
@@ -549,7 +547,7 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
         NetCode = GetNetCode();
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    Track =GetBoard()->TrackItems()->BestInsertPointSpeeder()->GetItem( NetCode );
+    Track = GetBoard()->TrackItems()->BestInsertPointSpeeder()->GetItem( NetCode );
     if( Track->GetNetCode() != NetCode )
         Track = this;
 #endif

@@ -471,6 +471,12 @@ wxString TEARDROP::GetConnectedItemName( void ) const
     return wxT( "xxx" );
 }
 
+#ifdef NEWCONALGO
+void TEARDROP::SwapData( BOARD_ITEM* aImage )
+{
+    std::swap( *((TrackNodeItem::TEARDROP*) this), *((TrackNodeItem::TEARDROP*) aImage) );
+}
+#endif
 
 void TEARDROP::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                      int aClearanceValue,
@@ -697,17 +703,31 @@ void TEARDROP::DrawItem( EDA_DRAW_PANEL* aPanel,
                          wxDC* aDC,
                          const COLOR4D aColor,
                          const wxPoint& aOffset,
+#ifdef NEWCONALGO
+                         const PCB_DISPLAY_OPTIONS* aDisplOpts
+#else
                          const DISPLAY_OPTIONS* aDisplOpts
+#endif
                        )
 {
     if( !m_trackseg )
         return;
 
     EDA_RECT* clip_box = aPanel->GetClipBox();
-    bool showClearance = (IsCopperLayer(m_trackseg->GetLayer()) &&
-                         ((aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+    bool showClearance = ( IsCopperLayer(m_trackseg->GetLayer() ) &&
+                         ( (aDisplOpts->m_ShowTrackClearanceMode ==
+#ifdef NEWCONALGO
+                            PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+#else
+                            SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+#endif
                          ( m_trackseg->IsDragging() || m_trackseg->IsMoving() || m_trackseg->IsNew() ) ) ||
-                         ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ))) && m_can_draw_clearance;
+#ifdef NEWCONALGO
+                         ( aDisplOpts->m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS ))) &&
+#else
+                         ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ))) &&
+#endif
+                         m_can_draw_clearance;
 
     switch( m_shape )
     {

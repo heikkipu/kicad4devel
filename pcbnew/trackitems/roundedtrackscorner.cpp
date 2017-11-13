@@ -463,22 +463,42 @@ void ROUNDEDTRACKSCORNER::AddTo3DContainer( CBVHCONTAINER2D* aContainer, const d
     }
 }
 
+#ifdef NEWCONALGO
+void ROUNDEDTRACKSCORNER::SwapData( BOARD_ITEM* aImage )
+{
+    std::swap( *((TrackNodeItem::ROUNDEDTRACKSCORNER*) this), *((TrackNodeItem::ROUNDEDTRACKSCORNER*) aImage) );
+}
+#endif
+
 void ROUNDEDTRACKSCORNER::DrawItem( EDA_DRAW_PANEL* aPanel,
                                     wxDC* aDC,
                                     const COLOR4D aColor,
                                     const wxPoint& aOffset,
+#ifdef NEWCONALGO
+                                    const PCB_DISPLAY_OPTIONS* aDisplOpts
+#else
                                     const DISPLAY_OPTIONS* aDisplOpts
+#endif
                                   )
 {
     if( m_on && m_trackseg && m_trackseg_second && m_set_ok )
     {
         EDA_RECT* clip_box = aPanel->GetClipBox();
         bool showClearance = ( IsCopperLayer( m_trackseg->GetLayer() ) &&
-                               ( ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+                               ( ( aDisplOpts->m_ShowTrackClearanceMode ==
+#ifdef NEWCONALGO
+                                   PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+#else
+                                   SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS &&
+#endif
                                ( m_trackseg->IsDragging() || m_trackseg->IsMoving() || m_trackseg->IsNew()  ||
                                m_trackseg_second->IsDragging() || m_trackseg_second->IsMoving() ||
                                m_trackseg_second->IsNew() ) ) ||
+#ifdef NEWCONALGO
+                               ( aDisplOpts->m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS ) ) );
+#else
                                ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS ) ) );
+#endif
 
         if( !aDisplOpts->m_DisplayPcbTrackFill ||
             GetState( FORCE_SKETCH ) ||
@@ -664,12 +684,24 @@ void ROUNDEDTRACKSCORNER_ROUTE_EDIT::DrawItem( EDA_DRAW_PANEL* aPanel,
                                               wxDC* aDC,
                                               const COLOR4D aColor,
                                               const wxPoint& aOffset,
+#ifdef NEWCONALGO
+                                              const PCB_DISPLAY_OPTIONS* aDisplOpts
+#else
                                               const DISPLAY_OPTIONS* aDisplOpts
+#endif
                                            )
 {
     bool opts_track_fill = aDisplOpts->m_DisplayPcbTrackFill;
+#ifdef NEWCONALGO
+    const_cast<PCB_DISPLAY_OPTIONS*>( aDisplOpts )->m_DisplayPcbTrackFill = true;
+#else
     const_cast<DISPLAY_OPTIONS*>( aDisplOpts )->m_DisplayPcbTrackFill = true;
+#endif
     ROUNDEDTRACKSCORNER::DrawItem( aPanel, aDC, aColor, aOffset, aDisplOpts );
+#ifdef NEWCONALGO
+    const_cast<PCB_DISPLAY_OPTIONS*>( aDisplOpts )->m_DisplayPcbTrackFill = opts_track_fill;
+#else
     const_cast<DISPLAY_OPTIONS*>( aDisplOpts )->m_DisplayPcbTrackFill = opts_track_fill;
+#endif
 }
 

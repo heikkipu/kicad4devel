@@ -102,7 +102,11 @@ namespace TrackNodeItem
                                wxDC* aDC,
                                const COLOR4D aColor,
                                const wxPoint& aOffset,
+#ifdef NEWCONALGO
+                               const PCB_DISPLAY_OPTIONS* aDisplOpts
+#else
                                const DISPLAY_OPTIONS* aDisplOpts
+#endif
                              ) = 0;
         //Gal draw
         virtual void DrawItem( KIGFX::GAL* aGal, const bool aIsSketch ) = 0;

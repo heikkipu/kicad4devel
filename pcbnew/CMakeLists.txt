@@ -340,10 +340,8 @@ if( PCBNEW_WITH_TRACKITEMS )
         trackitems/teardrops_pcbnew_DRC.cpp
         trackitems/teardrops_pcbnew_menus.cpp
         trackitems/teardrops_pcbnew_misc.cpp
-        trackitems/teardrops_pcbnew_commit.cpp
 
         trackitems/roundedtrackscorners_pcbnew.cpp
-        trackitems/roundedtrackscorners_pcbnew_commit.cpp
         trackitems/roundedtrackscorners_pcbnew_DRC.cpp
         trackitems/roundedtrackscorners_pcbnew_menus.cpp
         trackitems/roundedtrackscorners_pcbnew_misc.cpp

@@ -100,6 +100,9 @@ namespace TrackNodeItem
         void SetPosition( const wxPoint& aPoint ) override {};
         void SetEnd( const wxPoint& aEnd ) {};
         void SetStart( const wxPoint& aStart ); //Use this, when change position. Same as connected item position.
+#ifdef NEWCONALGO
+        void SwapData( BOARD_ITEM* aImage ) override;
+#endif
 
         int GetShape() const { return m_shape; }
 
@@ -222,7 +225,11 @@ namespace TrackNodeItem
                        wxDC* aDC,
                        const COLOR4D aColor,
                        const wxPoint& aOffset,
+#ifdef NEWCONALGO
+                       const PCB_DISPLAY_OPTIONS* aDisplOpts ) override;
+#else
                        const DISPLAY_OPTIONS* aDisplOpts ) override;
+#endif
 
         void DrawItem( KIGFX::GAL* aGal, const bool aIsSketch ) override;
 

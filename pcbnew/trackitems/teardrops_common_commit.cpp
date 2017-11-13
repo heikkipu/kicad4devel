@@ -26,7 +26,6 @@
 
 using namespace TrackNodeItem;
 
-
 void TEARDROPS::CollectCommit( TEARDROP* aTeardrop, std::set<TRACK*>* aCommitContainer,
                                const bool aLockedToo
                              )
@@ -146,11 +145,3 @@ void TEARDROPS::CollectCommit( const TRACK* aTrackSegFrom,
         }
     }
 }
-
-void TEARDROPS::GalRemovedListAdd( const TEARDROP* aTear )
-{
-    if( aTear )
-        if( aTear->Type() == PCB_TEARDROP_T )
-            m_gal_removed_list->insert( const_cast<TEARDROP*>( aTear ) );
-}
-

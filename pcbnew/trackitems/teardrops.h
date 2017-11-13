@@ -98,6 +98,7 @@ public:
     void Remove( const BOARD_CONNECTED_ITEM* aItemFrom, const bool aUndo, const bool aLockedToo );
     void Remove( const BOARD_CONNECTED_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList, const bool aLockedToo );
     void Remove( const BOARD_CONNECTED_ITEM* aItemFrom, BOARD_COMMIT& aCommit, const bool aLockedToo );
+    void Remove( const BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList, const bool aLockedToo );
 
     void Remove( const TRACK* aTrackSegFrom,
                  const BOARD_CONNECTED_ITEM* aViaOrPadFrom,
@@ -374,30 +375,6 @@ public:
     void CollectCommit( TrackNodeItem::TEARDROP* aTeardrop, std::set<TRACK*>* aCommitContainer, const bool aLockedToo );
     void CollectCommit( const VIA* aViaFrom, std::set<TRACK*>* aCommitContainer, const bool aLockedToo );
     void CollectCommit( const D_PAD* aPadFrom, std::set<TRACK*>* aCommitContainer, const bool aLockedToo );
-//-----------------------------------------------------------------------------------------------------/
-
-//-----------------------------------------------------------------------------------------------------/
-// Gal canvas commit  push
-//-----------------------------------------------------------------------------------------------------/
-public:
-    void GalCommitPushPrepare( void );
-    void GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList );
-    void GalCommitPushRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList );
-    void GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList );
-private:
-    void GalRemovedListAdd( const TrackNodeItem::TEARDROP* aTear );
-    Teardrop_Container* m_gal_removed_list;
-    int m_current_routed_track_netcode;
-
-    VIA* m_gal_drag_via_dragged{nullptr};
-    std::set<VIA*> m_gal_drag_vias_added;
-    std::set<TrackNodeItem::TEARDROP*> m_gal_drag_tears_used;
-    std::vector<TRACK*>m_gal_commit_tracks;
-
-    TrackNodeItem::TEARDROP::SHAPES_T m_current_shape_gal;
-    TrackNodeItem::TEARDROP::PARAMS m_teardrop_params_gal;
-    TrackNodeItem::TEARDROP::PARAMS m_fillet_params_gal;
-    TrackNodeItem::TEARDROP::PARAMS m_subland_params_gal;
 //-----------------------------------------------------------------------------------------------------/
 
 //-----------------------------------------------------------------------------------------------------/

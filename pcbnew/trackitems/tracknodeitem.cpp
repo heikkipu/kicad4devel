@@ -171,7 +171,11 @@ void TRACKNODEITEM::Draw( EDA_DRAW_PANEL* aPanel,
       return;
 #endif
 
+#ifdef NEWCONALGO
+    PCB_DISPLAY_OPTIONS* displ_opts = ( PCB_DISPLAY_OPTIONS* ) aPanel->GetDisplayOptions();
+#else
     DISPLAY_OPTIONS* displ_opts = ( DISPLAY_OPTIONS* ) aPanel->GetDisplayOptions();
+#endif
 
     if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
     {

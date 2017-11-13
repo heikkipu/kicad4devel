@@ -478,9 +478,21 @@ public:
     void SortTracks( void );
 
 private:
-
-
 //---------------------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------------------/
+// Gal canvas route commit push.
+//-----------------------------------------------------------------------------------------------------/
+public:
+    void GalCommitPushPrepare( void );
+    void GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList );
+    void GalCommitPushRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList );
+    void GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList );
+
+private:
+    std::set<TRACK*> m_gal_commit_added_tracks;
+//-----------------------------------------------------------------------------------------------------/
+
 
 }; //TRACKITEMS
 

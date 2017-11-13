@@ -48,14 +48,12 @@ ROUNDEDTRACKSCORNERS::ROUNDEDTRACKSCORNERS( const TRACKITEMS* aParent, const BOA
     m_recreate_list = new RoundedTracksCorner_Container;
     m_recreate_list->clear();
 
-    m_gal_removed_list = new RoundedTracksCorner_Container;
-    m_gal_removed_list->clear();
-
     m_to_edit = EDIT_NULL_T;
     m_can_edit = false;
     m_track_edit_corner = nullptr;
 
     LoadDefaultParams();
+    m_params.length_ratio = 0; //Put corners to off mode in start.
 }
 
 ROUNDEDTRACKSCORNERS::~ROUNDEDTRACKSCORNERS()
@@ -69,11 +67,13 @@ ROUNDEDTRACKSCORNERS::~ROUNDEDTRACKSCORNERS()
     delete m_recreate_list;
     m_recreate_list = nullptr;
 
+#if 0
     delete m_gal_removed_list;
     m_gal_removed_list = nullptr;
+#endif //0
 }
 
-ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackSegTo,
+ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackTo,
                                                    const TRACK* aTrackSegSecond,
                                                    const wxPoint aPosition,
                                                    const bool aNullTrackCheck
@@ -81,16 +81,16 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackSegTo,
 {
     ROUNDEDTRACKSCORNER* corner = nullptr;
 
-    if( aTrackSegTo && aTrackSegSecond )
+    if( aTrackTo && aTrackSegSecond )
     {
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSegTo ) ) &&
+        if( dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackTo ) ) &&
             dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSegSecond ) ) )
         {
             //Not in pad or via:
-            if( const_cast<TRACK*>( aTrackSegTo )->GetVia( aPosition, aTrackSegTo->GetLayer() ) )
+            if( const_cast<TRACK*>( aTrackTo )->GetVia( aPosition, aTrackTo->GetLayer() ) )
                 return nullptr;
 
-            BOARD_CONNECTED_ITEM* lock_point = m_Board->GetLockPoint( aPosition, aTrackSegTo->GetLayerSet() );
+            BOARD_CONNECTED_ITEM* lock_point = m_Board->GetLockPoint( aPosition, aTrackTo->GetLayerSet() );
             if( lock_point && ( lock_point->Type() == PCB_PAD_T ) )
                 return nullptr;
 
@@ -98,7 +98,7 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackSegTo,
             if( lock_point && ( lock_point->Type() == PCB_PAD_T ) )
                 return nullptr;
 
-            ROUNDEDCORNERTRACK* trackseg = static_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSegTo ) );
+            ROUNDEDCORNERTRACK* trackseg = static_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackTo ) );
             ROUNDEDTRACKSCORNER* trackseg_corner_atpos = nullptr;
             if( aPosition == trackseg->GetStart() )
                 trackseg_corner_atpos = trackseg->GetStartPointCorner();
@@ -113,13 +113,13 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackSegTo,
                 trackseg_corner_atpos = tracksegsecond->GetEndPointCorner();
 
             if( !trackseg_corner_atpos && !tracksegsecond_corner_atpos &&
-                !m_Parent->Teardrops()->Get( aTrackSegTo, aPosition, true ) &&
+                !m_Parent->Teardrops()->Get( aTrackTo, aPosition, true ) &&
                 !m_Parent->Teardrops()->Get( aTrackSegSecond, aPosition, true ) )
             {
 
                 ROUNDEDTRACKSCORNER::PARAMS params = GetParams();
                 corner = new ROUNDEDTRACKSCORNER( m_Board,
-                                                  aTrackSegTo,
+                                                  aTrackTo,
                                                   aTrackSegSecond,
                                                   aPosition,
                                                   params,
@@ -178,7 +178,6 @@ void ROUNDEDTRACKSCORNERS::Delete( ROUNDEDTRACKSCORNER* aCorner, DLIST<TRACK>* a
             //GAL View removing.
             if( m_EditFrame && m_EditFrame->IsGalCanvasActive() )
             {
-               GalRemovedListAdd( aCorner );
                m_EditFrame->GetGalCanvas()->GetView()->Remove( aCorner );
             }
 
@@ -218,12 +217,12 @@ void ROUNDEDTRACKSCORNERS::Delete( ROUNDEDTRACKSCORNER* aCorner, DLIST<TRACK>* a
     }
 }
 
-TRACK* ROUNDEDTRACKSCORNERS::FindSecondTrack( const TRACK* aTrackSegTo, wxPoint aPosition )
+TRACK* ROUNDEDTRACKSCORNERS::FindSecondTrack( const TRACK* aTrackTo, wxPoint aPosition )
 {
-    if( aTrackSegTo )
+    if( aTrackTo )
     {
         Tracks_Container tracks;
-        Collect( aTrackSegTo, aPosition, tracks );
+        Collect( aTrackTo, aPosition, tracks );
         if( tracks.size() == 1 )
         {
             TRACK* track_second = *tracks.begin();
@@ -299,23 +298,23 @@ ROUNDEDCORNERTRACK* ROUNDEDTRACKSCORNERS::Convert( TRACK* aTrack, PICKED_ITEMS_L
     return rounded_track;
 }
 
-ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackSegTo, const wxPoint aPosition, PICKED_ITEMS_LIST* aUndoRedoList )
+ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackTo, const wxPoint aPosition, PICKED_ITEMS_LIST* aUndoRedoList )
 {
     ROUNDEDTRACKSCORNER* corner = nullptr;
     ITEM_PICKER picker_new( nullptr, UR_NEW );
-    if( aTrackSegTo )
+    if( aTrackTo && IsOn() )
     {
-        TRACK* track_second = FindSecondTrack( aTrackSegTo, aPosition );
+        TRACK* track_second = FindSecondTrack( aTrackTo, aPosition );
         if( track_second )
         {
             track_second = Convert( track_second, aUndoRedoList );
-            aTrackSegTo = Convert( aTrackSegTo, aUndoRedoList );
+            aTrackTo = Convert( aTrackTo, aUndoRedoList );
 
-            corner = Create( aTrackSegTo, track_second, aPosition, false );
+            corner = Create( aTrackTo, track_second, aPosition, false );
 
             if( corner )
             {
-                DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackSegTo->GetList() );
+                DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackTo->GetList() );
                 TracksDList_Insert( tracks_list, corner, corner->GetTrackSeg() );
 
                 picker_new.SetItem( corner );
@@ -334,77 +333,110 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackSegTo, const wxPoin
     return corner;
 }
 
-void ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackSegTo, const wxPoint& aCurPosAt )
+ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackTo,
+                                                const wxPoint aPosition,
+                                                const unsigned int aLength,
+                                                PICKED_ITEMS_LIST* aUndoRedoList
+                                              )
 {
-    if( aTrackSegTo && ( aTrackSegTo->Type() == PCB_TRACE_T ) )
+    ROUNDEDTRACKSCORNER* corner = nullptr;
+    ROUNDEDTRACKSCORNER::PARAMS current_params = GetParams();
+    ROUNDEDTRACKSCORNER::PARAMS params = current_params;
+    params.length_set = aLength;
+    params.length_ratio = 100;
+    SetParams( params );
+    corner = Add( aTrackTo, aPosition, aUndoRedoList );
+    SetParams( current_params );
+    RecreateMenu();
+    return corner;
+}
+
+ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackTo, const wxPoint& aCurPosAt )
+{
+    ROUNDEDTRACKSCORNER* corner = nullptr;
+    if( aTrackTo && ( aTrackTo->Type() == PCB_TRACE_T ) && IsOn() )
     {
         PICKED_ITEMS_LIST undoredo_items;
 
         unsigned int min_dist = std::numeric_limits<unsigned int>::max();
 
-        unsigned int dist_start = hypot( abs( aTrackSegTo->GetStart().y - aCurPosAt.y ),
-                                        abs( aTrackSegTo->GetStart().x - aCurPosAt.x ) );
+        unsigned int dist_start = hypot( abs( aTrackTo->GetStart().y - aCurPosAt.y ),
+                                        abs( aTrackTo->GetStart().x - aCurPosAt.x ) );
         if( dist_start < min_dist )
             min_dist = dist_start;
 
-        unsigned int dist_end = hypot( abs( aTrackSegTo->GetEnd().y - aCurPosAt.y ),
-                                      abs( aTrackSegTo->GetEnd().x - aCurPosAt.x ) );
+        unsigned int dist_end = hypot( abs( aTrackTo->GetEnd().y - aCurPosAt.y ),
+                                      abs( aTrackTo->GetEnd().x - aCurPosAt.x ) );
         wxPoint pos;
-        ( dist_start < dist_end )? pos = aTrackSegTo->GetStart() : pos = aTrackSegTo->GetEnd();
+        ( dist_start < dist_end )? pos = aTrackTo->GetStart() : pos = aTrackTo->GetEnd();
 
-        Add( aTrackSegTo, pos, &undoredo_items );
+        corner = Add( aTrackTo, pos, &undoredo_items );
         if( undoredo_items.GetCount() )
             m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
     }
+    return corner;
 }
 
-void ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList )
+std::pair<ROUNDEDTRACKSCORNER*, ROUNDEDTRACKSCORNER*> ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackTo,
+                                                                                 PICKED_ITEMS_LIST* aUndoRedoList
+                                                                               )
 {
-    if( aTrackSegTo && ( aTrackSegTo->Type() == PCB_TRACE_T ) && !aTrackSegTo->IsNull() )
+    std::pair<ROUNDEDTRACKSCORNER*, ROUNDEDTRACKSCORNER*> ret_pair{nullptr, nullptr};
+    if( aTrackTo && ( aTrackTo->Type() == PCB_TRACE_T ) && !aTrackTo->IsNull() && IsOn() )
     {
+        ROUNDEDTRACKSCORNER* corner = nullptr;
         for( int n = 0; n < 2; ++n )
         {
-            wxPoint pos = aTrackSegTo->GetStart();
+            wxPoint pos = aTrackTo->GetStart();
             if( n )
-                pos = aTrackSegTo->GetEnd();
+                pos = aTrackTo->GetEnd();
 
-            Add( aTrackSegTo, pos, aUndoRedoList );
+            corner = Add( aTrackTo, pos, aUndoRedoList );
+            n? ret_pair.second = corner : ret_pair.first = corner;
         }
     }
+    return ret_pair;
 }
 
-void ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackSegTo, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList )
+std::pair<ROUNDEDTRACKSCORNER*, ROUNDEDTRACKSCORNER*> ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackTo,
+                                                                                 const unsigned int aLength,
+                                                                                 PICKED_ITEMS_LIST* aUndoRedoList
+                                                                               )
 {
+    std::pair<ROUNDEDTRACKSCORNER*, ROUNDEDTRACKSCORNER*> ret_pair{nullptr, nullptr};
     ROUNDEDTRACKSCORNER::PARAMS current_params = GetParams();
     ROUNDEDTRACKSCORNER::PARAMS params = current_params;
     params.length_set = aLength;
     params.length_ratio = 100;
     SetParams( params );
-    Add( aTrackSegTo, aUndoRedoList );
+    ret_pair = Add( aTrackTo, aUndoRedoList );
     SetParams( current_params );
     RecreateMenu();
+    return ret_pair;
 }
 
-void ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackSegTo,
-                                const wxPoint aPosition,
-                                const unsigned int aLength,
-                                PICKED_ITEMS_LIST* aUndoRedoList
-                              )
+std::pair<ROUNDEDTRACKSCORNER*, ROUNDEDTRACKSCORNER*> ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackTo )
 {
-    ROUNDEDTRACKSCORNER::PARAMS current_params = GetParams();
-    ROUNDEDTRACKSCORNER::PARAMS params = current_params;
-    params.length_set = aLength;
-    params.length_ratio = 100;
-    SetParams( params );
-    Add( aTrackSegTo, aPosition, aUndoRedoList );
-    SetParams( current_params );
-    RecreateMenu();
-}
-
-void ROUNDEDTRACKSCORNERS::Add( TRACK* aTrackSegTo )
-{
+    std::pair<ROUNDEDTRACKSCORNER*, ROUNDEDTRACKSCORNER*> ret_pair{nullptr, nullptr};
     PICKED_ITEMS_LIST null_undo_redo_list;
-    Add( aTrackSegTo, &null_undo_redo_list );
+    ret_pair = Add( aTrackTo, &null_undo_redo_list );
+    return ret_pair;
+}
+
+void ROUNDEDTRACKSCORNERS::Add( std::set<TRACK*>* aTracksAt, PICKED_ITEMS_LIST* aUndoRedoList )
+{
+    if( IsOn() )
+    {
+        std::set<TRACK*> converted_tracks;
+        for( auto track : *aTracksAt )
+        {
+            ROUNDEDCORNERTRACK* rc_track = Convert( track, aUndoRedoList );
+            converted_tracks.insert( rc_track );
+        }
+
+        for( auto track : converted_tracks )
+            Add( track, aUndoRedoList );
+    }
 }
 
 ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::NET_SCAN_NET_ADD( const int aNet,
@@ -427,19 +459,25 @@ bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_ADD::ExecuteAt( TRACK* aTrackSeg )
 
 void ROUNDEDTRACKSCORNERS::Add( const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList )
 {
-    Convert( aNetCodeTo, aUndoRedoList );
+    if( IsOn() )
+    {
+        Convert( aNetCodeTo, aUndoRedoList );
 
-    std::unique_ptr<NET_SCAN_NET_ADD> net_add( new NET_SCAN_NET_ADD( aNetCodeTo, this, aUndoRedoList ) );
-    if( net_add )
-        net_add->Execute();
+        std::unique_ptr<NET_SCAN_NET_ADD> net_add( new NET_SCAN_NET_ADD( aNetCodeTo, this, aUndoRedoList ) );
+        if( net_add )
+            net_add->Execute();
+    }
 }
 
 void ROUNDEDTRACKSCORNERS::Add( const int aNetCodeTo )
 {
-    PICKED_ITEMS_LIST undoredo_items;
-    Add( aNetCodeTo, &undoredo_items );
-    if( m_EditFrame && undoredo_items.GetCount() )
-        m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
+    if( IsOn() )
+    {
+        PICKED_ITEMS_LIST undoredo_items;
+        Add( aNetCodeTo, &undoredo_items );
+        if( m_EditFrame && undoredo_items.GetCount() )
+            m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
+    }
 }
 
 ROUNDEDTRACKSCORNERS::NET_SCAN_NET_CONVERT::NET_SCAN_NET_CONVERT( const int aNet,
@@ -467,50 +505,51 @@ void ROUNDEDTRACKSCORNERS::Convert( const int aNetCode, PICKED_ITEMS_LIST* aUndo
         net_convert->Execute();
 }
 
-void ROUNDEDTRACKSCORNERS::Remove( const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo )
+void ROUNDEDTRACKSCORNERS::Remove( const TRACK* aTrackFrom, const bool aUndo, const bool aLockedToo )
 {
-    if( aTrackItemFrom )
+    if( aTrackFrom )
     {
         PICKED_ITEMS_LIST undoredo_items;
-        Remove( aTrackItemFrom, &undoredo_items, aLockedToo );
+        Remove( aTrackFrom, &undoredo_items, aLockedToo );
         if( m_EditFrame && aUndo && undoredo_items.GetCount() )
             m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_DELETED );
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Remove( const TRACK* aTrackItemFrom,
+void ROUNDEDTRACKSCORNERS::Remove( const TRACK* aTrackFrom,
                                    PICKED_ITEMS_LIST* aUndoRedoList,
                                    const bool aLockedToo
                                  )
 {
-    if( aTrackItemFrom )
+    if( aTrackFrom )
     {
-        if( aTrackItemFrom->Type() == PCB_ROUNDEDTRACKSCORNER_T )
+        if( aTrackFrom->Type() == PCB_ROUNDEDTRACKSCORNER_T )
         {
-            Remove( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackItemFrom ) ),
+            Remove( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackFrom ) ),
                     aUndoRedoList,
                     !CAN_RECREATE,
                     aLockedToo );
         }
         else
         {
-            if( aTrackItemFrom->Type() == PCB_TRACE_T )
+            if( aTrackFrom->Type() == PCB_TRACE_T &&
+                dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackFrom ) ) )
             {
                 TRACKNODEITEM* item = nullptr;
                 for( unsigned int n = 0; n < 2; ++n )
                 {
-                    n? item = Next( const_cast<TRACK*>( aTrackItemFrom ) ) :
-                       item = Back( const_cast<TRACK*>( aTrackItemFrom ) );
+                    n? item = Next( const_cast<TRACK*>( aTrackFrom ) ) :
+                       item = Back( const_cast<TRACK*>( aTrackFrom ) );
 
                     if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
                     {
                         ROUNDEDTRACKSCORNER* corner = static_cast<ROUNDEDTRACKSCORNER*>( item );
                         if( aLockedToo || ( !aLockedToo && !corner->IsLocked() ) )
                         {
-                            if( ( corner->GetTrackSeg() == const_cast<TRACK*>( aTrackItemFrom ) ) ||
-                               ( corner->GetTrackSegSecond() == const_cast<TRACK*>( aTrackItemFrom ) ) )
+                            if( ( corner->GetTrackSeg() == const_cast<TRACK*>( aTrackFrom ) ) ||
+                               ( corner->GetTrackSegSecond() == const_cast<TRACK*>( aTrackFrom ) ) )
                             {
-                                DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackItemFrom->GetList() );
+                                DLIST<TRACK>* tracks_list = static_cast<DLIST<TRACK>*>( aTrackFrom->GetList() );
                                 if( tracks_list )
                                 {
                                     Delete( corner, tracks_list, aUndoRedoList );
@@ -546,18 +585,30 @@ void ROUNDEDTRACKSCORNERS::Remove( ROUNDEDTRACKSCORNER* aCorner,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Remove( const TRACK* aTrackItemFrom, BOARD_COMMIT& aCommit, const bool aLockedToo )
+void ROUNDEDTRACKSCORNERS::Remove( const TRACK* aTrackFrom,
+                                   BOARD_COMMIT& aCommit,
+                                   const bool aLockedToo )
 {
-    if( aTrackItemFrom )
+    if( aTrackFrom )
     {
         PICKED_ITEMS_LIST undoredo_items;
-        Remove( aTrackItemFrom, &undoredo_items, aLockedToo );
+        Remove( aTrackFrom, &undoredo_items, aLockedToo );
 
         unsigned int num_removed_corners = undoredo_items.GetCount();
         if( num_removed_corners )
             for( unsigned int n = 0; n < num_removed_corners; ++n )
                 aCommit.Removed( undoredo_items.GetPickedItem( n ) );
     }
+}
+
+void ROUNDEDTRACKSCORNERS::Remove( const BOARD_ITEM* aItemFrom,
+                                   PICKED_ITEMS_LIST* aUndoRedoList,
+                                   const bool aLockedToo )
+{
+    if( aItemFrom->Type() == PCB_TRACE_T )
+        Remove( static_cast<TRACK*>( const_cast<BOARD_ITEM*>( aItemFrom ) ),
+                aUndoRedoList,
+                aLockedToo );
 }
 
 ROUNDEDTRACKSCORNERS::NET_SCAN_NET_REMOVE::NET_SCAN_NET_REMOVE( const int aNet,
@@ -621,12 +672,12 @@ void ROUNDEDTRACKSCORNERS::Repopulate( const int aNetCodeTo, PICKED_ITEMS_LIST* 
     Recreate( aNetCodeTo, aUndoRedoList );
 }
 
-void ROUNDEDTRACKSCORNERS::Change( const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo )
+void ROUNDEDTRACKSCORNERS::Change( const TRACK* aTrackFrom, const bool aUndo, const bool aLockedToo )
 {
-    if( aTrackItemFrom && aTrackItemFrom->Type() == PCB_ROUNDEDTRACKSCORNER_T )
+    if( aTrackFrom && aTrackFrom->Type() == PCB_ROUNDEDTRACKSCORNER_T )
     {
         PICKED_ITEMS_LIST undoredo_items;
-        ROUNDEDTRACKSCORNER* corner = static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackItemFrom ) );
+        ROUNDEDTRACKSCORNER* corner = static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackFrom ) );
         wxPoint pos = corner->GetEnd();
         TRACK* track = corner->GetTrackSeg();
 
@@ -885,14 +936,14 @@ void ROUNDEDTRACKSCORNERS::ToMemory( const TRACK* aTrackSegFrom )
         m_back_corner_in_memory = dynamic_cast<ROUNDEDTRACKSCORNER*>( item );
 }
 
-void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList )
+void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackTo, PICKED_ITEMS_LIST* aUndoRedoList )
 {
     ROUNDEDTRACKSCORNER::PARAMS corner_params = GetParams();
     if( m_next_corner_in_memory ) //Recreate next corner.
     {
         ROUNDEDTRACKSCORNER::PARAMS params = m_next_corner_in_memory->GetParams();
         SetParams( params );
-        ROUNDEDTRACKSCORNER* added_corner = Add( const_cast<TRACK*>( aTrackSegTo ),
+        ROUNDEDTRACKSCORNER* added_corner = Add( const_cast<TRACK*>( aTrackTo ),
                                                  m_next_corner_in_memory->GetEnd(),
                                                  aUndoRedoList );
         if( added_corner )
@@ -902,7 +953,7 @@ void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LI
     {
         ROUNDEDTRACKSCORNER::PARAMS params = m_back_corner_in_memory->GetParams();
         SetParams( params );
-        ROUNDEDTRACKSCORNER* added_corner = Add( const_cast<TRACK*>( aTrackSegTo ),
+        ROUNDEDTRACKSCORNER* added_corner = Add( const_cast<TRACK*>( aTrackTo ),
                                                  m_back_corner_in_memory->GetEnd(),
                                                  aUndoRedoList );
         if( added_corner )
@@ -912,16 +963,16 @@ void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LI
     RecreateMenu();
 }
 
-void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackSegTo )
+void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackTo )
 {
     PICKED_ITEMS_LIST undoredo_list;
-    FromMemory( aTrackSegTo, &undoredo_list );
+    FromMemory( aTrackTo, &undoredo_list );
 }
 
-void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackSegTo, BOARD_COMMIT& aCommit )
+void ROUNDEDTRACKSCORNERS::FromMemory( const TRACK* aTrackTo, BOARD_COMMIT& aCommit )
 {
     PICKED_ITEMS_LIST undoredo_items;
-    FromMemory( aTrackSegTo, &undoredo_items );
+    FromMemory( aTrackTo, &undoredo_items );
 
     unsigned int num_added_corners = undoredo_items.GetCount();
     if( num_added_corners )

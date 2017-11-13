@@ -50,32 +50,40 @@ public:
     inline bool IsOn( void ) const { return m_params.length_ratio; }
 
     //One aCorner
-    void Add( TRACK* aTrackSegTo, const wxPoint& aCurPosAt );
-    TrackNodeItem::ROUNDEDTRACKSCORNER* Add( TRACK* aTrackSegTo,
-                                            const wxPoint aPosition,
-                                            PICKED_ITEMS_LIST* aUndoRedoList
-                                         );
-    void Add( TRACK* aTrackSegTo,
-              const wxPoint aPosition,
-              const unsigned int aLength,
-              PICKED_ITEMS_LIST* aUndoRedoList
-            );
-    void Add( TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList );
-    void Add( TRACK* aTrackSegTo, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList );
-    void Add( TRACK* aTrackSegTo ); //Track routing trace.
+    TrackNodeItem::ROUNDEDTRACKSCORNER* Add( TRACK* aTrackTo, const wxPoint& aCurPosAt );
+    TrackNodeItem::ROUNDEDTRACKSCORNER* Add( TRACK* aTrackTo,
+                                             const wxPoint aPosition,
+                                             PICKED_ITEMS_LIST* aUndoRedoList
+                                           );
+    TrackNodeItem::ROUNDEDTRACKSCORNER* Add( TRACK* aTrackTo,
+                                             const wxPoint aPosition,
+                                             const unsigned int aLength,
+                                             PICKED_ITEMS_LIST* aUndoRedoList
+                                           );
+
+    std::pair<TrackNodeItem::ROUNDEDTRACKSCORNER*, TrackNodeItem::ROUNDEDTRACKSCORNER*>
+        Add( TRACK* aTrackTo, PICKED_ITEMS_LIST* aUndoRedoList );
+    std::pair<TrackNodeItem::ROUNDEDTRACKSCORNER*, TrackNodeItem::ROUNDEDTRACKSCORNER*>
+        Add( TRACK* aTrackTo, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList );
+    std::pair<TrackNodeItem::ROUNDEDTRACKSCORNER*, TrackNodeItem::ROUNDEDTRACKSCORNER*> Add( TRACK* aTrackTo );
+
+    void Add( std::set<TRACK*>* aTracksAt, PICKED_ITEMS_LIST* aUndoRedoList );
+
     //All
     void Add( const DLIST<TRACK>* aTracksAt );
     void Add( const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList );
     void Add( const int aNetCodeTo );
 
-    void Remove( const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo );
-    void Remove( const TRACK* aTrackItemFrom, PICKED_ITEMS_LIST* aUndoRedoList, const bool aLockedToo );
-    void Remove( const TRACK* aTrackItemFrom, BOARD_COMMIT& aCommit, const bool aLockedToo );
+    void Remove( const TRACK* aTrackFrom, const bool aUndo, const bool aLockedToo );
+    void Remove( const TRACK* aTrackFrom, PICKED_ITEMS_LIST* aUndoRedoList, const bool aLockedToo );
+    void Remove( const TRACK* aTrackFrom, BOARD_COMMIT& aCommit, const bool aLockedToo );
+    void Remove( const BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList, const bool aLockedToo );
+
     void Remove( DLIST<TRACK>* aTracksAt ); //All
     void Remove( const int aNetCodeFrom, PICKED_ITEMS_LIST* aUndoRedoList, const bool aLockedToo );
     void Remove( const int aNetCodeFrom, const bool aUndo, const bool aLockedToo );
 
-    void Change( const TRACK* aTrackItemFrom, const bool aUndo, const bool aLockedToo );
+    void Change( const TRACK* aTrackFrom, const bool aUndo, const bool aLockedToo );
 
     void Recreate( const int aNetCodeTo, PICKED_ITEMS_LIST* aUndoRedoList );
 
@@ -105,7 +113,7 @@ protected:
 
 private:
     //Creation
-    TrackNodeItem::ROUNDEDTRACKSCORNER* Create( const TRACK* aTrackSegTo,
+    TrackNodeItem::ROUNDEDTRACKSCORNER* Create( const TRACK* aTrackTo,
                                                 const TRACK* aTrackSegSecond,
                                                 const wxPoint aPosition,
                                                 const bool aNullTrackCheck
@@ -124,7 +132,7 @@ private:
                  const bool aLockedToo
                );
 
-    TRACK* FindSecondTrack( const TRACK* aTrackSegTo, wxPoint aPosition );
+    TRACK* FindSecondTrack( const TRACK* aTrackTo, wxPoint aPosition );
 
     //aTrack is converted to ROUNDEDCORNERTRACK in m_board->m_Track
     ROUNDEDCORNERTRACK* Convert( TRACK* aTrack, PICKED_ITEMS_LIST* aUndoRedoList ); //One Track
@@ -142,9 +150,9 @@ private:
 public:
     //Save
     void ToMemory( const TRACK* aTrackSegFrom );
-    void FromMemory( const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList );
-    void FromMemory( const TRACK* aTrackSegTo );
-    void FromMemory( const TRACK* aTrackSegTo, BOARD_COMMIT& aCommit );
+    void FromMemory( const TRACK* aTrackTo, PICKED_ITEMS_LIST* aUndoRedoList );
+    void FromMemory( const TRACK* aTrackTo );
+    void FromMemory( const TRACK* aTrackTo, BOARD_COMMIT& aCommit );
 
 private:
     TrackNodeItem::ROUNDEDTRACKSCORNER* m_next_corner_in_memory;
@@ -278,23 +286,6 @@ private:
                             DRC* aDRC
                           );
 
-//-----------------------------------------------------------------------------------------------------/
-
-//-----------------------------------------------------------------------------------------------------/
-// Gal canvas commit  push
-//-----------------------------------------------------------------------------------------------------/
-public:
-    void GalCommitPushPrepare( void );
-    void GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList );
-    void GalCommitPushRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList );
-    void GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList );
-
-private:
-    void GalRemovedListAdd( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner );
-    RoundedTracksCorner_Container* m_gal_removed_list;
-    int m_current_routed_track_netcode;
-
-    std::set<TRACK*>m_gal_commit_tracks;
 //-----------------------------------------------------------------------------------------------------/
 
 

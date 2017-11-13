@@ -80,6 +80,9 @@ namespace TrackNodeItem
         EDA_ITEM* Clone() const override; //override TRACK.
         const EDA_RECT GetBoundingBox() const override; //override TRACK.
         const wxPoint& GetPosition() const override { return m_mid_pos; }
+#ifdef NEWCONALGO
+        void SwapData( BOARD_ITEM* aImage ) override;
+#endif
 
         void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                    int aClearanceValue,
@@ -109,7 +112,7 @@ namespace TrackNodeItem
         void ResetVisibleEndpoints( void );
         bool AreTracksConnected( void );
 
-        TRACK* GetTrackSegSecond( void ) const { return m_trackseg_second; }
+        TRACK* GetTrackSegSecond( void ) const { return m_trackseg_second; } //First track [GetTrackSeg()]
         wxPoint GetPointInArc( const wxPoint aFromPos, const double aLength ) const;
 
     protected:
@@ -124,7 +127,11 @@ namespace TrackNodeItem
                        wxDC* aDC,
                        const COLOR4D aColor,
                        const wxPoint& aOffset,
+#ifdef NEWCONALGO
+                       const PCB_DISPLAY_OPTIONS* aDisplOpts
+#else
                        const DISPLAY_OPTIONS* aDisplOpts
+#endif
                      ) override;
 
         void DrawItem( KIGFX::GAL* aGal, const bool aIsSketch ) override;
@@ -196,7 +203,11 @@ namespace TrackNodeItem
                        wxDC* aDC,
                        const COLOR4D aColor,
                        const wxPoint& aOffset,
+#ifdef NEWCONALGO
+                       const PCB_DISPLAY_OPTIONS* aDisplOpts
+#else
                        const DISPLAY_OPTIONS* aDisplOpts
+#endif
                      ) override;
     };
 

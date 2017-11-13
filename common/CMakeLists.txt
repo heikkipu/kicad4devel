@@ -425,7 +425,6 @@ if( PCBNEW_WITH_TRACKITEMS )
         ../pcbnew/trackitems/roundedcornertrack.cpp
         ../pcbnew/trackitems/roundedtrackscorner.cpp
         ../pcbnew/trackitems/roundedtrackscorners_common.cpp
-        ../pcbnew/trackitems/roundedtrackscorners_common_commit.cpp
         ../pcbnew/trackitems/roundedtrackscorners_common_edit.cpp
         ../pcbnew/trackitems/roundedtrackscorners_common_menus.cpp
         ../pcbnew/trackitems/roundedtrackscorners_common_misc.cpp
@@ -433,11 +432,12 @@ if( PCBNEW_WITH_TRACKITEMS )
         ../pcbnew/trackitems/roundedtrackscorners_common_todolist.cpp
 
         ../pcbnew/trackitems/trackitems_common.cpp
+        ../pcbnew/trackitems/trackitems_common_commit.cpp
 
         ../pcbnew/trackitems/viastitching_common.cpp
     )
 endif()
-    
+
 # add -DPCBNEW to compilation of these PCBNEW sources
 set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     COMPILE_DEFINITIONS "PCBNEW"

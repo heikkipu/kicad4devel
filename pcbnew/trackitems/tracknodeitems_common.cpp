@@ -121,10 +121,15 @@ TRACK* TRACKNODEITEMS::GetTrackSegment( const wxPoint aStart,
         while( track_seg )
         {
             if( track_seg->GetNetCode() == aNetCode )
+            {
                 if( track_seg->GetLayer() == aLayer )
                     if( ( track_seg->GetStart() == aStart ) && ( track_seg->GetEnd() == aEnd ) )
                         return track_seg;
-            track_seg = track_seg->Next();
+                track_seg = track_seg->Next();
+            }
+            else
+                if( !n ) //Only when speeding.
+                    track_seg = nullptr;
         }
         //If did not find fast, then very beggining of the list.
         track_seg = m_Board->m_Track;

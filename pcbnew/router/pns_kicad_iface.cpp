@@ -895,16 +895,6 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
         track->SetWidth( seg->Width() );
         track->SetLayer( ToLAYER_ID( seg->Layers().Start() ) );
         track->SetNetCode( seg->Net() > 0 ? seg->Net() : 0 );
-#ifdef PCBNEW_WITH_TRACKITEMS
-        if(m_board->TrackItems()->RoundedTracksCorners()->IsOn())
-        {
-            ROUNDEDCORNERTRACK* rc_track = new ROUNDEDCORNERTRACK(m_board, track);
-            newBI = rc_track;
-            delete track;
-            track = nullptr;
-        }
-        else
-#endif
         newBI = track;
         break;
     }
