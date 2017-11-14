@@ -484,13 +484,14 @@ private:
 // Gal canvas route commit push.
 //-----------------------------------------------------------------------------------------------------/
 public:
-    void GalCommitPushPrepare( void );
-    void GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList );
-    void GalCommitPushRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList );
-    void GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList );
+    void GalRouteCommitPrepare( void );
+    void GalRouteCommitAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList );
+    void GalRouteCommitRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList );
+    void GalRouteCommitFinish( void );
 
 private:
     std::set<TRACK*> m_gal_commit_added_tracks;
+    void GalRouteCommitFinish( PICKED_ITEMS_LIST* aUndoRedoList );
 //-----------------------------------------------------------------------------------------------------/
 
 

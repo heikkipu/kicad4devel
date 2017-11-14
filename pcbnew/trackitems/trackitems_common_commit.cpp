@@ -28,47 +28,26 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // Gal canvas route commit push.
 //-----------------------------------------------------------------------------------------------------/
-void TRACKITEMS::GalCommitPushPrepare( void )
+void TRACKITEMS::GalRouteCommitPrepare( void )
 {
     m_gal_commit_added_tracks.clear();
 }
 
 //Gal canvas add when drag and route tracks.
-void TRACKITEMS::GalCommitPushAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList )
+void TRACKITEMS::GalRouteCommitAdd( BOARD_ITEM* aItem, PICKED_ITEMS_LIST* aUndoRedoList )
 {
     if( aItem )
     {
         if( aItem->Type() == PCB_TRACE_T )
         {
             TRACK* track = static_cast<TRACK*>( aItem );
-            /*
-            m_Teardrops->Add( track, aUndoRedoList );
-            if( m_RoundedTracksCorners->IsOn() )
-            {
-                std::pair<ROUNDEDTRACKSCORNER*, ROUNDEDTRACKSCORNER*> tracks_cormers =
-                    m_RoundedTracksCorners->Add( track, aUndoRedoList );
-
-                for( int n = 0; n < 2; ++n )
-                {
-                    ROUNDEDTRACKSCORNER* corner = nullptr;
-                    n? corner = tracks_cormers.second : corner = tracks_cormers.first;
-                    if( corner )
-                    {
-                        m_gal_commit_added_tracks.insert( corner->GetTrackSeg() );
-                        m_gal_commit_added_tracks.insert( corner->GetTrackSegSecond() );
-                    }
-                }
-
-            }
-            else
-                */
-                m_gal_commit_added_tracks.insert( track );
+            m_gal_commit_added_tracks.insert( track );
         }
     }
 }
 
 //Gal canva remove when drag and route tracks.
-void TRACKITEMS::GalCommitPushRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList )
+void TRACKITEMS::GalRouteCommitRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* aUndoRedoList )
 {
     if( aItemFrom )
     {
@@ -80,7 +59,7 @@ void TRACKITEMS::GalCommitPushRemove( BOARD_ITEM* aItemFrom, PICKED_ITEMS_LIST* 
     }
 }
 
-void TRACKITEMS::GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList )
+void TRACKITEMS::GalRouteCommitFinish( PICKED_ITEMS_LIST* aUndoRedoList )
 {
     for( TRACK* track : m_gal_commit_added_tracks )
     {
@@ -88,6 +67,14 @@ void TRACKITEMS::GalCommitPushFinish( PICKED_ITEMS_LIST* aUndoRedoList )
     }
 
     m_RoundedTracksCorners->Add( &m_gal_commit_added_tracks, aUndoRedoList );
+}
+
+void TRACKITEMS::GalRouteCommitFinish( void )
+{
+    PICKED_ITEMS_LIST undoredo_items;
+    GalRouteCommitFinish( &undoredo_items );
+    if( m_EditFrame && undoredo_items.GetCount() )
+        m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_NEW );
 }
 
 //-----------------------------------------------------------------------------------------------------/

@@ -62,7 +62,7 @@ using namespace std::placeholders;
 #include "pns_router.h"
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-#include "trackitems/viastitching.h"
+#include <trackitems/trackitems.h>
 #endif
 
 using namespace KIGFX;
@@ -145,20 +145,6 @@ static const TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlind
     _( "Adds a blind or buried via at the end of currently routed track."),
     via_buried_xpm, AF_NONE,
     (void*) VIA_ACTION_FLAGS::BLIND_VIA );
-
-#ifdef PCBNEW_WITH_TRACKITEMS
-static const TOOL_ACTION ACT_SelectLayerAndPlaceThroughVia( "pcbnew.InteractiveRouter.SelectLayerPlaceVia",
-    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SEL_LAYER_AND_ADD_THROUGH_VIA ),
-    _( "Select Layer And Place Through Via" ),
-    _( "Select layer and Add a through-hole via at zone" ),
-    via_xpm );
-
-static const TOOL_ACTION ACT_SelectLayerAndPlaceBlindVia( "pcbnew.InteractiveRouter.SelectLayerPlaceBlindVia",
-    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA ),
-    _( "Select Layer Pair And Place Blind/Buried Via" ),
-    _( "Select layer pair and add a blind or buried via at zone."),
-    via_buried_xpm );
-#endif
 
 static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_MICROVIA ),
@@ -329,12 +315,6 @@ public:
         Add( ACT_SwitchPosture );
 
         AppendSeparator();
-
-#ifdef PCBNEW_WITH_TRACKITEMS
-        Add( ACT_SelectLayerAndPlaceThroughVia );
-        Add( ACT_SelectLayerAndPlaceBlindVia );
-        AppendSeparator();
-#endif
 
         m_widthMenu.SetBoard( aBoard );
         Add( &m_widthMenu );
@@ -727,6 +707,11 @@ void ROUTER_TOOL::performRouting()
     if( !prepareInteractive() )
         return;
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    BOARD* board = getModel<BOARD>();
+    board->TrackItems()->GalRouteCommitPrepare();
+#endif
+
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         // Don't crash if we missed an operation that cancelled routing.
@@ -781,6 +766,10 @@ void ROUTER_TOOL::performRouting()
     }
 
     finishInteractive();
+
+#ifdef PCBNEW_WITH_TRACKITEMS
+    board->TrackItems()->GalRouteCommitFinish();
+#endif
 }
 
 
@@ -900,24 +889,8 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
-#ifdef PCBNEW_WITH_TRACKITEMS
-            board->ViaStitching()->AddThermalVia( m_frame, VIA_THROUGH, false );
-        }
-        else if( evt->IsAction( &ACT_PlaceBlindVia ) )
-        {
-            board->ViaStitching()->AddThermalVia( m_frame, VIA_BLIND_BURIED, false );
-        }
-        else if( evt->IsAction( &ACT_SelectLayerAndPlaceThroughVia ) )
-        {
-            board->ViaStitching()->AddThermalVia( m_frame, VIA_THROUGH, true );
-        }
-        else if( evt->IsAction( &ACT_SelectLayerAndPlaceBlindVia ) )
-        {
-            board->ViaStitching()->AddThermalVia( m_frame, VIA_BLIND_BURIED, true );
-        }
-#else
             m_toolMgr->RunAction( PCB_ACTIONS::layerToggle, true );
-#endif
+        }
         else if( evt->IsAction( &PCB_ACTIONS::remove ) )
         {
             deleteTraces( m_startItem, true );
@@ -961,6 +934,11 @@ void ROUTER_TOOL::performDragging()
 
     m_frame->UndoRedoBlock( true );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    BOARD* board = getModel<BOARD>();
+    board->TrackItems()->GalRouteCommitPrepare();
+#endif
+
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         ctls->ForceCursorPosition( false );
@@ -984,6 +962,10 @@ void ROUTER_TOOL::performDragging()
 
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
+
+#ifdef PCBNEW_WITH_TRACKITEMS
+    board->TrackItems()->GalRouteCommitFinish();
+#endif
 
     m_startItem = NULL;
 
@@ -1032,6 +1014,11 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     m_ctls->SetAutoPan( true );
     m_frame->UndoRedoBlock( true );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    BOARD* board = getModel<BOARD>();
+    board->TrackItems()->GalRouteCommitPrepare();
+#endif
+
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsCancel() )
@@ -1053,6 +1040,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
+
+#ifdef PCBNEW_WITH_TRACKITEMS
+    board->TrackItems()->GalRouteCommitFinish();
+#endif
 
     m_ctls->SetAutoPan( false );
     m_ctls->ShowCursor( false );

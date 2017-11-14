@@ -624,7 +624,9 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_NET_REMOVE::NET_SCAN_NET_REMOVE( const int aNet,
     m_locked_too = aLockedToo;
 
     DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track;
-    m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode( aNet );
+    TRACK* first_track = tracks_list->GetFirst();
+    if( first_track )
+        m_net_start_seg = first_track->GetStartNetCode( aNet );
 }
 
 bool ROUNDEDTRACKSCORNERS::NET_SCAN_NET_REMOVE::ExecuteAt( TRACK* aTrackSeg )

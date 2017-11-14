@@ -70,7 +70,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
         return;
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    board->TrackItems()->GalCommitPushPrepare();
     board->TrackItems()->Teardrops()->UpdateListClear();
     board->TrackItems()->RoundedTracksCorners()->UpdateListClear();
 #endif
@@ -147,7 +146,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                 view->Add( boardItem );
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-                board->TrackItems()->GalCommitPushAdd( boardItem, &undoList );
+                board->TrackItems()->GalRouteCommitAdd( boardItem, &undoList );
 #endif
                 break;
             }
@@ -157,7 +156,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                 if( !m_editModules && aCreateUndoEntry )
                 {
 #ifdef PCBNEW_WITH_TRACKITEMS
-                    board->TrackItems()->GalCommitPushRemove( boardItem, &undoList );
+                    board->TrackItems()->GalRouteCommitRemove( boardItem, &undoList );
                     if( (boardItem->Type() != PCB_ROUNDEDTRACKSCORNER_T) && (boardItem->Type() != PCB_TEARDROP_T) )
 #endif
                     undoList.PushItem( ITEM_PICKER( boardItem, UR_DELETED ) );
@@ -302,7 +301,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
 #ifdef PCBNEW_WITH_TRACKITEMS
     board->TrackItems()->RoundedTracksCorners()->UpdateListDo();
     board->TrackItems()->Teardrops()->UpdateListDo();
-    board->TrackItems()->GalCommitPushFinish( &undoList );
 #endif
 
     if( !m_editModules && aCreateUndoEntry )

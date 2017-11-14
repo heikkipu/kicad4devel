@@ -1015,9 +1015,13 @@ TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode )
         ret_item = m_Board->m_Track;
 
 #ifdef DEBUG
-    TRACK* back_item = ret_item->Back();
-    if( back_item )
-        wxASSERT_MSG( back_item->GetNetCode() < ret_item->GetNetCode(), "BestInsertPointSpeeder" );
+    if( ret_item )
+    {
+        TRACK* back_item = ret_item->Back();
+        if( back_item )
+            wxASSERT_MSG( back_item->GetNetCode() < aNetCode,
+                            "BestInsertPointSpeeder" );
+    }
 #endif
 
     return ret_item;

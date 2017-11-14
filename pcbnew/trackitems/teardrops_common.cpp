@@ -2295,7 +2295,11 @@ TEARDROPS::NET_SCAN_NET_UPDATE::NET_SCAN_NET_UPDATE( const int aNet,
     DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track;
     m_net_start_seg = const_cast<TRACK*>( aTrackSeg );
     if( !aTrackSeg )
-        m_net_start_seg = tracks_list->GetFirst()->GetStartNetCode( aNet );
+    {
+        TRACK* first_track = tracks_list->GetFirst();
+        if( first_track )
+            m_net_start_seg = first_track->GetStartNetCode( aNet );
+    }
 }
 
 bool TEARDROPS::NET_SCAN_NET_UPDATE::ExecuteAt( TRACK* aTrackSeg )
