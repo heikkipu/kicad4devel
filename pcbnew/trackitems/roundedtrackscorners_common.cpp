@@ -66,11 +66,6 @@ ROUNDEDTRACKSCORNERS::~ROUNDEDTRACKSCORNERS()
 
     delete m_recreate_list;
     m_recreate_list = nullptr;
-
-#if 0
-    delete m_gal_removed_list;
-    m_gal_removed_list = nullptr;
-#endif //0
 }
 
 ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::Create( const TRACK* aTrackTo,

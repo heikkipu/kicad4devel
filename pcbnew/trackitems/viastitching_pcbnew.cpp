@@ -1081,15 +1081,39 @@ void ViaStitching::StopDrawingVia( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 //-----------------------------------------------------------------------------------------------------/
 void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame )
 {
+    wxProgressDialog * progressDialog = NULL;
+    if( aActiveWindow )
+        progressDialog = new wxProgressDialog( _( "Fill All Zones" ),
+                                               _("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
+                                               10,
+                                               aActiveWindow,
+                                               wxPD_AUTO_HIDE |
+                                               wxPD_APP_MODAL |
+                                               wxPD_ELAPSED_TIME );
+
+    int progress_counter = 1;
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Delete zones..." ) );
+
     const_cast<BOARD*>(m_Board)->m_Zone.DeleteAll();
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Compile ratsnest..." ) );
 
 #ifdef NEWCONALGO
     auto connity = m_Board->GetConnectivity();
     connity->RecalculateRatsnest();
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Set netcodes..." ) );
+
     m_Board->ViaStitching()->SetNetcodes();
 #else
     aEditFrame->Compile_Ratsnest( nullptr, false );
 #endif
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Collect zones..." ) );
 
     std::vector<ZONE_CONTAINER*> zones;
     for( int n = 0; n < m_Board->GetAreaCount(); ++n )
@@ -1099,18 +1123,8 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
             zones.push_back(zoneContainer);
     }
 
-    wxProgressDialog * progressDialog = NULL;
-    if( aActiveWindow )
-        progressDialog = new wxProgressDialog( _( "Fill All Zones" ),
-                                               _("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
-                                               5,
-                                               aActiveWindow,
-                                               wxPD_AUTO_HIDE |
-                                               wxPD_APP_MODAL |
-                                               wxPD_ELAPSED_TIME );
-
     if( progressDialog )
-        progressDialog->Update( 1, _( "Filling..." ) );
+        progressDialog->Update( ++progress_counter, _( "Fill zones..." ) );
 
 #ifdef NEWCONALGO
 #ifdef _OPENMP
@@ -1128,13 +1142,13 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
         m_Board->GetConnectivity()->Update( zone );
 
     if( progressDialog )
-        progressDialog->Update( 2, _( "Calculate copper pour connections..." ) );
+        progressDialog->Update( ++progress_counter, _( "Calculate copper pour connections..." ) );
 
     ConnectToZones();
     SetNetcodes();
 
     if( progressDialog )
-        progressDialog->Update( 3, _( "Cleaning insulated areas..." ) );
+        progressDialog->Update( ++progress_counter, _( "Cleaning insulated areas..." ) );
 
     for( int m = 0; m < zones.size(); ++m )
     {
@@ -1145,7 +1159,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
     }
 
     if( progressDialog )
-        progressDialog->Update( 4, _( "Updating ratsnest..." ) );
+        progressDialog->Update( ++progress_counter, _( "Updating ratsnest..." ) );
 
     connity->RecalculateRatsnest();
 
@@ -1172,17 +1186,20 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
             }
 
         if( progressDialog )
-            n? progressDialog->Update( 4, _( "Updating ratsnest..." ) ) :
-                progressDialog->Update( 2, _( "Calculate copper pour connections..." ) );
+            n? progressDialog->Update( ++progress_counter, _( "Updating ratsnest..." ) ) :
+                progressDialog->Update( ++progress_counter, _( "Calculate copper pour connections..." ) );
 
         n? SetNetcodes() : ConnectToZones();
 
         if( progressDialog && !n )
-            progressDialog->Update( 3, _( "Cleaning insulated areas..." ) );
+            progressDialog->Update( ++progress_counter, _( "Cleaning insulated areas..." ) );
     }
     aEditFrame->Compile_Ratsnest( nullptr, false );
 
 #endif
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Finish..." ) );
 
     if( progressDialog )
     {

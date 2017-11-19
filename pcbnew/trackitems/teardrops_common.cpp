@@ -26,7 +26,7 @@
 #include <view/view.h> //Gal canvas
 #include "teardrops.h"
 #ifdef NEWCONALGO
-#include <connectivity.h>
+#include <connectivity_data.h>
 #endif
 
 using namespace TrackNodeItem;

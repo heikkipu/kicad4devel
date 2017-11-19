@@ -22,6 +22,7 @@
  */
 
 #include"trackitems.h"
+#include <view/view.h>
 
 
 using namespace TrackNodeItem;
@@ -356,10 +357,16 @@ TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::~TRACKS_PROGRESS_FIX_ITEM_CONNE
     m_Parent->Teardrops()->SetShapeParams( m_fillet_params );
     m_Parent->Teardrops()->SetShapeParams( m_subland_params );
     m_Parent->Teardrops()->SetCurrentShape( m_current_shape );
-    //m_Parent->Teardrops()->RecreateMenu();
+
+    PCB_EDIT_FRAME* edit_frame = m_Parent->GetEditFrame();
     for( auto track_seg : m_fixed_tracks )
+    {
         if( dynamic_cast<ROUNDEDCORNERTRACK*>( track_seg ) )
             m_Parent->RoundedTracksCorners()->Update( track_seg );
+
+        if( edit_frame && edit_frame->IsGalCanvasActive() )
+            edit_frame->GetGalCanvas()->GetView()->Update( track_seg, KIGFX::GEOMETRY );
+    }
 }
 
 unsigned int TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::ExecuteItem( const BOARD_ITEM* aItemAt )

@@ -25,7 +25,7 @@
 
 #include <geometry/seg.h>
 #ifdef NEWCONALGO
-#include <connectivity.h>
+#include <connectivity_data.h>
 #endif
 
 using namespace TrackNodeItem;

@@ -26,7 +26,7 @@
 #include <class_marker_pcb.h>
 #include <view/view.h>
 #ifdef NEWCONALGO
-#include <connectivity.h>
+#include <connectivity_data.h>
 #endif
 
 using namespace TrackNodeItem;
