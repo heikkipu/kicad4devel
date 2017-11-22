@@ -835,7 +835,9 @@ bool VIASTITCHING::DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame )
             if( g_Drc_On )
 #endif
                 hit_drc = dynamic_cast<PCB_EDIT_FRAME*>( aFrame )->GetDrcController()->Drc( static_cast<TRACK*>( aItem ),
-                                                                                            m_Board->m_Track );
+                                                                                            m_Board->m_Track,
+                                                                                            false
+                                                                                          );
 
             if( !zones.size() || hit_drc )
             {
@@ -1093,27 +1095,27 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
 
     int progress_counter = 1;
     if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Delete zones..." ) );
+        progressDialog->Update( ++progress_counter, _( "Deleting segment zones..." ) );
 
     const_cast<BOARD*>(m_Board)->m_Zone.DeleteAll();
 
     if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Compile ratsnest..." ) );
+        progressDialog->Update( ++progress_counter, _( "Compiling ratsnest..." ) );
 
 #ifdef NEWCONALGO
     auto connity = m_Board->GetConnectivity();
     connity->RecalculateRatsnest();
 
     if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Set netcodes..." ) );
+        progressDialog->Update( ++progress_counter, _( "Setting netcodes..." ) );
 
-    m_Board->ViaStitching()->SetNetcodes();
+    SetNetcodes();
 #else
     aEditFrame->Compile_Ratsnest( nullptr, false );
 #endif
 
     if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Collect zones..." ) );
+        progressDialog->Update( ++progress_counter, _( "Collecting zones..." ) );
 
     std::vector<ZONE_CONTAINER*> zones;
     for( int n = 0; n < m_Board->GetAreaCount(); ++n )
@@ -1124,7 +1126,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
     }
 
     if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Fill zones..." ) );
+        progressDialog->Update( ++progress_counter, _( "Filling zones..." ) );
 
 #ifdef NEWCONALGO
 #ifdef _OPENMP
@@ -1136,13 +1138,14 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
         zone->ClearFilledPolysList();
         zone->UnFill();
         zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board), nullptr, false );
+        zone->SetIsFilled( true );
     }
 
     for( auto zone : zones )
         m_Board->GetConnectivity()->Update( zone );
 
     if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Calculate copper pour connections..." ) );
+        progressDialog->Update( ++progress_counter, _( "Calculating copper pour connections..." ) );
 
     ConnectToZones();
     SetNetcodes();
@@ -1153,9 +1156,12 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
     for( int m = 0; m < zones.size(); ++m )
     {
         ZONE_CONTAINER* zone = zones[m];
-        zone->TestForCopperIslandAndRemoveInsulatedIslands( const_cast<BOARD*>(m_Board) );
-        if( aEditFrame->IsGalCanvasActive() )
-            aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
+        if( zone )
+        {
+            zone->TestForCopperIslandAndRemoveInsulatedIslands( const_cast<BOARD*>(m_Board) );
+            if( aEditFrame->IsGalCanvasActive() )
+                aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
+        }
     }
 
     if( progressDialog )
@@ -1187,7 +1193,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
 
         if( progressDialog )
             n? progressDialog->Update( ++progress_counter, _( "Updating ratsnest..." ) ) :
-                progressDialog->Update( ++progress_counter, _( "Calculate copper pour connections..." ) );
+                progressDialog->Update( ++progress_counter, _( "Calculating copper pour connections..." ) );
 
         n? SetNetcodes() : ConnectToZones();
 
@@ -1199,7 +1205,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
 #endif
 
     if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Finish..." ) );
+        progressDialog->Update( ++progress_counter, _( "Done..." ) );
 
     if( progressDialog )
     {

@@ -107,17 +107,17 @@
 #define DRCE_TEARDROP_INSIDE_TEXT           516
 #define DRCE_JUNCTION_INSIDE_TEXT           517
 
-//Teardrop warnings and  markings. 
-#define DRCE_TEARDROP_TRIMMED               551     
+//Teardrop warnings and  markings.
+#define DRCE_TEARDROP_TRIMMED               551
 #define DRCE_TEARDROP_BIG                   552
 #define DRCE_TEARDROP_MISSING               553
 #define DRCE_TJUNCTION_MISSING              554
 #define DRCE_JUNCTION_MISSING               555
-#define DRCE_TEARDROP_USELESS               556  
+#define DRCE_TEARDROP_USELESS               556
 #define DRCE_TEARDROP_IMPOSSIBLE            557
 #define DRCE_JUNCTION_TRACK_SEGS_WIDTH      558
 #define DRCE_TJUNCTION_ANGLE                559
-#define DRCE_TEARDROPS_INSIDE               560     
+#define DRCE_TEARDROPS_INSIDE               560
 
 #define DRCE_TRACKNODEITEM_UNSPECIFIED      600
 
@@ -476,7 +476,11 @@ public:
      * @param aList The track list to test (usually m_Pcb->m_Track)
      * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
      */
+#ifdef PCBNEW_WITH_TRACKITEMS
+int Drc( TRACK* aRefSegm, TRACK* aList, const bool aSetMsgPanel = true );
+#else
     int Drc( TRACK* aRefSeg, TRACK* aList );
+#endif
 
     /**
      * Function Drc

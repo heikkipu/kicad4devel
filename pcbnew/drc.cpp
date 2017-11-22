@@ -156,7 +156,11 @@ DRC::~DRC()
 }
 
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+int DRC::Drc( TRACK* aRefSegm, TRACK* aList, const bool aSetMsgPanel )
+#else
 int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
+#endif
 {
     updatePointers();
 
@@ -164,6 +168,9 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
     {
         wxASSERT( m_currentMarker );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+        if( aSetMsgPanel )
+#endif
         m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
         return BAD_DRC;
     }
@@ -172,6 +179,9 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
     {
         wxASSERT( m_currentMarker );
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+        if( aSetMsgPanel )
+#endif
         m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
         return BAD_DRC;
     }

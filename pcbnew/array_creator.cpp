@@ -34,6 +34,9 @@
 #ifdef PCBNEW_WITH_TRACKITEMS
 #include "drc_stuff.h"
 #include "trackitems/viastitching.h"
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 #endif
 
 void ARRAY_CREATOR::Invoke()
@@ -70,6 +73,12 @@ void ARRAY_CREATOR::Invoke()
             item = static_cast<MODULE*>( item )->GetParent();
         }
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+        std::set<BOARD_ITEM*> newitems;
+#ifdef _OPENMP
+    #pragma omp parallel for schedule(dynamic)
+#endif
+#endif
         // The first item in list is the original item. We do not modify it
         for( int ptN = 1; ptN < array_opts->GetArraySize(); ptN++ )
         {
@@ -97,11 +106,12 @@ void ARRAY_CREATOR::Invoke()
 #ifdef PCBNEW_WITH_TRACKITEMS
                 if( getBoard()->ViaStitching()->DestroyConflicts( new_item, &m_parent ) )
                     continue;
-#endif
-
+                newitems.insert( new_item );
+#else
                 prePushAction( new_item );
                 commit.Add( new_item );
                 postPushAction( new_item );
+#endif
             }
 
             // attempt to renumber items if the array parameters define
@@ -118,6 +128,15 @@ void ARRAY_CREATOR::Invoke()
                 }
             }
         }
+
+#ifdef PCBNEW_WITH_TRACKITEMS
+        for( auto item : newitems )
+        {
+            prePushAction( item );
+            commit.Add( item );
+            postPushAction( item );
+        }
+#endif
     }
 
     commit.Push( _( "Create an array" ) );
