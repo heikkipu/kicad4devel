@@ -34,7 +34,7 @@
 #ifdef PCBNEW_WITH_TRACKITEMS
 #include "drc_stuff.h"
 #include "trackitems/viastitching.h"
-#ifdef _OPENMP
+#ifdef USE_OPENMP
 #include <omp.h>
 #endif
 #endif
@@ -75,7 +75,7 @@ void ARRAY_CREATOR::Invoke()
 
 #ifdef PCBNEW_WITH_TRACKITEMS
         std::set<BOARD_ITEM*> newitems;
-#ifdef _OPENMP
+#ifdef USE_OPENMP
     #pragma omp parallel for schedule(dynamic)
 #endif
 #endif
@@ -130,11 +130,11 @@ void ARRAY_CREATOR::Invoke()
         }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        for( auto item : newitems )
+        for( auto newitem : newitems )
         {
-            prePushAction( item );
-            commit.Add( item );
-            postPushAction( item );
+            prePushAction( newitem );
+            commit.Add( newitem );
+            postPushAction( newitem );
         }
 #endif
     }

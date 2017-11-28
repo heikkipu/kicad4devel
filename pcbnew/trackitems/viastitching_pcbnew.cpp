@@ -24,7 +24,7 @@
 #include "viastitching.h"
 #include "trackitems.h"
 
-#ifdef _OPENMP
+#ifdef USE_OPENMP
 #include <omp.h>
 #endif
 
@@ -1129,7 +1129,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
         progressDialog->Update( ++progress_counter, _( "Filling zones..." ) );
 
 #ifdef NEWCONALGO
-#ifdef _OPENMP
+#ifdef USE_OPENMP
     #pragma omp parallel for schedule(dynamic)
 #endif
     for( int m = 0; m < zones.size(); ++m )
@@ -1142,7 +1142,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
     }
 
     for( auto zone : zones )
-        m_Board->GetConnectivity()->Update( zone );
+        connity->Update( zone );
 
     if( progressDialog )
         progressDialog->Update( ++progress_counter, _( "Calculating copper pour connections..." ) );
@@ -1153,12 +1153,46 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
     if( progressDialog )
         progressDialog->Update( ++progress_counter, _( "Cleaning insulated areas..." ) );
 
+#ifdef USE_OPENMP
+    #pragma omp parallel for schedule(dynamic)
+#endif
     for( int m = 0; m < zones.size(); ++m )
     {
         ZONE_CONTAINER* zone = zones[m];
         if( zone )
         {
+#if 0
             zone->TestForCopperIslandAndRemoveInsulatedIslands( const_cast<BOARD*>(m_Board) );
+#else
+            std::vector<int> islands;
+            islands.clear();
+
+#ifdef USE_OPENMP
+            #pragma omp critical(cluster_search)
+            {
+#endif
+            CN_CONNECTIVITY_ALGO::CLUSTERS clusters =
+                connity->GetConnectivityAlgo()->SearchClusters( CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK );
+
+            for( auto cluster : clusters )
+                if( cluster->Contains( zone ) && cluster->IsOrphaned() )
+                    for( auto z : *cluster )
+                        if( z->Parent() == zone )
+                            islands.push_back( static_cast<CN_ZONE*>(z)->SubpolyIndex() );
+
+            std::sort( islands.begin(), islands.end(), std::greater<int>() );
+
+            for( auto idx : islands )
+            {
+                const SHAPE_POLY_SET* polylist = &zone->GetFilledPolysList();
+                const_cast<SHAPE_POLY_SET*>(polylist)->DeletePolygon( idx );
+            }
+
+            connity->Update( zone );
+#ifdef USE_OPENMP
+            }
+#endif
+#endif //0
             if( aEditFrame->IsGalCanvasActive() )
                 aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
         }
@@ -1172,7 +1206,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
 #else
     for(int n = 0; n < 2; n++)     //Via Stitching: Fill pours twice.
     {
-#ifdef _OPENMP
+#ifdef USE_OPENMP
         #pragma omp parallel for schedule(dynamic)
 #endif
         for( int m = 0; m < zones.size(); ++m )
