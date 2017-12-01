@@ -1168,6 +1168,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
             islands.clear();
 
 #ifdef USE_OPENMP
+            //Still improvenments, while most of the parallelism is in critical section.
             #pragma omp critical(cluster_search)
             {
 #endif

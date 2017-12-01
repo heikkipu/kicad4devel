@@ -2563,7 +2563,16 @@ TRACK* PCB_PARSER::parseTRACK()
         NeedRIGHT();
     }
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    //Speeding up tracks conversion. If rounded tracks corners used.
+    TRACK* track_created = track.release();
+    ROUNDEDCORNERTRACK* rc_track = new ROUNDEDCORNERTRACK( m_board, track_created );
+    delete track_created;
+    track_created = nullptr;
+    return rc_track;
+#else
     return track.release();
+#endif
 }
 
 

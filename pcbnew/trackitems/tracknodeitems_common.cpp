@@ -130,6 +130,8 @@ TRACK* TRACKNODEITEMS::GetTrackSegment( const wxPoint aStart,
             else
                 if( !n ) //Only when speeding.
                     track_seg = nullptr;
+                else
+                    track_seg = track_seg->Next();
         }
         //If did not find fast, then very beggining of the list.
         track_seg = m_Board->m_Track;
