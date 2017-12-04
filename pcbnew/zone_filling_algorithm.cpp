@@ -66,11 +66,20 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET*
         return false;
 
     // Make a smoothed polygon out of the user-drawn polygon if required
+#ifdef PCBNEW_WITH_TRACKITEMS
+    #pragma omp critical(smoothed_poly_deletion)
+    {
+#endif
+
     if( m_smoothedPoly )
     {
         delete m_smoothedPoly;
         m_smoothedPoly = NULL;
     }
+
+#ifdef PCBNEW_WITH_TRACKITEMS
+    }
+#endif
 
     switch( m_cornerSmoothingType )
     {
