@@ -244,7 +244,7 @@ public:
     void FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame );
 
 private:
-    void ConnectToZones( void );
+    std::set<SHAPE_POLY_SET::POLYGON*> ConnectToZones( void );
 
 //-----------------------------------------------------------------------------------------------------/
 

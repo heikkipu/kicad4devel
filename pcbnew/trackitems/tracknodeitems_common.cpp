@@ -78,7 +78,7 @@ void TRACKNODEITEMS::TracksDList_Insert( DLIST<TRACK>* aTracksList, const TRACK*
         aTracksList->Insert( const_cast<TRACK*>( aInsertItem ), const_cast<TRACK*>( aInsertItemBefore ) );
 
         if( m_Board->m_Track == aTracksList->GetFirst() )
-            m_Board->TrackItems()->BestInsertPointSpeeder()->Insert( aInsertItem );
+            m_Board->TrackItems()->NetCodeFirstTrackItem()->Insert( aInsertItem );
     }
 }
 
@@ -87,7 +87,7 @@ void TRACKNODEITEMS::TracksDList_Remove( DLIST<TRACK>* aTracksList, const TRACK*
     if( aTracksList && aRemoveItem )
     {
         if( m_Board->m_Track == aTracksList->GetFirst() )
-            m_Board->TrackItems()->BestInsertPointSpeeder()->Remove( aRemoveItem );
+            m_Board->TrackItems()->NetCodeFirstTrackItem()->Remove( aRemoveItem );
 
         aTracksList->Remove( const_cast<TRACK*>( aRemoveItem ) );
     }
@@ -115,7 +115,7 @@ TRACK* TRACKNODEITEMS::GetTrackSegment( const wxPoint aStart,
                                       ) const
 {
     //First try to find fast
-    TRACK* track_seg = m_Board->TrackItems()->BestInsertPointSpeeder()->GetItem( aNetCode );
+    TRACK* track_seg = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetItem( aNetCode );
     for( int n = 0; n < 2; ++n )
     {
         while( track_seg )

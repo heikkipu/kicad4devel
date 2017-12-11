@@ -535,6 +535,11 @@ class SHAPE_POLY_SET : public SHAPE
             return m_polys[aIndex];
         }
 
+        const POLYGON& Polygon( int aIndex ) const
+        {
+            return m_polys[aIndex];
+        }
+
         const SHAPE_LINE_CHAIN& COutline( int aIndex ) const
         {
             return m_polys[aIndex][0];
@@ -845,7 +850,7 @@ class SHAPE_POLY_SET : public SHAPE
         ///> Returns true if a given subpolygon contains the point aP. If aSubpolyIndex < 0
         ///> (default value), checks all polygons in the set
         bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1 ) const;
-        
+
 #ifdef PCBNEW_WITH_TRACKITEMS
         //Acts same way as Contains, but return POLYGON if true.
         const POLYGON* GetPolygon( const VECTOR2I& aP, int aSubpolyIndex = -1 ) const;

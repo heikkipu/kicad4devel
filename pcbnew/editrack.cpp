@@ -655,7 +655,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
             s_ItemsListPicker.PushItem( picker );
             GetBoard()->m_Track.Insert( track, insertBeforeMe );
 #ifdef PCBNEW_WITH_TRACKITEMS
-            GetBoard()->TrackItems()->BestInsertPointSpeeder()->Insert( track );
+            GetBoard()->TrackItems()->NetCodeFirstTrackItem()->Insert( track );
             if(track->Type() == PCB_TRACE_T)
                 added_tracksegs.insert(track);
 #endif
@@ -1305,7 +1305,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
 #ifdef PCBNEW_WITH_TRACKITEMS
         pcb->TrackItems()->Teardrops()->Remove( oldtrack, false, true );
         pcb->TrackItems()->RoundedTracksCorners()->Remove( oldtrack, false, true );
-        pcb->TrackItems()->BestInsertPointSpeeder()->Remove( oldtrack );
+        pcb->TrackItems()->NetCodeFirstTrackItem()->Remove( oldtrack );
 #endif
 
         delete aTrackList.Remove( oldtrack );

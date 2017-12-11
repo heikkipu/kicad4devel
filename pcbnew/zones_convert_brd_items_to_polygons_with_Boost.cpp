@@ -74,7 +74,9 @@
  * To emit zone data to a file when filling zones for the debugging purposes,
  * set this 'true' and build.
  */
+#ifdef DEBUG
 static const bool g_DumpZonesWhenFilling = false;
+#endif
 
 extern void BuildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCornerBuffer,
                                                      BOARD* aPcb, ZONE_CONTAINER* aZone,
@@ -414,8 +416,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     int outline_half_thickness = m_ZoneMinThickness / 2;
 
 
+#ifdef DEBUG
     std::unique_ptr<SHAPE_FILE_IO> dumper( new SHAPE_FILE_IO(
             g_DumpZonesWhenFilling ? "zones_dump.txt" : "", SHAPE_FILE_IO::IOM_APPEND ) );
+#endif
 
     // Set the number of segments in arc approximations
     if( m_ArcToSegmentsCount == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF  )
@@ -432,8 +436,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
 
     CPOLYGONS_LIST tmp;
 
+#ifdef DEBUG
     if(g_DumpZonesWhenFilling)
         dumper->BeginGroup("clipper-zone");
+#endif
 
     SHAPE_POLY_SET solidAreas = *m_smoothedPoly;
 
@@ -442,19 +448,25 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
 
     SHAPE_POLY_SET holes;
 
+#ifdef DEBUG
     if(g_DumpZonesWhenFilling)
         dumper->Write( &solidAreas, "solid-areas" );
+#endif
 
     tmp.RemoveAllContours();
     buildFeatureHoleList( aPcb, holes );
 
+#ifdef DEBUG
     if(g_DumpZonesWhenFilling)
         dumper->Write( &holes, "feature-holes" );
+#endif
 
     holes.Simplify( POLY_CALC_MODE );
 
+#ifdef DEBUG
     if (g_DumpZonesWhenFilling)
         dumper->Write( &holes, "feature-holes-postsimplify" );
+#endif
 
     // Generate the filled areas (currently, without thermal shapes, which will
     // be created later).
@@ -462,14 +474,18 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     // needed by Gerber files and Fracture()
     solidAreas.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
+#ifdef DEBUG
     if (g_DumpZonesWhenFilling)
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );
+#endif
 
     SHAPE_POLY_SET areas_fractured = solidAreas;
     areas_fractured.Fracture( POLY_CALC_MODE );
 
+#ifdef DEBUG
     if (g_DumpZonesWhenFilling)
         dumper->Write( &areas_fractured, "areas_fractured" );
+#endif
 
     m_FilledPolysList = areas_fractured;
 
@@ -494,15 +510,19 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
         // needed by Gerber files and Fracture()
         solidAreas.BooleanSubtract( thermalHoles, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
+#ifdef DEBUG
         if( g_DumpZonesWhenFilling )
             dumper->Write( &thermalHoles, "thermal-holes" );
+#endif
 
         // put these areas in m_FilledPolysList
         SHAPE_POLY_SET th_fractured = solidAreas;
         th_fractured.Fracture( POLY_CALC_MODE );
 
+#ifdef DEBUG
         if( g_DumpZonesWhenFilling )
             dumper->Write ( &th_fractured, "th_fractured" );
+#endif
 
         m_FilledPolysList = th_fractured;
 
@@ -510,8 +530,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
             TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
     }
 
+#ifdef DEBUG
     if(g_DumpZonesWhenFilling)
         dumper->EndGroup();
+#endif
 }
 
 void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )

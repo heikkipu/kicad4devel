@@ -717,8 +717,8 @@ public:
 private:
     void buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeatures );
 
-    SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.
-    SHAPE_POLY_SET*       m_smoothedPoly;        // Corner-smoothed version of m_Poly
+    SHAPE_POLY_SET*       m_Poly{nullptr};                ///< Outline of the zone.
+    SHAPE_POLY_SET*       m_smoothedPoly{nullptr};        // Corner-smoothed version of m_Poly
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;
 

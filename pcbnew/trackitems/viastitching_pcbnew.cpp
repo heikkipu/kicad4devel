@@ -280,8 +280,11 @@ void VIASTITCHING::SetNetcodes( void )
 }
 
 //Set real zone polygon connections to thermal vias.
-void VIASTITCHING::ConnectToZones( void )
+std::set<SHAPE_POLY_SET::POLYGON*> VIASTITCHING::ConnectToZones( void )
 {
+    std::set<SHAPE_POLY_SET::POLYGON*> connected_polys;
+    connected_polys.clear();
+
     //Connect unconnected single vias in copper pours.
     if( m_Board->GetAreaCount() )
     {
@@ -371,10 +374,10 @@ void VIASTITCHING::ConnectToZones( void )
                     bool hit = false;
                     std::vector<D_PAD*> test_pads = m_Board->TrackItems()->GetPads( thermalcode );
 
-                    for( auto& poly: vias_polys )
+                    for( auto& via_poly: vias_polys )
                     {
-                        const VIA* via =  poly.first;
-                        const SHAPE_POLY_SET::POLYGON* via_poly = poly.second;
+                        const VIA* via =  via_poly.first;
+                        const SHAPE_POLY_SET::POLYGON* vias_poly = via_poly.second;
 
                         // Other vias have pad connectivity.
                         for( auto& other_via : other_zone_vias )
@@ -386,7 +389,7 @@ void VIASTITCHING::ConnectToZones( void )
 
                                 for( auto& othervia_polyzone : *othervia_polyszones )
                                 {
-                                    if( othervia_polyzone.first == via_poly )
+                                    if( othervia_polyzone.first == vias_poly )
                                     {
                                         hit = true;
                                         break;
@@ -400,7 +403,7 @@ void VIASTITCHING::ConnectToZones( void )
                             via_polyzone = const_cast<VIA*>( via )->GetThermalPolysZones();
                             ZONE_CONTAINER* zone = nullptr;
                             std::unordered_map<const SHAPE_POLY_SET::POLYGON*, ZONE_CONTAINER*>::const_iterator vpz =
-                                via_polyzone->find( via_poly );
+                                via_polyzone->find( vias_poly );
 
                             if( vpz != via_polyzone->end() ) //always true, must be.
                                 zone = vpz->second;
@@ -440,7 +443,7 @@ void VIASTITCHING::ConnectToZones( void )
                                                                 const SHAPE_POLY_SET::POLYGON* seg_poly =
                                                                     zone_polys.GetPolygon( VECTOR2I( seg_pos.x, seg_pos.y ) );
 
-                                                                if( seg_poly == via_poly )
+                                                                if( seg_poly == vias_poly )
                                                                 {
                                                                     hit = true;
                                                                     track_seg = nullptr;
@@ -476,7 +479,7 @@ void VIASTITCHING::ConnectToZones( void )
                                             const SHAPE_POLY_SET::POLYGON* pad_poly =
                                                 zone_polys.GetPolygon( VECTOR2I( pad_pos.x, pad_pos.y ) );
 
-                                            if( pad_poly == via_poly )
+                                            if( pad_poly == vias_poly )
                                             {
                                                 hit = true;
                                                 break;
@@ -496,11 +499,16 @@ void VIASTITCHING::ConnectToZones( void )
                     // Set netcodes if connection with pad or track.
                     if( hit )
                         for( auto& via_poly: vias_polys )
+                        {
                             const_cast<VIA*>( via_poly.first )->SetNetCode( thermalcode );
+                            connected_polys.insert( const_cast<SHAPE_POLY_SET::POLYGON*>(via_poly.second) );
+                        }
                 }
             }
         }
     }
+
+    return connected_polys;
 }
 
 //Recursively collect all vias to aViasPolys container which hits aVia in aZonePoly.
@@ -598,6 +606,349 @@ void VIASTITCHING::Collect_Zones_Hit_Pos( std::vector<ZONE_CONTAINER*>& aZones,
         }
     }
 }
+
+TRACK* VIASTITCHING::ViaBreakTrack( const TRACK* aStartingTrack,
+                                    const VIA* aVia
+                                  )
+{
+    PCB_LAYER_ID via_top_layer, via_bottom_layer;
+    aVia->LayerPair( &via_top_layer, &via_bottom_layer );
+    wxPoint via_pos = aVia->GetEnd();
+
+    for( const TRACK* track = aStartingTrack; track; track = track->Next() )
+    {
+        if( track != aVia )
+        {
+            if( ( track->Type() == PCB_VIA_T ) )
+            {
+                if( track->IsOnLayer( via_top_layer ) || track->IsOnLayer( via_bottom_layer ) )
+                {
+                    if( ( aVia->GetThermalCode() == dynamic_cast<const VIA*>( track )->GetThermalCode() ) )
+                    {
+                        if( track->HitTest( via_pos ) )
+                            return const_cast<TRACK*>( track );
+                    }
+                    else
+                        if( HitTestPoints( via_pos, track->GetEnd(),
+                            aVia->GetWidth() / 2 + track->GetWidth() / 2 ) )
+                            return const_cast<TRACK*>( track );
+                }
+            }
+            else
+            {
+                if( aVia->IsOnLayer( track->GetLayer() ) )
+                {
+                    if( track->HitTest( via_pos ) )
+                        return const_cast<TRACK*>( track );
+                    else
+                        //Track endpoints may connect with zone.
+                        //Test endpoints with clearance. Do not want break connection to zone.
+                        if( HitTestPoints( via_pos,
+                                           track->GetStart(),
+                                           aVia->GetWidth() / 2 + track->GetWidth() / 2 + track->GetClearance() ) )
+                        {
+                            return const_cast<TRACK*>( track );
+                        }
+                        else
+                            if( HitTestPoints( via_pos,
+                                               track->GetEnd(),
+                                               aVia->GetWidth() / 2 + track->GetWidth() / 2 + track->GetClearance() ) )
+                            {
+                                return const_cast<TRACK*>( track );
+                            }
+                }
+
+            }
+        }
+    }
+    return nullptr;
+}
+
+
+ZONE_CONTAINER* VIASTITCHING::HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer )
+{
+    int num_areas = aPcb->GetAreaCount();
+    for( int area_index = 0; area_index < num_areas; area_index++ )
+    {
+        ZONE_CONTAINER* area  = aPcb->GetArea( area_index );
+        if( area->GetLayer() == aLayer )
+            if( area->HitTestInsideZone( aPos ) )
+                return area;
+    }
+    return nullptr;
+}
+
+//-----------------------------------------------------------------------------------------------------/
+//Zone filling and stitch via connection.
+//-----------------------------------------------------------------------------------------------------/
+void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame )
+{
+    wxProgressDialog * progressDialog = NULL;
+    if( aActiveWindow )
+        progressDialog = new wxProgressDialog( _( "Fill All Zones" ),
+                                               _("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
+                                               10,
+                                               aActiveWindow,
+                                               wxPD_AUTO_HIDE |
+                                               wxPD_APP_MODAL |
+                                               wxPD_ELAPSED_TIME );
+
+    int progress_counter = 1;
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Deleting segment zones..." ) );
+
+    const_cast<BOARD*>(m_Board)->m_Zone.DeleteAll();
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Compiling ratsnest..." ) );
+
+#ifdef NEWCONALGO
+    auto connity = m_Board->GetConnectivity();
+    connity->RecalculateRatsnest();
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Setting netcodes..." ) );
+
+    SetNetcodes();
+#else
+    aEditFrame->Compile_Ratsnest( nullptr, false );
+#endif
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Collecting zones..." ) );
+
+    std::vector<ZONE_CONTAINER*> zones;
+    for( int n = 0; n < m_Board->GetAreaCount(); ++n )
+    {
+        ZONE_CONTAINER* zoneContainer = m_Board->GetArea( n );
+        if( !zoneContainer->GetIsKeepout() )
+            zones.push_back(zoneContainer);
+    }
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Filling zones..." ) );
+
+#ifdef USE_OPENMP
+    #pragma omp parallel for schedule(dynamic)
+#endif
+#ifdef NEWCONALGO
+    for( int n = 0; n < zones.size(); ++n )
+    {
+        ZONE_CONTAINER* zone = zones[n];
+        zone->ClearFilledPolysList();
+        zone->UnFill();
+        zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board), nullptr, false );
+        zone->SetIsFilled( true );
+    }
+
+    for( auto zone : zones )
+        connity->Update( zone );
+
+#else
+    for( int m = 0; m < zones.size(); ++m )
+    {
+        ZONE_CONTAINER* zone = zones[m];
+        zone->ClearFilledPolysList();
+        zone->UnFill();
+        zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board) );
+    }
+#endif
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Calculating copper pour connections..." ) );
+    std::set<SHAPE_POLY_SET::POLYGON*>via_connected_polys = ConnectToZones();
+
+#ifdef NEWCONALGO
+    SetNetcodes();
+#endif
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Cleaning insulated areas..." ) );
+
+#ifdef USE_OPENMP
+    #pragma omp parallel for schedule(dynamic)
+#endif
+    for( int n = 0; n < zones.size(); ++n )
+    {
+        ZONE_CONTAINER* zone = zones[n];
+        PCB_LAYER_ID zone_layer = zone->GetLayer();
+
+        if( zone && IsCopperLayer( zone_layer) )
+        {
+            std::vector<int> islands;
+            islands.clear();
+            std::set<SHAPE_POLY_SET::POLYGON*> connected_polys;
+            connected_polys.clear();
+
+            int zone_netcode = zone->GetNetCode();
+
+            const SHAPE_POLY_SET* zone_polys = &zone->GetFilledPolysList();
+            int num_polys = zone_polys->OutlineCount();
+
+            // Tracks and vias have pad connectivity.
+            TRACK* start_track = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetItem( zone_netcode );
+            if( start_track )
+            {
+                for( int direction = 0; direction < 2; ++direction )
+                {
+                    TRACK* track_item = start_track;
+                    if( direction )
+                        track_item = start_track->Back();
+
+                    while( track_item )
+                    {
+                        bool is_via = ( track_item->Type() == PCB_VIA_T &&
+                                        !dynamic_cast<VIA*>( track_item )->GetThermalCode() );
+                        if( track_item->Type() == PCB_TRACE_T || is_via )
+                        {
+                            if( track_item->GetNetCode() == zone_netcode )
+                            {
+                                if( track_item->IsOnLayer( zone_layer ) )
+                                {
+                                    int  endpoint = 0;
+                                    if( is_via )
+                                        endpoint = 1;
+                                    for( ; endpoint < 2; ++endpoint )
+                                    {
+                                        wxPoint seg_pos = endpoint? track_item->GetEnd() :
+                                                                    track_item->GetStart();
+
+                                        if( zone->HitTestInsideZone( seg_pos ) )
+                                        {
+                                            const SHAPE_POLY_SET::POLYGON* seg_poly =
+                                                zone_polys->GetPolygon( VECTOR2I( seg_pos.x, seg_pos.y ) );
+
+                                            if( seg_poly )
+                                            {
+                                                connected_polys.insert( const_cast<SHAPE_POLY_SET::POLYGON*>(seg_poly) );
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                                track_item = nullptr;
+                        }
+                        if( track_item )
+                            ( direction )? track_item = track_item->Back() : track_item = track_item->Next();
+                    }
+                }
+            }
+
+            std::vector<D_PAD*> test_pads = m_Board->TrackItems()->GetPads( zone_netcode );
+            for( D_PAD* pad : test_pads )
+            {
+                wxPoint pad_pos = pad->GetPosition();
+
+                if( pad->IsOnLayer( zone_layer ) &&
+                    zone->HitTestInsideZone( pad_pos ) )
+                {
+                    const SHAPE_POLY_SET::POLYGON* pad_poly =
+                        zone_polys->GetPolygon( VECTOR2I( pad_pos.x, pad_pos.y ) );
+
+                    if( pad_poly )
+                    {
+                        connected_polys.insert( const_cast<SHAPE_POLY_SET::POLYGON*>(pad_poly) );
+                    }
+
+                }
+            }
+
+            for( int np = 0 ; np < num_polys; ++np )
+            {
+                const SHAPE_POLY_SET::POLYGON* zone_poly = &zone_polys->Polygon( np );
+
+                //Thermal via connection
+                if( ( via_connected_polys.find( const_cast<SHAPE_POLY_SET::POLYGON*>(zone_poly) ) ==
+                      via_connected_polys.end() ) &&
+                    ( connected_polys.find( const_cast<SHAPE_POLY_SET::POLYGON*>(zone_poly) ) ==
+                      connected_polys.end() ) )
+                    islands.push_back( np );
+            }
+
+            std::sort( islands.begin(), islands.end(), std::greater<int>() );
+
+            for( auto idx : islands )
+            {
+                const SHAPE_POLY_SET* polylist = &zone->GetFilledPolysList();
+                const_cast<SHAPE_POLY_SET*>(polylist)->DeletePolygon( idx );
+            }
+
+            if( aEditFrame->IsGalCanvasActive() )
+                aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
+        }
+    }
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Updating ratsnest..." ) );
+
+    for( auto zone : zones )
+    {
+#ifdef NEWCONALGO
+        connity->Update( zone );
+#else
+        m_Board->GetRatsnest()->Update( zone );
+#endif
+    }
+
+    aEditFrame->Compile_Ratsnest( nullptr, false );
+
+    if( progressDialog )
+        progressDialog->Update( ++progress_counter, _( "Done..." ) );
+
+    if( progressDialog )
+    {
+#ifdef __WXMAC__
+        // Work around a dialog z-order issue on OS X
+        aActiveWindow->Raise();
+#endif
+        progressDialog->Destroy();
+    }
+
+    aEditFrame->OnModify();
+}
+
+//-----------------------------------------------------------------------------------------------------/
+
+//Do not add thermal vias in array add. if no zone in current layer. And use DRC if it is ON.
+bool VIASTITCHING::DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame )
+{
+    if( aItem->Type() == PCB_VIA_T )
+    {
+        int thermalcode = dynamic_cast<const VIA*>( aItem )->GetThermalCode();
+        if( thermalcode )
+        {
+            std::vector<ZONE_CONTAINER*> zones;
+            Collect_Zones_Hit_Via( zones,
+                                   static_cast<const VIA*>( aItem ),
+                                   dynamic_cast<const VIA*>( aItem )->GetNetCode(),
+                                   aFrame->GetActiveLayer() );
+
+            aItem->SetFlags( IS_NEW );
+            bool hit_drc = false;
+#ifdef NEWCONALGO
+            if( aFrame->Settings().m_legacyDrcOn )
+#else
+            if( g_Drc_On )
+#endif
+                hit_drc = dynamic_cast<PCB_EDIT_FRAME*>( aFrame )->GetDrcController()->Drc( static_cast<TRACK*>( aItem ),
+                                                                                            m_Board->m_Track,
+                                                                                            false
+                                                                                          );
+
+            if( !zones.size() || hit_drc )
+            {
+                delete aItem;
+                aItem = nullptr;
+                return true;
+            }
+            aItem->ClearFlags( IS_NEW );
+        }
+    }
+    return false;
+}
+
 
 void VIASTITCHING::RuleCheck( const TRACK* aTrack, DRC* aDRC )
 {
@@ -754,133 +1105,6 @@ bool VIASTITCHING::Clean( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit )
     }
 
     return modified;
-}
-
-TRACK* VIASTITCHING::ViaBreakTrack( const TRACK* aStartingTrack,
-                                    const VIA* aVia
-                                  )
-{
-    PCB_LAYER_ID via_top_layer, via_bottom_layer;
-    aVia->LayerPair( &via_top_layer, &via_bottom_layer );
-    wxPoint via_pos = aVia->GetEnd();
-
-    for( const TRACK* track = aStartingTrack; track; track = track->Next() )
-    {
-        if( track != aVia )
-        {
-            if( ( track->Type() == PCB_VIA_T ) )
-            {
-                if( track->IsOnLayer( via_top_layer ) || track->IsOnLayer( via_bottom_layer ) )
-                {
-                    if( ( aVia->GetThermalCode() == dynamic_cast<const VIA*>( track )->GetThermalCode() ) )
-                    {
-                        if( track->HitTest( via_pos ) )
-                            return const_cast<TRACK*>( track );
-                    }
-                    else
-                        if( HitTestPoints( via_pos, track->GetEnd(),
-                            aVia->GetWidth() / 2 + track->GetWidth() / 2 ) )
-                            return const_cast<TRACK*>( track );
-                }
-            }
-            else
-            {
-                if( aVia->IsOnLayer( track->GetLayer() ) )
-                {
-                    if( track->HitTest( via_pos ) )
-                        return const_cast<TRACK*>( track );
-                    else
-                        //Track endpoints may connect with zone.
-                        //Test endpoints with clearance. Do not want break connection to zone.
-                        if( HitTestPoints( via_pos,
-                                           track->GetStart(),
-                                           aVia->GetWidth() / 2 + track->GetWidth() / 2 + track->GetClearance() ) )
-                        {
-                            return const_cast<TRACK*>( track );
-                        }
-                        else
-                            if( HitTestPoints( via_pos,
-                                               track->GetEnd(),
-                                               aVia->GetWidth() / 2 + track->GetWidth() / 2 + track->GetClearance() ) )
-                            {
-                                return const_cast<TRACK*>( track );
-                            }
-                }
-
-            }
-        }
-    }
-    return nullptr;
-}
-
-//Do not add thermal vias in array add. if no zone in current layer. And use DRC if it is ON.
-bool VIASTITCHING::DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame )
-{
-    if( aItem->Type() == PCB_VIA_T )
-    {
-        int thermalcode = dynamic_cast<const VIA*>( aItem )->GetThermalCode();
-        if( thermalcode )
-        {
-            std::vector<ZONE_CONTAINER*> zones;
-            Collect_Zones_Hit_Via( zones,
-                                   static_cast<const VIA*>( aItem ),
-                                   dynamic_cast<const VIA*>( aItem )->GetNetCode(),
-                                   aFrame->GetActiveLayer() );
-
-            aItem->SetFlags( IS_NEW );
-            bool hit_drc = false;
-#ifdef NEWCONALGO
-            if( aFrame->Settings().m_legacyDrcOn )
-#else
-            if( g_Drc_On )
-#endif
-                hit_drc = dynamic_cast<PCB_EDIT_FRAME*>( aFrame )->GetDrcController()->Drc( static_cast<TRACK*>( aItem ),
-                                                                                            m_Board->m_Track,
-                                                                                            false
-                                                                                          );
-
-            if( !zones.size() || hit_drc )
-            {
-                delete aItem;
-                aItem = nullptr;
-                return true;
-            }
-            aItem->ClearFlags( IS_NEW );
-        }
-    }
-    return false;
-}
-
-
-bool VIASTITCHING::SelectLayer( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos )
-{
-    if( aEditFrame->GetBoard()->HitTestForAnyFilledArea( aPos, F_Cu, B_Cu, -1 ) )
-    {
-        THROUGH_VIA_LAYER_SELECTOR layer_selector( aEditFrame, aPos );
-
-        if( layer_selector.ShowModal() == wxID_OK )
-        {
-            PCB_LAYER_ID layer = ToLAYER_ID( layer_selector.GetLayerSelection() );
-            aEditFrame->GetScreen()->m_Route_Layer_TOP = layer;
-            aEditFrame->SetActiveLayer( layer );
-            aEditFrame->GetCanvas()->MoveCursor( aPos );
-            return true;
-        }
-    }
-    return false;
-}
-
-ZONE_CONTAINER* VIASTITCHING::HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer )
-{
-    int num_areas = aPcb->GetAreaCount();
-    for( int area_index = 0; area_index < num_areas; area_index++ )
-    {
-        ZONE_CONTAINER* area  = aPcb->GetArea( area_index );
-        if( area->GetLayer() == aLayer )
-            if( area->HitTestInsideZone( aPos ) )
-                return area;
-    }
-    return nullptr;
 }
 
 
@@ -1079,186 +1303,26 @@ void ViaStitching::StopDrawingVia( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 //-----------------------------------------------------------------------------------------------------/
 
 //-----------------------------------------------------------------------------------------------------/
-//Zone filling and stitch via connection.
-//-----------------------------------------------------------------------------------------------------/
-void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame )
-{
-    wxProgressDialog * progressDialog = NULL;
-    if( aActiveWindow )
-        progressDialog = new wxProgressDialog( _( "Fill All Zones" ),
-                                               _("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
-                                               10,
-                                               aActiveWindow,
-                                               wxPD_AUTO_HIDE |
-                                               wxPD_APP_MODAL |
-                                               wxPD_ELAPSED_TIME );
-
-    int progress_counter = 1;
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Deleting segment zones..." ) );
-
-    const_cast<BOARD*>(m_Board)->m_Zone.DeleteAll();
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Compiling ratsnest..." ) );
-
-#ifdef NEWCONALGO
-    auto connity = m_Board->GetConnectivity();
-    connity->RecalculateRatsnest();
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Setting netcodes..." ) );
-
-    SetNetcodes();
-#else
-    aEditFrame->Compile_Ratsnest( nullptr, false );
-#endif
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Collecting zones..." ) );
-
-    std::vector<ZONE_CONTAINER*> zones;
-    for( int n = 0; n < m_Board->GetAreaCount(); ++n )
-    {
-        ZONE_CONTAINER* zoneContainer = m_Board->GetArea( n );
-        if( !zoneContainer->GetIsKeepout() )
-            zones.push_back(zoneContainer);
-    }
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Filling zones..." ) );
-
-#ifdef NEWCONALGO
-#ifdef USE_OPENMP
-    #pragma omp parallel for schedule(dynamic)
-#endif
-    for( int m = 0; m < zones.size(); ++m )
-    {
-        ZONE_CONTAINER* zone = zones[m];
-        zone->ClearFilledPolysList();
-        zone->UnFill();
-        zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board), nullptr, false );
-        zone->SetIsFilled( true );
-    }
-
-    for( auto zone : zones )
-        connity->Update( zone );
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Calculating copper pour connections..." ) );
-
-    ConnectToZones();
-    SetNetcodes();
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Cleaning insulated areas..." ) );
-
-#ifdef USE_OPENMP
-    #pragma omp parallel for schedule(dynamic)
-#endif
-    for( int m = 0; m < zones.size(); ++m )
-    {
-        ZONE_CONTAINER* zone = zones[m];
-        if( zone )
-        {
-#if 0
-            zone->TestForCopperIslandAndRemoveInsulatedIslands( const_cast<BOARD*>(m_Board) );
-#else
-            std::vector<int> islands;
-            islands.clear();
-
-#ifdef USE_OPENMP
-            //Still improvenments, while most of the parallelism is in critical section.
-            #pragma omp critical(cluster_search)
-            {
-#endif
-            CN_CONNECTIVITY_ALGO::CLUSTERS clusters =
-                connity->GetConnectivityAlgo()->SearchClusters( CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK );
-
-            for( auto cluster : clusters )
-                if( cluster->Contains( zone ) && cluster->IsOrphaned() )
-                    for( auto z : *cluster )
-                        if( z->Parent() == zone )
-                            islands.push_back( static_cast<CN_ZONE*>(z)->SubpolyIndex() );
-
-            std::sort( islands.begin(), islands.end(), std::greater<int>() );
-
-            for( auto idx : islands )
-            {
-                const SHAPE_POLY_SET* polylist = &zone->GetFilledPolysList();
-                const_cast<SHAPE_POLY_SET*>(polylist)->DeletePolygon( idx );
-            }
-
-            connity->Update( zone );
-#ifdef USE_OPENMP
-            }
-#endif
-#endif //0
-            if( aEditFrame->IsGalCanvasActive() )
-                aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
-        }
-    }
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Updating ratsnest..." ) );
-
-    connity->RecalculateRatsnest();
-
-#else
-    for(int n = 0; n < 2; n++)     //Via Stitching: Fill pours twice.
-    {
-#ifdef USE_OPENMP
-        #pragma omp parallel for schedule(dynamic)
-#endif
-        for( int m = 0; m < zones.size(); ++m )
-        {
-            ZONE_CONTAINER* zone = zones[m];
-            zone->ClearFilledPolysList();
-            zone->UnFill();
-            zone->BuildFilledSolidAreasPolygons( const_cast<BOARD*>(m_Board) );
-        }
-
-        if( n )
-            for( auto zone : zones )
-            {
-                m_Board->GetRatsnest()->Update( zone );
-                if( aEditFrame->IsGalCanvasActive() )
-                    aEditFrame->GetGalCanvas()->GetView()->Update( zone, KIGFX::ALL );
-            }
-
-        if( progressDialog )
-            n? progressDialog->Update( ++progress_counter, _( "Updating ratsnest..." ) ) :
-                progressDialog->Update( ++progress_counter, _( "Calculating copper pour connections..." ) );
-
-        n? SetNetcodes() : ConnectToZones();
-
-        if( progressDialog && !n )
-            progressDialog->Update( ++progress_counter, _( "Cleaning insulated areas..." ) );
-    }
-    aEditFrame->Compile_Ratsnest( nullptr, false );
-
-#endif
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Done..." ) );
-
-    if( progressDialog )
-    {
-#ifdef __WXMAC__
-        // Work around a dialog z-order issue on OS X
-        aActiveWindow->Raise();
-#endif
-        progressDialog->Destroy();
-    }
-
-    aEditFrame->OnModify();
-}
-
-//-----------------------------------------------------------------------------------------------------/
-
-//-----------------------------------------------------------------------------------------------------/
 //Via layer selector
 //-----------------------------------------------------------------------------------------------------/
+bool VIASTITCHING::SelectLayer( PCB_EDIT_FRAME* aEditFrame, const wxPoint aPos )
+{
+    if( aEditFrame->GetBoard()->HitTestForAnyFilledArea( aPos, F_Cu, B_Cu, -1 ) )
+    {
+        THROUGH_VIA_LAYER_SELECTOR layer_selector( aEditFrame, aPos );
+
+        if( layer_selector.ShowModal() == wxID_OK )
+        {
+            PCB_LAYER_ID layer = ToLAYER_ID( layer_selector.GetLayerSelection() );
+            aEditFrame->GetScreen()->m_Route_Layer_TOP = layer;
+            aEditFrame->SetActiveLayer( layer );
+            aEditFrame->GetCanvas()->MoveCursor( aPos );
+            return true;
+        }
+    }
+    return false;
+}
+
 VIASTITCHING::THROUGH_VIA_LAYER_SELECTOR::THROUGH_VIA_LAYER_SELECTOR( PCB_EDIT_FRAME* aEditFrame,
                                                                       const wxPoint aPos
                                                                     ) :

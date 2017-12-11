@@ -67,29 +67,32 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET*
 
     // Make a smoothed polygon out of the user-drawn polygon if required
 #ifdef PCBNEW_WITH_TRACKITEMS
-    #pragma omp critical(smoothed_poly_deletion)
-    {
-#endif
+    if( !m_smoothedPoly )
+        m_smoothedPoly = new SHAPE_POLY_SET();
+
+    m_smoothedPoly->RemoveAllContours();
+#else
 
     if( m_smoothedPoly )
     {
         delete m_smoothedPoly;
         m_smoothedPoly = NULL;
     }
-
-#ifdef PCBNEW_WITH_TRACKITEMS
-    }
 #endif
 
     switch( m_cornerSmoothingType )
     {
     case ZONE_SETTINGS::SMOOTHING_CHAMFER:
+#ifndef PCBNEW_WITH_TRACKITEMS
         m_smoothedPoly = new SHAPE_POLY_SET();
+#endif
         *m_smoothedPoly = m_Poly->Chamfer( m_cornerRadius );
         break;
 
     case ZONE_SETTINGS::SMOOTHING_FILLET:
+#ifndef PCBNEW_WITH_TRACKITEMS
         m_smoothedPoly = new SHAPE_POLY_SET();
+#endif
         *m_smoothedPoly = m_Poly->Fillet( m_cornerRadius, m_ArcToSegmentsCount );
         break;
 
@@ -99,7 +102,9 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET*
         // We can avoid issues by creating a very small chamfer which remove acute angles,
         // or left it without chamfer and use only CPOLYGONS_LIST::InflateOutline to create
         // clearance areas
+#ifndef PCBNEW_WITH_TRACKITEMS
         m_smoothedPoly = new SHAPE_POLY_SET();
+#endif
         *m_smoothedPoly = m_Poly->Chamfer( Millimeter2iu( 0.0 ) );
         break;
     }

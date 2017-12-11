@@ -44,7 +44,7 @@ TRACKITEMS::TRACKITEMS( const BOARD* aBoard )
     m_Board = const_cast<BOARD*>( aBoard );
     m_Teardrops = new TEARDROPS( this, aBoard );
     m_RoundedTracksCorners = new ROUNDEDTRACKSCORNERS( this, aBoard );
-    m_BestInsertPointSpeeder = new BEST_INSERT_POINT_SPEEDER( aBoard );
+    m_NetCodeFirstTrackItem = new NETCODE_FIRST_TRACKITEM( aBoard );
 }
 
 TRACKITEMS::~TRACKITEMS()
@@ -53,8 +53,8 @@ TRACKITEMS::~TRACKITEMS()
     m_Teardrops = nullptr;
     delete m_RoundedTracksCorners;
     m_RoundedTracksCorners = nullptr;
-    delete m_BestInsertPointSpeeder;
-    m_BestInsertPointSpeeder = nullptr;
+    delete m_NetCodeFirstTrackItem;
+    m_NetCodeFirstTrackItem = nullptr;
 }
 
 
@@ -944,12 +944,12 @@ void TRACKITEMS::SetMsgPanel( const TRACK* aTrack )
 //---------------------------------------------------------------------------------------------------
 
 //Private function to get first items from speeder list.
-TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetAndSync( const int aNetCode )
+TRACK* TRACKITEMS::NETCODE_FIRST_TRACKITEM::GetAndSync( const int aNetCode )
 {
     TRACK* item = nullptr;
-    if( aNetCode < m_best_insert_point_items.size() )
+    if( aNetCode < m_netcode_first_trackitems.size() )
     {
-        item = m_best_insert_point_items[aNetCode];
+        item = m_netcode_first_trackitems[aNetCode];
         if( item )
         {
             //Sync, but maybe needles work.
@@ -959,7 +959,7 @@ TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetAndSync( const int aNetCode )
                 if( ( back_item && ( back_item->GetNetCode() < aNetCode) ) ||
                     ( !back_item && ( item->GetNetCode() == aNetCode ) ) )
                 {
-                    m_best_insert_point_items[aNetCode] = item;
+                    m_netcode_first_trackitems[aNetCode] = item;
                     return item;
                 }
                 item = back_item;
@@ -971,7 +971,7 @@ TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetAndSync( const int aNetCode )
 
 //Return netcodes first item or first item on netcode less than this.
 //Otherwise returns m_Track first item.
-TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode )
+TRACK* TRACKITEMS::NETCODE_FIRST_TRACKITEM::GetItem( const int aNetCode )
 {
     TRACK* ret_item = nullptr;
 
@@ -981,7 +981,7 @@ TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode )
         if( aNetCode >= m_Board->m_Track->GetNetCode() )
         {
             //Item at netcode exists.
-            if( m_best_insert_point_items.size() > aNetCode )
+            if( m_netcode_first_trackitems.size() > aNetCode )
                 ret_item = GetAndSync( aNetCode );
 
             //Item at netcode do not exists.
@@ -989,7 +989,7 @@ TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode )
             {
                 //Check item before next netcodes first item, if exists.
                 int netcode = aNetCode + 1;
-                while( netcode < m_best_insert_point_items.size() )
+                while( netcode < m_netcode_first_trackitems.size() )
                 {
                     TRACK* item = GetAndSync( netcode );
                     if( item )
@@ -1020,50 +1020,50 @@ TRACK* TRACKITEMS::BEST_INSERT_POINT_SPEEDER::GetItem( const int aNetCode )
         TRACK* back_item = ret_item->Back();
         if( back_item )
             wxASSERT_MSG( back_item->GetNetCode() < aNetCode,
-                            "BestInsertPointSpeeder" );
+                            "NetCodeFirstTrackItem" );
     }
 #endif
 
     return ret_item;
 }
 
-void TRACKITEMS::BEST_INSERT_POINT_SPEEDER::Insert( const TRACK* aTrackItem )
+void TRACKITEMS::NETCODE_FIRST_TRACKITEM::Insert( const TRACK* aTrackItem )
 {
     if( aTrackItem )
     {
         int netcode = aTrackItem->GetNetCode();
-        if( netcode >= m_best_insert_point_items.size() )
-            m_best_insert_point_items.resize( netcode + 1 );
+        if( netcode >= m_netcode_first_trackitems.size() )
+            m_netcode_first_trackitems.resize( netcode + 1 );
         TRACK* trackitem = const_cast<TRACK*>( aTrackItem );
         TRACK* trackitem_prev = trackitem->Back();
         if( ( trackitem_prev && ( trackitem_prev->GetNetCode() < netcode ) ) ||
             ( !trackitem_prev && ( trackitem->GetNetCode() == netcode ) ) )
         {
-            m_best_insert_point_items[netcode] = trackitem;
+            m_netcode_first_trackitems[netcode] = trackitem;
         }
     }
 }
 
-void TRACKITEMS::BEST_INSERT_POINT_SPEEDER::Remove( const TRACK* aTrackItem )
+void TRACKITEMS::NETCODE_FIRST_TRACKITEM::Remove( const TRACK* aTrackItem )
 {
     if( aTrackItem )
     {
         int netcode = aTrackItem->GetNetCode();
-        if( netcode < m_best_insert_point_items.size() )
+        if( netcode < m_netcode_first_trackitems.size() )
         {
             TRACK* trackitem = const_cast<TRACK*>( aTrackItem );
-            if( trackitem == m_best_insert_point_items[netcode] )
+            if( trackitem == m_netcode_first_trackitems[netcode] )
             {
                 trackitem = const_cast<TRACK*>( aTrackItem )->Back();
                 if( trackitem && ( trackitem->GetNetCode() == netcode ) )
-                    m_best_insert_point_items[netcode] = trackitem;
+                    m_netcode_first_trackitems[netcode] = trackitem;
                 else
                 {
                     trackitem = const_cast<TRACK*>( aTrackItem )->Next();
                     if( trackitem && ( trackitem->GetNetCode() == netcode ) )
-                        m_best_insert_point_items[netcode] = trackitem;
+                        m_netcode_first_trackitems[netcode] = trackitem;
                     else
-                        m_best_insert_point_items[netcode] = nullptr;
+                        m_netcode_first_trackitems[netcode] = nullptr;
                 }
             }
         }
@@ -1103,7 +1103,7 @@ void TRACKITEMS::SortTracks( void )
         for( int n = 0; n < num_items;  ++n )
         {
             m_Board->m_Track.PushBack( tracks[n] );
-            m_Board->TrackItems()->BestInsertPointSpeeder()->Insert( tracks[n] );
+            m_Board->TrackItems()->NetCodeFirstTrackItem()->Insert( tracks[n] );
         }
     }
 }

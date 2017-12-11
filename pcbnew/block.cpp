@@ -593,7 +593,7 @@ void PCB_EDIT_FRAME::Block_Delete()
         case PCB_TEARDROP_T:
         case PCB_ROUNDEDTRACKSCORNER_T:
             if( dynamic_cast<TRACK*>(item) )
-                GetBoard()->TrackItems()->BestInsertPointSpeeder()->Remove( static_cast<TRACK*>(item) );
+                GetBoard()->TrackItems()->NetCodeFirstTrackItem()->Remove( static_cast<TRACK*>(item) );
 #endif
             item->UnLink();
             break;

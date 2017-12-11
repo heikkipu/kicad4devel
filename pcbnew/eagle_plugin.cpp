@@ -1702,7 +1702,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     m_board->m_Track.Insert( t, NULL );
 #ifdef PCBNEW_WITH_TRACKITEMS
-                    m_board->TrackItems()->BestInsertPointSpeeder()->Insert( t );
+                    m_board->TrackItems()->NetCodeFirstTrackItem()->Insert( t );
 #endif
                 }
                 else
@@ -1729,7 +1729,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     VIA* via = new VIA( m_board );
                     m_board->m_Track.Insert( via, NULL );
 #ifdef PCBNEW_WITH_TRACKITEMS
-                    m_board->TrackItems()->BestInsertPointSpeeder()->Insert( via );
+                    m_board->TrackItems()->NetCodeFirstTrackItem()->Insert( via );
 #endif
 
                     via->SetLayerPair( layer_front_most, layer_back_most );

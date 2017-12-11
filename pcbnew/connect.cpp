@@ -1110,7 +1110,7 @@ static void RebuildTrackChain( BOARD* pcb )
 
         if( prev_netcode != trackList[i]->GetNetCode() )
         {
-            pcb->TrackItems()->BestInsertPointSpeeder()->Insert( trackList[i] );
+            pcb->TrackItems()->NetCodeFirstTrackItem()->Insert( trackList[i] );
             prev_netcode = trackList[i]->GetNetCode();
         }
     }

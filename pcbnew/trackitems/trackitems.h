@@ -435,38 +435,38 @@ private:
 //---------------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------------
-// Speedup m_Track linked list in get best inserton point in class_track.
+// Speedup m_Track linked list keeping count first item of netcode.
 //---------------------------------------------------------------------------------------------------
 private:
 
-    class BEST_INSERT_POINT_SPEEDER
+    class NETCODE_FIRST_TRACKITEM
     {
     public:
-        BEST_INSERT_POINT_SPEEDER( const BOARD* aBoard )
+        NETCODE_FIRST_TRACKITEM( const BOARD* aBoard )
         {
             m_Board = aBoard;
-            m_best_insert_point_items.clear();
+            m_netcode_first_trackitems.clear();
         }
-        ~BEST_INSERT_POINT_SPEEDER(){;}
+        ~NETCODE_FIRST_TRACKITEM(){;}
 
         TRACK* GetItem( const int aNetCode );
         void Insert( const TRACK* aTrackItem );
         void Remove( const TRACK* aTrackItem );
 
     private:
-        BEST_INSERT_POINT_SPEEDER(){;}
+        NETCODE_FIRST_TRACKITEM(){;}
         const BOARD* m_Board{nullptr};
-        std::vector<TRACK*> m_best_insert_point_items;
+        std::vector<TRACK*> m_netcode_first_trackitems;
         TRACK* GetAndSync( const int aNetCode );
 
     };
 
-    BEST_INSERT_POINT_SPEEDER* m_BestInsertPointSpeeder{nullptr};
+    NETCODE_FIRST_TRACKITEM* m_NetCodeFirstTrackItem{nullptr};
 
 public:
-    BEST_INSERT_POINT_SPEEDER* BestInsertPointSpeeder( void ) const
+    NETCODE_FIRST_TRACKITEM* NetCodeFirstTrackItem( void ) const
     {
-        return m_BestInsertPointSpeeder;
+        return m_NetCodeFirstTrackItem;
     }
 
 //---------------------------------------------------------------------------------------------------

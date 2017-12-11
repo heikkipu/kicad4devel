@@ -1326,7 +1326,7 @@ static void AddNewTrace( AUTOROUTER_CONTEXT& ctx )
         s_ItemsListPicker.PushItem( picker );
         ctx.board->m_Track.Insert( track, insertBeforeMe );
 #ifdef PCBNEW_WITH_TRACKITEMS
-        ctx.board->TrackItems()->BestInsertPointSpeeder()->Insert( track );
+        ctx.board->TrackItems()->NetCodeFirstTrackItem()->Insert( track );
 #endif
     }
 

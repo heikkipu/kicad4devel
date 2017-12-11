@@ -919,7 +919,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        TrackItems()->BestInsertPointSpeeder()->Insert( (TRACK*) aBoardItem );
+        TrackItems()->NetCodeFirstTrackItem()->Insert( (TRACK*) aBoardItem );
 #endif
 
         break;
@@ -1020,7 +1020,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
 #ifdef PCBNEW_WITH_TRACKITEMS
     case PCB_TEARDROP_T:
     case PCB_ROUNDEDTRACKSCORNER_T:
-        TrackItems()->BestInsertPointSpeeder()->Remove( (TRACK*) aBoardItem );
+        TrackItems()->NetCodeFirstTrackItem()->Remove( (TRACK*) aBoardItem );
 #endif
         m_Track.Remove( (TRACK*) aBoardItem );
         break;
