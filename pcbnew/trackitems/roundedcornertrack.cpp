@@ -30,7 +30,7 @@
 using namespace TrackNodeItem;
 
 
-ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const ROUNDEDCORNERTRACK& aTrack ) :
+ROUNDED_CORNER_TRACK::ROUNDED_CORNER_TRACK( const ROUNDED_CORNER_TRACK& aTrack ) :
     TRACK( aTrack )
 {
     m_StartVisible = m_Start;
@@ -40,7 +40,7 @@ ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const ROUNDEDCORNERTRACK& aTrack ) :
 }
 
 //Create a new rounded corner track.
-ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent ) :
+ROUNDED_CORNER_TRACK::ROUNDED_CORNER_TRACK( const BOARD_ITEM* aParent ) :
     TRACK( const_cast<BOARD_ITEM*>( aParent ) )
 {
     m_StartVisible = m_Start;
@@ -50,7 +50,7 @@ ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent ) :
 }
 
 //Copy ( Convert ) old normal track.
-ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent, const TRACK* aTrack ) :
+ROUNDED_CORNER_TRACK::ROUNDED_CORNER_TRACK( const BOARD_ITEM* aParent, const TRACK* aTrack ) :
     TRACK( const_cast<BOARD_ITEM*>( aParent ), aTrack->Type() )
 {
     SetStart( aTrack->GetStart() );
@@ -66,13 +66,13 @@ ROUNDEDCORNERTRACK::ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent, const TRACK* 
     m_EndPointCorner = nullptr;
 }
 
-void ROUNDEDCORNERTRACK::ResetVisibleEndpoints( void )
+void ROUNDED_CORNER_TRACK::ResetVisibleEndpoints( void )
 {
     m_StartVisible = m_Start;
     m_EndVisible = m_End;
 }
 
-TrackNodeItem::ROUNDEDTRACKSCORNER* ROUNDEDCORNERTRACK::Contains( const wxPoint& aPos ) const
+TrackNodeItem::ROUNDED_TRACKS_CORNER* ROUNDED_CORNER_TRACK::Contains( const wxPoint& aPos ) const
 {
     if( aPos == m_Start )
         return m_StartPointCorner;
@@ -81,7 +81,7 @@ TrackNodeItem::ROUNDEDTRACKSCORNER* ROUNDEDCORNERTRACK::Contains( const wxPoint&
     return nullptr;
 }
 
-void ROUNDEDCORNERTRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+void ROUNDED_CORNER_TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                                int aClearanceValue,
                                                                int aCircleToSegmentsCount,
                                                                double aCorrectionFactor
@@ -96,7 +96,7 @@ void ROUNDEDCORNERTRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& a
 }
 
 //Copy from class_track.cpp and made modifications.
-void ROUNDEDCORNERTRACK::Draw( EDA_DRAW_PANEL* aPanel,
+void ROUNDED_CORNER_TRACK::Draw( EDA_DRAW_PANEL* aPanel,
                                wxDC* aDC,
                                GR_DRAWMODE aDrawMode,
                                const wxPoint& aOffset

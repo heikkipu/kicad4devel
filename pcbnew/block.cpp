@@ -919,8 +919,8 @@ void PCB_EDIT_FRAME::Block_Duplicate( bool aIncrement )
 #ifdef PCBNEW_WITH_TRACKITEMS
             if( newitem->Type() == PCB_TEARDROP_T )
                 m_Pcb->TrackItems()->Teardrops()->UpdateListAdd( static_cast<TrackNodeItem::TEARDROP*>(newitem) );
-            if(dynamic_cast<ROUNDEDCORNERTRACK*>(newitem))
-                dynamic_cast<ROUNDEDCORNERTRACK*>(newitem)->ResetVisibleEndpoints();
+            if(dynamic_cast<ROUNDED_CORNER_TRACK*>(newitem))
+                dynamic_cast<ROUNDED_CORNER_TRACK*>(newitem)->ResetVisibleEndpoints();
 #endif
 
             picker.SetItem ( newitem );

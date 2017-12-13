@@ -26,8 +26,8 @@
  * @brief Definitions for rounded track corners using class.
  */
 
-#ifndef ROUNDEDTRACKSCORNERS_H
-#define ROUNDEDTRACKSCORNERS_H
+#ifndef ROUNDED_TRACKS_CORNERS_H
+#define ROUNDED_TRACKS_CORNERS_H
 
 
 #include "tracknodeitem.h"
@@ -39,33 +39,33 @@
 #include <board_commit.h>
 
 
-class ROUNDEDTRACKSCORNERS : public TrackNodeItems::TRACKNODEITEMS
+class ROUNDED_TRACKS_CORNERS : public TrackNodeItems::TRACKNODEITEMS
 {
 public:
     static const wxString TXT_ROUNDEDTRACKSCORNERS;
 
-    ROUNDEDTRACKSCORNERS( const TRACKITEMS* aParent, const BOARD* aBoard );
-    ~ROUNDEDTRACKSCORNERS();
+    ROUNDED_TRACKS_CORNERS( const TRACKITEMS* aParent, const BOARD* aBoard );
+    ~ROUNDED_TRACKS_CORNERS();
 
     inline bool IsOn( void ) const { return m_params.length_ratio; }
 
     //One aCorner
-    TrackNodeItem::ROUNDEDTRACKSCORNER* Add( TRACK* aTrackTo, const wxPoint& aCurPosAt );
-    TrackNodeItem::ROUNDEDTRACKSCORNER* Add( TRACK* aTrackTo,
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* Add( TRACK* aTrackTo, const wxPoint& aCurPosAt );
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* Add( TRACK* aTrackTo,
                                              const wxPoint aPosition,
                                              PICKED_ITEMS_LIST* aUndoRedoList
                                            );
-    TrackNodeItem::ROUNDEDTRACKSCORNER* Add( TRACK* aTrackTo,
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* Add( TRACK* aTrackTo,
                                              const wxPoint aPosition,
                                              const unsigned int aLength,
                                              PICKED_ITEMS_LIST* aUndoRedoList
                                            );
 
-    std::pair<TrackNodeItem::ROUNDEDTRACKSCORNER*, TrackNodeItem::ROUNDEDTRACKSCORNER*>
+    std::pair<TrackNodeItem::ROUNDED_TRACKS_CORNER*, TrackNodeItem::ROUNDED_TRACKS_CORNER*>
         Add( TRACK* aTrackTo, PICKED_ITEMS_LIST* aUndoRedoList );
-    std::pair<TrackNodeItem::ROUNDEDTRACKSCORNER*, TrackNodeItem::ROUNDEDTRACKSCORNER*>
+    std::pair<TrackNodeItem::ROUNDED_TRACKS_CORNER*, TrackNodeItem::ROUNDED_TRACKS_CORNER*>
         Add( TRACK* aTrackTo, const unsigned int aLength, PICKED_ITEMS_LIST* aUndoRedoList );
-    std::pair<TrackNodeItem::ROUNDEDTRACKSCORNER*, TrackNodeItem::ROUNDEDTRACKSCORNER*> Add( TRACK* aTrackTo );
+    std::pair<TrackNodeItem::ROUNDED_TRACKS_CORNER*, TrackNodeItem::ROUNDED_TRACKS_CORNER*> Add( TRACK* aTrackTo );
 
     void Add( std::set<TRACK*>* aTracksAt, PICKED_ITEMS_LIST* aUndoRedoList );
 
@@ -100,7 +100,7 @@ public:
     TrackNodeItem::TRACKNODEITEM* Parse( PCB_PARSER* aParser ) override;
 
     void LoadDefaultParams( void );
-    TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS CopyCurrentParams( const TRACK* aTrackSegAt,
+    TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS CopyCurrentParams( const TRACK* aTrackSegAt,
                                                                   const wxPoint& aCurPosAt
                                                                 );
 
@@ -108,25 +108,25 @@ public:
     TrackNodeItem::TRACKNODEITEM* Back( const TRACK* aTrackSegAt ) const override;
 
 protected:
-    ROUNDEDTRACKSCORNERS(){};
+    ROUNDED_TRACKS_CORNERS(){};
     void CreateMenu( wxMenu* aMenu ) const override;
 
 private:
     //Creation
-    TrackNodeItem::ROUNDEDTRACKSCORNER* Create( const TRACK* aTrackTo,
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* Create( const TRACK* aTrackTo,
                                                 const TRACK* aTrackSegSecond,
                                                 const wxPoint aPosition,
                                                 const bool aNullTrackCheck
                                               );
     //Removing
-    void Delete( TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
+    void Delete( TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                  DLIST<TRACK>*aTrackListAt,
                  PICKED_ITEMS_LIST* aUndoRedoList
                );
 
     //Private remove funcs.
     static const bool CAN_RECREATE = true;
-    void Remove( TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
+    void Remove( TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                  PICKED_ITEMS_LIST* aUndoRedoList,
                  const bool aSaveRemoved,
                  const bool aLockedToo
@@ -134,15 +134,15 @@ private:
 
     TRACK* FindSecondTrack( const TRACK* aTrackTo, wxPoint aPosition );
 
-    //aTrack is converted to ROUNDEDCORNERTRACK in m_board->m_Track
-    ROUNDEDCORNERTRACK* Convert( TRACK* aTrack, PICKED_ITEMS_LIST* aUndoRedoList ); //One Track
+    //aTrack is converted to ROUNDED_CORNER_TRACK in m_board->m_Track
+    ROUNDED_CORNER_TRACK* Convert( TRACK* aTrack, PICKED_ITEMS_LIST* aUndoRedoList ); //One Track
     void Convert( const int aNetCode, PICKED_ITEMS_LIST* aUndoRedoList ); //One Net
     void Convert( const DLIST<TRACK>* aTracksAt, PICKED_ITEMS_LIST* aUndoRedoList ); //All TRACKs in m_Tracks list.
 
-    TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS GetParams( void ) const { return m_params; }
-    void SetParams( const TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS aParams );
-    TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS GetDefaultParams( void ) const;
-    TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS m_params;
+    TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS GetParams( void ) const { return m_params; }
+    void SetParams( const TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS aParams );
+    TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS GetDefaultParams( void ) const;
+    TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS m_params;
 
 //-----------------------------------------------------------------------------------------------------/
 // One track segment corner( s ) memory
@@ -155,16 +155,16 @@ public:
     void FromMemory( const TRACK* aTrackTo, BOARD_COMMIT& aCommit );
 
 private:
-    TrackNodeItem::ROUNDEDTRACKSCORNER* m_next_corner_in_memory;
-    TrackNodeItem::ROUNDEDTRACKSCORNER* m_back_corner_in_memory;
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* m_next_corner_in_memory;
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* m_back_corner_in_memory;
 //-----------------------------------------------------------------------------------------------------/
 
 //-----------------------------------------------------------------------------------------------------/
 // Todo lists.
 //-----------------------------------------------------------------------------------------------------/
 public:
-    using RoundedTracksCorner_Container = std::set<TrackNodeItem::ROUNDEDTRACKSCORNER*>;
-    using RoundedCornerTrack_Container = std::set<ROUNDEDCORNERTRACK*>;
+    using RoundedTracksCorner_Container = std::set<TrackNodeItem::ROUNDED_TRACKS_CORNER*>;
+    using RoundedCornerTrack_Container = std::set<ROUNDED_CORNER_TRACK*>;
     void UpdateListClear( void );
     void UpdateListAdd( const TRACK* aTrackSegFrom );
     void UpdateListAdd( const BOARD_ITEM* aBoardItem );
@@ -184,7 +184,7 @@ private:
     RoundedTracksCorner_Container* m_update_list;
     RoundedCornerTrack_Container* m_update_tracks_list;
     RoundedTracksCorner_Container* m_recreate_list;
-    void UpdateListAdd( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner );
+    void UpdateListAdd( const TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner );
 //-----------------------------------------------------------------------------------------------------/
 
 //-----------------------------------------------------------------------------------------------------/
@@ -192,7 +192,7 @@ private:
 //-----------------------------------------------------------------------------------------------------/
 public:
     void Update( const BOARD_ITEM* aItemAt );
-    void Update( const int aNetCode, const TRACK* aTrackSegAt );
+    void Update( const int aNetCode, const TRACK* aStartTrack );
     void Update( const TRACK* aTrackSegAt );
     void Update( TRACK* aTrackSegAt,
                  EDA_DRAW_PANEL* aPanel,
@@ -202,7 +202,7 @@ public:
                );
 
 private:
-    void Update( TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
+    void Update( TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                  EDA_DRAW_PANEL* aPanel,
                  wxDC* aDC, GR_DRAWMODE aDrawMode,
                  bool aErase
@@ -224,7 +224,7 @@ public:
     bool CanEdit( void ) const { return m_can_edit;}
     void ToggleEdit( const TO_EDIT_T aEdit );
     bool IsEditOn( void ) const { return ( bool )m_to_edit; }
-    TrackNodeItem::ROUNDEDTRACKSCORNER* UpdateRouteEdit( EDA_DRAW_PANEL* aPanel,
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* UpdateRouteEdit( EDA_DRAW_PANEL* aPanel,
                                                          wxDC* aDC,
                                                          const TRACK* aTrack,
                                                          const TRACK* aTrackSecond,
@@ -232,13 +232,13 @@ public:
                                                          bool* aTrack45Only
                                                        );
     void DestroyRouteEdit( void );
-    TrackNodeItem::ROUNDEDTRACKSCORNER* GetEditCorner( void ) const { return m_track_edit_corner; }
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* GetEditCorner( void ) const { return m_track_edit_corner; }
 
 private:
-    TrackNodeItem::ROUNDEDTRACKSCORNER* m_track_edit_corner{nullptr};
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* m_track_edit_corner{nullptr};
     TO_EDIT_T m_to_edit;
     bool m_can_edit;
-    TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS m_edit_params;
+    TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS m_edit_params;
     bool m_editparams_drawn{false};
     wxPoint m_edit_start_point;
     bool m_track45Only_before_edit;
@@ -259,28 +259,28 @@ public:
     void DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef, const TEXTE_PCB* aText, const int aMinDist, DRC* aDRC );
 
 private:
-    bool DRC_DoClearanceTest( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
+    bool DRC_DoClearanceTest( const TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                               const wxPoint aTestPoint,
                               const int aMinDist
                             );
-    bool DRC_DoClearanceTest( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
+    bool DRC_DoClearanceTest( const TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                               const D_PAD* aPad,
                               const int aMinDist,
                               DRC* aDRC
                             );
-    bool DRC_ClearanceTest( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
+    bool DRC_ClearanceTest( const TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                             const VIA* aVia,
                             const int aMinDist
                           );
-    bool DRC_ClearanceTest( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
+    bool DRC_ClearanceTest( const TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                             const TRACK* aTrackSeg,
                             const int aMinDist
                           );
-    bool DRC_ClearanceTest( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCornerFirst,
-                            TrackNodeItem::ROUNDEDTRACKSCORNER* aCornerSecond,
+    bool DRC_ClearanceTest( const TrackNodeItem::ROUNDED_TRACKS_CORNER* aCornerFirst,
+                            TrackNodeItem::ROUNDED_TRACKS_CORNER* aCornerSecond,
                             const int aMinDist
                           );
-    bool DRC_TestClearance( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCorner,
+    bool DRC_TestClearance( const TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                             const TRACK* aTrackSeg,
                             const int aMinDist,
                             DRC* aDRC
@@ -306,7 +306,7 @@ private:
     void Menu_ConvertSegmentedCorner( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos ) const;
     void Menu_ConvertSegmentedCornersNet( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos ) const;
 
-    wxString ParamsTxtToMenu( const TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS aParams ) const;
+    wxString ParamsTxtToMenu( const TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS aParams ) const;
     inline int MenuToDo_CalcSizeLengthSet( const int aMenuID );
     inline int MenuToDo_CalcSizeLengthRatio( const int aMenuID );
     void Menu_ChangeSize( wxMenu* aMenu ) const;
@@ -338,7 +338,7 @@ private:
     {
     public:
         NET_SCAN_TRACK_COLLECT_SAMELENGTH( const TRACK* aTrackSeg,
-                                           const ROUNDEDTRACKSCORNERS* aParent,
+                                           const ROUNDED_TRACKS_CORNERS* aParent,
                                            PICKED_ITEMS_LIST* aUndoRedoList
                                          );
         ~NET_SCAN_TRACK_COLLECT_SAMELENGTH() {};
@@ -347,7 +347,7 @@ private:
         std::set<TRACK*>* GetAnotherSegments( void ) { return &m_another_segments; }
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
         PICKED_ITEMS_LIST* m_picked_items{nullptr};
 
     private:
@@ -368,13 +368,13 @@ private:
     {
     public:
         NET_SCAN_NET_ADD( const int aNet,
-                          const ROUNDEDTRACKSCORNERS* aParent,
+                          const ROUNDED_TRACKS_CORNERS* aParent,
                           PICKED_ITEMS_LIST* aUndoRedoList
                         );
         ~NET_SCAN_NET_ADD() {};
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
 
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
     };
@@ -383,20 +383,20 @@ private:
     {
     public:
         NET_SCAN_NET_CONVERT( const int aNet,
-                              const ROUNDEDTRACKSCORNERS* aParent,
+                              const ROUNDED_TRACKS_CORNERS* aParent,
                               PICKED_ITEMS_LIST* aUndoRedoList
                             );
         ~NET_SCAN_NET_CONVERT() {};
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
     };
 
     class NET_SCAN_NET_REMOVE : public NET_SCAN_BASE
     {
     public:
         NET_SCAN_NET_REMOVE( const int aNet,
-                             const ROUNDEDTRACKSCORNERS* aParent,
+                             const ROUNDED_TRACKS_CORNERS* aParent,
                              PICKED_ITEMS_LIST* aUndoRedoList,
                              RoundedTracksCorner_Container* aRecreateList,
                              const bool aLockedToo
@@ -404,7 +404,7 @@ private:
         ~NET_SCAN_NET_REMOVE() {};
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
 
         PICKED_ITEMS_LIST* m_picked_items {nullptr};
         RoundedTracksCorner_Container* m_recreate_list {nullptr};
@@ -415,27 +415,27 @@ private:
     {
     public:
         NET_SCAN_NET_RECREATE( const int aNet,
-                               const ROUNDEDTRACKSCORNERS* aParent,
+                               const ROUNDED_TRACKS_CORNERS* aParent,
                                PICKED_ITEMS_LIST* aUndoRedoList,
                                RoundedTracksCorner_Container* aRecreateList
                              );
         ~NET_SCAN_NET_RECREATE();
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
 
     private:
-        TrackNodeItem::ROUNDEDTRACKSCORNER::PARAMS m_current_params;
+        TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS m_current_params;
     };
 
     class NET_SCAN_TRACK_UPDATE : public NET_SCAN_BASE
     {
     public:
-        NET_SCAN_TRACK_UPDATE( const TRACK* aTrackSeg, const ROUNDEDTRACKSCORNERS* aParent );
+        NET_SCAN_TRACK_UPDATE( const TRACK* aTrackSeg, const ROUNDED_TRACKS_CORNERS* aParent );
         ~NET_SCAN_TRACK_UPDATE() {};
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
     };
 
 //-----------------------------------------------------------------------------------------------------/
@@ -446,23 +446,23 @@ private:
     class ROUNDEDTRACKSCORNERS_PROGRESS : public TrackNodeItems::TRACKS_PROGRESS
     {
     protected:
-        ROUNDEDTRACKSCORNERS_PROGRESS( const ROUNDEDTRACKSCORNERS* aParent,
+        ROUNDEDTRACKSCORNERS_PROGRESS( const ROUNDED_TRACKS_CORNERS* aParent,
                                        const DLIST<TRACK>* aTracks,
                                        PICKED_ITEMS_LIST* aUndoRedoList
                                      ) :
             TRACKS_PROGRESS( aParent->GetEditFrame(), aTracks, aUndoRedoList )
             {
-                m_parent = const_cast<ROUNDEDTRACKSCORNERS*>( aParent );
+                m_parent = const_cast<ROUNDED_TRACKS_CORNERS*>( aParent );
             }
 
-        ROUNDEDTRACKSCORNERS* m_parent{nullptr};
+        ROUNDED_TRACKS_CORNERS* m_parent{nullptr};
 
     };
 
     class ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS : public ROUNDEDTRACKSCORNERS_PROGRESS
     {
     public:
-        ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS( const ROUNDEDTRACKSCORNERS* aParent,
+        ROUNDEDTRACKSCORNERS_PROGRESS_ADD_CORNERS( const ROUNDED_TRACKS_CORNERS* aParent,
                                                    const DLIST<TRACK>* aTracks,
                                                    PICKED_ITEMS_LIST* aUndoRedoList
                                                  );
@@ -474,7 +474,7 @@ private:
     class ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS : public ROUNDEDTRACKSCORNERS_PROGRESS
     {
     public:
-        ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS( const ROUNDEDTRACKSCORNERS* aParent,
+        ROUNDEDTRACKSCORNERS_PROGRESS_CONVERT_TRACKS( const ROUNDED_TRACKS_CORNERS* aParent,
                                                       const DLIST<TRACK>* aTracks,
                                                       PICKED_ITEMS_LIST* aUndoRedoList
                                                     );
@@ -485,7 +485,7 @@ private:
     class ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS : virtual public ROUNDEDTRACKSCORNERS_PROGRESS
     {
     public:
-        ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS( const ROUNDEDTRACKSCORNERS* aParent,
+        ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS( const ROUNDED_TRACKS_CORNERS* aParent,
                                                       const DLIST<TRACK>* aTracks,
                                                       PICKED_ITEMS_LIST* aUndoRedoList
                                                     );
@@ -510,7 +510,7 @@ private:
     class ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN : public ROUNDEDTRACKSCORNERS_PROGRESS_REMOVE_CORNERS
     {
     public:
-        ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN( const ROUNDEDTRACKSCORNERS* aParent,
+        ROUNDEDTRACKSCORNERS_PROGRESS_CLEAN( const ROUNDED_TRACKS_CORNERS* aParent,
                                              const DLIST<TRACK>* aTracks,
                                              PICKED_ITEMS_LIST* aUndoRedoList
                                            );
@@ -521,4 +521,4 @@ private:
 
 };
 
-#endif //ROUNDEDTRACKSCORNERS_H
+#endif //ROUNDED_TRACKS_CORNERS_H

@@ -536,7 +536,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->CallMouseCapture( &dc, wxDefaultPosition, false );
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if(TrackNodeItem::ROUNDEDTRACKSCORNER* cor = GetBoard()->TrackItems()->RoundedTracksCorners()->GetEditCorner())
+        if(TrackNodeItem::ROUNDED_TRACKS_CORNER* cor = GetBoard()->TrackItems()->RoundedTracksCorners()->GetEditCorner())
             cor->Draw( m_canvas, &dc, GR_XOR );
 #endif
 
@@ -546,7 +546,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->CallMouseCapture( &dc, wxDefaultPosition, false );
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if(TrackNodeItem::ROUNDEDTRACKSCORNER* cor = GetBoard()->TrackItems()->RoundedTracksCorners()->GetEditCorner())
+        if(TrackNodeItem::ROUNDED_TRACKS_CORNER* cor = GetBoard()->TrackItems()->RoundedTracksCorners()->GetEditCorner())
             cor->Draw( m_canvas, &dc, GR_XOR );
 #endif
 
@@ -2162,11 +2162,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_EDIT_LENGTH_SET:
-        GetBoard()->TrackItems()->RoundedTracksCorners()->ToggleEdit( ROUNDEDTRACKSCORNERS::EDIT_LENGTH_SET_T );
+        GetBoard()->TrackItems()->RoundedTracksCorners()->ToggleEdit( ROUNDED_TRACKS_CORNERS::EDIT_LENGTH_SET_T );
         break;
 
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_EDIT_LENGTH_RATIO:
-        GetBoard()->TrackItems()->RoundedTracksCorners()->ToggleEdit( ROUNDEDTRACKSCORNERS::EDIT_LENGTH_RATIO_T );
+        GetBoard()->TrackItems()->RoundedTracksCorners()->ToggleEdit( ROUNDED_TRACKS_CORNERS::EDIT_LENGTH_RATIO_T );
         break;
 
     case ID_POPUP_PCB_ROUNDEDTRACKSCORNER_CONVERT_SEGMENTED:

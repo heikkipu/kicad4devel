@@ -25,7 +25,7 @@
 
 using namespace TrackNodeItem;
 
-void ROUNDEDTRACKSCORNERS::CreateMenu( wxMenu* aMenu ) const
+void ROUNDED_TRACKS_CORNERS::CreateMenu( wxMenu* aMenu ) const
 {
     if( aMenu )
     {
@@ -47,19 +47,19 @@ void ROUNDEDTRACKSCORNERS::CreateMenu( wxMenu* aMenu ) const
     }
 }
 
-int ROUNDEDTRACKSCORNERS::MenuToDo_CalcSizeLengthSet( const int aMenuID )
+int ROUNDED_TRACKS_CORNERS::MenuToDo_CalcSizeLengthSet( const int aMenuID )
 {
-    return ( aMenuID - ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST ) * ROUNDEDTRACKSCORNER::DEFAULT_MIN_LENGTH_SET;
+    return ( aMenuID - ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST ) * ROUNDED_TRACKS_CORNER::DEFAULT_MIN_LENGTH_SET;
 }
 
-int ROUNDEDTRACKSCORNERS::MenuToDo_CalcSizeLengthRatio( const int aMenuID )
+int ROUNDED_TRACKS_CORNERS::MenuToDo_CalcSizeLengthRatio( const int aMenuID )
 {
     return ( aMenuID - ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_RATIO_FIRST ) * 10;
 }
 
-void ROUNDEDTRACKSCORNERS::MenuToDo_ChangeSize( const int aMenuID )
+void ROUNDED_TRACKS_CORNERS::MenuToDo_ChangeSize( const int aMenuID )
 {
-    ROUNDEDTRACKSCORNER::PARAMS params = GetParams( );
+    ROUNDED_TRACKS_CORNER::PARAMS params = GetParams( );
     if( ( aMenuID >= ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST ) &&
         ( aMenuID <= ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_LAST ) )
         params.length_set = MenuToDo_CalcSizeLengthSet( aMenuID );
@@ -72,12 +72,12 @@ void ROUNDEDTRACKSCORNERS::MenuToDo_ChangeSize( const int aMenuID )
     RecreateMenu( );
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_ChangeSize( wxMenu* aMenu ) const
+void ROUNDED_TRACKS_CORNERS::Menu_ChangeSize( wxMenu* aMenu ) const
 {
     if( aMenu )
     {
         wxString msg;
-        ROUNDEDTRACKSCORNER::PARAMS current_params = GetParams( );
+        ROUNDED_TRACKS_CORNER::PARAMS current_params = GetParams( );
         wxMenu* size_length_set_menu = new wxMenu;
         msg.Printf( _( "Select Length" ) );
         AddMenuItem( aMenu,
@@ -89,7 +89,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeSize( wxMenu* aMenu ) const
         for( int n = ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_FIRST;
              n <= ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_SET_LAST; ++n )
         {
-            unsigned int length_set = const_cast<ROUNDEDTRACKSCORNERS*> ( this )->MenuToDo_CalcSizeLengthSet( n );
+            unsigned int length_set = const_cast<ROUNDED_TRACKS_CORNERS*> ( this )->MenuToDo_CalcSizeLengthSet( n );
             if( length_set != current_params.length_set )
             {
                 if( !length_set )
@@ -111,7 +111,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeSize( wxMenu* aMenu ) const
         for( int n = ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_RATIO_FIRST;
              n <= ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_SIZE_LENGTH_RATIO_LAST; ++n )
         {
-            int length_ratio = const_cast<ROUNDEDTRACKSCORNERS*> ( this )->MenuToDo_CalcSizeLengthRatio( n );
+            int length_ratio = const_cast<ROUNDED_TRACKS_CORNERS*> ( this )->MenuToDo_CalcSizeLengthRatio( n );
             if( length_ratio != current_params.length_ratio )
             {
                 if( !length_ratio )
@@ -134,7 +134,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeSize( wxMenu* aMenu ) const
                          KiBitmap( tools_xpm ) );
         }
 
-        ROUNDEDTRACKSCORNER::PARAMS default_params = GetDefaultParams( );
+        ROUNDED_TRACKS_CORNER::PARAMS default_params = GetDefaultParams( );
         if( current_params != default_params )
         {
             msg.Printf( _( "Set Default %s" ), GetChars( ParamsTxtToMenu( default_params ) ) );
@@ -146,7 +146,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeSize( wxMenu* aMenu ) const
     }
 }
 
-wxString ROUNDEDTRACKSCORNERS::ParamsTxtToMenu( const ROUNDEDTRACKSCORNER::PARAMS aParams ) const
+wxString ROUNDED_TRACKS_CORNERS::ParamsTxtToMenu( const ROUNDED_TRACKS_CORNER::PARAMS aParams ) const
 {
     wxString return_s = m_EditFrame->LengthDoubleToString( aParams.length_set, true );
     if( !aParams.length_set )

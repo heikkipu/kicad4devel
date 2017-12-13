@@ -295,7 +295,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             GetBoard()->TrackItems()->Teardrops()->ToggleEdit( TEARDROPS::EDIT_SIZE_WIDTH_T ); //Length too.
         else
         if( GetBoard()->TrackItems()->RoundedTracksCorners()->IsEditOn() )
-            GetBoard()->TrackItems()->RoundedTracksCorners()->ToggleEdit( ROUNDEDTRACKSCORNERS::EDIT_LENGTH_SET_T ); //Ratio too.
+            GetBoard()->TrackItems()->RoundedTracksCorners()->ToggleEdit( ROUNDED_TRACKS_CORNERS::EDIT_LENGTH_SET_T ); //Ratio too.
         else
 #endif
         if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
@@ -322,10 +322,10 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     case ID_PCB_DRAW_VIA_BUTT:
-        GetBoard()->ViaStitching()->AddThermalVia( this, ID_POPUP_PCB_PLACE_ZONE_CURRENTTYPE_VIA ); 
+        GetBoard()->ViaStitching()->AddThermalVia( this, ID_POPUP_PCB_PLACE_ZONE_CURRENTTYPE_VIA );
         break;
 #endif
-        
+
     case ID_PCB_ZONES_BUTT:
     case ID_PCB_KEEPOUT_AREA_BUTT:
         /* ZONE or KEEPOUT Tool is selected. Determine action for a left click:

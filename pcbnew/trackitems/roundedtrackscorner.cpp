@@ -32,7 +32,7 @@
 using namespace TrackNodeItem;
 
 
-ROUNDEDTRACKSCORNER::ROUNDEDTRACKSCORNER( const BOARD_ITEM* aParent,
+ROUNDED_TRACKS_CORNER::ROUNDED_TRACKS_CORNER( const BOARD_ITEM* aParent,
                                           const TRACK* aTrackSeg,
                                           const TRACK* aTrackSegSecond,
                                           const wxPoint aPosition,
@@ -56,7 +56,7 @@ ROUNDEDTRACKSCORNER::ROUNDEDTRACKSCORNER( const BOARD_ITEM* aParent,
     CallConstructor( aTrackSeg, aParams, aCheckNullTrack );
 }
 
-bool ROUNDEDTRACKSCORNER::CallConstructor( const TRACK* aTrackSeg,
+bool ROUNDED_TRACKS_CORNER::CallConstructor( const TRACK* aTrackSeg,
                                            const PARAMS aParams,
                                            const bool aCheckNullTrack
                                          )
@@ -66,8 +66,8 @@ bool ROUNDEDTRACKSCORNER::CallConstructor( const TRACK* aTrackSeg,
         if( ( m_trackseg->Type() == PCB_TRACE_T ) &&
             ( m_trackseg->Type() == PCB_TRACE_T ) )
         {
-            if( dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg ) &&
-                dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second ) )
+            if( dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg ) &&
+                dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second ) )
             {
                 if( ( m_trackseg_second->GetWidth() == m_trackseg->GetWidth() ) )
                 {
@@ -83,7 +83,7 @@ bool ROUNDEDTRACKSCORNER::CallConstructor( const TRACK* aTrackSeg,
     return false;
 }
 
-void ROUNDEDTRACKSCORNER::SetTrackSecondEndpoint( void )
+void ROUNDED_TRACKS_CORNER::SetTrackSecondEndpoint( void )
 {
     if( m_trackseg_second )
     {
@@ -96,99 +96,99 @@ void ROUNDEDTRACKSCORNER::SetTrackSecondEndpoint( void )
 }
 
 //Needed when removed.
-void ROUNDEDTRACKSCORNER::ReleaseTrackSegs( void )
+void ROUNDED_TRACKS_CORNER::ReleaseTrackSegs( void )
 {
-    if( m_trackseg && dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg ) )
+    if( m_trackseg && dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg ) )
     {
-        if( this == dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_StartPointCorner )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_StartPointCorner = nullptr;
-        if( this == dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_EndPointCorner )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_EndPointCorner = nullptr;
+        if( this == dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_StartPointCorner )
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_StartPointCorner = nullptr;
+        if( this == dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_EndPointCorner )
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_EndPointCorner = nullptr;
     }
 
-    if( m_trackseg_second && dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second ) )
+    if( m_trackseg_second && dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second ) )
     {
-        if( this == dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_StartPointCorner )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_StartPointCorner = nullptr;
-        if( this == dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_EndPointCorner )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_EndPointCorner = nullptr;
+        if( this == dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_StartPointCorner )
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_StartPointCorner = nullptr;
+        if( this == dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_EndPointCorner )
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_EndPointCorner = nullptr;
     }
 }
 
 //Needed when Construct and Undo
-void ROUNDEDTRACKSCORNER::ConnectTrackSegs( void )
+void ROUNDED_TRACKS_CORNER::ConnectTrackSegs( void )
 {
     SetConnectedPos();
 
-    if( m_trackseg && dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg ) )
+    if( m_trackseg && dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg ) )
     {
         if( m_connected_pos == m_trackseg->GetStart() )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_StartPointCorner = this;
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_StartPointCorner = this;
         if( m_connected_pos == m_trackseg->GetEnd() )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_EndPointCorner = this;
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_EndPointCorner = this;
     }
 
-    if( m_trackseg_second && dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second ) )
+    if( m_trackseg_second && dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second ) )
     {
         if( m_connected_pos == m_trackseg_second->GetStart() )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_StartPointCorner = this;
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_StartPointCorner = this;
         if( m_connected_pos == m_trackseg_second->GetEnd() )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_EndPointCorner = this;
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_EndPointCorner = this;
     }
 }
 
-void ROUNDEDTRACKSCORNER::ResetVisibleEndpoints( void )
+void ROUNDED_TRACKS_CORNER::ResetVisibleEndpoints( void )
 {
-    if( m_trackseg && dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg ) )
+    if( m_trackseg && dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg ) )
     {
         if( m_trackstartpos_is_pos )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_StartVisible = m_trackseg->GetStart();
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_StartVisible = m_trackseg->GetStart();
         else
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_EndVisible = m_trackseg->GetEnd();
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_EndVisible = m_trackseg->GetEnd();
     }
 
-    if( m_trackseg_second && dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second ) )
+    if( m_trackseg_second && dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second ) )
     {
         if( m_trackseg_second_startpos_is_pos )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_StartVisible = m_trackseg_second->GetStart();
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_StartVisible = m_trackseg_second->GetStart();
         else
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_EndVisible = m_trackseg_second->GetEnd();
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_EndVisible = m_trackseg_second->GetEnd();
     }
 }
 
-void ROUNDEDTRACKSCORNER::SetTracksVisibleEndpoints( void )
+void ROUNDED_TRACKS_CORNER::SetTracksVisibleEndpoints( void )
 {
-    if( m_trackseg && dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg ) )
+    if( m_trackseg && dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg ) )
     {
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_StartPointCorner == this )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_StartVisible = m_pos_start;
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_EndPointCorner == this )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->m_EndVisible = m_pos_start;
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_StartPointCorner == this )
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_StartVisible = m_pos_start;
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_EndPointCorner == this )
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->m_EndVisible = m_pos_start;
     }
 
-    if( m_trackseg_second && dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second ) )
+    if( m_trackseg_second && dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second ) )
     {
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_StartPointCorner == this )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_StartVisible = m_pos_end;
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_EndPointCorner == this )
-            dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second )->m_EndVisible = m_pos_end;
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_StartPointCorner == this )
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_StartVisible = m_pos_end;
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_EndPointCorner == this )
+            dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second )->m_EndVisible = m_pos_end;
     }
 }
 
-bool ROUNDEDTRACKSCORNER::AreTracksConnected( void )
+bool ROUNDED_TRACKS_CORNER::AreTracksConnected( void )
 {
     if( m_trackseg && m_trackseg_second )
     {
         wxPoint trackseg_pos {0,0};
         wxPoint trackseg_second_pos {1,1};
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg ) )
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg ) )
         {
             if( m_trackstartpos_is_pos )
                 trackseg_pos = m_trackseg->GetStart();
             else
                 trackseg_pos = m_trackseg->GetEnd();
         }
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg_second ) )
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg_second ) )
         {
             if( m_trackseg_second_startpos_is_pos )
                 trackseg_second_pos = m_trackseg_second->GetStart();
@@ -203,7 +203,7 @@ bool ROUNDEDTRACKSCORNER::AreTracksConnected( void )
     return false;
 }
 
-bool ROUNDEDTRACKSCORNER::Update( void )
+bool ROUNDED_TRACKS_CORNER::Update( void )
 {
     if( !TRACKNODEITEM::Update() || !m_trackseg_second )
     {
@@ -232,7 +232,7 @@ bool ROUNDEDTRACKSCORNER::Update( void )
     return true;
 }
 
-void ROUNDEDTRACKSCORNER::SetNotOKValues( void )
+void ROUNDED_TRACKS_CORNER::SetNotOKValues( void )
 {
     m_set_ok = false;
     m_pos_end = m_connected_pos;
@@ -241,7 +241,7 @@ void ROUNDEDTRACKSCORNER::SetNotOKValues( void )
     ResetVisibleEndpoints();
 }
 
-void ROUNDEDTRACKSCORNER::SetArc( void )
+void ROUNDED_TRACKS_CORNER::SetArc( void )
 {
     //Trackseg arced length.
     //Calculated length from trackseg width.
@@ -256,7 +256,7 @@ void ROUNDEDTRACKSCORNER::SetArc( void )
     m_trackseg_arced_length = std::min( max_dist_pos_to_arc_end, seg_min_length );
 }
 
-void ROUNDEDTRACKSCORNER::SetPoints( void )
+void ROUNDED_TRACKS_CORNER::SetPoints( void )
 {
     m_pos = GetPoint( m_connected_pos, m_trackseg_angle, m_trackseg_arced_length );
 
@@ -303,7 +303,7 @@ void ROUNDEDTRACKSCORNER::SetPoints( void )
     m_pos_end = m_seg_points[m_num_arc_segs];
 }
 
-void ROUNDEDTRACKSCORNER::SetParams( const PARAMS aParams )
+void ROUNDED_TRACKS_CORNER::SetParams( const PARAMS aParams )
 {
     m_length_set = aParams.length_set;
     m_length_ratio = aParams.length_ratio;
@@ -320,7 +320,7 @@ void ROUNDEDTRACKSCORNER::SetParams( const PARAMS aParams )
     Update();
 }
 
-ROUNDEDTRACKSCORNER::PARAMS ROUNDEDTRACKSCORNER::GetParams( void ) const
+ROUNDED_TRACKS_CORNER::PARAMS ROUNDED_TRACKS_CORNER::GetParams( void ) const
 {
     PARAMS returnParams;
     returnParams.length_ratio = m_length_ratio;
@@ -329,7 +329,7 @@ ROUNDEDTRACKSCORNER::PARAMS ROUNDEDTRACKSCORNER::GetParams( void ) const
     return returnParams;
 }
 
-double ROUNDEDTRACKSCORNER::GetLengthVisible( void ) const
+double ROUNDED_TRACKS_CORNER::GetLengthVisible( void ) const
 {
     double length = 0.0;
     if( m_set_ok )
@@ -337,7 +337,7 @@ double ROUNDEDTRACKSCORNER::GetLengthVisible( void ) const
     return length;
 }
 
-wxPoint ROUNDEDTRACKSCORNER::GetPointInArc( const wxPoint aFromPos, const double aLength ) const
+wxPoint ROUNDED_TRACKS_CORNER::GetPointInArc( const wxPoint aFromPos, const double aLength ) const
 {
     wxPoint ret_point( 0,0 );
     double angle_ratio = aLength / GetLengthVisible();
@@ -358,12 +358,12 @@ wxPoint ROUNDEDTRACKSCORNER::GetPointInArc( const wxPoint aFromPos, const double
     return ret_point;
 }
 
-EDA_ITEM* ROUNDEDTRACKSCORNER::Clone() const
+EDA_ITEM* ROUNDED_TRACKS_CORNER::Clone() const
 {
-    return new ROUNDEDTRACKSCORNER( *this );
+    return new ROUNDED_TRACKS_CORNER( *this );
 }
 
-const EDA_RECT ROUNDEDTRACKSCORNER::GetBoundingBox() const
+const EDA_RECT ROUNDED_TRACKS_CORNER::GetBoundingBox() const
 {
     int ymax = std::max( m_seg_points[0].y, m_seg_points[m_num_arc_segs].y );
         ymax = std::max( ymax, m_connected_pos.y );
@@ -384,12 +384,12 @@ const EDA_RECT ROUNDEDTRACKSCORNER::GetBoundingBox() const
     return ret;
 }
 
-unsigned int ROUNDEDTRACKSCORNER::GetBoundingRad( void ) const
+unsigned int ROUNDED_TRACKS_CORNER::GetBoundingRad( void ) const
 {
     return m_trackseg->GetWidth();
 }
 
-wxString ROUNDEDTRACKSCORNER::GetSelectMenuText() const
+wxString ROUNDED_TRACKS_CORNER::GetSelectMenuText() const
 {
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
@@ -419,7 +419,7 @@ wxString ROUNDEDTRACKSCORNER::GetSelectMenuText() const
     return text;
 }
 
-void ROUNDEDTRACKSCORNER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+void ROUNDED_TRACKS_CORNER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                                 int aClearanceValue,
                                                                 int aCircleToSegmentsCount,
                                                                 double aCorrectionFactor
@@ -438,7 +438,7 @@ void ROUNDEDTRACKSCORNER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& 
     }
 }
 
-void ROUNDEDTRACKSCORNER::AddTo3DContainer( CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits )
+void ROUNDED_TRACKS_CORNER::AddTo3DContainer( CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits )
 {
     if( IsSetOK() && m_on )
     {
@@ -464,13 +464,13 @@ void ROUNDEDTRACKSCORNER::AddTo3DContainer( CBVHCONTAINER2D* aContainer, const d
 }
 
 #ifdef NEWCONALGO
-void ROUNDEDTRACKSCORNER::SwapData( BOARD_ITEM* aImage )
+void ROUNDED_TRACKS_CORNER::SwapData( BOARD_ITEM* aImage )
 {
-    std::swap( *((TrackNodeItem::ROUNDEDTRACKSCORNER*) this), *((TrackNodeItem::ROUNDEDTRACKSCORNER*) aImage) );
+    std::swap( *((TrackNodeItem::ROUNDED_TRACKS_CORNER*) this), *((TrackNodeItem::ROUNDED_TRACKS_CORNER*) aImage) );
 }
 #endif
 
-void ROUNDEDTRACKSCORNER::DrawItem( EDA_DRAW_PANEL* aPanel,
+void ROUNDED_TRACKS_CORNER::DrawItem( EDA_DRAW_PANEL* aPanel,
                                     wxDC* aDC,
                                     const COLOR4D aColor,
                                     const wxPoint& aOffset,
@@ -605,7 +605,7 @@ void ROUNDEDTRACKSCORNER::DrawItem( EDA_DRAW_PANEL* aPanel,
 }
 
 
-void ROUNDEDTRACKSCORNER::DrawItem( KIGFX::GAL* aGal, const bool aIsSketch )
+void ROUNDED_TRACKS_CORNER::DrawItem( KIGFX::GAL* aGal, const bool aIsSketch )
 {
     if( m_on && m_trackseg && m_trackseg_second && m_set_ok )
     {
@@ -638,7 +638,7 @@ ROUNDEDTRACKSCORNER_ROUTE_EDIT::ROUNDEDTRACKSCORNER_ROUTE_EDIT( const BOARD_ITEM
                                                                 const PARAMS aParams,
                                                                 const bool aCheckNullTrack
                                                               ) :
-    ROUNDEDTRACKSCORNER( aParent,
+    ROUNDED_TRACKS_CORNER( aParent,
                          aTrackSeg,
                          aTrackSegSecond,
                          aTrackSeg->GetStart(),
@@ -697,7 +697,7 @@ void ROUNDEDTRACKSCORNER_ROUTE_EDIT::DrawItem( EDA_DRAW_PANEL* aPanel,
 #else
     const_cast<DISPLAY_OPTIONS*>( aDisplOpts )->m_DisplayPcbTrackFill = true;
 #endif
-    ROUNDEDTRACKSCORNER::DrawItem( aPanel, aDC, aColor, aOffset, aDisplOpts );
+    ROUNDED_TRACKS_CORNER::DrawItem( aPanel, aDC, aColor, aOffset, aDisplOpts );
 #ifdef NEWCONALGO
     const_cast<PCB_DISPLAY_OPTIONS*>( aDisplOpts )->m_DisplayPcbTrackFill = opts_track_fill;
 #else

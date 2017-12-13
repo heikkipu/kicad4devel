@@ -29,7 +29,7 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // Roundedtrackscorner -> Track / VIA clearance
 //-----------------------------------------------------------------------------------------------------/
-bool ROUNDEDTRACKSCORNERS::DRC_DoClearanceTest( const ROUNDEDTRACKSCORNER* aCorner,
+bool ROUNDED_TRACKS_CORNERS::DRC_DoClearanceTest( const ROUNDED_TRACKS_CORNER* aCorner,
                                                 const wxPoint aTestPoint,
                                                 const int aMinDist
                                               )
@@ -44,7 +44,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_DoClearanceTest( const ROUNDEDTRACKSCORNER* aCorn
     return true;
 }
 
-bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const ROUNDEDTRACKSCORNER* aCorner,
+bool ROUNDED_TRACKS_CORNERS::DRC_ClearanceTest( const ROUNDED_TRACKS_CORNER* aCorner,
                                               const VIA* aVia,
                                               const int aMinDist
                                             )
@@ -52,7 +52,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const ROUNDEDTRACKSCORNER* aCorner
     return DRC_DoClearanceTest( aCorner, aVia->GetStart(), aMinDist );
 }
 
-bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const ROUNDEDTRACKSCORNER* aCorner,
+bool ROUNDED_TRACKS_CORNERS::DRC_ClearanceTest( const ROUNDED_TRACKS_CORNER* aCorner,
                                               const TRACK* aTrackSeg,
                                               const int aMinDist
                                             )
@@ -60,10 +60,10 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const ROUNDEDTRACKSCORNER* aCorner
     wxPoint track_start_pos = aTrackSeg->GetStart();
     wxPoint track_end_pos = aTrackSeg->GetEnd();
 
-    if( dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) ) )
+    if( dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSeg ) ) )
     {
-        track_start_pos = dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetStartVisible();
-        track_end_pos = dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetEndVisible();
+        track_start_pos = dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetStartVisible();
+        track_end_pos = dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetEndVisible();
     }
 
     for( unsigned int n = 0; n < aCorner->GetPolyPointsNum(); ++n )
@@ -75,8 +75,8 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const ROUNDEDTRACKSCORNER* aCorner
     return true;
 }
 
-bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const TrackNodeItem::ROUNDEDTRACKSCORNER* aCornerFirst,
-                                              TrackNodeItem::ROUNDEDTRACKSCORNER* aCornerSecond,
+bool ROUNDED_TRACKS_CORNERS::DRC_ClearanceTest( const TrackNodeItem::ROUNDED_TRACKS_CORNER* aCornerFirst,
+                                              TrackNodeItem::ROUNDED_TRACKS_CORNER* aCornerSecond,
                                               const int aMinDist
                                             )
 {
@@ -89,7 +89,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_ClearanceTest( const TrackNodeItem::ROUNDEDTRACKS
 }
 
 //Only return DRC error when editing.
-bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner,
+bool ROUNDED_TRACKS_CORNERS::DRC_TestClearance( const ROUNDED_TRACKS_CORNER* aCorner,
                                               const TRACK* aTrackSeg,
                                               const int aMinDist, DRC* aDRC
                                             )
@@ -105,7 +105,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner
             int error_code = DRCE_TRACK_NEAR_VIA;
             if( editing )
             {
-                aDRC->m_currentMarker = aDRC->fillMarker( static_cast<TRACK*>( const_cast<ROUNDEDTRACKSCORNER*>( aCorner ) ),
+                aDRC->m_currentMarker = aDRC->fillMarker( static_cast<TRACK*>( const_cast<ROUNDED_TRACKS_CORNER*>( aCorner ) ),
                                                           static_cast<VIA*>( const_cast<TRACK*>( aTrackSeg ) ),
                                                           error_code,
                                                           aDRC->m_currentMarker );
@@ -123,7 +123,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner
             int error_code = DRCE_TRACK_SEGMENTS_TOO_CLOSE;
             if( editing )
             {
-                aDRC->m_currentMarker = aDRC->fillMarker( static_cast<TRACK*>( const_cast<ROUNDEDTRACKSCORNER*>( aCorner ) ),
+                aDRC->m_currentMarker = aDRC->fillMarker( static_cast<TRACK*>( const_cast<ROUNDED_TRACKS_CORNER*>( aCorner ) ),
                                                           static_cast<TRACK*>( const_cast<TRACK*>( aTrackSeg ) ),
                                                           error_code,
                                                           aDRC->m_currentMarker );
@@ -136,12 +136,12 @@ bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner
 
     if( aTrackSeg->Type() == PCB_ROUNDEDTRACKSCORNER_T )
     {
-        if( !DRC_ClearanceTest( aCorner, static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSeg ) ), aMinDist ) )
+        if( !DRC_ClearanceTest( aCorner, static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<TRACK*>( aTrackSeg ) ), aMinDist ) )
         {
             int error_code = DRCE_TRACK_SEGMENTS_TOO_CLOSE;
             if( editing )
             {
-                aDRC->m_currentMarker = aDRC->fillMarker( static_cast<TRACK*>( const_cast<ROUNDEDTRACKSCORNER*>( aCorner ) ),
+                aDRC->m_currentMarker = aDRC->fillMarker( static_cast<TRACK*>( const_cast<ROUNDED_TRACKS_CORNER*>( aCorner ) ),
                                                           static_cast<TRACK*>( const_cast<TRACK*>( aTrackSeg ) ),
                                                           error_code,
                                                           aDRC->m_currentMarker );
@@ -155,7 +155,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_TestClearance( const ROUNDEDTRACKSCORNER* aCorner
     return true;
 }
 
-bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRefFirst,
+bool ROUNDED_TRACKS_CORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRefFirst,
                                           const BOARD_CONNECTED_ITEM* aRefSecond,
                                           const int aMinDist,
                                           DRC* aDRC
@@ -164,12 +164,12 @@ bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRefFirst,
     if( aRefFirst != aRefSecond )
     {
         if( aRefFirst->Type() == PCB_ROUNDEDTRACKSCORNER_T )
-            return DRC_TestClearance( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRefFirst ) ),
+            return DRC_TestClearance( static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRefFirst ) ),
                                       static_cast<TRACK*>( const_cast<BOARD_CONNECTED_ITEM*>( aRefSecond ) ),
                                       aMinDist,
                                       aDRC );
         if( aRefSecond->Type() == PCB_ROUNDEDTRACKSCORNER_T )
-            return DRC_TestClearance( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRefSecond ) ),
+            return DRC_TestClearance( static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRefSecond ) ),
                                       static_cast<TRACK*>( const_cast<BOARD_CONNECTED_ITEM*>( aRefFirst ) ),
                                       aMinDist,
                                       aDRC );
@@ -182,7 +182,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRefFirst,
 // Roundedtrackscorner-> PAD clearance
 //-----------------------------------------------------------------------------------------------------/
 //drc_clearance_test_functions.cpp base
-bool ROUNDEDTRACKSCORNERS::DRC_DoClearanceTest( const ROUNDEDTRACKSCORNER* aCorner,
+bool ROUNDED_TRACKS_CORNERS::DRC_DoClearanceTest( const ROUNDED_TRACKS_CORNER* aCorner,
                                                 const D_PAD* aPad,
                                                 const int aMinDist,
                                                 DRC* aDRC
@@ -217,7 +217,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_DoClearanceTest( const ROUNDEDTRACKSCORNER* aCorn
 }
 
 //Only return DRC error when editing track.
-bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
+bool ROUNDED_TRACKS_CORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
                                           const D_PAD* aPad,
                                           const int aMinDist,
                                           DRC* aDRC
@@ -225,9 +225,9 @@ bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
 {
     if( aRef->Type() == PCB_ROUNDEDTRACKSCORNER_T )
     {
-        bool editing = DRC_Flags( dynamic_cast<ROUNDEDTRACKSCORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) )->GetTrackSeg()->GetFlags() );
-        editing |= DRC_Flags( dynamic_cast<ROUNDEDTRACKSCORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) )->GetTrackSegSecond()->GetFlags() );
-        if( !DRC_DoClearanceTest( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) ),
+        bool editing = DRC_Flags( dynamic_cast<ROUNDED_TRACKS_CORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) )->GetTrackSeg()->GetFlags() );
+        editing |= DRC_Flags( dynamic_cast<ROUNDED_TRACKS_CORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) )->GetTrackSegSecond()->GetFlags() );
+        if( !DRC_DoClearanceTest( static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) ),
                                   aPad,
                                   aMinDist,
                                   aDRC ) )
@@ -241,7 +241,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
                                                           aDRC->m_currentMarker );
                 return false;
             }
-            m_Parent->DRC_AddMarker( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) ),
+            m_Parent->DRC_AddMarker( static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) ),
                                      aPad,
                                      aRef->GetPosition(),
                                      error_code );
@@ -255,7 +255,7 @@ bool ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
 // Roundedtrackscorner -> text clearance
 //-----------------------------------------------------------------------------------------------------/
 //Do not return DRC error. Only marks errorplaces.
-void ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
+void ROUNDED_TRACKS_CORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
                                           const TEXTE_PCB* aText,
                                           const int aMinDist,
                                           DRC* aDRC
@@ -263,7 +263,7 @@ void ROUNDEDTRACKSCORNERS::DRC_Clearance( const BOARD_CONNECTED_ITEM* aRef,
 {
     if( aRef->Type() == PCB_ROUNDEDTRACKSCORNER_T )
     {
-        ROUNDEDTRACKSCORNER* corner = static_cast<ROUNDEDTRACKSCORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) );
+        ROUNDED_TRACKS_CORNER* corner = static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<BOARD_CONNECTED_ITEM*>( aRef ) );
         std::vector<wxPoint> text_shape;
         text_shape.clear();
         aText->TransformTextShapeToSegmentList( text_shape );

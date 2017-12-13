@@ -292,10 +292,10 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK* aBegin, TRACK* aEnd)
     {
 #ifdef PCBNEW_WITH_TRACKITEMS
         wxPoint start_point = track->GetStart();
-        if(dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track))
-            start_point = dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track)->GetStartVisible();
-        if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
-            start_point = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetStartVisible();
+        if(dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(track))
+            start_point = dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(track)->GetStartVisible();
+        if(dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
+            start_point = dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetStartVisible();
 
         CONNECTED_POINT candidate( track, start_point );
 
@@ -303,10 +303,10 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK* aBegin, TRACK* aEnd)
         if( track->Type() == PCB_TRACE_T )
         {
             wxPoint end_point = track->GetEnd();
-            if(dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track))
-                end_point = dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track)->GetEndVisible();
-            if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
-                end_point = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetEndVisible();
+            if(dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(track))
+                end_point = dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(track)->GetEndVisible();
+            if(dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
+                end_point = dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetEndVisible();
 
             CONNECTED_POINT candidate2( track, end_point );
             m_candidates.push_back( candidate2 );
@@ -360,10 +360,10 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK* aTrack )
     wxPoint position = aTrack->GetStart();
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    if(dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(aTrack)))
-        position = dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(aTrack))->GetStartVisible();
-    if(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack)))
-        position = dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack))->GetStartVisible();
+    if(dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(const_cast<TRACK*>(aTrack)))
+        position = dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(const_cast<TRACK*>(aTrack))->GetStartVisible();
+    if(dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack)))
+        position = dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack))->GetStartVisible();
 #endif
 
     for( int kk = 0; kk < 2; kk++ )
@@ -440,10 +440,10 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK* aTrack )
         position = aTrack->GetEnd();
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if(dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(aTrack)))
-            position = dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(aTrack))->GetEndVisible();
-        if(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack)))
-            position = dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack))->GetEndVisible();
+        if(dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(const_cast<TRACK*>(aTrack)))
+            position = dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(const_cast<TRACK*>(aTrack))->GetEndVisible();
+        if(dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack)))
+            position = dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack))->GetEndVisible();
 #endif
     }
 
@@ -1034,7 +1034,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     //Via Stitching. Set netcode to thermal vias.
-    m_Pcb->ViaStitching()->SetNetcodes( collected_vias );
+    m_Pcb->ViaStitching()->SetNetCodes( collected_vias );
 #endif
 
     if( IsGalCanvasActive() )

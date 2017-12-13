@@ -101,8 +101,8 @@ bool TEARDROP::Update( void )
 
 void TEARDROP::SetRoundedCornerTrack( void )
 {
-    if( dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg ) )
-        m_trackseg_length = dynamic_cast<ROUNDEDCORNERTRACK*>( m_trackseg )->GetLengthVisible();
+    if( dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg ) )
+        m_trackseg_length = dynamic_cast<ROUNDED_CORNER_TRACK*>( m_trackseg )->GetLengthVisible();
 }
 
 void TEARDROP::SetSize( void )

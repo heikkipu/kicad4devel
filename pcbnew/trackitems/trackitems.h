@@ -67,7 +67,7 @@ public:
     ~TRACKITEMS();
 
     TEARDROPS* Teardrops( void ) const { return m_Teardrops; }
-    ROUNDEDTRACKSCORNERS* RoundedTracksCorners( void ) const { return m_RoundedTracksCorners; }
+    ROUNDED_TRACKS_CORNERS* RoundedTracksCorners( void ) const { return m_RoundedTracksCorners; }
 
 #ifdef NEWCONALGO
     void SetEditFrame( const PCB_EDIT_FRAME* aEditFrame );  //Must be done when BOARD is created.
@@ -102,7 +102,7 @@ private:
     TRACKITEMS(){};
 
     TEARDROPS* m_Teardrops{nullptr};
-    ROUNDEDTRACKSCORNERS* m_RoundedTracksCorners{nullptr};
+    ROUNDED_TRACKS_CORNERS* m_RoundedTracksCorners{nullptr};
 
     BOARD* m_Board;
     PCB_EDIT_FRAME* m_EditFrame;
@@ -129,10 +129,10 @@ private:
 
     protected:
         NET_SCAN_BASE() {};
-        NET_SCAN_BASE( const TRACK* aTrackSeg,
+        NET_SCAN_BASE( const TRACK* aStartTrack,
                        const TRACKITEMS* aParent
                      ) :
-            SCAN_NET_BASE( aTrackSeg )
+            SCAN_NET_BASE( aStartTrack )
         {
             m_Parent = const_cast<TRACKITEMS*>( aParent );
         }
@@ -157,7 +157,7 @@ private:
     class NET_SCAN_GET_VIA : public NET_SCAN_BASE
     {
     public:
-        NET_SCAN_GET_VIA( const TRACK* aTrackSeg, const wxPoint aPos, const TRACKITEMS* aParent );
+        NET_SCAN_GET_VIA( const TRACK* aStartTrack, const wxPoint aPos, const TRACKITEMS* aParent );
         ~NET_SCAN_GET_VIA() {};
 
         VIA* GetResult( void ) const {
@@ -165,7 +165,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
 
         VIA* m_result_via {nullptr};
     private:
@@ -175,21 +175,21 @@ private:
     class NET_SCAN_GET_NEXT_VIA : public NET_SCAN_GET_VIA
     {
     public:
-        NET_SCAN_GET_NEXT_VIA( const TRACK* aTrackSeg, const TRACKITEMS* aParent );
+        NET_SCAN_GET_NEXT_VIA( const TRACK* aStartTrack, const TRACKITEMS* aParent );
         ~NET_SCAN_GET_NEXT_VIA() {};
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
     };
 
     class NET_SCAN_GET_BACK_VIA : public NET_SCAN_GET_VIA
     {
     public:
-        NET_SCAN_GET_BACK_VIA( const TRACK* aTrackSeg, const TRACKITEMS* aParent );
+        NET_SCAN_GET_BACK_VIA( const TRACK* aStartTrack, const TRACKITEMS* aParent );
         ~NET_SCAN_GET_BACK_VIA() {};
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
     };
 
     class PADS_SCAN_GET_PADS_IN_NET : public TrackItems::PADS_SCAN_BASE
@@ -213,7 +213,7 @@ private:
     class NET_SCAN_DRAW_TARGET_NODE_POS : public NET_SCAN_BASE
     {
     public:
-        NET_SCAN_DRAW_TARGET_NODE_POS( const TRACK* aTrackSeg,
+        NET_SCAN_DRAW_TARGET_NODE_POS( const TRACK* aStartTrack,
                                        const wxPoint aPosition,
                                        const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList,
                                        const TRACKITEMS* aParent
@@ -225,7 +225,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
 
     private:
         bool m_result {false};
@@ -282,7 +282,7 @@ private:
     class NET_SCAN_SHARP_ANGLES : public NET_SCAN_BASE
     {
     public:
-        NET_SCAN_SHARP_ANGLES( const TRACK* aTrackSeg,
+        NET_SCAN_SHARP_ANGLES( const TRACK* aStartTrack,
                                const TRACKITEMS* aParent,
                                const wxPoint aPos
                              );
@@ -294,7 +294,7 @@ private:
         }
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
 
     private:
         wxPoint m_pos {0,0};
@@ -347,7 +347,7 @@ private:
     {
     public:
         NET_SCAN_VIA_BAD_CONNECTION( const TRACKITEMS* aParent,
-                                     const TRACK* aTrackSeg,
+                                     const TRACK* aStartTrack,
                                      const wxPoint aTrackPos,
                                      TrackNodeItem::Tracks_Container* aResultList
                                    );
@@ -356,7 +356,7 @@ private:
         VIA* GetVia( void ) { return m_via; }
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
 
     private:
         wxPoint m_track_pos {0,0};
@@ -421,13 +421,13 @@ private:
     class NET_SCAN_NET_LENGTH : public NET_SCAN_BASE
     {
     public:
-        NET_SCAN_NET_LENGTH( const TRACKITEMS* aParent, const TRACK* aTrackSeg );
+        NET_SCAN_NET_LENGTH( const TRACKITEMS* aParent, const TRACK* aStartTrack );
         ~NET_SCAN_NET_LENGTH() {};
 
         double GetLength( void ) const{ return m_netlength;}
 
     protected:
-        bool ExecuteAt( TRACK* aTrackSeg ) override;
+        bool ExecuteAt( TRACK* aTrack ) override;
 
     private:
         double m_netlength = 0.0;

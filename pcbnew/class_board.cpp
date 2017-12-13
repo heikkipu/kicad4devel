@@ -2316,8 +2316,8 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     TRACK* newTrack = nullptr;
-    if(dynamic_cast<ROUNDEDCORNERTRACK*>(aSegment))
-        newTrack = static_cast<ROUNDEDCORNERTRACK*>(aSegment->Clone());
+    if(dynamic_cast<ROUNDED_CORNER_TRACK*>(aSegment))
+        newTrack = static_cast<ROUNDED_CORNER_TRACK*>(aSegment->Clone());
     else
         newTrack = (TRACK*)aSegment->Clone();
 #else

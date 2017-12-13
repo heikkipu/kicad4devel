@@ -26,10 +26,10 @@
 using namespace TrackNodeItem;
 
 
-void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks_Route( EDA_DRAW_PANEL* aPanel,
-                                                        wxDC* aDC,
-                                                        const bool aOnlyChanged
-                                                      )
+void ROUNDED_TRACKS_CORNERS::UpdateList_DrawTracks_Route( EDA_DRAW_PANEL* aPanel,
+                                                          wxDC* aDC,
+                                                          const bool aOnlyChanged
+                                                        )
 {
     if( m_update_tracks_list )
     {
@@ -65,10 +65,10 @@ void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks_Route( EDA_DRAW_PANEL* aPanel,
     GRSetDrawMode( aDC, GR_XOR );
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListDo_Route( EDA_DRAW_PANEL* aPanel,
-                                               wxDC* aDC,
-                                               bool aErase
-                                             )
+void ROUNDED_TRACKS_CORNERS::UpdateListDo_Route( EDA_DRAW_PANEL* aPanel,
+                                                 wxDC* aDC,
+                                                 bool aErase
+                                               )
 {
     if( m_update_tracks_list )
         for( auto r_t: *m_update_tracks_list )
@@ -76,7 +76,7 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_Route( EDA_DRAW_PANEL* aPanel,
 
     if( m_update_list )
     {
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner )
                 if( aErase )
                     if( ( corner->GetTrackSeg() == g_CurrentTrackSegment ) ||
@@ -87,15 +87,15 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_Route( EDA_DRAW_PANEL* aPanel,
                         corner->Draw( aPanel, aDC, GR_XOR );
                     }
 
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner )
                 corner->ResetVisibleEndpoints();
 
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner )
                 corner->Update();
 
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner )
             {
                 if( ( corner->GetTrackSeg() == g_CurrentTrackSegment ) ||

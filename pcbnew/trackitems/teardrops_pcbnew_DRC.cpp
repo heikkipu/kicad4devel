@@ -67,10 +67,10 @@ bool TEARDROPS::DRC_ClearanceTest( const TEARDROP* aTear, const TRACK* aTrackSeg
     wxPoint track_start_pos = aTrackSeg->GetStart();
     wxPoint track_end_pos = aTrackSeg->GetEnd();
 
-    if( dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) ) )
+    if( dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSeg ) ) )
     {
-        track_start_pos = dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetStartVisible();
-        track_end_pos = dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetEndVisible();
+        track_start_pos = dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetStartVisible();
+        track_end_pos = dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetEndVisible();
     }
 
     if( !DRC_DoClearanceTest( aTear, track_start_pos, aMinDist ) )
@@ -116,7 +116,7 @@ bool TEARDROPS::DRC_ClearanceTest( const TEARDROP* aTear, const TRACK* aTrackSeg
     return true;
 }
 
-bool TEARDROPS::DRC_ClearanceTest( const TEARDROP* aTear, ROUNDEDTRACKSCORNER* aCorner, const int aMinDist )
+bool TEARDROPS::DRC_ClearanceTest( const TEARDROP* aTear, ROUNDED_TRACKS_CORNER* aCorner, const int aMinDist )
 {
     for( unsigned int n = 0; n < aCorner->GetPolyPointsNum(); ++n )
     {
@@ -251,7 +251,7 @@ bool TEARDROPS::DRC_TestClearance( const TEARDROP* aTear, const TRACK* aTrackSeg
 
     if( aTrackSeg->Type() == PCB_ROUNDEDTRACKSCORNER_T )
     {
-        if( !DRC_ClearanceTest( aTear, static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSeg ) ), aMinDist ) )
+        if( !DRC_ClearanceTest( aTear, static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<TRACK*>( aTrackSeg ) ), aMinDist ) )
         {
             int error_code = DRCE_TEARDROP_NEAR_TRACK;
             if( dynamic_cast<TEARDROP_JUNCTIONS*>( const_cast<TEARDROP*>( aTear ) ) )
@@ -544,19 +544,19 @@ TEARDROPS::NET_SCAN_MULTI_TEARDROPS::NET_SCAN_MULTI_TEARDROPS( const TEARDROP* a
     m_result_teardrop = nullptr;
 }
 
-bool TEARDROPS::NET_SCAN_MULTI_TEARDROPS::ExecuteAt( TRACK* aTrackSeg )
+bool TEARDROPS::NET_SCAN_MULTI_TEARDROPS::ExecuteAt( TRACK* aTrack )
 {
-    if( aTrackSeg && ( aTrackSeg->Type() == PCB_TEARDROP_T ) )
+    if( aTrack && ( aTrack->Type() == PCB_TEARDROP_T ) )
     {
-        if( m_net_start_seg->Type() == PCB_TEARDROP_T )
+        if( m_scan_start_track->Type() == PCB_TEARDROP_T )
         {
-            TEARDROP* tear = static_cast<TEARDROP*>( aTrackSeg );
-            TEARDROP* net_start_tear = static_cast<TEARDROP*>( m_net_start_seg );
+            TEARDROP* tear = static_cast<TEARDROP*>( aTrack );
+            TEARDROP* net_start_tear = static_cast<TEARDROP*>( m_scan_start_track );
             if( tear != net_start_tear )
                 if( tear->GetTrackSeg() == net_start_tear->GetTrackSeg() )
                     if( tear->GetEnd() == net_start_tear->GetEnd() )
                     {
-                        m_result_teardrop = dynamic_cast<TEARDROP*>( const_cast<TRACK*>( aTrackSeg ) );
+                        m_result_teardrop = dynamic_cast<TEARDROP*>( const_cast<TRACK*>( aTrack ) );
                         return true;
                     }
         }

@@ -44,7 +44,7 @@ void TEARDROPS::UpdateListAdd( const TEARDROP* aTear )
             m_update_list->insert( const_cast<TEARDROP*>( aTear ) );
 }
 
-void TEARDROPS::UpdateListAdd( const ROUNDEDTRACKSCORNERS::RoundedCornerTrack_Container* aRoundedTracks )
+void TEARDROPS::UpdateListAdd( const ROUNDED_TRACKS_CORNERS::RoundedCornerTrack_Container* aRoundedTracks )
 {
    for( auto track : *aRoundedTracks )
         UpdateListAdd( track );

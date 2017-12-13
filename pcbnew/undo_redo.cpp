@@ -532,10 +532,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-            if(dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(item))
-            {    
-                dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(item)->ResetVisibleEndpoints();
-                dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(item)->ReleaseTrackSegs();
+            if(dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(item))
+            {
+                dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(item)->ResetVisibleEndpoints();
+                dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(item)->ReleaseTrackSegs();
             }
 #endif
             view->Remove( item );
@@ -552,10 +552,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-            if(dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(item))
+            if(dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(item))
             {
-                dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(item)->ConnectTrackSegs();
-                dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(item)->ResetVisibleEndpoints();
+                dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(item)->ConnectTrackSegs();
+                dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(item)->ResetVisibleEndpoints();
                 GetBoard()->TrackItems()->RoundedTracksCorners()->UpdateListAdd( static_cast<TRACK*>(item) );
             }
 #endif
@@ -685,7 +685,7 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
         std::swap( *((TrackNodeItem::TEARDROP*) this), *((TrackNodeItem::TEARDROP*) aImage) );
         break;
     case PCB_ROUNDEDTRACKSCORNER_T:
-        std::swap( *((TrackNodeItem::ROUNDEDTRACKSCORNER*) this), *((TrackNodeItem::ROUNDEDTRACKSCORNER*) aImage) );
+        std::swap( *((TrackNodeItem::ROUNDED_TRACKS_CORNER*) this), *((TrackNodeItem::ROUNDED_TRACKS_CORNER*) aImage) );
         break;
 #endif
 

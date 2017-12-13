@@ -131,7 +131,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         GetBoard()->TrackItems()->Teardrops()->RouteCreate_Start();
         GetBoard()->TrackItems()->RoundedTracksCorners()->RouteCreate_Start();
         if(GetBoard()->TrackItems()->RoundedTracksCorners()->IsOn())
-            g_CurrentTrackList.PushBack( new ROUNDEDCORNERTRACK( GetBoard() ) );
+            g_CurrentTrackList.PushBack( new ROUNDED_CORNER_TRACK( GetBoard() ) );
         else
 #endif
         g_CurrentTrackList.PushBack( new TRACK( GetBoard() ) );
@@ -244,7 +244,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             // Create 2nd segment
 #ifdef PCBNEW_WITH_TRACKITEMS
             if(GetBoard()->TrackItems()->RoundedTracksCorners()->IsOn())
-                g_CurrentTrackList.PushBack( (ROUNDEDCORNERTRACK*)g_CurrentTrackSegment->Clone() );
+                g_CurrentTrackList.PushBack( (ROUNDED_CORNER_TRACK*)g_CurrentTrackSegment->Clone() );
             else
 #endif
             g_CurrentTrackList.PushBack( (TRACK*)g_CurrentTrackSegment->Clone() );
@@ -344,7 +344,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             {
                 GetBoard()->TrackItems()->RoundedTracksCorners()->DestroyRouteEdit();
                 GetBoard()->TrackItems()->RoundedTracksCorners()->Add(g_CurrentTrackSegment);
-                newTrack = (ROUNDEDCORNERTRACK*)g_CurrentTrackSegment->Clone();
+                newTrack = (ROUNDED_CORNER_TRACK*)g_CurrentTrackSegment->Clone();
             }
             else
                 newTrack = (TRACK*)g_CurrentTrackSegment->Clone();
@@ -441,10 +441,10 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
 #ifdef PCBNEW_WITH_TRACKITEMS
         if(GetBoard()->TrackItems()->RoundedTracksCorners()->IsOn())
         {
-            if(newTrack && dynamic_cast<ROUNDEDCORNERTRACK*>(curTrack))
+            if(newTrack && dynamic_cast<ROUNDED_CORNER_TRACK*>(curTrack))
             {
                 delete newTrack;
-                newTrack = (ROUNDEDCORNERTRACK*)curTrack->Clone();
+                newTrack = (ROUNDED_CORNER_TRACK*)curTrack->Clone();
             }
         }
 #endif
@@ -992,7 +992,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         pcb->TrackItems()->Angles( g_CurrentTrackSegment,
                                                            g_CurrentTrackSegment->GetEnd(),
                                                            aPanel, aDC );
-    TrackNodeItem::ROUNDEDTRACKSCORNER* arc_cor = nullptr;
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* arc_cor = nullptr;
     if(pcb->TrackItems()->RoundedTracksCorners()->IsOn())
     {
         arc_cor = pcb->TrackItems()->RoundedTracksCorners()->UpdateRouteEdit( aPanel, aDC,
@@ -1072,11 +1072,11 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     // calculate track len on board:
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
-            trackLen += dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetLengthVisible();
+        if(dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
+            trackLen += dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetLengthVisible();
         else
-            if(dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track))
-                trackLen += dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track)->GetLengthVisible();
+            if(dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(track))
+                trackLen += dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(track)->GetLengthVisible();
             else
                 trackLen += track->GetLength(); //TEARDROPS too. Always 0.
 

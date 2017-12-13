@@ -132,8 +132,8 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
             if( track->GetNetCode() == GetNet() )
 #ifdef PCBNEW_WITH_TRACKITEMS
             {
-                if(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(track)))
-                    lengthnet += dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(track))->GetLengthVisible();
+                if(dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(track)))
+                    lengthnet += dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(track))->GetLengthVisible();
                 else
                     lengthnet += track->GetLength();
             }
@@ -141,11 +141,11 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
                 lengthnet += track->GetLength();
 #endif
         }
-        
+
 #ifdef PCBNEW_WITH_TRACKITEMS
         if( track->Type() == PCB_ROUNDEDTRACKSCORNER_T )
             if( track->GetNetCode() == GetNet() )
-                lengthnet += dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(track))->GetLengthVisible();
+                lengthnet += dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(const_cast<TRACK*>(track))->GetLengthVisible();
 #endif
 
     }

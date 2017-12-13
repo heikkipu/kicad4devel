@@ -320,26 +320,26 @@ void TrackNodeItem::Collect( const TRACK* aTrackSeg,
     }
 }
 
-SCAN_NET_COLLECT::SCAN_NET_COLLECT( const TRACK* aTrackSeg,
+SCAN_NET_COLLECT::SCAN_NET_COLLECT( const TRACK* aStartTrack,
                                     const wxPoint aPosAt,
                                     Tracks_Container* aTracksList
                                   ) :
-    SCAN_NET_BASE( aTrackSeg )
+    SCAN_NET_BASE( aStartTrack )
 {
     m_pos = aPosAt;
-    m_layer = aTrackSeg->GetLayer();
+    m_layer = aStartTrack->GetLayer();
     m_tracks_list = aTracksList;
     m_tracks_list->clear();
 }
 
-bool SCAN_NET_COLLECT::ExecuteAt( TRACK* aTrackSeg )
+bool SCAN_NET_COLLECT::ExecuteAt( TRACK* aTrack )
 {
-    if( ( aTrackSeg != m_net_start_seg ) &&
-        ( aTrackSeg->Type() == PCB_TRACE_T ) &&
-        aTrackSeg->IsOnLayer( m_layer ) )
+    if( ( aTrack != m_scan_start_track ) &&
+        ( aTrack->Type() == PCB_TRACE_T ) &&
+        aTrack->IsOnLayer( m_layer ) )
     {
-        if( ( aTrackSeg->GetStart() == m_pos ) || ( aTrackSeg->GetEnd() == m_pos ) )
-            m_tracks_list->insert( const_cast<TRACK*>( aTrackSeg ) );
+        if( ( aTrack->GetStart() == m_pos ) || ( aTrack->GetEnd() == m_pos ) )
+            m_tracks_list->insert( const_cast<TRACK*>( aTrack ) );
     }
 
     return false;
@@ -386,15 +386,15 @@ TRACK* SCAN_NET_FIND_T_TRACKS::GetResultTrack( bool aFirstSecond ) const
         return m_result_track_0;
 }
 
-SCAN_NET_FIND_T_TRACKS::SCAN_NET_FIND_T_TRACKS( const TRACK* aTrackSeg,
+SCAN_NET_FIND_T_TRACKS::SCAN_NET_FIND_T_TRACKS( const TRACK* aStartTrack,
                                                 const wxPoint aPosAt,
                                                 Tracks_Container* aTracksList
                                               ) :
-    SCAN_NET_COLLECT( aTrackSeg, aPosAt, aTracksList )
+    SCAN_NET_COLLECT( aStartTrack, aPosAt, aTracksList )
 {
     m_result_track_0 = nullptr;
     m_result_track_1 = nullptr;
-    double angle_this = TrackSegAngle( m_net_start_seg, aPosAt );
+    double angle_this = TrackSegAngle( m_scan_start_track, aPosAt );
     m_angle_next = angle_this + M_PI_2;
     if( m_angle_next >= M_PIx2 )
         m_angle_next -= M_PIx2;
@@ -406,21 +406,21 @@ SCAN_NET_FIND_T_TRACKS::SCAN_NET_FIND_T_TRACKS( const TRACK* aTrackSeg,
     m_angle_back_rnd = Rad2DeciDegRnd( m_angle_back );
 }
 
-bool SCAN_NET_FIND_T_TRACKS::ExecuteAt( TRACK* aTrackSeg )
+bool SCAN_NET_FIND_T_TRACKS::ExecuteAt( TRACK* aTrack )
 {
-    if( ( aTrackSeg != m_net_start_seg ) &&
-        ( aTrackSeg->Type() == PCB_TRACE_T ) &&
-        aTrackSeg->IsOnLayer( m_layer ) )
+    if( ( aTrack != m_scan_start_track ) &&
+        ( aTrack->Type() == PCB_TRACE_T ) &&
+        aTrack->IsOnLayer( m_layer ) )
     {
-        if( ( aTrackSeg->GetStart() == m_pos ) || ( aTrackSeg->GetEnd() == m_pos ) )
+        if( ( aTrack->GetStart() == m_pos ) || ( aTrack->GetEnd() == m_pos ) )
         {
-            double angle_track = TrackSegAngle( aTrackSeg, m_pos );
+            double angle_track = TrackSegAngle( aTrack, m_pos );
             int angle_track_rnd = Rad2DeciDegRnd( angle_track );
 
             if( angle_track_rnd == m_angle_back_rnd )
-                m_result_track_0 = const_cast<TRACK*>( aTrackSeg );
+                m_result_track_0 = const_cast<TRACK*>( aTrack );
             if( angle_track_rnd == m_angle_next_rnd )
-                m_result_track_1 = const_cast<TRACK*>( aTrackSeg );
+                m_result_track_1 = const_cast<TRACK*>( aTrack );
         }
     }
 
@@ -432,39 +432,39 @@ bool SCAN_NET_FIND_T_TRACKS::ExecuteAt( TRACK* aTrackSeg )
 //------------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------------------
-//Base class scanning one net where aNetSeg belongs.
-SCAN_NET_BASE::SCAN_NET_BASE( const TRACK* aNetStartSeg )
+//Base class scanning one net where aStartTrack belongs.
+SCAN_NET_BASE::SCAN_NET_BASE( const TRACK* aStartTrack )
 {
-    m_net_start_seg = const_cast<TRACK*>( aNetStartSeg );
+    m_scan_start_track = const_cast<TRACK*>( aStartTrack );
     m_reverse = false;
     m_return_at_break = true;
 }
 
 void SCAN_NET_BASE::Execute( void )
 {
-    if( m_net_start_seg )
+    if( m_scan_start_track )
     {
-        int net_code = m_net_start_seg->GetNetCode();
+        int net_code = m_scan_start_track->GetNetCode();
         for( unsigned int n = 0; n < 2; ++n )
         {
-            TRACK* track_seg = m_net_start_seg;
+            TRACK* track = m_scan_start_track;
             if( n )
-                ( m_reverse )? track_seg = m_net_start_seg->Next() :
-                               track_seg = m_net_start_seg->Back();
+                ( m_reverse )? track = m_scan_start_track->Next() :
+                               track = m_scan_start_track->Back();
 
-            while( track_seg )
+            while( track )
             {
-                if( track_seg->GetNetCode() == net_code )
+                if( track->GetNetCode() == net_code )
                 {
-                    TRACK* next_seg = nullptr;
+                    TRACK* next_track = nullptr;
                     if( m_reverse )
-                        ( n )? next_seg = track_seg->Next() :
-                               next_seg = track_seg->Back();
+                        ( n )? next_track = track->Next() :
+                               next_track = track->Back();
                     else
-                        ( n )? next_seg = track_seg->Back() :
-                               next_seg = track_seg->Next();
+                        ( n )? next_track = track->Back() :
+                               next_track = track->Next();
 
-                    if( ExecuteAt( track_seg ) ) //Break when virtual function true. MUST REMEMBER!
+                    if( ExecuteAt( track ) ) //Break when virtual function true. MUST REMEMBER!
                     {
                         if( m_return_at_break )
                             return;
@@ -472,10 +472,10 @@ void SCAN_NET_BASE::Execute( void )
                             break;
                     }
 
-                    track_seg = next_seg;
+                    track = next_track;
                 }
                 else
-                    track_seg = nullptr;
+                    track = nullptr;
             }
         }
     }

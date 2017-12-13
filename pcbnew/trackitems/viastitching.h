@@ -58,6 +58,7 @@
 #include <class_layer_box_selector.h>
 #include <class_board.h>
 #include <dialogs/dialog_layer_selection_base.h>
+#include "tracknodeitem.h"
 
 class VIASTITCHING
 {
@@ -65,8 +66,8 @@ public:
     VIASTITCHING( const BOARD* aBoard );
     ~VIASTITCHING();
 
-    void SetNetcodes( const std::unordered_map<const VIA*, int>& aVias );
-    void SetNetcodes( void );
+    void SetNetCodes( const std::unordered_map<const VIA*, int>& aVias );
+    void SetNetCodes( void );
 
     void AddThermalVia( const PCB_EDIT_FRAME* aEditFrame,
                         const int aViaType_ID
@@ -245,6 +246,64 @@ public:
 
 private:
     std::set<SHAPE_POLY_SET::POLYGON*> ConnectToZones( void );
+
+    using ZonePolygonsContainer = std::set<SHAPE_POLY_SET::POLYGON*>;
+    class SCAN_NET_COLLECT_HITTED_POLYS : public TrackNodeItem::SCAN_NET_BASE
+    {
+    public:
+        SCAN_NET_COLLECT_HITTED_POLYS( const TRACK* aStartTrackItem,
+                                       const ZONE_CONTAINER* aZone,
+                                       ZonePolygonsContainer* aPolygons
+                                     ) :
+            SCAN_NET_BASE( aStartTrackItem )
+        {
+            m_connected_polys = aPolygons;
+            m_zone = aZone;
+            m_zone_polys = &m_zone->GetFilledPolysList();
+        };
+
+        ~SCAN_NET_COLLECT_HITTED_POLYS(){};
+
+    protected:
+        bool ExecuteAt( TRACK* aTrack ) override;
+
+    private:
+        const ZONE_CONTAINER* m_zone{nullptr};
+        const SHAPE_POLY_SET* m_zone_polys{nullptr};
+        ZonePolygonsContainer* m_connected_polys{nullptr};
+
+        SCAN_NET_COLLECT_HITTED_POLYS(){};
+    };
+
+    class SCAN_NET_TRACK_HIT_POLY : public TrackNodeItem::SCAN_NET_BASE
+    {
+    public:
+        SCAN_NET_TRACK_HIT_POLY( const TRACK* aStartTrackItem,
+                                 const ZONE_CONTAINER* aZone,
+                                 const SHAPE_POLY_SET::POLYGON* aPlygonToHit
+                               ) :
+            SCAN_NET_BASE( aStartTrackItem )
+        {
+            m_zone = aZone;
+            m_polygon_to_hit = aPlygonToHit;
+            m_hit = false;
+            m_return_at_break = true;
+        };
+
+        ~SCAN_NET_TRACK_HIT_POLY(){};
+
+        bool GetResult( void ) { return m_hit; }
+
+    protected:
+        bool ExecuteAt( TRACK* aTrack ) override;
+
+    private:
+        const ZONE_CONTAINER* m_zone{nullptr};
+        const SHAPE_POLY_SET::POLYGON* m_polygon_to_hit{nullptr};
+        bool m_hit{false};
+
+        SCAN_NET_TRACK_HIT_POLY(){};
+    };
 
 //-----------------------------------------------------------------------------------------------------/
 

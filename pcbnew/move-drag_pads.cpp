@@ -56,7 +56,7 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
         pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
     }
 #endif
-    
+
     // Pad move in progress: restore origin of dragged tracks, if any.
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
@@ -75,7 +75,7 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
         pcb->TrackItems()->Teardrops()->Recreate( pad, false );
     pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo();
     pcb->TrackItems()->Teardrops()->UpdateListAdd( pcb->TrackItems()->RoundedTracksCorners()->UpdateList_GetUpdatedTracks() );
-    pcb->TrackItems()->Teardrops()->UpdateListDo();       
+    pcb->TrackItems()->Teardrops()->UpdateListDo();
     Panel->Refresh();
 #endif
 
@@ -118,7 +118,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
         Track = g_DragSegmentList[ii].m_Track;
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if( !dynamic_cast<ROUNDEDCORNERTRACK*>(Track) )
+        if( !dynamic_cast<ROUNDED_CORNER_TRACK*>(Track) )
 #endif
         if( aErase )
             Track->Draw( aPanel, aDC, GR_XOR );
@@ -127,7 +127,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
 #ifdef PCBNEW_WITH_TRACKITEMS
         pcb->TrackItems()->Teardrops()->UpdateListAdd( Track );
-        if( !dynamic_cast<ROUNDEDCORNERTRACK*>(Track) )
+        if( !dynamic_cast<ROUNDED_CORNER_TRACK*>(Track) )
 #endif
         Track->Draw( aPanel, aDC, GR_XOR );
     }
@@ -135,7 +135,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo( aPanel, aDC, GR_XOR, true );
     pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks( aPanel, aDC, GR_XOR );
     pcb->TrackItems()->Teardrops()->UpdateListAdd( pcb->TrackItems()->RoundedTracksCorners()->UpdateList_GetUpdatedTracks() );
-    pcb->TrackItems()->Teardrops()->UpdateListDo( aPanel, aDC, GR_XOR, true );       
+    pcb->TrackItems()->Teardrops()->UpdateListDo( aPanel, aDC, GR_XOR, true );
 #endif
 }
 
@@ -163,13 +163,13 @@ void PCB_BASE_FRAME::StartMovePad( D_PAD* aPad, wxDC* aDC, bool aDragConnectedTr
 #ifdef PCBNEW_WITH_TRACKITEMS
     pick_list.ClearItemsList();
 #endif
- 
+
     // Build the list of track segments to drag if the command is a drag pad
     if( aDragConnectedTracks )
     {
         DRAG_LIST drglist( GetBoard() );
         drglist.BuildDragListe( aPad );
-        
+
 #ifdef PCBNEW_WITH_TRACKITEMS
         ITEM_PICKER itemWrapper( NULL, UR_CHANGED );
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )

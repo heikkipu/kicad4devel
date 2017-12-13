@@ -67,9 +67,9 @@ class PCB_PARSER : public PCB_LEXER
 {
 #ifdef PCBNEW_WITH_TRACKITEMS
     friend class TEARDROPS;
-    friend class ROUNDEDTRACKSCORNERS;
+    friend class ROUNDED_TRACKS_CORNERS;
 #endif
-    
+
     typedef boost::unordered_map< std::string, PCB_LAYER_ID >   LAYER_ID_MAP;
     typedef boost::unordered_map< std::string, LSET >       LSET_MAP;
 

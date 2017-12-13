@@ -272,25 +272,25 @@ TRACKITEMS::NET_SCAN_SHARP_ANGLES::NET_SCAN_SHARP_ANGLES( const TRACK* aTrackSeg
                                                         ) :
     NET_SCAN_BASE( aTrackSeg, aParent )
 {
-    m_layer_id = m_net_start_seg->GetLayer();
+    m_layer_id = m_scan_start_track->GetLayer();
     m_pos = aPos;
     m_result_track = nullptr;
 }
 
-bool TRACKITEMS::NET_SCAN_SHARP_ANGLES::ExecuteAt( TRACK* aTrackSeg )
+bool TRACKITEMS::NET_SCAN_SHARP_ANGLES::ExecuteAt( TRACK* aTrack )
 {
-    if( ( aTrackSeg != m_net_start_seg ) &&
-        ( aTrackSeg->Type() == PCB_TRACE_T ) &&
-        aTrackSeg->IsOnLayer( m_layer_id ) )
+    if( ( aTrack != m_scan_start_track ) &&
+        ( aTrack->Type() == PCB_TRACE_T ) &&
+        aTrack->IsOnLayer( m_layer_id ) )
     {
-        if( ( aTrackSeg->GetStart() == m_pos ) || ( aTrackSeg->GetEnd() == m_pos ) )
+        if( ( aTrack->GetStart() == m_pos ) || ( aTrack->GetEnd() == m_pos ) )
         {
-            if( IsSharpAngle( aTrackSeg,
-                              m_net_start_seg,
+            if( IsSharpAngle( aTrack,
+                              m_scan_start_track,
                               m_pos,
-                              m_Parent->RoundedTracksCorners()->Get( aTrackSeg, m_pos, true ) ) )
+                              m_Parent->RoundedTracksCorners()->Get( aTrack, m_pos, true ) ) )
             {
-                m_result_track = const_cast<TRACK*>( aTrackSeg );
+                m_result_track = const_cast<TRACK*>( aTrack );
                 return true;
             }
         }
@@ -361,7 +361,7 @@ TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::~TRACKS_PROGRESS_FIX_ITEM_CONNE
     PCB_EDIT_FRAME* edit_frame = m_Parent->GetEditFrame();
     for( auto track_seg : m_fixed_tracks )
     {
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( track_seg ) )
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( track_seg ) )
             m_Parent->RoundedTracksCorners()->Update( track_seg );
 
         if( edit_frame && edit_frame->IsGalCanvasActive() )

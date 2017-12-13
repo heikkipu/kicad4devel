@@ -29,7 +29,7 @@
 using namespace TrackNodeItem;
 
 
-void ROUNDEDTRACKSCORNERS::Popup( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Popup( wxMenu* aMenu,
                                   const TRACK* aTrackSeg,
                                   const wxPoint& aPos
                                 ) const
@@ -40,10 +40,10 @@ void ROUNDEDTRACKSCORNERS::Popup( wxMenu* aMenu,
         wxPoint track_nearest_endpoint = TrackNodeItem::TrackSegNearestEndpoint( aTrackSeg, aPos );
         msg.Printf( _( "Rounded Corners" ) );
 
-        ROUNDEDTRACKSCORNER* corner = nullptr;
+        ROUNDED_TRACKS_CORNER* corner = nullptr;
         TRACKNODEITEM* item = Get( aTrackSeg, track_nearest_endpoint );
-        if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-            corner = static_cast<ROUNDEDTRACKSCORNER*>( item );
+        if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
+            corner = static_cast<ROUNDED_TRACKS_CORNER*>( item );
 
         wxMenu* corner_menu = new wxMenu;
         AddMenuItem( aMenu,
@@ -77,7 +77,7 @@ void ROUNDEDTRACKSCORNERS::Popup( wxMenu* aMenu,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_AddToTrack( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Menu_AddToTrack( wxMenu* aMenu,
                                             const TRACK* aTrackSeg,
                                             const wxPoint& aPos
                                           ) const
@@ -90,7 +90,7 @@ void ROUNDEDTRACKSCORNERS::Menu_AddToTrack( wxMenu* aMenu,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_RemoveFromTrack( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Menu_RemoveFromTrack( wxMenu* aMenu,
                                                  const TRACK* aTrackSeg,
                                                  const wxPoint& aPos
                                                ) const
@@ -100,7 +100,7 @@ void ROUNDEDTRACKSCORNERS::Menu_RemoveFromTrack( wxMenu* aMenu,
         if( aTrackSeg->Type() == PCB_TRACE_T )
         {
             TRACKNODEITEM* item = Get( aTrackSeg, aPos );
-            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
+            if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
             {
                 AddMenuItem( aMenu,
                              ID_POPUP_PCB_ROUNDEDTRACKSCORNER_DELETE,
@@ -111,7 +111,7 @@ void ROUNDEDTRACKSCORNERS::Menu_RemoveFromTrack( wxMenu* aMenu,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_ChangeFromTrack( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Menu_ChangeFromTrack( wxMenu* aMenu,
                                                  const TRACK* aTrackSeg,
                                                  const wxPoint& aPos
                                                ) const
@@ -121,7 +121,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeFromTrack( wxMenu* aMenu,
         if( aTrackSeg->Type() == PCB_TRACE_T )
         {
             TRACKNODEITEM* item = Get( aTrackSeg, aPos );
-            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
+            if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
             {
                 wxString msg;
                 msg.Printf( _( "Change Corner %s" ), GetChars( ParamsTxtToMenu( GetParams() ) ) );
@@ -134,7 +134,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ChangeFromTrack( wxMenu* aMenu,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_CopyParamsToCurrent( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Menu_CopyParamsToCurrent( wxMenu* aMenu,
                                                      const TRACK* aTrackSeg,
                                                      const wxPoint& aPos
                                                    ) const
@@ -144,11 +144,11 @@ void ROUNDEDTRACKSCORNERS::Menu_CopyParamsToCurrent( wxMenu* aMenu,
         if( aTrackSeg->Type() == PCB_TRACE_T )
         {
             TRACKNODEITEM* item = Get( aTrackSeg, aPos );
-            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
+            if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
             {
                 wxString msg;
                 msg.Printf( _( "Copy Corner Settings %s to Current" ),
-                            GetChars( ParamsTxtToMenu( static_cast<ROUNDEDTRACKSCORNER*>( item )->GetParams() ) ) );
+                            GetChars( ParamsTxtToMenu( static_cast<ROUNDED_TRACKS_CORNER*>( item )->GetParams() ) ) );
                 AddMenuItem( aMenu,
                              ID_POPUP_PCB_ROUNDEDTRACKSCORNER_COPYCURRENT,
                              msg,
@@ -158,7 +158,7 @@ void ROUNDEDTRACKSCORNERS::Menu_CopyParamsToCurrent( wxMenu* aMenu,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_AddToNet( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Menu_AddToNet( wxMenu* aMenu,
                                           const TRACK* aTrackSeg,
                                           const wxPoint& aPos
                                         ) const
@@ -177,7 +177,7 @@ void ROUNDEDTRACKSCORNERS::Menu_AddToNet( wxMenu* aMenu,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_RemoveFromNet( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Menu_RemoveFromNet( wxMenu* aMenu,
                                                const TRACK* aTrackSeg,
                                                const wxPoint& aPos
                                              ) const
@@ -198,7 +198,7 @@ void ROUNDEDTRACKSCORNERS::Menu_RemoveFromNet( wxMenu* aMenu,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCorner( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Menu_ConvertSegmentedCorner( wxMenu* aMenu,
                                                         const TRACK* aTrackSeg,
                                                         const wxPoint& aPos
                                                       ) const
@@ -212,7 +212,7 @@ void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCorner( wxMenu* aMenu,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::Menu_ConvertSegmentedCornersNet( wxMenu* aMenu,
+void ROUNDED_TRACKS_CORNERS::Menu_ConvertSegmentedCornersNet( wxMenu* aMenu,
                                                             const TRACK* aTrackSeg,
                                                             const wxPoint& aPos
                                                           ) const

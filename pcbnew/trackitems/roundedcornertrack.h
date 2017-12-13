@@ -26,25 +26,25 @@
  * @brief Definitions for rounded corner track.
  */
 
-#ifndef ROUNDEDCORNERTRACK_H
-#define ROUNDEDCORNERTRACK_H
+#ifndef ROUNDED_CORNER_TRACK_H
+#define ROUNDED_CORNER_TRACK_H
 
 #include <class_track.h>
 #include <class_board.h>
 #include "roundedtrackscorner.h"
 
 
-class ROUNDEDCORNERTRACK : public TRACK
+class ROUNDED_CORNER_TRACK : public TRACK
 {
 public:
-    ROUNDEDCORNERTRACK( const ROUNDEDCORNERTRACK& aTrack );
-    ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent );
-    ROUNDEDCORNERTRACK( const BOARD_ITEM* aParent, const TRACK* aTrack );
-    ~ROUNDEDCORNERTRACK(){};
+    ROUNDED_CORNER_TRACK( const ROUNDED_CORNER_TRACK& aTrack );
+    ROUNDED_CORNER_TRACK( const BOARD_ITEM* aParent );
+    ROUNDED_CORNER_TRACK( const BOARD_ITEM* aParent, const TRACK* aTrack );
+    ~ROUNDED_CORNER_TRACK(){};
 
     EDA_ITEM* Clone() const override
     {
-        return new ROUNDEDCORNERTRACK( *this );
+        return new ROUNDED_CORNER_TRACK( *this );
     }
 
     double GetLengthVisible() const
@@ -56,9 +56,9 @@ public:
     const wxPoint& GetStartVisible( void ) const { return m_StartVisible; }
     const wxPoint& GetEndVisible( void ) const { return m_EndVisible; }
 
-    TrackNodeItem::ROUNDEDTRACKSCORNER* Contains( const wxPoint& aPos ) const;
-    TrackNodeItem::ROUNDEDTRACKSCORNER* GetStartPointCorner( void ) const { return m_StartPointCorner; }
-    TrackNodeItem::ROUNDEDTRACKSCORNER* GetEndPointCorner( void ) const { return m_EndPointCorner; }
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* Contains( const wxPoint& aPos ) const;
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* GetStartPointCorner( void ) const { return m_StartPointCorner; }
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* GetEndPointCorner( void ) const { return m_EndPointCorner; }
 
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                int aClearanceValue,
@@ -73,13 +73,13 @@ public:
              ) override;
 
 private:
-    friend class TrackNodeItem::ROUNDEDTRACKSCORNER; //Only, who can set values.
+    friend class TrackNodeItem::ROUNDED_TRACKS_CORNER; //Only, who can set values.
 
     wxPoint m_StartVisible {0,0};
     wxPoint m_EndVisible {0,0};
 
-    TrackNodeItem::ROUNDEDTRACKSCORNER* m_StartPointCorner {nullptr};
-    TrackNodeItem::ROUNDEDTRACKSCORNER* m_EndPointCorner {nullptr};
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* m_StartPointCorner {nullptr};
+    TrackNodeItem::ROUNDED_TRACKS_CORNER* m_EndPointCorner {nullptr};
 };
 
-#endif //ROUNDEDCORNERTRACK_H
+#endif //ROUNDED_CORNER_TRACK_H

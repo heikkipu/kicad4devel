@@ -163,13 +163,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     //RoundedCornerTracks
-    if(dynamic_cast<ROUNDEDCORNERTRACK*>(aRefSeg))
+    if(dynamic_cast<ROUNDED_CORNER_TRACK*>(aRefSeg))
     {
-        origin = dynamic_cast<ROUNDEDCORNERTRACK*>(aRefSeg)->GetStartVisible();
-        m_segmEnd   = delta = dynamic_cast<ROUNDEDCORNERTRACK*>(aRefSeg)->GetEndVisible() - origin;
+        origin = dynamic_cast<ROUNDED_CORNER_TRACK*>(aRefSeg)->GetStartVisible();
+        m_segmEnd   = delta = dynamic_cast<ROUNDED_CORNER_TRACK*>(aRefSeg)->GetEndVisible() - origin;
     }
 #endif
-    
+
     // Phase 0 : Test vias
     if( aRefSeg->Type() == PCB_VIA_T )
     {
@@ -321,10 +321,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 m_padToTestPos = dummypad.GetPosition() - origin;
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-                if( !m_pcb->TrackItems()->Teardrops()->DRC_Clearance( aRefSeg, static_cast<D_PAD*>(&dummypad), 
+                if( !m_pcb->TrackItems()->Teardrops()->DRC_Clearance( aRefSeg, static_cast<D_PAD*>(&dummypad),
                                                         netclass->GetClearance(), this) )
                     return false;
-                if( !m_pcb->TrackItems()->RoundedTracksCorners()->DRC_Clearance( aRefSeg, static_cast<D_PAD*>(&dummypad), 
+                if( !m_pcb->TrackItems()->RoundedTracksCorners()->DRC_Clearance( aRefSeg, static_cast<D_PAD*>(&dummypad),
                                                         netclass->GetClearance(), this) )
                     return false;
                 if(!dynamic_cast<TrackNodeItem::TRACKNODEITEM*>(aRefSeg))
@@ -352,16 +352,16 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             m_padToTestPos = shape_pos - origin;
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-            if( !m_pcb->TrackItems()->Teardrops()->DRC_Clearance( aRefSeg, static_cast<D_PAD*>(pad), 
+            if( !m_pcb->TrackItems()->Teardrops()->DRC_Clearance( aRefSeg, static_cast<D_PAD*>(pad),
                                                     aRefSeg->GetClearance( pad ), this) )
                 return false;
-            if( !m_pcb->TrackItems()->RoundedTracksCorners()->DRC_Clearance( aRefSeg, static_cast<D_PAD*>(pad), 
+            if( !m_pcb->TrackItems()->RoundedTracksCorners()->DRC_Clearance( aRefSeg, static_cast<D_PAD*>(pad),
                                                     aRefSeg->GetClearance( pad ), this) )
                 return false;
-            
+
             if(!dynamic_cast<TrackNodeItem::TRACKNODEITEM*>(aRefSeg))
 #endif
-            
+
             if( !checkClearanceSegmToPad( pad, aRefSeg->GetWidth(), aRefSeg->GetClearance( pad ) ) )
             {
                 m_currentMarker = fillMarker( aRefSeg, pad,
@@ -427,13 +427,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
             //RoundedCornerTracks
-            if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
+            if(dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
             {
-                delta = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetEndVisible() - dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetStartVisible();
-                segStartPoint = aRefSeg->GetStart() - dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetStartVisible();
+                delta = dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetEndVisible() - dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetStartVisible();
+                segStartPoint = aRefSeg->GetStart() - dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetStartVisible();
             }
 #endif
-    
+
             if( track->Type() == PCB_VIA_T )
             {
                 // Test distance between two vias, i.e. two circles, trivial case
@@ -473,13 +473,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
         //RoundedCornerTracks
-        if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
+        if(dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
         {
-            segStartPoint = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetStartVisible() - origin;
-            segEndPoint = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetEndVisible() - origin;
+            segStartPoint = dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetStartVisible() - origin;
+            segEndPoint = dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetEndVisible() - origin;
         }
 #endif
-    
+
         RotatePoint( &segStartPoint, m_segmAngle );
         RotatePoint( &segEndPoint, m_segmAngle );
         if( track->Type() == PCB_VIA_T )
@@ -625,10 +625,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
                     //RoundedCornerTracks
-                    if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
+                    if(dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
                     {
-                        segStartPoint = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetStartVisible();
-                        segEndPoint = dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetEndVisible();
+                        segStartPoint = dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetStartVisible();
+                        segEndPoint = dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetEndVisible();
                     }
 #endif
                     delta = segEndPoint - segStartPoint;
@@ -647,13 +647,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
                     //RoundedCornerTracks
-                    if(dynamic_cast<ROUNDEDCORNERTRACK*>(aRefSeg))
+                    if(dynamic_cast<ROUNDED_CORNER_TRACK*>(aRefSeg))
                     {
-                        relStartPos = dynamic_cast<ROUNDEDCORNERTRACK*>(aRefSeg)->GetStartVisible() - segStartPoint;
-                        relEndPos = dynamic_cast<ROUNDEDCORNERTRACK*>(aRefSeg)->GetEndVisible() - segStartPoint;
+                        relStartPos = dynamic_cast<ROUNDED_CORNER_TRACK*>(aRefSeg)->GetStartVisible() - segStartPoint;
+                        relEndPos = dynamic_cast<ROUNDED_CORNER_TRACK*>(aRefSeg)->GetEndVisible() - segStartPoint;
                     }
 #endif
-    
+
                     RotatePoint( &relStartPos, angle );
                     RotatePoint( &relEndPos, angle );
 

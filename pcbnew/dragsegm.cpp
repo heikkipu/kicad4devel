@@ -307,22 +307,22 @@ void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC )
     }
     pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks( panel, DC, GR_XOR );
 #endif
-    
+
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         TRACK* track = g_DragSegmentList[ii].m_Track;
 
 #ifndef USE_WX_OVERLAY
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if(!dynamic_cast<ROUNDEDCORNERTRACK*>(track))
+        if(!dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
 #endif
         track->Draw( panel, DC, GR_XOR );   // erase from screen at old position
 #endif
         g_DragSegmentList[ii].SetTrackEndsCoordinates( g_Offset_Module );
-        
+
 #ifdef PCBNEW_WITH_TRACKITEMS
         pcb->TrackItems()->Teardrops()->UpdateListAdd( track );
-        if(!dynamic_cast<ROUNDEDCORNERTRACK*>(track))
+        if(!dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
 #endif
         track->Draw( panel, DC, GR_XOR );
     }
@@ -331,7 +331,7 @@ void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC )
     pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo( panel, DC, GR_XOR, true );
     pcb->TrackItems()->RoundedTracksCorners()->UpdateList_DrawTracks( panel, DC, GR_XOR );
     pcb->TrackItems()->Teardrops()->UpdateListAdd( pcb->TrackItems()->RoundedTracksCorners()->UpdateList_GetUpdatedTracks() );
-    pcb->TrackItems()->Teardrops()->UpdateListDo( panel, DC, GR_XOR, true );       
+    pcb->TrackItems()->Teardrops()->UpdateListDo( panel, DC, GR_XOR, true );
 #endif
 }
 
@@ -375,13 +375,13 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LSET aLay
         if( track->GetNetCode() != aNetCode )   // not the same netcode: all candidates tested
             break;
 
-#ifdef PCBNEW_WITH_TRACKITEMS 
+#ifdef PCBNEW_WITH_TRACKITEMS
         if( track->Type() == PCB_TEARDROP_T ) //Do not collect teardrops at this time...
             continue;
         if( track->Type() == PCB_ROUNDEDTRACKSCORNER_T ) //Do not collect teardrops at this time...
             continue;
 #endif
-        
+
         if( !( aLayerMask & track->GetLayerSet() ).any() )
             continue;                       // Cannot be connected, not on the same layer
 
@@ -389,7 +389,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LSET aLay
             continue;                       // already put in list
 
         STATUS_FLAGS flag = 0;
-#ifdef PCBNEW_WITH_TRACKITEMS 
+#ifdef PCBNEW_WITH_TRACKITEMS
         int maxdist = std::min( aMaxDist, track->GetWidth() / 2 ); //std::min gives aMaxDist a chance.
 #else
         int maxdist = std::max( aMaxDist, track->GetWidth() / 2 );
@@ -441,7 +441,7 @@ void Collect_TrackSegmentsToDrag( BOARD* aPcb, const wxPoint& aRefPos, LSET aLay
             else
             {
                 //... collect teardrop(s) now.
-                aPcb->TrackItems()->Teardrops()->AddToDragList( track, g_DragSegmentList ); 
+                aPcb->TrackItems()->Teardrops()->AddToDragList( track, g_DragSegmentList );
                 aPcb->TrackItems()->RoundedTracksCorners()->AddToDragList( track, g_DragSegmentList );
             }
 #endif

@@ -27,7 +27,7 @@
 using namespace TrackNodeItem;
 
 
-void ROUNDEDTRACKSCORNERS::ToggleEdit( const TO_EDIT_T aEdit )
+void ROUNDED_TRACKS_CORNERS::ToggleEdit( const TO_EDIT_T aEdit )
 {
     if( m_track_edit_corner )
     {
@@ -63,19 +63,19 @@ void ROUNDEDTRACKSCORNERS::ToggleEdit( const TO_EDIT_T aEdit )
     }
 }
 
-void ROUNDEDTRACKSCORNERS::RouteCreate_Start( void )
+void ROUNDED_TRACKS_CORNERS::RouteCreate_Start( void )
 {
     m_can_edit = true;
 }
 
-void ROUNDEDTRACKSCORNERS::RouteCreate_Stop( void )
+void ROUNDED_TRACKS_CORNERS::RouteCreate_Stop( void )
 {
     m_can_edit = false;
     ToggleEdit( EDIT_NULL_T );
     DestroyRouteEdit();
 }
 
-void ROUNDEDTRACKSCORNERS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
+void ROUNDED_TRACKS_CORNERS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
                                            wxDC* aDC,
                                            const wxPoint& aOffset
                                          ) const
@@ -122,7 +122,7 @@ void ROUNDEDTRACKSCORNERS::DrawEditParams( EDA_DRAW_PANEL* aPanel,
     }
 }
 
-void ROUNDEDTRACKSCORNERS::DestroyRouteEdit( void )
+void ROUNDED_TRACKS_CORNERS::DestroyRouteEdit( void )
 {
     if( m_track_edit_corner )
     {
@@ -133,7 +133,7 @@ void ROUNDEDTRACKSCORNERS::DestroyRouteEdit( void )
     }
 }
 
-ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit( EDA_DRAW_PANEL* aPanel,
+ROUNDED_TRACKS_CORNER* ROUNDED_TRACKS_CORNERS::UpdateRouteEdit( EDA_DRAW_PANEL* aPanel,
                                                             wxDC* aDC,
                                                             const TRACK* aTrack,
                                                             const TRACK* aTrackSecond,
@@ -156,7 +156,7 @@ ROUNDEDTRACKSCORNER* ROUNDEDTRACKSCORNERS::UpdateRouteEdit( EDA_DRAW_PANEL* aPan
         bool erase = aErase;
         if( !m_track_edit_corner )
         {
-            ROUNDEDTRACKSCORNER::PARAMS params = GetParams();
+            ROUNDED_TRACKS_CORNER::PARAMS params = GetParams();
             BOARD* board = dynamic_cast<PCB_BASE_FRAME*>( aPanel->GetParent() )->GetBoard();
             m_track_edit_corner = new ROUNDEDTRACKSCORNER_ROUTE_EDIT( board,
                                                                       aTrack,

@@ -542,15 +542,15 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
 #ifdef PCBNEW_WITH_TRACKITEMS
         if( track->Type() == PCB_TEARDROP_T )
-            aBoard->TrackItems()->Teardrops()->Plot( static_cast<TrackNodeItem::TEARDROP*>(track), aPlotter, 
+            aBoard->TrackItems()->Teardrops()->Plot( static_cast<TrackNodeItem::TEARDROP*>(track), aPlotter,
                                        &plotMode, &gbr_metadata );
         else
             if( track->Type() == PCB_ROUNDEDTRACKSCORNER_T )
-                aBoard->TrackItems()->RoundedTracksCorners()->Plot( static_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(track), aPlotter, 
+                aBoard->TrackItems()->RoundedTracksCorners()->Plot( static_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(track), aPlotter,
                                         &plotMode, &gbr_metadata );
             else
-                if(dynamic_cast<ROUNDEDCORNERTRACK*>(track))
-                    aPlotter->ThickSegment( dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetStartVisible(), dynamic_cast<ROUNDEDCORNERTRACK*>(track)->GetEndVisible(), width, plotMode, &gbr_metadata );
+                if(dynamic_cast<ROUNDED_CORNER_TRACK*>(track))
+                    aPlotter->ThickSegment( dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetStartVisible(), dynamic_cast<ROUNDED_CORNER_TRACK*>(track)->GetEndVisible(), width, plotMode, &gbr_metadata );
                 else
 #endif
         aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode, &gbr_metadata );

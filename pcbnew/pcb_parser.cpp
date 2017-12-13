@@ -2566,7 +2566,7 @@ TRACK* PCB_PARSER::parseTRACK()
 #ifdef PCBNEW_WITH_TRACKITEMS
     //Speeding up tracks conversion. If rounded tracks corners used.
     TRACK* track_created = track.release();
-    ROUNDEDCORNERTRACK* rc_track = new ROUNDEDCORNERTRACK( m_board, track_created );
+    ROUNDED_CORNER_TRACK* rc_track = new ROUNDED_CORNER_TRACK( m_board, track_created );
     delete track_created;
     track_created = nullptr;
     return rc_track;

@@ -233,10 +233,10 @@ namespace TrackNodeItems
 
         protected:
             NET_SCAN_BASE() {};
-            NET_SCAN_BASE( const TRACK* aTrackSeg,
+            NET_SCAN_BASE( const TRACK* aStartTrack,
                            const TRACKNODEITEMS* aParent
                          ) :
-                SCAN_NET_BASE( aTrackSeg )
+                SCAN_NET_BASE( aStartTrack )
             {
                 m_Parent = const_cast<TRACKNODEITEMS*>( aParent );
             }

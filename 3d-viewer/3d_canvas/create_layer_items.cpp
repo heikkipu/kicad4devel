@@ -259,9 +259,9 @@ COBJECT2D *CINFO3D_VISU::createNewTrack( const TRACK* aTrack,
                       -aTrack->GetStart().y * m_biuTo3Dunits ); // y coord is inverted
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    if( aTrack->Type() == PCB_TRACE_T && dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack)))
-        start3DU = SFVEC2F(  dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack))->GetStartVisible().x * m_biuTo3Dunits,
-                      -dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack))->GetStartVisible().y * m_biuTo3Dunits );
+    if( aTrack->Type() == PCB_TRACE_T && dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack)))
+        start3DU = SFVEC2F(  dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack))->GetStartVisible().x * m_biuTo3Dunits,
+                      -dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack))->GetStartVisible().y * m_biuTo3Dunits );
 #endif
 
     switch( aTrack->Type() )
@@ -288,9 +288,9 @@ COBJECT2D *CINFO3D_VISU::createNewTrack( const TRACK* aTrack,
                          -aTrack->GetEnd().y * m_biuTo3Dunits );
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-        if( aTrack->Type() == PCB_TRACE_T && dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack)))
-            end3DU = SFVEC2F(  dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack))->GetEndVisible().x * m_biuTo3Dunits,
-                      -dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack))->GetEndVisible().y * m_biuTo3Dunits );
+        if( aTrack->Type() == PCB_TRACE_T && dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack)))
+            end3DU = SFVEC2F(  dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack))->GetEndVisible().x * m_biuTo3Dunits,
+                      -dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack))->GetEndVisible().y * m_biuTo3Dunits );
 #endif
 
         // Cannot add segments that have the same start and end point
@@ -1301,9 +1301,9 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             if(track->Type() == PCB_TEARDROP_T)
                 dynamic_cast<TrackNodeItem::TEARDROP*>(const_cast<TRACK*>(track))->AddTo3DContainer(layerContainer, m_biuTo3Dunits);
             if(track->Type() == PCB_ROUNDEDTRACKSCORNER_T)
-                dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<TRACK*>(track))->AddTo3DContainer(layerContainer, m_biuTo3Dunits);
+                dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(const_cast<TRACK*>(track))->AddTo3DContainer(layerContainer, m_biuTo3Dunits);
 #endif
-                
+
         }
     }
 

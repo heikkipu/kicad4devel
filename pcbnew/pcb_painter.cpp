@@ -313,16 +313,16 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 
 #ifdef PCBNEW_WITH_TRACKITEMS
     case PCB_TEARDROP_T:
-        dynamic_cast<TrackNodeItem::TEARDROP*>(const_cast<EDA_ITEM*>(item))->Draw( m_gal, 
-                                                                              &m_pcbSettings, 
-                                                                              m_pcbSettings.m_outlineWidth, 
+        dynamic_cast<TrackNodeItem::TEARDROP*>(const_cast<EDA_ITEM*>(item))->Draw( m_gal,
+                                                                              &m_pcbSettings,
+                                                                              m_pcbSettings.m_outlineWidth,
                                                                               aLayer );
         break;
-        
+
     case PCB_ROUNDEDTRACKSCORNER_T:
-        dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>(const_cast<EDA_ITEM*>(item))->Draw( m_gal, 
-                                                                              &m_pcbSettings, 
-                                                                              m_pcbSettings.m_outlineWidth, 
+        dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>(const_cast<EDA_ITEM*>(item))->Draw( m_gal,
+                                                                              &m_pcbSettings,
+                                                                              m_pcbSettings.m_outlineWidth,
                                                                               aLayer );
         break;
 #endif
@@ -343,13 +343,13 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     int      width = aTrack->GetWidth();
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    if(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack)))
+    if(dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack)))
     {
-        start = VECTOR2D(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack))->GetStartVisible());
-        end = VECTOR2D(dynamic_cast<ROUNDEDCORNERTRACK*>(const_cast<TRACK*>(aTrack))->GetEndVisible());
+        start = VECTOR2D(dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack))->GetStartVisible());
+        end = VECTOR2D(dynamic_cast<ROUNDED_CORNER_TRACK*>(const_cast<TRACK*>(aTrack))->GetEndVisible());
     }
 #endif
-        
+
     if( m_pcbSettings.m_netNamesOnTracks && IsNetnameLayer( aLayer ) )
     {
         // If there is a net name - display it on the track

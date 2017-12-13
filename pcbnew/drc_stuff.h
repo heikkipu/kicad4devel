@@ -200,7 +200,7 @@ class DRC
     friend class DIALOG_DRC_CONTROL;
 #ifdef PCBNEW_WITH_TRACKITEMS
     friend class TEARDROPS;
-    friend class ROUNDEDTRACKSCORNERS;
+    friend class ROUNDED_TRACKS_CORNERS;
 #endif
 
 private:

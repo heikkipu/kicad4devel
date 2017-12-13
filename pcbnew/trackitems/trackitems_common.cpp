@@ -43,7 +43,7 @@ TRACKITEMS::TRACKITEMS( const BOARD* aBoard )
 {
     m_Board = const_cast<BOARD*>( aBoard );
     m_Teardrops = new TEARDROPS( this, aBoard );
-    m_RoundedTracksCorners = new ROUNDEDTRACKSCORNERS( this, aBoard );
+    m_RoundedTracksCorners = new ROUNDED_TRACKS_CORNERS( this, aBoard );
     m_NetCodeFirstTrackItem = new NETCODE_FIRST_TRACKITEM( aBoard );
 }
 
@@ -98,7 +98,7 @@ void TRACKITEMS::SetMenu( wxMenu* aMenu )
             AddMenuItem( aMenu,
                         m_RoundedTracksCorners->GetMenu(),
                         ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_COMMON_MNU,
-                        ROUNDEDTRACKSCORNERS::TXT_ROUNDEDTRACKSCORNERS,
+                        ROUNDED_TRACKS_CORNERS::TXT_ROUNDEDTRACKSCORNERS,
                         KiBitmap( add_tracks_xpm ) );
         }
 #else
@@ -113,7 +113,7 @@ void TRACKITEMS::SetMenu( wxMenu* aMenu )
         AddMenuItem( aMenu,
                      m_RoundedTracksCorners->GetMenu(),
                      ID_POPUP_PCB_ROUNDEDTRACKSCORNERS_COMMON_MNU,
-                     ROUNDEDTRACKSCORNERS::TXT_ROUNDEDTRACKSCORNERS,
+                     ROUNDED_TRACKS_CORNERS::TXT_ROUNDEDTRACKSCORNERS,
                      KiBitmap( add_tracks_xpm ) );
 
 #endif
@@ -137,23 +137,23 @@ void TRACKITEMS::SetMenu( wxMenu* aMenu )
 //---------------------------------------------------------------------------------------------------
 // Get pads and vias
 //---------------------------------------------------------------------------------------------------
-TRACKITEMS::NET_SCAN_GET_VIA::NET_SCAN_GET_VIA( const TRACK* aTrackSeg,
+TRACKITEMS::NET_SCAN_GET_VIA::NET_SCAN_GET_VIA( const TRACK* aStartTrack,
                                                 const wxPoint aPos,
                                                 const TRACKITEMS* aParent
                                               ) :
-    NET_SCAN_BASE( aTrackSeg, aParent )
+    NET_SCAN_BASE( aStartTrack, aParent )
 {
     m_pos = aPos;
     m_result_via = nullptr;
 }
 
-bool TRACKITEMS::NET_SCAN_GET_VIA::ExecuteAt( TRACK* aTrackSeg )
+bool TRACKITEMS::NET_SCAN_GET_VIA::ExecuteAt( TRACK* aTrack )
 {
-    if( aTrackSeg->Type() == PCB_VIA_T )
-        if( aTrackSeg->IsOnLayer( m_net_start_seg->GetLayer() ) )
-            if( aTrackSeg->GetStart() == m_pos )
+    if( aTrack->Type() == PCB_VIA_T )
+        if( aTrack->IsOnLayer( m_scan_start_track->GetLayer() ) )
+            if( aTrack->GetStart() == m_pos )
             {
-                m_result_via = static_cast<VIA*>( const_cast<TRACK*>( aTrackSeg ) );
+                m_result_via = static_cast<VIA*>( const_cast<TRACK*>( aTrack ) );
                 return true;
             }
     return false;
@@ -176,20 +176,20 @@ VIA* TRACKITEMS::GetVia( const TRACK* aTrackSegAt, const wxPoint aPosAt ) const
     return result;
 }
 
-TRACKITEMS::NET_SCAN_GET_NEXT_VIA::NET_SCAN_GET_NEXT_VIA( const TRACK* aTrackSeg,
+TRACKITEMS::NET_SCAN_GET_NEXT_VIA::NET_SCAN_GET_NEXT_VIA( const TRACK* aStartTrack,
                                                           const TRACKITEMS* aParent
                                                         ) :
-    NET_SCAN_GET_VIA( aTrackSeg, wxPoint{0,0}, aParent )
+    NET_SCAN_GET_VIA( aStartTrack, wxPoint{0,0}, aParent )
 {
 }
 
-bool TRACKITEMS::NET_SCAN_GET_NEXT_VIA::ExecuteAt( TRACK* aTrackSeg )
+bool TRACKITEMS::NET_SCAN_GET_NEXT_VIA::ExecuteAt( TRACK* aTrack )
 {
-    if( aTrackSeg->Type() == PCB_VIA_T )
-        if( aTrackSeg->IsOnLayer( m_net_start_seg->GetLayer() ) )
-            if( aTrackSeg->GetStart() == m_net_start_seg->GetEnd() )
+    if( aTrack->Type() == PCB_VIA_T )
+        if( aTrack->IsOnLayer( m_scan_start_track->GetLayer() ) )
+            if( aTrack->GetStart() == m_scan_start_track->GetEnd() )
             {
-                m_result_via = static_cast<VIA*>( const_cast<TRACK*>( aTrackSeg ) );
+                m_result_via = static_cast<VIA*>( const_cast<TRACK*>( aTrack ) );
                 return true;
             }
     return false;
@@ -211,21 +211,21 @@ VIA* TRACKITEMS::NextVia( const TRACK* aTrackSegAt ) const
     return result;
 }
 
-TRACKITEMS::NET_SCAN_GET_BACK_VIA::NET_SCAN_GET_BACK_VIA( const TRACK* aTrackSeg,
+TRACKITEMS::NET_SCAN_GET_BACK_VIA::NET_SCAN_GET_BACK_VIA( const TRACK* aStartTrack,
                                                           const TRACKITEMS* aParent
                                                         ) :
-    NET_SCAN_GET_VIA( aTrackSeg, wxPoint{0,0}, aParent )
+    NET_SCAN_GET_VIA( aStartTrack, wxPoint{0,0}, aParent )
 {
     m_reverse = true;
 }
 
-bool TRACKITEMS::NET_SCAN_GET_BACK_VIA::ExecuteAt( TRACK* aTrackSeg )
+bool TRACKITEMS::NET_SCAN_GET_BACK_VIA::ExecuteAt( TRACK* aTrack )
 {
-    if( aTrackSeg->Type() == PCB_VIA_T )
-        if( aTrackSeg->IsOnLayer( m_net_start_seg->GetLayer() ) )
-            if( aTrackSeg->GetStart() == m_net_start_seg->GetStart() )
+    if( aTrack->Type() == PCB_VIA_T )
+        if( aTrack->IsOnLayer( m_scan_start_track->GetLayer() ) )
+            if( aTrack->GetStart() == m_scan_start_track->GetStart() )
             {
-                m_result_via = static_cast<VIA*>( const_cast<TRACK*>( aTrackSeg ) );
+                m_result_via = static_cast<VIA*>( const_cast<TRACK*>( aTrack ) );
                 return true;
             }
     return false;
@@ -713,28 +713,28 @@ void TRACKITEMS::Angles( const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList,
 //----------------------------------------------------------------------------------------
 // Draw target to node when in pos.
 //----------------------------------------------------------------------------------------
-TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::NET_SCAN_DRAW_TARGET_NODE_POS( const TRACK* aTrackSeg,
+TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::NET_SCAN_DRAW_TARGET_NODE_POS( const TRACK* aStartTrack,
                                                                           const wxPoint aPosition,
                                                                           const std::vector<DRAG_SEGM_PICKER>* aDragSegmentList,
                                                                           const TRACKITEMS* aParent
                                                                         ) :
-    NET_SCAN_BASE( aTrackSeg, aParent )
+    NET_SCAN_BASE( aStartTrack, aParent )
 {
     m_result = false;
     m_pos = aPosition;
     m_drag_segments = const_cast<std::vector<DRAG_SEGM_PICKER>*>( aDragSegmentList );
 }
 
-bool TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::ExecuteAt( TRACK* aTrackSeg )
+bool TRACKITEMS::NET_SCAN_DRAW_TARGET_NODE_POS::ExecuteAt( TRACK* aTrack )
 {
-    if( aTrackSeg != m_net_start_seg )
+    if( aTrack != m_scan_start_track )
     {
-        if( ( ( aTrackSeg->GetStart() == m_pos ) ||
-            ( aTrackSeg->GetEnd() == m_pos ) ) &&
-            aTrackSeg->IsOnLayer( m_net_start_seg->GetLayer() ) )
+        if( ( ( aTrack->GetStart() == m_pos ) ||
+            ( aTrack->GetEnd() == m_pos ) ) &&
+            aTrack->IsOnLayer( m_scan_start_track->GetLayer() ) )
         {
             for( unsigned int n = 0; n < m_drag_segments->size(); ++n )
-                if( m_drag_segments->at( n ).m_Track == aTrackSeg )
+                if( m_drag_segments->at( n ).m_Track == aTrack )
                     return false;
 
             m_result = true;
@@ -835,11 +835,11 @@ VIA* TRACKITEMS::GetBadConnectedVia( const TRACK* aTrackSeg,
 
 
 TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::NET_SCAN_VIA_BAD_CONNECTION( const TRACKITEMS* aParent,
-                                                                      const TRACK* aTrackSeg,
+                                                                      const TRACK* aStartTrack,
                                                                       const wxPoint aTrackPos,
                                                                       Tracks_Container* aResultList
                                                                     ) :
-    NET_SCAN_BASE( aTrackSeg, aParent )
+    NET_SCAN_BASE( aStartTrack, aParent )
 {
     m_track_pos = aTrackPos;
     m_result_list =  aResultList;
@@ -847,17 +847,17 @@ TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::NET_SCAN_VIA_BAD_CONNECTION( const TRAC
     m_via = nullptr;
 }
 
-bool TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::ExecuteAt( TRACK* aTrackSeg )
+bool TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::ExecuteAt( TRACK* aTrack )
 {
-    PCB_LAYER_ID layer = m_net_start_seg->GetLayer();
+    PCB_LAYER_ID layer = m_scan_start_track->GetLayer();
 
-    if( ( aTrackSeg->Type() == PCB_VIA_T ) && ( aTrackSeg->IsOnLayer( layer ) ) )
+    if( ( aTrack->Type() == PCB_VIA_T ) && ( aTrack->IsOnLayer( layer ) ) )
     {
-        wxPoint via_pos = aTrackSeg->GetEnd();
-        if( hypot( m_track_pos.x - via_pos.x, m_track_pos.y - via_pos.y ) < aTrackSeg->GetWidth()>>1 )
+        wxPoint via_pos = aTrack->GetEnd();
+        if( hypot( m_track_pos.x - via_pos.x, m_track_pos.y - via_pos.y ) < aTrack->GetWidth()>>1 )
         {
-            m_result_list->insert( const_cast<TRACK*>( aTrackSeg ) );
-            m_via = static_cast<VIA*>( const_cast<TRACK*>( aTrackSeg ) );
+            m_result_list->insert( const_cast<TRACK*>( aTrack ) );
+            m_via = static_cast<VIA*>( const_cast<TRACK*>( aTrack ) );
         }
     }
     return false;
@@ -870,25 +870,25 @@ bool TRACKITEMS::NET_SCAN_VIA_BAD_CONNECTION::ExecuteAt( TRACK* aTrackSeg )
 //----------------------------------------------------------------------------------------
 
 TRACKITEMS::NET_SCAN_NET_LENGTH::NET_SCAN_NET_LENGTH( const TRACKITEMS* aParent,
-                                                      const TRACK* aTrackSeg
+                                                      const TRACK* aStartTrack
                                                     ) :
-    NET_SCAN_BASE( aTrackSeg, aParent )
+    NET_SCAN_BASE( aStartTrack, aParent )
 {
     m_netlength = 0.0;
 }
 
-bool TRACKITEMS::NET_SCAN_NET_LENGTH::ExecuteAt( TRACK* aTrackSeg )
+bool TRACKITEMS::NET_SCAN_NET_LENGTH::ExecuteAt( TRACK* aTrack )
 {
-    if( aTrackSeg->Type() == PCB_TRACE_T )
+    if( aTrack->Type() == PCB_TRACE_T )
     {
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) ) )
-            m_netlength += dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSeg ) )->GetLengthVisible();
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrack ) ) )
+            m_netlength += dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrack ) )->GetLengthVisible();
         else
-            m_netlength += aTrackSeg->GetLength();
+            m_netlength += aTrack->GetLength();
     }
 
-    if( aTrackSeg->Type() == PCB_ROUNDEDTRACKSCORNER_T )
-        m_netlength += dynamic_cast<TrackNodeItem::ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSeg ) )->GetLengthVisible();
+    if( aTrack->Type() == PCB_ROUNDEDTRACKSCORNER_T )
+        m_netlength += dynamic_cast<TrackNodeItem::ROUNDED_TRACKS_CORNER*>( const_cast<TRACK*>( aTrack ) )->GetLengthVisible();
 
     return false;
 }

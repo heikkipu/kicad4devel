@@ -33,18 +33,18 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // Save
 //-----------------------------------------------------------------------------------------------------/
-void ROUNDEDTRACKSCORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel ) const
+void ROUNDED_TRACKS_CORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel ) const
 {
     bool corners = false;
-    ROUNDEDTRACKSCORNER::PARAMS prev_params = {0, 0};
+    ROUNDED_TRACKS_CORNER::PARAMS prev_params = {0, 0};
     for( TRACK* track_seg = m_Board->m_Track;  track_seg; track_seg = track_seg->Next() )
     {
         if( track_seg->Type() == PCB_ROUNDEDTRACKSCORNER_T )
         {
-            TRACK* connected_track = dynamic_cast<TRACK*>( dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->GetTrackSeg() );
+            TRACK* connected_track = dynamic_cast<TRACK*>( dynamic_cast<ROUNDED_TRACKS_CORNER*>( track_seg )->GetTrackSeg() );
             if( connected_track && ( connected_track->Type() == PCB_TRACE_T ) )
             {
-                ROUNDEDTRACKSCORNER::PARAMS param = dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->GetParams();
+                ROUNDED_TRACKS_CORNER::PARAMS param = dynamic_cast<ROUNDED_TRACKS_CORNER*>( track_seg )->GetParams();
                 if( param.length_ratio ) // do not save null length ratio corners.
                 {
                     if( param != prev_params )
@@ -70,7 +70,7 @@ void ROUNDEDTRACKSCORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel )
                                 " ( start %s ) ( end %s )",
                                 FMT_IU( connected_track->GetStart() ).c_str(),
                                 FMT_IU( connected_track->GetEnd() ).c_str() );
-                    if( dynamic_cast<ROUNDEDTRACKSCORNER*>( track_seg )->IsLocked() )
+                    if( dynamic_cast<ROUNDED_TRACKS_CORNER*>( track_seg )->IsLocked() )
                         aOut->Print( 0, " ( locked )" );
                     aOut->Print( 0, " ( arc ) )\n" );
                     corners = true;
@@ -82,7 +82,7 @@ void ROUNDEDTRACKSCORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel )
     if( corners )
     {
         //Save current last. When load, it is current back.
-        ROUNDEDTRACKSCORNER::PARAMS cur_params = GetParams();
+        ROUNDED_TRACKS_CORNER::PARAMS cur_params = GetParams();
         aOut->Print( aNestLevel, "( roundedtrackscorner " );
         aOut->Print( 0,
                      " ( length_set %d ) ( length_ratio %d ) ( segments %d )",
@@ -96,13 +96,13 @@ void ROUNDEDTRACKSCORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel )
 //-----------------------------------------------------------------------------------------------------/
 // Load
 //-----------------------------------------------------------------------------------------------------/
-TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Parse( PCB_PARSER* aParser )
+TRACKNODEITEM* ROUNDED_TRACKS_CORNERS::Parse( PCB_PARSER* aParser )
 {
     using namespace PCB_KEYS_T;
     wxCHECK_MSG( aParser->CurTok() == T_roundedtrackscorner, nullptr,
                  wxT( "Cannot parse " ) + aParser->GetTokenString( aParser->CurTok() ) + wxT( " as roundedtrackscorner." ) );
 
-    ROUNDEDTRACKSCORNER::PARAMS param = {0, 0};
+    ROUNDED_TRACKS_CORNER::PARAMS param = {0, 0};
     int net_code = 0;
     wxPoint pos;
     PCB_LAYER_ID track_layer_id;
@@ -110,7 +110,7 @@ TRACKNODEITEM* ROUNDEDTRACKSCORNERS::Parse( PCB_PARSER* aParser )
     wxPoint track_end;
     TRACK* track_seg;
     PICKED_ITEMS_LIST picked_items;
-    ROUNDEDTRACKSCORNER* ret_corner = nullptr;
+    ROUNDED_TRACKS_CORNER* ret_corner = nullptr;
     bool locked = false;
     T token;
 

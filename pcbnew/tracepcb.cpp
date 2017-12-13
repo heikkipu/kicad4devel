@@ -159,13 +159,13 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
 
 #ifdef PCBNEW_WITH_TRACKITEMS
         //Draw only track segments. Draw vias later... after zones.
-        if( track->Type() != PCB_VIA_T ) 
+        if( track->Type() != PCB_VIA_T )
 #endif
         track->Draw( aPanel, DC, aDrawMode );
     }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    if(TrackNodeItem::ROUNDEDTRACKSCORNER* cor = TrackItems()->RoundedTracksCorners()->GetEditCorner())
+    if(TrackNodeItem::ROUNDED_TRACKS_CORNER* cor = TrackItems()->RoundedTracksCorners()->GetEditCorner())
         cor->Draw( aPanel, DC, aDrawMode );
 #endif
 
@@ -214,7 +214,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
     }
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    //... draw vias here. 
+    //... draw vias here.
     for( TRACK* track = m_Track; track; track = track->Next() )
         if( !track->IsMoving() )
             if( track->Type() == PCB_VIA_T )

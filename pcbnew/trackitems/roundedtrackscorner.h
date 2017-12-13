@@ -26,15 +26,15 @@
  * @brief Definitions for rounded track nodes.
  */
 
-#ifndef ROUNDEDTRACKSCORNER_H
-#define ROUNDEDTRACKSCORNER_H
+#ifndef ROUNDED_TRACKS_CORNER_H
+#define ROUNDED_TRACKS_CORNER_H
 
 #include "tracknodeitem.h"
 
 
 namespace TrackNodeItem
 {
-    class ROUNDEDTRACKSCORNER : public TrackNodeItem::TRACKNODEITEM
+    class ROUNDED_TRACKS_CORNER : public TrackNodeItem::TRACKNODEITEM
     {
     public:
         static const int SEGMENTS_MAX = 100;     //max num segments.
@@ -66,7 +66,7 @@ namespace TrackNodeItem
             }
         };
 
-        ROUNDEDTRACKSCORNER( const BOARD_ITEM* aParent,
+        ROUNDED_TRACKS_CORNER( const BOARD_ITEM* aParent,
                             const TRACK* aTrackSeg,
                             const TRACK* aTrackSegSecond,
                             const wxPoint aPosition,
@@ -74,9 +74,9 @@ namespace TrackNodeItem
                             const bool aCheckNullTrack
                          );
 
-        ~ROUNDEDTRACKSCORNER(){;}
+        ~ROUNDED_TRACKS_CORNER(){;}
 
-        wxString GetClass() const override { return wxT( "ROUNDEDTRACKSCORNER" ); } //override TRACK.
+        wxString GetClass() const override { return wxT( "ROUNDED_TRACKS_CORNER" ); } //override TRACK.
         EDA_ITEM* Clone() const override; //override TRACK.
         const EDA_RECT GetBoundingBox() const override; //override TRACK.
         const wxPoint& GetPosition() const override { return m_mid_pos; }
@@ -182,7 +182,7 @@ namespace TrackNodeItem
 //-----------------------------------------------------------------------------------------------------/
 // Track routing edit corner.
 //-----------------------------------------------------------------------------------------------------/
-    class ROUNDEDTRACKSCORNER_ROUTE_EDIT : public ROUNDEDTRACKSCORNER
+    class ROUNDEDTRACKSCORNER_ROUTE_EDIT : public ROUNDED_TRACKS_CORNER
     {
     public:
         ROUNDEDTRACKSCORNER_ROUTE_EDIT( const BOARD_ITEM* aParent,
@@ -214,5 +214,5 @@ namespace TrackNodeItem
 } //namespace TrackNodeItem
 
 
-#endif //ROUNDEDTRACKSCORNER_H
+#endif //ROUNDED_TRACKS_CORNER_H
 

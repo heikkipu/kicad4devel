@@ -30,7 +30,7 @@
 using namespace TrackNodeItem;
 
 
-void ROUNDEDTRACKSCORNERS::AddToDragList( const TRACK* aTrackFrom,
+void ROUNDED_TRACKS_CORNERS::AddToDragList( const TRACK* aTrackFrom,
                                           std::vector<DRAG_SEGM_PICKER>& aDragSegList
                                         )
 {
@@ -41,9 +41,9 @@ void ROUNDEDTRACKSCORNERS::AddToDragList( const TRACK* aTrackFrom,
             TRACKNODEITEM* item = nullptr;
             n? item = Back( aTrackFrom ) : item = Next( aTrackFrom );
 
-            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
+            if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
             {
-                DRAG_SEGM_PICKER wrapper( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
+                DRAG_SEGM_PICKER wrapper( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
                 aDragSegList.push_back( wrapper );
             }
         }
@@ -53,7 +53,7 @@ void ROUNDEDTRACKSCORNERS::AddToDragList( const TRACK* aTrackFrom,
 //-----------------------------------------------------------------------------------------------------/
 // Convert segments arc to rounded corner.
 //-----------------------------------------------------------------------------------------------------/
-void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners( TRACK* aTrackFrom, const bool aUndo )
+void ROUNDED_TRACKS_CORNERS::ConvertSegmentedCorners( TRACK* aTrackFrom, const bool aUndo )
 {
     PICKED_ITEMS_LIST undoredo_items;
     ConvertSegmentedCorners( aTrackFrom, &undoredo_items );
@@ -61,7 +61,7 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners( TRACK* aTrackFrom, const boo
         m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_CHANGED );
 }
 
-bool ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners( TRACK* aTrackFrom,
+bool ROUNDED_TRACKS_CORNERS::ConvertSegmentedCorners( TRACK* aTrackFrom,
                                                     PICKED_ITEMS_LIST* aUndoRedoList
                                                   )
 {
@@ -94,7 +94,7 @@ bool ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners( TRACK* aTrackFrom,
     return false;
 }
 
-void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners( const int aNetCode, const bool aUndo )
+void ROUNDED_TRACKS_CORNERS::ConvertSegmentedCorners( const int aNetCode, const bool aUndo )
 {
     PICKED_ITEMS_LIST undoredo_items;
     DLIST<TRACK>* tracks_list = &m_Parent->GetBoard()->m_Track;
@@ -121,9 +121,9 @@ void ROUNDEDTRACKSCORNERS::ConvertSegmentedCorners( const int aNetCode, const bo
         m_EditFrame->SaveCopyInUndoList( undoredo_items, UR_CHANGED );
 }
 
-ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_COLLECT_SAMELENGTH::NET_SCAN_TRACK_COLLECT_SAMELENGTH(
+ROUNDED_TRACKS_CORNERS::NET_SCAN_TRACK_COLLECT_SAMELENGTH::NET_SCAN_TRACK_COLLECT_SAMELENGTH(
     const TRACK* aTrackSeg,
-    const ROUNDEDTRACKSCORNERS* aParent,
+    const ROUNDED_TRACKS_CORNERS* aParent,
     PICKED_ITEMS_LIST* aUndoRedoList
 ) :
     NET_SCAN_BASE( aTrackSeg, aParent )
@@ -134,21 +134,21 @@ ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_COLLECT_SAMELENGTH::NET_SCAN_TRACK_COLLECT_
     m_another_segments.clear();
 }
 
-bool ROUNDEDTRACKSCORNERS::NET_SCAN_TRACK_COLLECT_SAMELENGTH::ExecuteAt( TRACK* aTrackSeg )
+bool ROUNDED_TRACKS_CORNERS::NET_SCAN_TRACK_COLLECT_SAMELENGTH::ExecuteAt( TRACK* aTrack )
 {
-    if( aTrackSeg->Type() == PCB_TRACE_T )
+    if( aTrack->Type() == PCB_TRACE_T )
     {
-        unsigned int length = round( aTrackSeg->GetLength() / ROUND_DIVIDER );
+        unsigned int length = round( aTrack->GetLength() / ROUND_DIVIDER );
         if( length == m_track_length )
-            m_samelength_segments.insert( aTrackSeg );
+            m_samelength_segments.insert( aTrack );
         else
-            m_another_segments.insert( aTrackSeg );
+            m_another_segments.insert( aTrack );
     }
     return false;
 }
 
 //Remove individual arced segments
-void ROUNDEDTRACKSCORNERS::RemoveArcedSegments( std::set<TRACK*>* aTracksArced,
+void ROUNDED_TRACKS_CORNERS::RemoveArcedSegments( std::set<TRACK*>* aTracksArced,
                                                 PICKED_ITEMS_LIST* aUndoRedoList
                                               )
 {
@@ -167,7 +167,7 @@ void ROUNDEDTRACKSCORNERS::RemoveArcedSegments( std::set<TRACK*>* aTracksArced,
     }
 }
 
-std::set<TRACK*> ROUNDEDTRACKSCORNERS::CollectSameLengthConnected( const TRACK* aTrackToConnect,
+std::set<TRACK*> ROUNDED_TRACKS_CORNERS::CollectSameLengthConnected( const TRACK* aTrackToConnect,
                                                                    const std::set<TRACK*>* aTracksSameLength
                                                                  )
 {
@@ -207,7 +207,7 @@ std::set<TRACK*> ROUNDEDTRACKSCORNERS::CollectSameLengthConnected( const TRACK* 
     return tracks_arced;
 }
 
-std::map<TRACK*, bool> ROUNDEDTRACKSCORNERS::FindSegmentsBothSidesOfArced( const std::set<TRACK*>* aTracksArced,
+std::map<TRACK*, bool> ROUNDED_TRACKS_CORNERS::FindSegmentsBothSidesOfArced( const std::set<TRACK*>* aTracksArced,
                                                                            const std::set<TRACK*>* aTracksOthers
                                                                          )
 {
@@ -242,7 +242,7 @@ std::map<TRACK*, bool> ROUNDEDTRACKSCORNERS::FindSegmentsBothSidesOfArced( const
     return tracks_connected2arced;
 }
 
-bool ROUNDEDTRACKSCORNERS::CreateCorner( std::set<TRACK*>* aTracksArced,
+bool ROUNDED_TRACKS_CORNERS::CreateCorner( std::set<TRACK*>* aTracksArced,
                                          const std::map<TRACK*,
                                          bool>* aBothSidesTracks,
                                          PICKED_ITEMS_LIST* aUndoRedoList
@@ -311,7 +311,7 @@ bool ROUNDEDTRACKSCORNERS::CreateCorner( std::set<TRACK*>* aTracksArced,
             second_track->SetEnd( second_track_new_pos );
 
         ITEM_PICKER added_picker( nullptr, UR_NEW );
-        ROUNDEDCORNERTRACK* new_track( ( ROUNDEDCORNERTRACK* )first_track->Clone() );
+        ROUNDED_CORNER_TRACK* new_track( ( ROUNDED_CORNER_TRACK* )first_track->Clone() );
         new_track->SetStart( first_track_new_pos );
         new_track->SetEnd( second_track_new_pos );
         added_picker.SetItem( new_track );

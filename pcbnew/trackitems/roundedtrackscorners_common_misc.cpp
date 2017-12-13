@@ -28,15 +28,15 @@ using namespace TrackNodeItem;
 //-----------------------------------------------------------------------------------------------------/
 // PLOT
 //-----------------------------------------------------------------------------------------------------/
-void ROUNDEDTRACKSCORNERS::Plot( const TRACKNODEITEM* aTrackNodeItem,
+void ROUNDED_TRACKS_CORNERS::Plot( const TRACKNODEITEM* aTrackNodeItem,
                                  PLOTTER* aPlotter,
                                  const EDA_DRAW_MODE_T* aPlotMode,
                                  void* aData
                                )
 {
-    if( aTrackNodeItem && dynamic_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACKNODEITEM*>( aTrackNodeItem ) ) )
+    if( aTrackNodeItem && dynamic_cast<ROUNDED_TRACKS_CORNER*>( const_cast<TRACKNODEITEM*>( aTrackNodeItem ) ) )
     {
-        ROUNDEDTRACKSCORNER* corner = static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACKNODEITEM*>( aTrackNodeItem ) );
+        ROUNDED_TRACKS_CORNER* corner = static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<TRACKNODEITEM*>( aTrackNodeItem ) );
         if( corner->IsSetOK() )
         {
             std::vector<wxPoint> corners;

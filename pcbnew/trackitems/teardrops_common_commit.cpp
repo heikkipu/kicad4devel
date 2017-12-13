@@ -50,11 +50,11 @@ TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::NET_SCAN_VIA_COLLECTCOMMIT( const VIA* aV
     m_commit_container = aCommitContainer;
 }
 
-bool TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::ExecuteAt( TRACK* aTrackSeg )
+bool TEARDROPS::NET_SCAN_VIA_COLLECTCOMMIT::ExecuteAt( TRACK* aTrack )
 {
-    if( aTrackSeg->Type() == PCB_TRACE_T )
+    if( aTrack->Type() == PCB_TRACE_T )
     {
-        TEARDROP* tear = dynamic_cast<TEARDROPS*>( m_Parent )->GetTeardrop( aTrackSeg, m_via );
+        TEARDROP* tear = dynamic_cast<TEARDROPS*>( m_Parent )->GetTeardrop( aTrack, m_via );
         if( tear )
         {
             if( m_locked_too || ( !m_locked_too && !tear->IsLocked() ) )
@@ -93,9 +93,9 @@ TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::NET_SCAN_PAD_COLLECTCOMMIT( const D_PAD* 
     m_commit_container = aCommitContainer;
 }
 
-bool TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::ExecuteAt( TRACK* aTrackSeg )
+bool TEARDROPS::NET_SCAN_PAD_COLLECTCOMMIT::ExecuteAt( TRACK* aTrack )
 {
-    TEARDROP* tear = m_Parent->GetTeardrop( aTrackSeg, m_pad );
+    TEARDROP* tear = m_Parent->GetTeardrop( aTrack, m_pad );
     if( tear )
     {
         if( m_locked_too || ( !m_locked_too && !tear->IsLocked() ) )

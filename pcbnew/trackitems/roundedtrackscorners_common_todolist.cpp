@@ -27,74 +27,74 @@
 using namespace TrackNodeItem;
 
 
-void ROUNDEDTRACKSCORNERS::UpdateListClear( void )
+void ROUNDED_TRACKS_CORNERS::UpdateListClear( void )
 {
     m_update_list->clear();
     m_update_tracks_list->clear();
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListAdd( const ROUNDEDTRACKSCORNER* aCorner )
+void ROUNDED_TRACKS_CORNERS::UpdateListAdd( const ROUNDED_TRACKS_CORNER* aCorner )
 {
     if( aCorner )
     {
-        m_update_list->insert( const_cast<ROUNDEDTRACKSCORNER*>( aCorner ) );
+        m_update_list->insert( const_cast<ROUNDED_TRACKS_CORNER*>( aCorner ) );
 
         //Must collect connected tracks corners too.
         TRACK* track = aCorner->GetTrackSeg();
-        m_update_tracks_list->insert( static_cast<ROUNDEDCORNERTRACK*>( track ) );
+        m_update_tracks_list->insert( static_cast<ROUNDED_CORNER_TRACK*>( track ) );
 
         TRACKNODEITEM* item = Get( track, track->GetStart() );
-        if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-            m_update_list->insert( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
+        if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
+            m_update_list->insert( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
 
         item = Get( track, track->GetEnd() );
-        if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-            m_update_list->insert( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
+        if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
+            m_update_list->insert( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
 
         track = aCorner->GetTrackSegSecond();
-        m_update_tracks_list->insert( static_cast<ROUNDEDCORNERTRACK*>( track ) );
+        m_update_tracks_list->insert( static_cast<ROUNDED_CORNER_TRACK*>( track ) );
 
         item = Get( track, track->GetStart() );
-        if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-            m_update_list->insert( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
+        if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
+            m_update_list->insert( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
 
         item = Get( track, track->GetEnd() );
-        if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-            m_update_list->insert( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
+        if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
+            m_update_list->insert( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
     }
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListAdd( const TRACK* aTrackSegFrom )
+void ROUNDED_TRACKS_CORNERS::UpdateListAdd( const TRACK* aTrackSegFrom )
 {
     if( aTrackSegFrom )
     {
 
         if( aTrackSegFrom->Type() == PCB_ROUNDEDTRACKSCORNER_T )
-            UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
+            UpdateListAdd( static_cast<ROUNDED_TRACKS_CORNER*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
 
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSegFrom ) ) )
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSegFrom ) ) )
         {
-            m_update_tracks_list->insert( static_cast<ROUNDEDCORNERTRACK*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
+            m_update_tracks_list->insert( static_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
 
             TRACKNODEITEM* item = Next( aTrackSegFrom );
-            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-                UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
+            if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
+                UpdateListAdd( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
 
             item = Back( aTrackSegFrom );
-            if( item && dynamic_cast<ROUNDEDTRACKSCORNER*>( item ) )
-                UpdateListAdd( static_cast<ROUNDEDTRACKSCORNER*>( item ) );
+            if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
+                UpdateListAdd( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
         }
     }
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListAdd( const BOARD_ITEM* aBoardItem )
+void ROUNDED_TRACKS_CORNERS::UpdateListAdd( const BOARD_ITEM* aBoardItem )
 {
     if( dynamic_cast<TRACK*>( const_cast<BOARD_ITEM*>( aBoardItem ) ) )
-        if( dynamic_cast<ROUNDEDCORNERTRACK*>( static_cast<BOARD_ITEM*>( const_cast<BOARD_ITEM*>( aBoardItem ) ) ) )
-            UpdateListAdd( static_cast<ROUNDEDCORNERTRACK*>( const_cast<BOARD_ITEM*>( aBoardItem ) ) );
+        if( dynamic_cast<ROUNDED_CORNER_TRACK*>( static_cast<BOARD_ITEM*>( const_cast<BOARD_ITEM*>( aBoardItem ) ) ) )
+            UpdateListAdd( static_cast<ROUNDED_CORNER_TRACK*>( const_cast<BOARD_ITEM*>( aBoardItem ) ) );
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode )
+void ROUNDED_TRACKS_CORNERS::UpdateList_DrawTracks( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode )
 {
     if( m_update_tracks_list )
         for( auto r_t: *m_update_tracks_list )
@@ -102,7 +102,7 @@ void ROUNDEDTRACKSCORNERS::UpdateList_DrawTracks( EDA_DRAW_PANEL* aPanel, wxDC* 
                 r_t->Draw( aPanel, aDC, aDrawMode );
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListDo( void )
+void ROUNDED_TRACKS_CORNERS::UpdateListDo( void )
 {
     if( m_update_tracks_list )
         for( auto r_t: *m_update_tracks_list )
@@ -110,10 +110,10 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo( void )
 
     if( m_update_list )
     {
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner && corner->GetList() )
                 corner->ResetVisibleEndpoints();
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner && corner->GetList() )
             {
                 corner->Update();
@@ -123,7 +123,7 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo( void )
     }
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListDo( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase )
+void ROUNDED_TRACKS_CORNERS::UpdateListDo( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode, bool aErase )
 {
     if( m_update_tracks_list )
         for( auto r_t: *m_update_tracks_list )
@@ -131,26 +131,26 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_D
 
     if( m_update_list )
     {
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner && corner->GetList() )
                 if( aErase )
                     corner->Draw( aPanel, aDC, aDrawMode );
 
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner && corner->GetList() )
                 corner->ResetVisibleEndpoints();
 
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner && corner->GetList() )
                 corner->Update();
 
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner && corner->GetList() )
                 corner->Draw( aPanel, aDC, aDrawMode );
     }
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListDo_UndoRedo( void )
+void ROUNDED_TRACKS_CORNERS::UpdateListDo_UndoRedo( void )
 {
     if( m_update_tracks_list )
         for( auto r_t: *m_update_tracks_list )
@@ -158,14 +158,14 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_UndoRedo( void )
 
     if( m_update_list )
     {
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner && corner->GetList() )
             {
                 corner->ConnectTrackSegs();
                 corner->ResetVisibleEndpoints();
             }
 
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
         {
             if( corner && corner->GetList() )
             {
@@ -183,16 +183,16 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_UndoRedo( void )
             for( auto r_t: *m_update_tracks_list )
                 m_EditFrame->GetGalCanvas()->GetView()->Update( r_t, KIGFX::GEOMETRY );
 
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
             if( corner && corner->GetList() )
                 m_EditFrame->GetGalCanvas()->GetView()->Update( corner );
 
     }
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListDo_RemoveBroken( PICKED_ITEMS_LIST* aUndoRedoList )
+void ROUNDED_TRACKS_CORNERS::UpdateListDo_RemoveBroken( PICKED_ITEMS_LIST* aUndoRedoList )
 {
-    for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+    for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
         if( corner && corner->GetList() )
             if( !corner->AreTracksConnected() )
                 Remove( corner, aUndoRedoList, false, true );
@@ -200,9 +200,9 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_RemoveBroken( PICKED_ITEMS_LIST* aUndoRe
     UpdateListDo();
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListDo_BlockRotate( PICKED_ITEMS_LIST* aItemsList )
+void ROUNDED_TRACKS_CORNERS::UpdateListDo_BlockRotate( PICKED_ITEMS_LIST* aItemsList )
 {
-    for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+    for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
         if( corner && corner->GetList() )
         {
             for( int n = 0; n < 2; ++n )
@@ -226,17 +226,17 @@ void ROUNDEDTRACKSCORNERS::UpdateListDo_BlockRotate( PICKED_ITEMS_LIST* aItemsLi
         }
 }
 
-void ROUNDEDTRACKSCORNERS::UpdateListDo_BlockDuplicate( const wxPoint aMoveVector, PICKED_ITEMS_LIST* aUndoRedoList )
+void ROUNDED_TRACKS_CORNERS::UpdateListDo_BlockDuplicate( const wxPoint aMoveVector, PICKED_ITEMS_LIST* aUndoRedoList )
 {
     if( m_update_list )
     {
-        ROUNDEDTRACKSCORNER::PARAMS current_params = GetParams();
-        for( ROUNDEDTRACKSCORNER* corner : *m_update_list )
+        ROUNDED_TRACKS_CORNER::PARAMS current_params = GetParams();
+        for( ROUNDED_TRACKS_CORNER* corner : *m_update_list )
         {
-            ROUNDEDTRACKSCORNER::PARAMS params {0, 0, 0};
+            ROUNDED_TRACKS_CORNER::PARAMS params {0, 0, 0};
             if( corner )
             {
-                ROUNDEDTRACKSCORNER::PARAMS corner_params = corner->GetParams();
+                ROUNDED_TRACKS_CORNER::PARAMS corner_params = corner->GetParams();
                 if( params != corner_params )
                 {
                     params = corner_params;

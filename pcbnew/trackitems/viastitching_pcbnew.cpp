@@ -197,7 +197,7 @@ bool VIASTITCHING::IsTrackConnection( const VIA* aVia, const int aNetcode )
     return false;
 }
 
-void VIASTITCHING::SetNetcodes( const std::unordered_map<const VIA*, int>& aVias )
+void VIASTITCHING::SetNetCodes( const std::unordered_map<const VIA*, int>& aVias )
 {
     for( auto& via_n : aVias )
     {
@@ -248,7 +248,7 @@ void VIASTITCHING::SetNetcodes( const std::unordered_map<const VIA*, int>& aVias
 
 
 //Set zone connections to thermal vias.
-void VIASTITCHING::SetNetcodes( void )
+void VIASTITCHING::SetNetCodes( void )
 {
     std::unordered_map<const VIA*, int> collected_vias;
     collected_vias.clear();
@@ -276,7 +276,36 @@ void VIASTITCHING::SetNetcodes( void )
         }
     }
 
-    SetNetcodes( collected_vias );
+    SetNetCodes( collected_vias );
+}
+
+bool VIASTITCHING::SCAN_NET_TRACK_HIT_POLY::ExecuteAt( TRACK* aTrack )
+{
+    if( aTrack && ( aTrack->Type() == PCB_TRACE_T ) )
+    {
+        if( aTrack->IsOnLayer( m_zone->GetLayer() ) )
+        {
+            for( int m = 0; m < 2; ++m )
+            {
+                wxPoint seg_pos = m? aTrack->GetEnd() :
+                                     aTrack->GetStart();
+
+                if( m_zone->HitTestInsideZone( seg_pos ) )
+                {
+                    const SHAPE_POLY_SET& zone_polys = m_zone->GetFilledPolysList();
+
+                    const SHAPE_POLY_SET::POLYGON* seg_poly = zone_polys.GetPolygon( VECTOR2I( seg_pos.x, seg_pos.y ) );
+
+                    if( seg_poly == m_polygon_to_hit )
+                    {
+                        m_hit = true;
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }
 
 //Set real zone polygon connections to thermal vias.
@@ -413,53 +442,14 @@ std::set<SHAPE_POLY_SET::POLYGON*> VIASTITCHING::ConnectToZones( void )
                                 PCB_LAYER_ID zone_layer = zone->GetLayer();
 
                                 // Tracks have pad connectivity.
-                                TRACK* start_track = const_cast<VIA*>( via );
-                                if( start_track )
+                                TRACK* start_track = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetItem( thermalcode );
+                                if( start_track && ( via->IsOnLayer( zone_layer ) ) )
                                 {
-                                    for( int n = 0; n < 2; ++n )
-                                    {
-                                        TRACK* track_seg = start_track;
-                                        if( n )
-                                            track_seg = start_track->Back();
-
-                                        while( track_seg )
-                                        {
-                                            if( track_seg->Type() == PCB_TRACE_T )
-                                            {
-                                                if( track_seg->GetNetCode() == thermalcode )
-                                                {
-                                                    if( track_seg->IsOnLayer( zone_layer ) && via->IsOnLayer( zone_layer ) )
-                                                    {
-                                                        for( int m = 0; m < 2; ++m )
-                                                        {
-                                                            wxPoint seg_pos = m? track_seg->GetEnd() :
-                                                                                 track_seg->GetStart();
-
-                                                            if( zone->HitTestInsideZone( seg_pos ) )
-                                                            {
-                                                                const SHAPE_POLY_SET& zone_polys =
-                                                                    zone->GetFilledPolysList();
-
-                                                                const SHAPE_POLY_SET::POLYGON* seg_poly =
-                                                                    zone_polys.GetPolygon( VECTOR2I( seg_pos.x, seg_pos.y ) );
-
-                                                                if( seg_poly == vias_poly )
-                                                                {
-                                                                    hit = true;
-                                                                    track_seg = nullptr;
-                                                                    break;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                    track_seg = nullptr;
-                                            }
-                                            if( track_seg )
-                                                ( n )? track_seg = track_seg->Back() : track_seg = track_seg->Next();
-                                        }
-                                    }
+                                    std::unique_ptr<SCAN_NET_TRACK_HIT_POLY> hit_poly(
+                                        new SCAN_NET_TRACK_HIT_POLY( start_track, zone, vias_poly ) );
+                                    if( hit_poly )
+                                        hit_poly->Execute();
+                                    hit = hit_poly->GetResult();
                                 }
 
                                 // Pad connection if no tracks or via connectivity.
@@ -681,9 +671,43 @@ ZONE_CONTAINER* VIASTITCHING::HitTestZone( const BOARD* aPcb, const wxPoint aPos
 //-----------------------------------------------------------------------------------------------------/
 //Zone filling and stitch via connection.
 //-----------------------------------------------------------------------------------------------------/
+
+bool VIASTITCHING::SCAN_NET_COLLECT_HITTED_POLYS::ExecuteAt( TRACK* aTrack )
+{
+    bool is_via = ( aTrack->Type() == PCB_VIA_T &&
+                    !dynamic_cast<VIA*>( aTrack )->GetThermalCode() );
+    if( aTrack->Type() == PCB_TRACE_T || is_via )
+    {
+        if( aTrack->IsOnLayer( m_zone->GetLayer() ) )
+        {
+            int  endpoint = 0;
+            if( is_via )
+                endpoint = 1;
+            for( ; endpoint < 2; ++endpoint )
+            {
+                wxPoint seg_pos = endpoint? aTrack->GetEnd() :
+                                            aTrack->GetStart();
+
+                if( m_zone->HitTestInsideZone( seg_pos ) )
+                {
+                    const SHAPE_POLY_SET::POLYGON* seg_poly =
+                        m_zone_polys->GetPolygon( VECTOR2I( seg_pos.x, seg_pos.y ) );
+
+                    if( seg_poly )
+                    {
+                        m_connected_polys->insert( const_cast<SHAPE_POLY_SET::POLYGON*>(seg_poly) );
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME* aEditFrame )
 {
-    wxProgressDialog * progressDialog = NULL;
+    int progress_counter = 1;
+    wxProgressDialog * progressDialog = nullptr;
     if( aActiveWindow )
         progressDialog = new wxProgressDialog( _( "Fill All Zones" ),
                                                _("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
@@ -692,8 +716,6 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
                                                wxPD_AUTO_HIDE |
                                                wxPD_APP_MODAL |
                                                wxPD_ELAPSED_TIME );
-
-    int progress_counter = 1;
 
     if( progressDialog )
         progressDialog->Update( ++progress_counter, _( "Deleting segment zones..." ) );
@@ -706,11 +728,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
 #ifdef NEWCONALGO
     auto connity = m_Board->GetConnectivity();
     connity->RecalculateRatsnest();
-
-    if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Setting netcodes..." ) );
-
-    SetNetcodes();
+    SetNetCodes();
 #else
     aEditFrame->Compile_Ratsnest( nullptr, false );
 #endif
@@ -760,7 +778,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
     std::set<SHAPE_POLY_SET::POLYGON*>via_connected_polys = ConnectToZones();
 
 #ifdef NEWCONALGO
-    SetNetcodes();
+    SetNetCodes();
 #endif
 
     if( progressDialog )
@@ -776,64 +794,22 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
 
         if( zone && IsCopperLayer( zone_layer) )
         {
-            std::vector<int> islands;
-            islands.clear();
+            const SHAPE_POLY_SET* zone_polys = &zone->GetFilledPolysList();
+            int num_polys = zone_polys->OutlineCount();
+            int zone_netcode = zone->GetNetCode();
+
             std::set<SHAPE_POLY_SET::POLYGON*> connected_polys;
             connected_polys.clear();
 
-            int zone_netcode = zone->GetNetCode();
-
-            const SHAPE_POLY_SET* zone_polys = &zone->GetFilledPolysList();
-            int num_polys = zone_polys->OutlineCount();
-
             // Tracks and vias have pad connectivity.
             TRACK* start_track = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetItem( zone_netcode );
-            if( start_track )
+            if( start_track && ( start_track->GetNetCode() == zone_netcode ) )
             {
-                for( int direction = 0; direction < 2; ++direction )
-                {
-                    TRACK* track_item = start_track;
-                    if( direction )
-                        track_item = start_track->Back();
+                std::unique_ptr<SCAN_NET_COLLECT_HITTED_POLYS> collect_polys(
+                    new SCAN_NET_COLLECT_HITTED_POLYS( start_track, zone, &connected_polys ) );
+                if( collect_polys )
+                    collect_polys->Execute();
 
-                    while( track_item )
-                    {
-                        bool is_via = ( track_item->Type() == PCB_VIA_T &&
-                                        !dynamic_cast<VIA*>( track_item )->GetThermalCode() );
-                        if( track_item->Type() == PCB_TRACE_T || is_via )
-                        {
-                            if( track_item->GetNetCode() == zone_netcode )
-                            {
-                                if( track_item->IsOnLayer( zone_layer ) )
-                                {
-                                    int  endpoint = 0;
-                                    if( is_via )
-                                        endpoint = 1;
-                                    for( ; endpoint < 2; ++endpoint )
-                                    {
-                                        wxPoint seg_pos = endpoint? track_item->GetEnd() :
-                                                                    track_item->GetStart();
-
-                                        if( zone->HitTestInsideZone( seg_pos ) )
-                                        {
-                                            const SHAPE_POLY_SET::POLYGON* seg_poly =
-                                                zone_polys->GetPolygon( VECTOR2I( seg_pos.x, seg_pos.y ) );
-
-                                            if( seg_poly )
-                                            {
-                                                connected_polys.insert( const_cast<SHAPE_POLY_SET::POLYGON*>(seg_poly) );
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                                track_item = nullptr;
-                        }
-                        if( track_item )
-                            ( direction )? track_item = track_item->Back() : track_item = track_item->Next();
-                    }
-                }
             }
 
             std::vector<D_PAD*> test_pads = m_Board->TrackItems()->GetPads( zone_netcode );
@@ -844,22 +820,20 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
                 if( pad->IsOnLayer( zone_layer ) &&
                     zone->HitTestInsideZone( pad_pos ) )
                 {
-                    const SHAPE_POLY_SET::POLYGON* pad_poly =
-                        zone_polys->GetPolygon( VECTOR2I( pad_pos.x, pad_pos.y ) );
+                    const SHAPE_POLY_SET::POLYGON* pad_poly = zone_polys->GetPolygon( VECTOR2I( pad_pos.x, pad_pos.y ) );
 
                     if( pad_poly )
-                    {
                         connected_polys.insert( const_cast<SHAPE_POLY_SET::POLYGON*>(pad_poly) );
-                    }
 
                 }
             }
 
+            std::vector<int> islands;
+            islands.clear();
             for( int np = 0 ; np < num_polys; ++np )
             {
                 const SHAPE_POLY_SET::POLYGON* zone_poly = &zone_polys->Polygon( np );
 
-                //Thermal via connection
                 if( ( via_connected_polys.find( const_cast<SHAPE_POLY_SET::POLYGON*>(zone_poly) ) ==
                       via_connected_polys.end() ) &&
                     ( connected_polys.find( const_cast<SHAPE_POLY_SET::POLYGON*>(zone_poly) ) ==
