@@ -309,17 +309,17 @@ private:
 //connect tracks nodes inside via or pad center of them
 //---------------------------------------------------------------------------------------------------
 public:
-    void FixTrackConnectionsInCenter( const DLIST<TRACK>* aTracksAt );
+    void CentralizeTrackConnection( const DLIST<TRACK>* aTracksAt );
 
 private:
-    class TRACKS_PROGRESS_FIX_ITEM_CONNECTION: public TRACKITEMS_TRACKS_PROGRESS
+    class TRACKS_PROGRESS_CENTRALIZE_CONNECTION: public TRACKITEMS_TRACKS_PROGRESS
     {
     public:
-        TRACKS_PROGRESS_FIX_ITEM_CONNECTION( const TRACKITEMS* aParent,
+        TRACKS_PROGRESS_CENTRALIZE_CONNECTION( const TRACKITEMS* aParent,
                                              const DLIST<TRACK>* aTracks,
                                              PICKED_ITEMS_LIST* aUndoRedoList
                                            );
-        ~TRACKS_PROGRESS_FIX_ITEM_CONNECTION();
+        ~TRACKS_PROGRESS_CENTRALIZE_CONNECTION();
 
     protected:
         unsigned int ExecuteItem( const BOARD_ITEM* aItemAt ) override;
@@ -449,7 +449,8 @@ private:
         }
         ~NETCODE_FIRST_TRACKITEM(){;}
 
-        TRACK* GetItem( const int aNetCode );
+        TRACK* GetBestInsertPoint( const int aNetCode );
+        TRACK* GetFirst( const int aNetCode );
         void Insert( const TRACK* aTrackItem );
         void Remove( const TRACK* aTrackItem );
 

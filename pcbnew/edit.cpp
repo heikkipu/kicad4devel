@@ -2052,7 +2052,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_TRACKS_CONNECT_CENTER_IN_ITEM:
-        GetBoard()->TrackItems()->FixTrackConnectionsInCenter(&GetBoard()->m_Track);
+        GetBoard()->TrackItems()->CentralizeTrackConnection(&GetBoard()->m_Track);
         OnModify();
         break;
 

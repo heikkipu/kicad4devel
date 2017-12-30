@@ -115,7 +115,7 @@ TRACK* TRACKNODEITEMS::GetTrackSegment( const wxPoint aStart,
                                       ) const
 {
     //First try to find fast
-    TRACK* track_seg = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetItem( aNetCode );
+    TRACK* track_seg = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetFirst( aNetCode );
     for( int n = 0; n < 2; ++n )
     {
         while( track_seg )

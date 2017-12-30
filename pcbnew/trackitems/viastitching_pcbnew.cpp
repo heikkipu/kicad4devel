@@ -442,7 +442,7 @@ std::set<SHAPE_POLY_SET::POLYGON*> VIASTITCHING::ConnectToZones( void )
                                 PCB_LAYER_ID zone_layer = zone->GetLayer();
 
                                 // Tracks have pad connectivity.
-                                TRACK* start_track = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetItem( thermalcode );
+                                TRACK* start_track = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetFirst( thermalcode );
                                 if( start_track && ( via->IsOnLayer( zone_layer ) ) )
                                 {
                                     std::unique_ptr<SCAN_NET_TRACK_HIT_POLY> hit_poly(
@@ -723,14 +723,14 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
     const_cast<BOARD*>(m_Board)->m_Zone.DeleteAll();
 
     if( progressDialog )
-        progressDialog->Update( ++progress_counter, _( "Compiling ratsnest..." ) );
+        progressDialog->Update( ++progress_counter, _( "Calculating ratsnest..." ) );
 
 #ifdef NEWCONALGO
     auto connity = m_Board->GetConnectivity();
     connity->RecalculateRatsnest();
     SetNetCodes();
 #else
-    aEditFrame->Compile_Ratsnest( nullptr, false );
+    aEditFrame->RecalculateAllTracksNetcode();
 #endif
 
     if( progressDialog )
@@ -802,7 +802,7 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
             connected_polys.clear();
 
             // Tracks and vias have pad connectivity.
-            TRACK* start_track = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetItem( zone_netcode );
+            TRACK* start_track = m_Board->TrackItems()->NetCodeFirstTrackItem()->GetFirst( zone_netcode );
             if( start_track && ( start_track->GetNetCode() == zone_netcode ) )
             {
                 std::unique_ptr<SCAN_NET_COLLECT_HITTED_POLYS> collect_polys(

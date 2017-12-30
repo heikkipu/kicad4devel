@@ -124,7 +124,7 @@ void TRACKITEMS::SetMenu( wxMenu* aMenu )
                      KiBitmap( add_tracks_xpm ) );
         AddMenuItem( misc_menu,
                      ID_POPUP_PCB_TRACKS_CONNECT_CENTER_IN_ITEM,
-                     _( "Adjust Pad / Via Connections of Tracks" ),
+                     _( "Centralize Pad / Via Connections of Tracks" ),
                      KiBitmap( via_xpm ) );
         AddMenuItem( aMenu,
                      misc_menu,
@@ -971,7 +971,7 @@ TRACK* TRACKITEMS::NETCODE_FIRST_TRACKITEM::GetAndSync( const int aNetCode )
 
 //Return netcodes first item or first item on netcode less than this.
 //Otherwise returns m_Track first item.
-TRACK* TRACKITEMS::NETCODE_FIRST_TRACKITEM::GetItem( const int aNetCode )
+TRACK* TRACKITEMS::NETCODE_FIRST_TRACKITEM::GetBestInsertPoint( const int aNetCode )
 {
     TRACK* ret_item = nullptr;
 
@@ -1024,6 +1024,12 @@ TRACK* TRACKITEMS::NETCODE_FIRST_TRACKITEM::GetItem( const int aNetCode )
     }
 #endif
 
+    return ret_item;
+}
+
+TRACK* TRACKITEMS::NETCODE_FIRST_TRACKITEM::GetFirst( const int aNetCode )
+{
+    TRACK* ret_item = GetAndSync( aNetCode );
     return ret_item;
 }
 

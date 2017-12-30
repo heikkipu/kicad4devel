@@ -96,12 +96,14 @@ namespace TrackNodeItem
         wxString GetSelectMenuText() const override;
         void AddTo3DContainer( CBVHCONTAINER2D* aContainer, const double aBiuTo3Dunits ) override;
 
-        const wxPoint& GetPosition() const override { return m_mid_pos; } // Center point of teardrop
         void SetPosition( const wxPoint& aPoint ) override {};
         void SetEnd( const wxPoint& aEnd ) {};
         void SetStart( const wxPoint& aStart ); //Use this, when change position. Same as connected item position.
 #ifdef NEWCONALGO
+        const wxPoint GetPosition() const override { return m_mid_pos; }
         void SwapData( BOARD_ITEM* aImage ) override;
+#else
+        const wxPoint& GetPosition() const override { return m_mid_pos; } // Center point of teardrop
 #endif
 
         int GetShape() const { return m_shape; }

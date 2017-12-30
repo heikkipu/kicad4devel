@@ -173,15 +173,6 @@ public:
     }
 
     /**
-     * function SearchConnectionsPadsToIntersectingPads
-     * Explores the list of pads and adds to m_PadsConnected member
-     * of each pad pads connected to
-     * Here, connections are due to intersecting pads, not tracks
-     * m_sortedPads must be initialized
-     */
-    void SearchConnectionsPadsToIntersectingPads();
-
-    /**
      * function SearchTracksConnectedToPads
      * Explores the list of pads.
      * if( add_to_padlist )
@@ -194,6 +185,16 @@ public:
      * @param add_to_tracklist = true to fill m_TracksConnected member of each pad
      */
     void SearchTracksConnectedToPads( bool add_to_padlist = true, bool add_to_tracklist = true);
+
+private:
+    /**
+     * function SearchConnectionsPadsToIntersectingPads
+     * Explores the list of pads and adds to m_PadsConnected member
+     * of each pad pads connected to
+     * Here, connections are due to intersecting pads, not tracks
+     * m_sortedPads must be initialized
+     */
+    void SearchConnectionsPadsToIntersectingPads();
 
     /**
      * function CollectItemsNearTo
@@ -223,7 +224,7 @@ public:
      */
     void Propagate_SubNets();
 
-private:
+//private:
     /**
      * function searchEntryPointInCandidatesList
      * Search an item in m_Connected connected to aPoint

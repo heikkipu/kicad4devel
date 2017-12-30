@@ -318,14 +318,14 @@ TRACK* TRACKITEMS::TRACKS_PROGRESS_MARK_SHARP_ANGLES::Find_Tracks_Sharp_Angle( c
 }
 
 //-----------------------------------------------------------------------------------------------------/
-// Adjust track connections in center of item.
+// Centralizetrack connections in center of item.
 //-----------------------------------------------------------------------------------------------------/
 // and mark them with markers to see what have been done.
-void TRACKITEMS::FixTrackConnectionsInCenter( const DLIST<TRACK>* aTracksAt )
+void TRACKITEMS::CentralizeTrackConnection( const DLIST<TRACK>* aTracksAt )
 {
     PICKED_ITEMS_LIST undoredo_list;
-    std::unique_ptr<TRACKS_PROGRESS_FIX_ITEM_CONNECTION> fix_connection(
-        new TRACKS_PROGRESS_FIX_ITEM_CONNECTION( this, aTracksAt, &undoredo_list ) );
+    std::unique_ptr<TRACKS_PROGRESS_CENTRALIZE_CONNECTION> fix_connection(
+        new TRACKS_PROGRESS_CENTRALIZE_CONNECTION( this, aTracksAt, &undoredo_list ) );
     if( fix_connection )
     {
         fix_connection->Execute();
@@ -334,7 +334,7 @@ void TRACKITEMS::FixTrackConnectionsInCenter( const DLIST<TRACK>* aTracksAt )
     }
 }
 
-TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::TRACKS_PROGRESS_FIX_ITEM_CONNECTION( const TRACKITEMS* aParent,
+TRACKITEMS::TRACKS_PROGRESS_CENTRALIZE_CONNECTION::TRACKS_PROGRESS_CENTRALIZE_CONNECTION( const TRACKITEMS* aParent,
                                                                                       const DLIST<TRACK>* aTracks,
                                                                                       PICKED_ITEMS_LIST* aUndoRedoList
                                                                                     ) :
@@ -351,7 +351,7 @@ TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::TRACKS_PROGRESS_FIX_ITEM_CONNEC
     m_fixed_tracks.clear();
 }
 
-TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::~TRACKS_PROGRESS_FIX_ITEM_CONNECTION()
+TRACKITEMS::TRACKS_PROGRESS_CENTRALIZE_CONNECTION::~TRACKS_PROGRESS_CENTRALIZE_CONNECTION()
 {
     m_Parent->Teardrops()->SetShapeParams( m_teardrop_params );
     m_Parent->Teardrops()->SetShapeParams( m_fillet_params );
@@ -369,7 +369,7 @@ TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::~TRACKS_PROGRESS_FIX_ITEM_CONNE
     }
 }
 
-unsigned int TRACKITEMS::TRACKS_PROGRESS_FIX_ITEM_CONNECTION::ExecuteItem( const BOARD_ITEM* aItemAt )
+unsigned int TRACKITEMS::TRACKS_PROGRESS_CENTRALIZE_CONNECTION::ExecuteItem( const BOARD_ITEM* aItemAt )
 {
     unsigned int exec_count = 0;
     TRACK* track_seg = dynamic_cast<TRACK*>( const_cast<BOARD_ITEM*>( aItemAt ) );

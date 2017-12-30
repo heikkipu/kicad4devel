@@ -79,9 +79,11 @@ namespace TrackNodeItem
         wxString GetClass() const override { return wxT( "ROUNDED_TRACKS_CORNER" ); } //override TRACK.
         EDA_ITEM* Clone() const override; //override TRACK.
         const EDA_RECT GetBoundingBox() const override; //override TRACK.
-        const wxPoint& GetPosition() const override { return m_mid_pos; }
 #ifdef NEWCONALGO
+        const wxPoint GetPosition() const override { return m_mid_pos; }
         void SwapData( BOARD_ITEM* aImage ) override;
+#else
+        const wxPoint& GetPosition() const override { return m_mid_pos; }
 #endif
 
         void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
