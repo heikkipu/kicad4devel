@@ -2628,6 +2628,9 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                             newFootprint->Value().SetEffects( footprint->Value() );
                         }
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+                        TrackItems()->Teardrops()->Remove( footprint, false, true );
+#endif
                         Remove( footprint );
                         Add( newFootprint, ADD_APPEND );
                         footprint = newFootprint;
@@ -2768,6 +2771,10 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     aReporter->Report( msg, REPORTER::RPT_ACTION );
                 }
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+                if( !aNetlist.IsDryRun() )
+                    TrackItems()->Teardrops()->Remove( module, false, true );
+#endif
                 if( !aNetlist.IsDryRun() )
                     module->DeleteStructure();
             }

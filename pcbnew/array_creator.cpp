@@ -104,7 +104,7 @@ void ARRAY_CREATOR::Invoke()
                 array_opts->TransformItem( ptN, new_item, rotPoint );
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-                if( getBoard()->ViaStitching()->DestroyConflicts( new_item, &m_parent ) )
+                if( getBoard()->ViaStitching()->AddViaArrayDestroyConflicts( new_item, &m_parent ) )
                     continue;
                 newitems.insert( new_item );
 #else

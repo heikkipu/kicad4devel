@@ -80,7 +80,6 @@ public:
 
     void RuleCheck( const TRACK* aTrack, DRC* aDRC );
 
-    bool DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame );
     bool Clean( PCB_EDIT_FRAME* aEditFrame, BOARD_COMMIT* aCommit );
     ZONE_CONTAINER* HitTestZone( const BOARD* aPcb, const wxPoint aPos, PCB_LAYER_ID aLayer );
 
@@ -117,6 +116,7 @@ private:
     bool IsTrackConnection( const VIA* aVia, const int aNetcode );
 
     TRACK* ViaBreakTrack( const TRACK* aStartingTrack, const VIA* aVia );
+    bool DestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame );
 //-----------------------------------------------------------------------------------------------------/
 
 //-----------------------------------------------------------------------------------------------------/
@@ -125,6 +125,10 @@ private:
 public:
     void AddViaArrayPrepare( const PCB_EDIT_FRAME* aEditFrame, const VIA* aVia );
     void AddViaArrayFinnish( void );
+    bool AddViaArrayDestroyConflicts( BOARD_ITEM* aItem, PCB_BASE_FRAME* aFrame )
+    {
+        return DestroyConflicts( aItem, aFrame );
+    }
 
 private:
     int m_via_array_netcode {0};
