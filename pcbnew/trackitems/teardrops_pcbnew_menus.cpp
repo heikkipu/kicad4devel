@@ -36,10 +36,10 @@ bool TEARDROPS::IsTeardropPlace( const TRACK* aTrackSeg, const wxPoint& aPos ) c
 {
     bool end_nearest = EndPosNearest( aTrackSeg, aPos );
     return ( end_nearest &&
-             ( ( m_Parent->NextVia( aTrackSeg ) ||
-             ( m_Parent->NextPad( aTrackSeg ) ) ) ) ) ||
-             ( !end_nearest && ( ( m_Parent->BackVia( aTrackSeg ) ||
-             ( m_Parent->BackPad( aTrackSeg ) ) ) ) );
+             ( ( m_Parent->EndPosVia( aTrackSeg ) ||
+             ( m_Parent->EndPosPad( aTrackSeg ) ) ) ) ) ||
+             ( !end_nearest && ( ( m_Parent->StartPosVia( aTrackSeg ) ||
+             ( m_Parent->StartPosPad( aTrackSeg ) ) ) ) );
 }
 
 void TEARDROPS::Menu_TrackAdd( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPoint& aPos ) const
@@ -100,18 +100,18 @@ void TEARDROPS::Menu_TrackAdd( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPo
                 ( end_nearest && !Get( aTrackSeg, aTrackSeg->GetEnd() ) ) ||
                 ( !end_nearest && !Get( aTrackSeg, aTrackSeg->GetStart() ) ) )
             {
-                if( !( dynamic_cast<TEARDROP*>( Next( aTrackSeg ) )&&( dynamic_cast<TEARDROP*>( Back( aTrackSeg ) ) ) ) )
+                if( !( dynamic_cast<TEARDROP*>( EndPosItem( aTrackSeg ) )&&( dynamic_cast<TEARDROP*>( StartPosItem( aTrackSeg ) ) ) ) )
                 {
                     if( teardrop_place )
                     {
                         if( ( end_nearest &&
-                            ( ( m_Parent->NextVia( aTrackSeg ) &&
-                            !dynamic_cast<TEARDROP_VIA*>( Next( aTrackSeg ) ) ) ||
-                            ( m_Parent->NextPad( aTrackSeg ) &&
-                            !dynamic_cast<TEARDROP_PAD*>( Next( aTrackSeg ) ) ) ) ) ||
-                            ( !end_nearest && ( ( m_Parent->BackVia( aTrackSeg ) &&
-                            !dynamic_cast<TEARDROP_VIA*>( Back( aTrackSeg ) ) ) ||
-                            ( m_Parent->BackPad( aTrackSeg ) && !dynamic_cast<TEARDROP_PAD*>( Back( aTrackSeg ) ) ) ) ) )
+                            ( ( m_Parent->EndPosVia( aTrackSeg ) &&
+                            !dynamic_cast<TEARDROP_VIA*>( EndPosItem( aTrackSeg ) ) ) ||
+                            ( m_Parent->EndPosPad( aTrackSeg ) &&
+                            !dynamic_cast<TEARDROP_PAD*>( EndPosItem( aTrackSeg ) ) ) ) ) ||
+                            ( !end_nearest && ( ( m_Parent->StartPosVia( aTrackSeg ) &&
+                            !dynamic_cast<TEARDROP_VIA*>( StartPosItem( aTrackSeg ) ) ) ||
+                            ( m_Parent->StartPosPad( aTrackSeg ) && !dynamic_cast<TEARDROP_PAD*>( StartPosItem( aTrackSeg ) ) ) ) ) )
                         {
                             msg.Printf( _( "Add Teardrop [%s] to Track [%s]" ),
                                         GetChars( ParamsTxtToMenu( current_params ) ),
@@ -121,14 +121,14 @@ void TEARDROPS::Menu_TrackAdd( wxMenu* aMenu, const TRACK* aTrackSeg, const wxPo
                     }
                     else
                     {
-                        if( ( !m_Parent->NextVia( aTrackSeg ) &&
-                            !dynamic_cast<TEARDROP_JUNCTIONS*>( Next( aTrackSeg ) ) ) ||
-                            ( !m_Parent->BackVia( aTrackSeg ) &&
-                            !dynamic_cast<TEARDROP_JUNCTIONS*>( Back( aTrackSeg ) ) ) ||
-                            ( !m_Parent->BackPad( aTrackSeg ) &&
-                            !dynamic_cast<TEARDROP_JUNCTIONS*>( Back( aTrackSeg ) ) ) ||
-                            ( !m_Parent->NextPad( aTrackSeg ) &&
-                            !dynamic_cast<TEARDROP_JUNCTIONS*>( Next( aTrackSeg ) ) ) )
+                        if( ( !m_Parent->EndPosVia( aTrackSeg ) &&
+                            !dynamic_cast<TEARDROP_JUNCTIONS*>( EndPosItem( aTrackSeg ) ) ) ||
+                            ( !m_Parent->StartPosVia( aTrackSeg ) &&
+                            !dynamic_cast<TEARDROP_JUNCTIONS*>( StartPosItem( aTrackSeg ) ) ) ||
+                            ( !m_Parent->StartPosPad( aTrackSeg ) &&
+                            !dynamic_cast<TEARDROP_JUNCTIONS*>( StartPosItem( aTrackSeg ) ) ) ||
+                            ( !m_Parent->EndPosPad( aTrackSeg ) &&
+                            !dynamic_cast<TEARDROP_JUNCTIONS*>( EndPosItem( aTrackSeg ) ) ) )
                         {
                             msg.Printf( _( "Add T-Junction [%s] to Track [%s]" ),
                                         GetChars( ParamsTxtToMenu( current_params ) ),

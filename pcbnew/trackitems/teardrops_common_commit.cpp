@@ -129,7 +129,7 @@ void TEARDROPS::CollectCommit( const TRACK* aTrackSegFrom,
         for( unsigned int n = 0; n < 2; ++n )
         {
             TRACKNODEITEM* item = nullptr;
-            n? item = Next( aTrackSegFrom ) : item = Back( aTrackSegFrom );
+            n? item = EndPosItem( aTrackSegFrom ) : item = StartPosItem( aTrackSegFrom );
 
             if( item && dynamic_cast<TEARDROP*>( item ) )
             {

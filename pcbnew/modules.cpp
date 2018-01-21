@@ -187,6 +187,18 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
         if( module->IsMoving() )
         {
             /* Restore old position for dragged tracks */
+#ifdef PCBNEW_WITH_TRACKITEMS
+            PCB_EDIT_FRAME* edit_frame = static_cast<PCB_EDIT_FRAME*>( Panel->GetParent() );
+            BOARD* pcb = edit_frame->GetBoard();
+
+            pcb->TrackItems()->Teardrops()->UpdateListClear();
+            pcb->TrackItems()->RoundedTracksCorners()->UpdateListClear();
+            for( unsigned jj=0 ; jj < g_DragSegmentList.size(); jj++ )
+            {
+                TRACK* tr = g_DragSegmentList[jj].m_Track;
+                pcb->TrackItems()->RoundedTracksCorners()->UpdateListAdd( tr );
+            }
+#endif
             for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
             {
                 pt_segm = g_DragSegmentList[ii].m_Track;
@@ -195,10 +207,15 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
                 pt_segm->ClearFlags();
                 g_DragSegmentList[ii].RestoreInitialValues();
                 pt_segm->Draw( Panel, DC, GR_OR );
-            }
-
 #ifdef PCBNEW_WITH_TRACKITEMS
-            pcbframe->GetBoard()->TrackItems()->Teardrops()->Update( module, Panel, DC, GR_XOR, true );
+                pcb->TrackItems()->Teardrops()->UpdateListAdd(pt_segm);
+#endif
+            }
+#ifdef PCBNEW_WITH_TRACKITEMS
+            pcb->TrackItems()->RoundedTracksCorners()->UpdateListDo();
+            pcb->TrackItems()->Teardrops()->UpdateListAdd( pcb->TrackItems()->RoundedTracksCorners()->UpdateList_GetUpdatedTracks() );
+            pcb->TrackItems()->Teardrops()->UpdateListDo();
+            Panel->Refresh();
 #endif
             EraseDragList();
             module->ClearFlags( IS_MOVED );
@@ -271,7 +288,7 @@ void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
     module->DrawOutlinesWhenMoving( aPanel, aDC, g_Offset_Module );
 
     DrawSegmentWhileMovingFootprint( aPanel, aDC );
-    
+
 #ifdef PCBNEW_WITH_TRACKITEMS
     if( g_DragSegmentList.size() )
     {
@@ -292,7 +309,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC )
     SetMsgPanel( aModule );
 
 #ifdef PCBNEW_WITH_TRACKITEMS
-    //Delete teardrops from module 
+    //Delete teardrops from module
     PICKED_ITEMS_LIST pickedItems;
     ITEM_PICKER       picker( NULL, UR_DELETED );
     GetBoard()->TrackItems()->Teardrops()->Remove( aModule, &pickedItems, true );

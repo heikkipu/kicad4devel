@@ -76,11 +76,11 @@ void ROUNDED_TRACKS_CORNERS::UpdateListAdd( const TRACK* aTrackSegFrom )
         {
             m_update_tracks_list->insert( static_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
 
-            TRACKNODEITEM* item = Next( aTrackSegFrom );
+            TRACKNODEITEM* item = EndPosItem( aTrackSegFrom );
             if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
                 UpdateListAdd( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
 
-            item = Back( aTrackSegFrom );
+            item = StartPosItem( aTrackSegFrom );
             if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
                 UpdateListAdd( static_cast<ROUNDED_TRACKS_CORNER*>( item ) );
         }

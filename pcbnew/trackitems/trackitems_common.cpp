@@ -176,14 +176,14 @@ VIA* TRACKITEMS::GetVia( const TRACK* aTrackSegAt, const wxPoint aPosAt ) const
     return result;
 }
 
-TRACKITEMS::NET_SCAN_GET_NEXT_VIA::NET_SCAN_GET_NEXT_VIA( const TRACK* aStartTrack,
+TRACKITEMS::NET_SCAN_GET_ENDPOS_VIA::NET_SCAN_GET_ENDPOS_VIA( const TRACK* aStartTrack,
                                                           const TRACKITEMS* aParent
                                                         ) :
     NET_SCAN_GET_VIA( aStartTrack, wxPoint{0,0}, aParent )
 {
 }
 
-bool TRACKITEMS::NET_SCAN_GET_NEXT_VIA::ExecuteAt( TRACK* aTrack )
+bool TRACKITEMS::NET_SCAN_GET_ENDPOS_VIA::ExecuteAt( TRACK* aTrack )
 {
     if( aTrack->Type() == PCB_VIA_T )
         if( aTrack->IsOnLayer( m_scan_start_track->GetLayer() ) )
@@ -195,13 +195,13 @@ bool TRACKITEMS::NET_SCAN_GET_NEXT_VIA::ExecuteAt( TRACK* aTrack )
     return false;
 }
 
-VIA* TRACKITEMS::NextVia( const TRACK* aTrackSegAt ) const
+VIA* TRACKITEMS::EndPosVia( const TRACK* aTrackSegAt ) const
 {
     VIA* result = nullptr;
     if( aTrackSegAt )
     {
-        std::unique_ptr<NET_SCAN_GET_NEXT_VIA> via(
-            new NET_SCAN_GET_NEXT_VIA( aTrackSegAt, this ) );
+        std::unique_ptr<NET_SCAN_GET_ENDPOS_VIA> via(
+            new NET_SCAN_GET_ENDPOS_VIA( aTrackSegAt, this ) );
         if( via )
         {
             via->Execute();
@@ -211,7 +211,7 @@ VIA* TRACKITEMS::NextVia( const TRACK* aTrackSegAt ) const
     return result;
 }
 
-TRACKITEMS::NET_SCAN_GET_BACK_VIA::NET_SCAN_GET_BACK_VIA( const TRACK* aStartTrack,
+TRACKITEMS::NET_SCAN_GET_STARTPOS_VIA::NET_SCAN_GET_STARTPOS_VIA( const TRACK* aStartTrack,
                                                           const TRACKITEMS* aParent
                                                         ) :
     NET_SCAN_GET_VIA( aStartTrack, wxPoint{0,0}, aParent )
@@ -219,7 +219,7 @@ TRACKITEMS::NET_SCAN_GET_BACK_VIA::NET_SCAN_GET_BACK_VIA( const TRACK* aStartTra
     m_reverse = true;
 }
 
-bool TRACKITEMS::NET_SCAN_GET_BACK_VIA::ExecuteAt( TRACK* aTrack )
+bool TRACKITEMS::NET_SCAN_GET_STARTPOS_VIA::ExecuteAt( TRACK* aTrack )
 {
     if( aTrack->Type() == PCB_VIA_T )
         if( aTrack->IsOnLayer( m_scan_start_track->GetLayer() ) )
@@ -231,12 +231,12 @@ bool TRACKITEMS::NET_SCAN_GET_BACK_VIA::ExecuteAt( TRACK* aTrack )
     return false;
 }
 
-VIA* TRACKITEMS::BackVia( const TRACK* aTrackSegAt ) const
+VIA* TRACKITEMS::StartPosVia( const TRACK* aTrackSegAt ) const
 {
     VIA* result = nullptr;
     if( aTrackSegAt )
     {
-        std::unique_ptr<NET_SCAN_GET_BACK_VIA> via( new NET_SCAN_GET_BACK_VIA( aTrackSegAt, this ) );
+        std::unique_ptr<NET_SCAN_GET_STARTPOS_VIA> via( new NET_SCAN_GET_STARTPOS_VIA( aTrackSegAt, this ) );
         if( via )
         {
             via->Execute();
@@ -254,61 +254,40 @@ D_PAD* TRACKITEMS::GetPad( const TRACK* aTrackSegAt, const wxPoint aPosAt ) cons
     {
         if( aTrackSegAt->Type() == PCB_TRACE_T )
         {
-#ifdef NEWCONALGO
-            auto connity = m_Board->GetConnectivity();
-            auto pads = connity->GetConnectedPads( const_cast<TRACK*>( aTrackSegAt ) );
+            std::vector<D_PAD*> pads = GetPads( aTrackSegAt->GetNetCode() );
             for( auto pad : pads )
                 if( pad->GetPosition() == aPosAt )
                     return pad;
-#else
-            for( unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n )
-                if( aTrackSegAt->m_PadsConnected.at( n )->GetPosition() == aPosAt )
-                    return aTrackSegAt->m_PadsConnected.at( n );
-#endif
         }
     }
     return nullptr;
 }
 
-D_PAD* TRACKITEMS::NextPad( const TRACK* aTrackSegAt ) const
+D_PAD* TRACKITEMS::EndPosPad( const TRACK* aTrackSegAt ) const
 {
     if( aTrackSegAt )
     {
         if( aTrackSegAt->Type() == PCB_TRACE_T )
         {
-#ifdef NEWCONALGO
-            auto connity = m_Board->GetConnectivity();
-            auto pads = connity->GetConnectedPads( const_cast<TRACK*>( aTrackSegAt ) );
+            std::vector<D_PAD*> pads = GetPads( aTrackSegAt->GetNetCode() );
             for( auto pad : pads )
                 if( aTrackSegAt->GetEnd() == pad->GetPosition() )
                     return pad;
-#else
-            for( unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n )
-                if( aTrackSegAt->GetEnd() == aTrackSegAt->m_PadsConnected.at( n )->GetPosition() )
-                    return aTrackSegAt->m_PadsConnected.at( n );
-#endif
         }
     }
     return nullptr;
 }
 
-D_PAD* TRACKITEMS::BackPad( const TRACK* aTrackSegAt ) const
+D_PAD* TRACKITEMS::StartPosPad( const TRACK* aTrackSegAt ) const
 {
     if( aTrackSegAt )
     {
         if( aTrackSegAt->Type() == PCB_TRACE_T )
         {
-#ifdef NEWCONALGO
-            auto connity = m_Board->GetConnectivity();
-            auto pads = connity->GetConnectedPads( const_cast<TRACK*>( aTrackSegAt ) );
+            std::vector<D_PAD*> pads = GetPads( aTrackSegAt->GetNetCode() );
             for( auto pad : pads )
                 if( aTrackSegAt->GetStart() == pad->GetPosition() )
                     return pad;
-#else
-            for( unsigned int n = 0; n < aTrackSegAt->m_PadsConnected.size(); ++n )
-                if( aTrackSegAt->GetStart() == aTrackSegAt->m_PadsConnected.at( n )->GetPosition() )
-                    return aTrackSegAt->m_PadsConnected.at( n );
-#endif
         }
     }
     return nullptr;
@@ -514,7 +493,7 @@ void TRACKITEMS::Angles( const TRACK* aTrackSeg,
 
     //angle 45 degrees multiples versus another track in not moving pos.
     Tracks_Container tracks_list;
-    Collect( aTrackSeg, op_pos, tracks_list );
+    TracksConnected( aTrackSeg, op_pos, tracks_list );
 
     for( TRACK* edittrack_collected : m_edittrack_start_segments )
         tracks_list.insert( edittrack_collected );
@@ -572,7 +551,7 @@ void TRACKITEMS::Angles( const TRACK* aTrackSeg,
 void TRACKITEMS::Edittrack_Init( const TRACK* aTrackSeg, const wxPoint aPosition )
 {
     m_edittrack_start_segments.clear();
-    Collect( aTrackSeg, aPosition, m_edittrack_start_segments );
+    TracksConnected( aTrackSeg, aPosition, m_edittrack_start_segments );
     if( aTrackSeg->Type() == PCB_TRACE_T )
         m_edittrack_start_segments.insert( const_cast<TRACK*>( aTrackSeg ) );
 }

@@ -148,8 +148,10 @@ ROUNDED_TRACKS_CORNER* ROUNDED_TRACKS_CORNERS::Create( const TRACK* aTrackTo,
                         }
 
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
                         //New connectivity algo add
                         m_Board->GetConnectivity()->Add( corner );
+#endif
 #endif
                     }
                 }
@@ -177,8 +179,10 @@ void ROUNDED_TRACKS_CORNERS::Delete( ROUNDED_TRACKS_CORNER* aCorner, DLIST<TRACK
             }
 
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
             //New connectivity algo remove
             m_Board->GetConnectivity()->Remove( aCorner );
+#endif
 #endif
 
             aCorner->ResetVisibleEndpoints();
@@ -217,7 +221,7 @@ TRACK* ROUNDED_TRACKS_CORNERS::FindSecondTrack( const TRACK* aTrackTo, wxPoint a
     if( aTrackTo )
     {
         Tracks_Container tracks;
-        Collect( aTrackTo, aPosition, tracks );
+        TracksConnected( aTrackTo, aPosition, tracks );
         if( tracks.size() == 1 )
         {
             TRACK* track_second = *tracks.begin();
@@ -258,7 +262,9 @@ ROUNDED_CORNER_TRACK* ROUNDED_TRACKS_CORNERS::Convert( TRACK* aTrack, PICKED_ITE
                 picker_new.SetItem( created_track );
                 aUndoRedoList->PushItem( picker_new );
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
                 m_Board->GetConnectivity()->Add( created_track );
+#endif
 #else
                 m_Board->GetRatsnest()->Add( created_track );
 #endif
@@ -268,7 +274,9 @@ ROUNDED_CORNER_TRACK* ROUNDED_TRACKS_CORNERS::Convert( TRACK* aTrack, PICKED_ITE
                 picker_deleted.SetItem( aTrack );
                 aUndoRedoList->PushItem( picker_deleted );
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
                 m_Board->GetConnectivity()->Remove( aTrack );
+#endif
 #else
                 m_Board->GetRatsnest()->Remove( aTrack );
 #endif
@@ -533,8 +541,8 @@ void ROUNDED_TRACKS_CORNERS::Remove( const TRACK* aTrackFrom,
                 TRACKNODEITEM* item = nullptr;
                 for( unsigned int n = 0; n < 2; ++n )
                 {
-                    n? item = Next( const_cast<TRACK*>( aTrackFrom ) ) :
-                       item = Back( const_cast<TRACK*>( aTrackFrom ) );
+                    n? item = EndPosItem( const_cast<TRACK*>( aTrackFrom ) ) :
+                       item = StartPosItem( const_cast<TRACK*>( aTrackFrom ) );
 
                     if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
                     {
@@ -786,7 +794,7 @@ ROUNDED_TRACKS_CORNER::PARAMS ROUNDED_TRACKS_CORNERS::CopyCurrentParams( const T
     return corner_params;
 }
 
-TRACKNODEITEM* ROUNDED_TRACKS_CORNERS::Next( const TRACK* aTrackSegAt ) const
+TRACKNODEITEM* ROUNDED_TRACKS_CORNERS::EndPosItem( const TRACK* aTrackSegAt ) const
 {
     ROUNDED_TRACKS_CORNER* result = nullptr;
     if( dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSegAt ) ) )
@@ -794,7 +802,7 @@ TRACKNODEITEM* ROUNDED_TRACKS_CORNERS::Next( const TRACK* aTrackSegAt ) const
     return result;
 }
 
-TRACKNODEITEM* ROUNDED_TRACKS_CORNERS::Back( const TRACK* aTrackSegAt ) const
+TRACKNODEITEM* ROUNDED_TRACKS_CORNERS::StartPosItem( const TRACK* aTrackSegAt ) const
 {
     ROUNDED_TRACKS_CORNER* result = nullptr;
     if( dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSegAt ) ) )
@@ -924,11 +932,11 @@ void ROUNDED_TRACKS_CORNERS::ToMemory( const TRACK* aTrackSegFrom )
     m_next_corner_in_memory = nullptr;
     m_back_corner_in_memory = nullptr;
 
-    TRACKNODEITEM* item = Next( aTrackSegFrom );
+    TRACKNODEITEM* item = EndPosItem( aTrackSegFrom );
     if( item )
         m_next_corner_in_memory = dynamic_cast<ROUNDED_TRACKS_CORNER*>( item );
 
-    item = Back( aTrackSegFrom );
+    item = StartPosItem( aTrackSegFrom );
     if( item )
         m_back_corner_in_memory = dynamic_cast<ROUNDED_TRACKS_CORNER*>( item );
 }

@@ -224,15 +224,10 @@ void VIASTITCHING::SetNetCodes( const std::unordered_map<const VIA*, int>& aVias
         else
         {
             // Set thermalcode unconnected via inside zone.
-#ifdef NEWCONALGO
-            auto connity = m_Board->GetConnectivity();
-            auto via_tracks = connity->GetConnectedTracks( via );
+            TrackNodeItem::Tracks_Container via_tracks;
+            TrackNodeItem::TracksConnected( via, via_tracks );
             if( ( netcode_was && !netcode ) ||
                 ( netcode_was && netcode && ( netcode_was == netcode ) && via_tracks.empty() ) )
-#else
-            if( ( netcode_was && !netcode ) ||
-                ( netcode_was && netcode && ( netcode_was == netcode ) && !via->m_TracksConnected.size() ) )
-#endif
             {
                 std::vector<ZONE_CONTAINER*> zones;
                 Collect_Zones_Hit_Via( zones, via, netcode_was );
@@ -256,21 +251,13 @@ void VIASTITCHING::SetNetCodes( void )
     for( TRACK* t = m_Board->m_Track;  t;  t = t->Next() )
     {
         const VIA* via = dynamic_cast<const VIA*>( t );
-#ifdef NEWCONALGO
-        auto connity = m_Board->GetConnectivity();
-        auto via_tracks = connity->GetConnectedTracks( via );
+        TrackNodeItem::Tracks_Container via_tracks;
+        TrackNodeItem::TracksConnected( via, via_tracks );
         if( via  &&
             ( dynamic_cast<const VIA*>( via )->GetThermalCode() ||
             ( t->GetNetCode() &&
             via_tracks.empty() &&
             !dynamic_cast<const VIA*>( via )->GetThermalCode() ) ) )
-#else
-        if( via  &&
-            ( dynamic_cast<const VIA*>( via )->GetThermalCode() ||
-            ( t->GetNetCode() &&
-            !via->m_TracksConnected.size() &&
-            !dynamic_cast<const VIA*>( via )->GetThermalCode() ) ) )
-#endif
         {
             collected_vias.insert( std::pair<const VIA*, int> ( via, t->GetNetCode() ) );
         }
@@ -726,8 +713,10 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
         progressDialog->Update( ++progress_counter, _( "Calculating ratsnest..." ) );
 
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
     auto connity = m_Board->GetConnectivity();
     connity->RecalculateRatsnest();
+#endif
     SetNetCodes();
 #else
     aEditFrame->RecalculateAllTracksNetcode();
@@ -760,8 +749,10 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
         zone->SetIsFilled( true );
     }
 
+#ifndef MYCONALGO
     for( auto zone : zones )
         connity->Update( zone );
+#endif
 
 #else
     for( int m = 0; m < zones.size(); ++m )
@@ -860,7 +851,9 @@ void VIASTITCHING::FillAndConnectZones(  wxWindow* aActiveWindow, PCB_EDIT_FRAME
     for( auto zone : zones )
     {
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
         connity->Update( zone );
+#endif
 #else
         m_Board->GetRatsnest()->Update( zone );
 #endif

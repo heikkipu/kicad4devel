@@ -600,25 +600,16 @@ unsigned int TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::DoAtPad( const D_PAD* aP
     unsigned int num_marks = 0;
     if( aPadAt )
     {
-#ifdef NEWCONALGO
-        auto connity = m_Parent->GetBoard()->GetConnectivity();
-        auto tracks = connity->GetConnectedTracks( aPadAt );
-        for( unsigned int n = 0; n < tracks.size(); ++n )
+        Tracks_Container tracks;
+        TracksConnected( aPadAt, m_Parent->GetBoard(), tracks );
+        //for( unsigned int n = 0; n < tracks.size(); ++n )
+        for( auto track_seg : tracks )
         {
-            TRACK* track_seg = static_cast<TRACK*>( tracks.at( n ) );
+            //TRACK* track_seg = static_cast<TRACK*>( tracks.at( n ) );
             bool same_seg = false;
-            for( unsigned int m = 0 ; m < n; ++m )
-                if( tracks.at( m ) == track_seg )
-                    same_seg = true;
-#else
-        for( unsigned int n = 0; n < aPadAt->m_TracksConnected.size(); ++n )
-        {
-            TRACK* track_seg = static_cast<TRACK*>( aPadAt->m_TracksConnected.at( n ) );
-            bool same_seg = false;
-            for( unsigned int m = 0 ; m < n; ++m )
-                if( aPadAt->m_TracksConnected.at( m ) == track_seg )
-                    same_seg = true;
-#endif
+            //for( unsigned int m = 0 ; m < n; ++m )
+            //    if( tracks.at( m ) == track_seg )
+            //       same_seg = true;
             wxPoint pad_pos = aPadAt->GetPosition();
             if( !same_seg )
             {
@@ -719,7 +710,7 @@ unsigned int TEARDROPS::MODULES_PROGRESS_MARK_WARNINGS::DoAtPad( const D_PAD* aP
                                 if( at_item->GetPosition() == pad_pos )
                                 {
                                     Tracks_Container tracks_list;
-                                    Collect( track_seg, pos, tracks_list );
+                                    TracksConnected( track_seg, pos, tracks_list );
                                     if( !tracks_list.size() )
                                     {
                                         if( !m_Parent->Get( track_seg, pos ) ) //If teardrop do not mark.
@@ -859,7 +850,7 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_WARNINGS::ExecuteItem( const BOARD_
                     else
                     {
                         Tracks_Container tracks_list;
-                        Collect( tears_track_seg, tear->GetStart(), tracks_list );
+                        TracksConnected( tears_track_seg, tear->GetStart(), tracks_list );
                         //Junctions track segment test.
                         if( ( m_type_todo == ALL_TYPES_T ) || ( m_type_todo == ONLY_JUNCTIONS_T ) )
                         {
@@ -1043,7 +1034,7 @@ unsigned int TEARDROPS::TRACKS_PROGRESS_MARK_WARNINGS::ExecuteItem( const BOARD_
                                 if( ( m_type_todo == ALL_TYPES_T ) || ( m_type_todo == ONLY_JUNCTIONS_T ) )
                                 {
                                     Tracks_Container tracks_list;
-                                    Collect( track_seg, track_pos, tracks_list );
+                                    TracksConnected( track_seg, track_pos, tracks_list );
                                     if( tracks_list.size() )
                                     {
                                         if( GetMaxWidth( tracks_list ) > track_seg->GetWidth() )

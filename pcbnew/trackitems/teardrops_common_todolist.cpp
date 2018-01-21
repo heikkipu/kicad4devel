@@ -203,11 +203,11 @@ void TEARDROPS::AddToDoList( const TRACK* aTrackSegFrom, Teardrop_Container* aLi
         if( aTrackSegFrom->Type() == PCB_TEARDROP_T )
             aListToAdd->insert( static_cast<TEARDROP*>( const_cast<TRACK*>( aTrackSegFrom ) ) );
 
-        TRACKNODEITEM* item = Next( aTrackSegFrom );
+        TRACKNODEITEM* item = EndPosItem( aTrackSegFrom );
         if( item && dynamic_cast<TEARDROP*>( item ) )
             aListToAdd->insert( static_cast<TEARDROP*>( item ) );
 
-        item = Back( aTrackSegFrom );
+        item = StartPosItem( aTrackSegFrom );
         if( item && dynamic_cast<TEARDROP*>( item ) )
             aListToAdd->insert( static_cast<TEARDROP*>( item ) );
     }

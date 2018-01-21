@@ -295,7 +295,6 @@ namespace TrackNodeItem
         return IsSharpAngle( AngleBtwTracks( aTrackSegA, aCommonPos, aTrackSegB, aCommonPos ), aRoundedCorner );
     }
 
-    void Collect( const TRACK* aTrackSeg, const wxPoint aPosAt, Tracks_Container& aTracksList );
     int GetMaxWidth( Tracks_Container& aTracksList );
     TRACK* GetMaxWidthTrack( Tracks_Container& aTracksList );
 
@@ -338,24 +337,39 @@ namespace TrackNodeItem
         bool m_return_at_break{true};
     };
 
-    class SCAN_NET_COLLECT : public SCAN_NET_BASE
+    void TracksConnected( const TRACK* aTrackSegAt, const wxPoint aPosAt, Tracks_Container& aTracksList );
+    void TracksConnected( const D_PAD* aPadAt, const BOARD* aBoard, Tracks_Container& aTracksList );
+    void TracksConnected( const VIA* aViaAt, Tracks_Container& aTracksList );
+
+    class SCAN_NET_COLLECT_TRACKSEGS_CONNECTED : public SCAN_NET_BASE
     {
     public:
-        SCAN_NET_COLLECT( const TRACK* aStartTrack,
-                          const wxPoint aPosAt,
-                          Tracks_Container* aTracksList
-                        );
+        SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( const TRACK* aTrackSegAt,
+                                              const wxPoint aPosAt,
+                                              Tracks_Container* aTracksList
+                                            );
+        SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( const D_PAD* aPad,
+                                              const BOARD* aBoard,
+                                              Tracks_Container* aTracksList
+                                            );
+        SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( const VIA* aViaAt,
+                                              Tracks_Container* aTracksList
+                                            );
 
-        ~SCAN_NET_COLLECT(){};
+        ~SCAN_NET_COLLECT_TRACKSEGS_CONNECTED(){};
 
     protected:
         bool ExecuteAt( TRACK* aTrack ) override;
         wxPoint m_pos{0,0};
         PCB_LAYER_ID m_layer;
         Tracks_Container* m_tracks_list{nullptr};
+
+    private:
+        KICAD_T m_connected_item_type{TYPE_NOT_INIT};
+        const D_PAD* m_pad{nullptr};
     };
 
-    class SCAN_NET_FIND_T_TRACKS : public SCAN_NET_COLLECT
+    class SCAN_NET_FIND_T_TRACKS : public SCAN_NET_COLLECT_TRACKSEGS_CONNECTED
     {
     public:
         SCAN_NET_FIND_T_TRACKS( const TRACK* aStartTrack,

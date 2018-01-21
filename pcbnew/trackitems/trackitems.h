@@ -146,11 +146,11 @@ private:
 //---------------------------------------------------------------------------------------------------
 public:
     VIA* GetVia( const TRACK* aTrackSegAt, const wxPoint aPosAt ) const;
-    VIA* NextVia( const TRACK* aTrackSegAt ) const;
-    VIA* BackVia( const TRACK* aTrackSegAt ) const;
+    VIA* EndPosVia( const TRACK* aTrackSegAt ) const;
+    VIA* StartPosVia( const TRACK* aTrackSegAt ) const;
     D_PAD* GetPad( const TRACK* aTrackSegAt, const wxPoint aPosAt ) const;
-    D_PAD* NextPad( const TRACK* aTrackSegAt ) const;
-    D_PAD* BackPad( const TRACK* aTrackSegAt ) const;
+    D_PAD* EndPosPad( const TRACK* aTrackSegAt ) const;
+    D_PAD* StartPosPad( const TRACK* aTrackSegAt ) const;
     std::vector<D_PAD*> GetPads( const int aNetcode ) const;
 
 private:
@@ -172,21 +172,21 @@ private:
         wxPoint m_pos {0,0};
     };
 
-    class NET_SCAN_GET_NEXT_VIA : public NET_SCAN_GET_VIA
+    class NET_SCAN_GET_ENDPOS_VIA : public NET_SCAN_GET_VIA
     {
     public:
-        NET_SCAN_GET_NEXT_VIA( const TRACK* aStartTrack, const TRACKITEMS* aParent );
-        ~NET_SCAN_GET_NEXT_VIA() {};
+        NET_SCAN_GET_ENDPOS_VIA( const TRACK* aStartTrack, const TRACKITEMS* aParent );
+        ~NET_SCAN_GET_ENDPOS_VIA() {};
 
     protected:
         bool ExecuteAt( TRACK* aTrack ) override;
     };
 
-    class NET_SCAN_GET_BACK_VIA : public NET_SCAN_GET_VIA
+    class NET_SCAN_GET_STARTPOS_VIA : public NET_SCAN_GET_VIA
     {
     public:
-        NET_SCAN_GET_BACK_VIA( const TRACK* aStartTrack, const TRACKITEMS* aParent );
-        ~NET_SCAN_GET_BACK_VIA() {};
+        NET_SCAN_GET_STARTPOS_VIA( const TRACK* aStartTrack, const TRACKITEMS* aParent );
+        ~NET_SCAN_GET_STARTPOS_VIA() {};
 
     protected:
         bool ExecuteAt( TRACK* aTrack ) override;

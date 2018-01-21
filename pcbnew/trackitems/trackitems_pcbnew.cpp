@@ -173,10 +173,10 @@ unsigned int TRACKITEMS::TRACKS_PROGRESS_MARK_SHARP_ANGLES::ExecuteItem( const B
         {
             VIA* via = nullptr;
             D_PAD* pad = nullptr;
-            ( n )? via = m_Parent->BackVia( track_seg ) :
-                 via = m_Parent->NextVia( track_seg );
-            ( n )? pad = m_Parent->BackPad( track_seg ) :
-                 pad = m_Parent->NextPad( track_seg );
+            ( n )? via = m_Parent->StartPosVia( track_seg ) :
+                 via = m_Parent->EndPosVia( track_seg );
+            ( n )? pad = m_Parent->StartPosPad( track_seg ) :
+                 pad = m_Parent->EndPosPad( track_seg );
             if( !via && !pad )
             {
                 //Do not mark T tracs
@@ -216,7 +216,7 @@ unsigned int TRACKITEMS::TRACKS_PROGRESS_MARK_SHARP_ANGLES::ExecuteItem( const B
                     //do not care if locked junctions in multiple connections
                     bool synapse = false;
                     Tracks_Container tracks_list;
-                    Collect( track_seg, track_pos, tracks_list );
+                    TracksConnected( track_seg, track_pos, tracks_list );
                     tracks_list.insert( track_seg );
                     if( tracks_list.size() > 2 )
                     {
@@ -381,8 +381,8 @@ unsigned int TRACKITEMS::TRACKS_PROGRESS_CENTRALIZE_CONNECTION::ExecuteItem( con
             VIA* via = nullptr;
             D_PAD* pad = nullptr;
 
-            ( n )? via = m_Parent->BackVia( track_seg ) : via = m_Parent->NextVia( track_seg );
-            ( n )? pad = m_Parent->BackPad( track_seg ) : pad = m_Parent->NextPad( track_seg );
+            ( n )? via = m_Parent->StartPosVia( track_seg ) : via = m_Parent->EndPosVia( track_seg );
+            ( n )? pad = m_Parent->StartPosPad( track_seg ) : pad = m_Parent->EndPosPad( track_seg );
 
             if( !via && !pad ) //If not connected.
             {

@@ -1806,7 +1806,7 @@ void TEARDROP_JUNCTIONS::CalcTeardrop( const int aWidthRatio, const int aLengthR
 
 void TEARDROP_JUNCTIONS::CollectTracks( const TRACK* aTrackSeg, const wxPoint aPos )
 {
-    Collect( aTrackSeg, aPos, m_connected_tracks );
+    TracksConnected( aTrackSeg, aPos, m_connected_tracks );
 }
 
 int TEARDROP_JUNCTIONS::MaxWidthFromTracks( void )

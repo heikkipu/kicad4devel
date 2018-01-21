@@ -101,11 +101,11 @@ public:
 
     void LoadDefaultParams( void );
     TrackNodeItem::ROUNDED_TRACKS_CORNER::PARAMS CopyCurrentParams( const TRACK* aTrackSegAt,
-                                                                  const wxPoint& aCurPosAt
-                                                                );
+                                                                    const wxPoint& aCurPosAt
+                                                                  );
 
-    TrackNodeItem::TRACKNODEITEM* Next( const TRACK* aTrackSegAt ) const override;
-    TrackNodeItem::TRACKNODEITEM* Back( const TRACK* aTrackSegAt ) const override;
+    TrackNodeItem::TRACKNODEITEM* EndPosItem( const TRACK* aTrackSegAt ) const override;
+    TrackNodeItem::TRACKNODEITEM* StartPosItem( const TRACK* aTrackSegAt ) const override;
 
 protected:
     ROUNDED_TRACKS_CORNERS(){};
@@ -114,10 +114,10 @@ protected:
 private:
     //Creation
     TrackNodeItem::ROUNDED_TRACKS_CORNER* Create( const TRACK* aTrackTo,
-                                                const TRACK* aTrackSegSecond,
-                                                const wxPoint aPosition,
-                                                const bool aNullTrackCheck
-                                              );
+                                                  const TRACK* aTrackSegSecond,
+                                                  const wxPoint aPosition,
+                                                  const bool aNullTrackCheck
+                                                );
     //Removing
     void Delete( TrackNodeItem::ROUNDED_TRACKS_CORNER* aCorner,
                  DLIST<TRACK>*aTrackListAt,

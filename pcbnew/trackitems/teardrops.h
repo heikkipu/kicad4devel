@@ -194,8 +194,8 @@ public:
     void Lock( const TRACK* aTrackSegAt, const wxPoint& aCurPosAt, const DLIST<TRACK>* aTracksAt );
     void Unlock( const TRACK* aTrackSegAt, const wxPoint& aCurPosAt, const DLIST<TRACK>* aTracksAt );
 
-    TrackNodeItem::TRACKNODEITEM* Next( const TRACK* aTrackSegAt ) const override;
-    TrackNodeItem::TRACKNODEITEM* Back( const TRACK* aTrackSegAt ) const override;
+    TrackNodeItem::TRACKNODEITEM* EndPosItem( const TRACK* aTrackSegAt ) const override;
+    TrackNodeItem::TRACKNODEITEM* StartPosItem( const TRACK* aTrackSegAt ) const override;
 
     TrackNodeItem::TEARDROP* GetTeardrop( const TRACK* aTrackSegAt, const BOARD_CONNECTED_ITEM* atViaOrPad ) const;
 
@@ -253,7 +253,7 @@ private:
     void Unlock( const VIA* aViaAt );
 
     bool IsSmallTeardrops( const D_PAD* aPadAt ) const;
-    inline bool IsConnected( const D_PAD* aPadAt, const TRACK* aTrackSegTo ) const;
+    inline bool IsCenterConnected( const D_PAD* aPadAt, const TRACK* aTrackSegTo ) const;
 
 public:
     TrackNodeItem::TEARDROP::PARAMS GetShapeParams( const TrackNodeItem::TEARDROP::SHAPES_T aShape ) const;
@@ -727,9 +727,9 @@ private:
         TEARDROPS::TEARDROPS_TYPE_TODO m_type_todo;
         bool m_result_value {false};
 
-        static const unsigned int COUNTS_MAX {
-            100
-        };
+        //static const unsigned int COUNTS_MAX {100};
+
+        std::vector<D_PAD*> m_net_pads;
     };
 
     class NET_SCAN_NET_CONTAINS : public NET_SCAN_NET_EMPTY

@@ -22,6 +22,7 @@
  */
 
 #include "tracknodeitem.h"
+#include "trackitems.h"
 
 using namespace TrackNodeItem;
 
@@ -305,43 +306,118 @@ wxPoint TrackNodeItem::TracksCommonPos( const TRACK* aTrackSegFirst, const TRACK
 //------------------------------------------------------------------------------------------------------
 //Collect all Track segments conneted to aTrackSeg at point aPosAt
 //Do not return aTrackSeg itself in aTracksList vector.
-void TrackNodeItem::Collect( const TRACK* aTrackSeg,
-                             const wxPoint aPosAt,
-                             Tracks_Container& aTracksList
-                           )
+void TrackNodeItem::TracksConnected( const TRACK* aTrackSegAt,
+                                            const wxPoint aPosAt,
+                                            Tracks_Container& aTracksList
+                                          )
 {
-    if( aTrackSeg && ( ( aTrackSeg->GetStart() == aPosAt ) || ( aTrackSeg->GetEnd() == aPosAt ) ) )
+    if( aTrackSegAt && (aTrackSegAt->Type() == PCB_TRACE_T ) &&
+        ( ( aTrackSegAt->GetStart() == aPosAt ) || ( aTrackSegAt->GetEnd() == aPosAt ) ) )
     {
-        std::unique_ptr<SCAN_NET_COLLECT> track(
-            new SCAN_NET_COLLECT( aTrackSeg, aPosAt, &aTracksList ) );
+        std::unique_ptr<SCAN_NET_COLLECT_TRACKSEGS_CONNECTED> tracks(
+            new SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( aTrackSegAt, aPosAt, &aTracksList ) );
 
-        if( track )
-            track->Execute();
+        if( tracks )
+            tracks->Execute();
     }
 }
 
-SCAN_NET_COLLECT::SCAN_NET_COLLECT( const TRACK* aStartTrack,
-                                    const wxPoint aPosAt,
-                                    Tracks_Container* aTracksList
-                                  ) :
-    SCAN_NET_BASE( aStartTrack )
+void TrackNodeItem::TracksConnected( const D_PAD* aPadAt,
+                                     const BOARD* aBoard,
+                                     Tracks_Container& aTracksList )
+{
+    if( aPadAt && aBoard )
+    {
+        std::unique_ptr<SCAN_NET_COLLECT_TRACKSEGS_CONNECTED> tracks(
+            new SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( aPadAt, aBoard, &aTracksList ) );
+
+        if( tracks )
+            tracks->Execute();
+    }
+}
+
+void TrackNodeItem::TracksConnected( const VIA* aViaAt, Tracks_Container& aTracksList )
+{
+    if( aViaAt && (aViaAt->Type() == PCB_VIA_T ) )
+    {
+        std::unique_ptr<SCAN_NET_COLLECT_TRACKSEGS_CONNECTED> tracks(
+            new SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( aViaAt, aViaAt->GetEnd(), &aTracksList ) );
+
+        if( tracks )
+            tracks->Execute();
+    }
+}
+
+SCAN_NET_COLLECT_TRACKSEGS_CONNECTED::SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( const TRACK* aTrackSegAt,
+                                                                            const wxPoint aPosAt,
+                                                                            Tracks_Container* aTracksList
+                                                                          ) :
+    SCAN_NET_BASE( aTrackSegAt )
 {
     m_pos = aPosAt;
-    m_layer = aStartTrack->GetLayer();
+    m_layer = aTrackSegAt->GetLayer();
+    m_connected_item_type = PCB_TRACE_T;
+
     m_tracks_list = aTracksList;
-    m_tracks_list->clear();
 }
 
-bool SCAN_NET_COLLECT::ExecuteAt( TRACK* aTrack )
+SCAN_NET_COLLECT_TRACKSEGS_CONNECTED::SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( const D_PAD* aPad,
+                                                                            const BOARD* aBoard,
+                                                                            Tracks_Container* aTracksList
+                                                                          ) :
+    SCAN_NET_BASE( aBoard->TrackItems()->NetCodeFirstTrackItem()->GetFirst( aPad->GetNetCode() ) )
 {
-    if( ( aTrack != m_scan_start_track ) &&
-        ( aTrack->Type() == PCB_TRACE_T ) &&
-        aTrack->IsOnLayer( m_layer ) )
-    {
-        if( ( aTrack->GetStart() == m_pos ) || ( aTrack->GetEnd() == m_pos ) )
-            m_tracks_list->insert( const_cast<TRACK*>( aTrack ) );
-    }
+    m_pad = aPad;
+    m_pos = m_pad->GetPosition();
+    m_connected_item_type = PCB_PAD_T;
 
+    m_tracks_list = aTracksList;
+}
+
+SCAN_NET_COLLECT_TRACKSEGS_CONNECTED::SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( const VIA* aViaAt,
+                                                                            Tracks_Container* aTracksList
+                                                                          ) :
+    SCAN_NET_BASE( aViaAt )
+{
+    m_pos = m_pad->GetPosition();
+    m_connected_item_type = PCB_VIA_T;
+
+    m_tracks_list = aTracksList;
+}
+
+bool SCAN_NET_COLLECT_TRACKSEGS_CONNECTED::ExecuteAt( TRACK* aTrack )
+{
+    if( aTrack->Type() == PCB_TRACE_T )
+    {
+        switch( m_connected_item_type )
+        {
+            case PCB_TRACE_T:
+                if( ( aTrack != m_scan_start_track ) && aTrack->IsOnLayer( m_layer ) )
+                {
+                    if( ( aTrack->GetStart() == m_pos ) || ( aTrack->GetEnd() == m_pos ) )
+                        m_tracks_list->insert( const_cast<TRACK*>( aTrack ) );
+                }
+                break;
+
+            case PCB_PAD_T:
+                if( m_pad->IsOnLayer( aTrack->GetLayer() ) )
+                {
+                    if( ( aTrack->GetStart() == m_pos ) || ( aTrack->GetEnd() == m_pos ) )
+                        m_tracks_list->insert( const_cast<TRACK*>( aTrack ) );
+                }
+                break;
+
+            case PCB_VIA_T:
+                if( m_scan_start_track->IsOnLayer( aTrack->GetLayer() ) )
+                {
+                    if( ( aTrack->GetStart() == m_pos ) || ( aTrack->GetEnd() == m_pos ) )
+                        m_tracks_list->insert( const_cast<TRACK*>( aTrack ) );
+                }
+                break;
+
+            default:;
+        }
+    }
     return false;
 }
 //------------------------------------------------------------------------------------------------------
@@ -390,7 +466,7 @@ SCAN_NET_FIND_T_TRACKS::SCAN_NET_FIND_T_TRACKS( const TRACK* aStartTrack,
                                                 const wxPoint aPosAt,
                                                 Tracks_Container* aTracksList
                                               ) :
-    SCAN_NET_COLLECT( aStartTrack, aPosAt, aTracksList )
+    SCAN_NET_COLLECT_TRACKSEGS_CONNECTED( aStartTrack, aPosAt, aTracksList )
 {
     m_result_track_0 = nullptr;
     m_result_track_1 = nullptr;

@@ -39,7 +39,7 @@ void ROUNDED_TRACKS_CORNERS::AddToDragList( const TRACK* aTrackFrom,
         for( int n = 0; n < 2; ++n )
         {
             TRACKNODEITEM* item = nullptr;
-            n? item = Back( aTrackFrom ) : item = Next( aTrackFrom );
+            n? item = StartPosItem( aTrackFrom ) : item = EndPosItem( aTrackFrom );
 
             if( item && dynamic_cast<ROUNDED_TRACKS_CORNER*>( item ) )
             {
@@ -318,7 +318,9 @@ bool ROUNDED_TRACKS_CORNERS::CreateCorner( std::set<TRACK*>* aTracksArced,
         aUndoRedoList->PushItem( added_picker );
         TracksDList_Insert( &GetBoard()->m_Track, new_track, second_track );
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
         GetBoard()->GetConnectivity()->Add( new_track );
+#endif
 #endif
 
         Add( new_track, half_dist_btw_tracks + 10, aUndoRedoList );

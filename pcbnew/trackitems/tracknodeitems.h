@@ -187,8 +187,8 @@ namespace TrackNodeItems
                                            const bool aExcactPos
                                          ) const;
 
-        virtual TrackNodeItem::TRACKNODEITEM* Next( const TRACK* aTrackSegAt ) const = 0;
-        virtual TrackNodeItem::TRACKNODEITEM* Back( const TRACK* aTrackSegAt ) const = 0;
+        virtual TrackNodeItem::TRACKNODEITEM* EndPosItem( const TRACK* aTrackSegAt ) const = 0;
+        virtual TrackNodeItem::TRACKNODEITEM* StartPosItem( const TRACK* aTrackSegAt ) const = 0;
 
     protected:
         TrackNodeItem_Container* m_get_list;

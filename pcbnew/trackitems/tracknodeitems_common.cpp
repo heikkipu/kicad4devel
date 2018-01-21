@@ -180,13 +180,19 @@ TRACKNODEITEM* TRACKNODEITEMS::Get( const TRACK* aTrackSegAt,
                                     const bool aExcactPos
                                   ) const
 {
-    if( aTrackSegAt && aTrackSegAt->Type() == PCB_TRACE_T )
+    if( aExcactPos )
     {
-        if( aPosAt == aTrackSegAt->GetStart() )
-            return Back( aTrackSegAt );
-        if( aPosAt == aTrackSegAt->GetEnd() )
-            return Next( aTrackSegAt );
+        if( aTrackSegAt && aTrackSegAt->Type() == PCB_TRACE_T )
+        {
+            if( aPosAt == aTrackSegAt->GetStart() )
+                return StartPosItem( aTrackSegAt );
+            if( aPosAt == aTrackSegAt->GetEnd() )
+                return EndPosItem( aTrackSegAt );
+        }
     }
+    else
+        return Get( aTrackSegAt, aPosAt );
+
     return nullptr;
 }
 
@@ -197,11 +203,11 @@ void TRACKNODEITEMS::AddGetList( const TRACK* aTrackSegFrom )
         m_get_list->clear();
         if( aTrackSegFrom->Type() == PCB_TRACE_T )
         {
-            TRACKNODEITEM* item = Next( aTrackSegFrom );
+            TRACKNODEITEM* item = EndPosItem( aTrackSegFrom );
             if( item )
                 m_get_list->insert( item );
 
-            item = Back( aTrackSegFrom );
+            item = StartPosItem( aTrackSegFrom );
             if( item )
                 m_get_list->insert( item );
         }

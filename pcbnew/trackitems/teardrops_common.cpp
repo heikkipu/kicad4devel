@@ -133,8 +133,10 @@ TEARDROP* TEARDROPS::Create( const TRACK* aTrackSegTo,
                             m_EditFrame->GetGalCanvas()->GetView()->Add( tear );
 
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
                     //New connectivity algo add
                     m_Board->GetConnectivity()->Add( tear );
+#endif
 #endif
                 }
             }
@@ -162,8 +164,10 @@ void TEARDROPS::Delete( TEARDROP* aTeardrop,
             }
 
 #ifdef NEWCONALGO
+#ifndef MYCONALGO
             //New connectivity algo remove
             m_Board->GetConnectivity()->Remove( aTeardrop );
+#endif
 #endif
 
             picker.SetItem( aTeardrop );
@@ -226,38 +230,26 @@ TEARDROP* TEARDROPS::Add( const TRACK* aTrackSegTo, const wxPoint& aCurPosAt )
         D_PAD* item_pad = nullptr;
         unsigned int min_dist = std::numeric_limits<unsigned int>::max();
 
-#ifdef NEWCONALGO
-        auto connity = m_Board->GetConnectivity();
-        auto pads = connity->GetConnectedPads( const_cast<TRACK*>( aTrackSegTo ) );
+        std::vector<D_PAD*> pads = m_Parent->GetPads( aTrackSegTo->GetNetCode() );
         for( auto pad : pads )
         {
             wxPoint pad_pos = pad->GetPosition();
-            unsigned int dist = hypot( abs( pad_pos.y - aCurPosAt.y ),
-                                       abs( pad_pos.x - aCurPosAt.x ) );
-            if( dist < min_dist )
+            if( (pad_pos == aTrackSegTo->GetStart()) || (pad_pos == aTrackSegTo->GetEnd()) )
             {
-                min_dist = dist;
-                item_pad = pad;
+                unsigned int dist = hypot( abs( pad_pos.y - aCurPosAt.y ),
+                                        abs( pad_pos.x - aCurPosAt.x ) );
+                if( dist < min_dist )
+                {
+                    min_dist = dist;
+                    item_pad = pad;
+                }
             }
         }
-#else
-        for( unsigned int n = 0; n<aTrackSegTo->m_PadsConnected.size(); ++n )
-        {
-            wxPoint pad_pos = aTrackSegTo->m_PadsConnected.at( n )->GetPosition();
-            unsigned int dist = hypot( abs( pad_pos.y - aCurPosAt.y ),
-                                       abs( pad_pos.x - aCurPosAt.x ) );
-            if( dist < min_dist )
-            {
-                min_dist = dist;
-                item_pad = aTrackSegTo->m_PadsConnected.at( n );
-            }
-        }
-#endif
 
         for( unsigned int n = 0; n < 2; ++n )
         {
             VIA* via;
-            ( n )? via = m_Parent->BackVia( aTrackSegTo ) : via = m_Parent->NextVia( aTrackSegTo );
+            ( n )? via = m_Parent->StartPosVia( aTrackSegTo ) : via = m_Parent->EndPosVia( aTrackSegTo );
             if( via )
             {
                 wxPoint via_pos = via->GetPosition();
@@ -436,8 +428,8 @@ void TEARDROPS::Add( const TRACK* aTrackSegTo, PICKED_ITEMS_LIST* aUndoRedoList 
 {
     if( aTrackSegTo && aUndoRedoList )
     {
-        Add( aTrackSegTo, m_Parent->NextVia( aTrackSegTo ), aUndoRedoList );
-        Add( aTrackSegTo, m_Parent->BackVia( aTrackSegTo ), aUndoRedoList );
+        Add( aTrackSegTo, m_Parent->EndPosVia( aTrackSegTo ), aUndoRedoList );
+        Add( aTrackSegTo, m_Parent->StartPosVia( aTrackSegTo ), aUndoRedoList );
 
         Add( aTrackSegTo,
              m_Board->GetPadFast( aTrackSegTo->GetStart(), LSET( aTrackSegTo->GetLayer() ) ),
@@ -529,10 +521,10 @@ bool TEARDROPS::NET_SCAN_NET_ADD::ExecuteAt( TRACK* aTrack )
 
     if( ( m_type_todo == ALL_TYPES_T ) || ( m_type_todo == ONLY_TEARDROPS_T ) )
     {
-        dynamic_cast<TEARDROPS*>( m_Parent )->Add( m_Parent->GetParent()->NextVia( aTrack ), m_picked_items );
-        dynamic_cast<TEARDROPS*>( m_Parent )->Add( m_Parent->GetParent()->BackVia( aTrack ), m_picked_items );
-        dynamic_cast<TEARDROPS*>( m_Parent )->Add( m_Parent->GetParent()->NextPad( aTrack ), m_picked_items );
-        dynamic_cast<TEARDROPS*>( m_Parent )->Add( m_Parent->GetParent()->BackPad( aTrack ), m_picked_items );
+        dynamic_cast<TEARDROPS*>( m_Parent )->Add( m_Parent->GetParent()->EndPosVia( aTrack ), m_picked_items );
+        dynamic_cast<TEARDROPS*>( m_Parent )->Add( m_Parent->GetParent()->StartPosVia( aTrack ), m_picked_items );
+        dynamic_cast<TEARDROPS*>( m_Parent )->Add( m_Parent->GetParent()->EndPosPad( aTrack ), m_picked_items );
+        dynamic_cast<TEARDROPS*>( m_Parent )->Add( m_Parent->GetParent()->StartPosPad( aTrack ), m_picked_items );
     }
 
     return false;
@@ -558,8 +550,8 @@ void TEARDROPS::Add( const TRACK* aTrackSegTo, const bool aTJunction, PICKED_ITE
     {
         VIA* via = nullptr;
         D_PAD* pad = nullptr;
-        ( n )? via = m_Parent->BackVia( aTrackSegTo ) : via = m_Parent->NextVia( aTrackSegTo );
-        ( n )? pad = m_Parent->BackPad( aTrackSegTo ) : pad = m_Parent->NextPad( aTrackSegTo );
+        ( n )? via = m_Parent->StartPosVia( aTrackSegTo ) : via = m_Parent->EndPosVia( aTrackSegTo );
+        ( n )? pad = m_Parent->StartPosPad( aTrackSegTo ) : pad = m_Parent->EndPosPad( aTrackSegTo );
         if( !via && !pad )
         {
             TRACK* track_next = nullptr;
@@ -575,7 +567,7 @@ void TEARDROPS::Add( const TRACK* aTrackSegTo, const bool aTJunction, PICKED_ITE
             else
             {
                 Tracks_Container tracks_list;
-                Collect( aTrackSegTo, track_pos, tracks_list );
+                TracksConnected( aTrackSegTo, track_pos, tracks_list );
                 if( tracks_list.size() )
                     if( ( GetMaxWidth( tracks_list ) > aTrackSegTo->GetWidth() ) && !t_tracks )
                         Add( aTrackSegTo, nullptr, aUndoRedoList, track_pos );
@@ -652,8 +644,8 @@ void TEARDROPS::Remove( const BOARD_CONNECTED_ITEM* aItemFrom,
                     for( unsigned int n = 0; n < 2; ++n )
                     {
                         TRACKNODEITEM* item = nullptr;
-                        n? item = Next( static_cast<TRACK*>( const_cast<BOARD_CONNECTED_ITEM*>( aItemFrom ) ) ) :
-                           item = Back( static_cast<TRACK*>( const_cast<BOARD_CONNECTED_ITEM*>( aItemFrom ) ) );
+                        n? item = EndPosItem( static_cast<TRACK*>( const_cast<BOARD_CONNECTED_ITEM*>( aItemFrom ) ) ) :
+                           item = StartPosItem( static_cast<TRACK*>( const_cast<BOARD_CONNECTED_ITEM*>( aItemFrom ) ) );
 
                         if( item && dynamic_cast<TEARDROP*>( item ) )
                         {
@@ -1659,6 +1651,7 @@ TEARDROPS::NET_SCAN_NET_EMPTY::NET_SCAN_NET_EMPTY( const int aNet,
 {
     m_type_todo = aTypeToDo;
     m_result_value = false;
+    m_net_pads = m_Parent->GetParent()->GetPads( aStartTrack->GetNetCode() );
 }
 
 bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt( TRACK* aTrack )
@@ -1668,10 +1661,7 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt( TRACK* aTrack )
         //Teardrops of Pads.
         if( ( m_type_todo == ALL_TYPES_T ) || ( m_type_todo == ONLY_TEARDROPS_T ) )
         {
-#ifdef NEWCONALGO
-            auto connity = m_Parent->GetBoard()->GetConnectivity();
-            auto pads = connity->GetConnectedPads( aTrack );
-            for( auto pad : pads )
+            for( auto pad : m_net_pads )
             {
                 wxPoint pad_pos = pad->GetPosition();
                 if( ( aTrack->GetStart() == pad_pos ) || ( aTrack->GetEnd() == pad_pos ) )
@@ -1687,25 +1677,8 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt( TRACK* aTrack )
                     }
                 }
             }
-#else
-            for( unsigned int m = 0; m < aTrack->m_PadsConnected.size(); ++m )
-            {
-                wxPoint pad_pos = aTrack->m_PadsConnected.at( m )->GetPosition();
-                if( ( aTrack->GetStart() == pad_pos ) || ( aTrack->GetEnd() == pad_pos ) )
-                {
-                    TEARDROP* tear = nullptr;
-                    TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>( m_Parent )->Get( aTrack, pad_pos );
-                    if( item && dynamic_cast<TEARDROP*>( item ) )
-                        tear = static_cast<TEARDROP*>( item );
-                    if( !tear )
-                    {
-                        m_result_value = true;
-                        return true;
-                    }
-                }
-            }
-#endif
         }
+
         //T-Junctoins and Junctions of Traces.
         if( ( m_type_todo == ALL_TYPES_T ) ||
             ( m_type_todo == ONLY_TJUNCTIONS_T )||
@@ -1740,7 +1713,7 @@ bool TEARDROPS::NET_SCAN_NET_EMPTY::ExecuteAt( TRACK* aTrack )
                     if( !( m_type_todo == ONLY_TJUNCTIONS_T ) )
                     {
                         Tracks_Container tracks_list;
-                        Collect( aTrack, track_pos, tracks_list );
+                        TracksConnected( aTrack, track_pos, tracks_list );
                         if( tracks_list.size() )
                             if( TrackNodeItem::GetMaxWidth( tracks_list ) > aTrack->GetWidth() )
                             {
@@ -1908,10 +1881,7 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt( TRACK* aTrack )
         //Teardrops of Pads.
         if( ( m_type_todo == ALL_TYPES_T ) || ( m_type_todo == ONLY_TEARDROPS_T ) )
         {
-#ifdef NEWCONALGO
-            auto connity = m_Parent->GetBoard()->GetConnectivity();
-            auto pads = connity->GetConnectedPads( aTrack );
-            for( auto pad : pads )
+            for( auto pad : m_net_pads )
             {
                 wxPoint pad_pos = pad->GetPosition();
                 if( ( aTrack->GetStart() == pad_pos ) || ( aTrack->GetEnd() == pad_pos ) )
@@ -1927,24 +1897,6 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt( TRACK* aTrack )
                     }
                 }
             }
-#else
-            for( unsigned int m = 0; m < aTrack->m_PadsConnected.size(); ++m )
-            {
-                wxPoint pad_pos = aTrack->m_PadsConnected.at( m )->GetPosition();
-                if( ( aTrack->GetStart() == pad_pos ) || ( aTrack->GetEnd() == pad_pos ) )
-                {
-                    TEARDROP* tear = nullptr;
-                    TRACKNODEITEM* item = dynamic_cast<TEARDROPS*>( m_Parent )->Get( aTrack, pad_pos );
-                    if( item && dynamic_cast<TEARDROP*>( item ) )
-                        tear = static_cast<TEARDROP*>( item );
-                    if( tear )
-                    {
-                        m_result_value = true;
-                        return true;
-                    }
-                }
-            }
-#endif
         }
 
         //T-Junctions and Junctions of Traces.
@@ -1981,7 +1933,7 @@ bool TEARDROPS::NET_SCAN_NET_CONTAINS::ExecuteAt( TRACK* aTrack )
                     if( !( m_type_todo == ONLY_TJUNCTIONS_T ) )
                     {
                         Tracks_Container tracks_list;
-                        Collect( aTrack, track_pos, tracks_list );
+                        TracksConnected( aTrack, track_pos, tracks_list );
                         if( tracks_list.size() )
                             if( TrackNodeItem::GetMaxWidth( tracks_list ) > aTrack->GetWidth() )
                             {
@@ -2043,13 +1995,13 @@ bool TEARDROPS::IsTrimmed( const TRACK* aTrackSegAt ) const
             t_length = dynamic_cast<ROUNDED_CORNER_TRACK*>( const_cast<TRACK*>( aTrackSegAt ) )->GetLengthVisible();
 
         TEARDROP* tear = nullptr;
-        TRACKNODEITEM* item = Next( aTrackSegAt );
+        TRACKNODEITEM* item = EndPosItem( aTrackSegAt );
         if( item && dynamic_cast<TEARDROP*>( item ) )
             tear = static_cast<TEARDROP*>( item );
         if( tear && ( tear->GetCalcLength() >= t_length ) )
             return true;
 
-        item = Back( aTrackSegAt );
+        item = StartPosItem( aTrackSegAt );
         if( item && dynamic_cast<TEARDROP*>( item ) )
             tear = static_cast<TEARDROP*>( item );
         if( tear && ( tear->GetCalcLength() >= t_length ) )
@@ -2109,7 +2061,7 @@ bool TEARDROPS::IsSmallTeardrops( const D_PAD* aPadAt ) const
     return result;
 }
 
-bool TEARDROPS::IsConnected( const D_PAD* aPadAt, const TRACK* aTrackSegTo ) const
+bool TEARDROPS::IsCenterConnected( const D_PAD* aPadAt, const TRACK* aTrackSegTo ) const
 {
     if( aPadAt && aTrackSegTo )
     {
@@ -2213,22 +2165,12 @@ TEARDROPS::NET_SCAN_PAD_BASE::NET_SCAN_PAD_BASE( const D_PAD* aPad, const TEARDR
 
 void TEARDROPS::NET_SCAN_PAD_BASE::Execute( void )
 {
-#ifdef NEWCONALGO
-    auto connity = m_Parent->GetBoard()->GetConnectivity();
-    auto tracks = connity->GetConnectedTracks( m_pad );
-    for( auto track : tracks )
-        if( !m_only_exact_connected || ( m_only_exact_connected && m_Parent->IsConnected( m_pad, track ) ) )
+    Tracks_Container tracks_list;
+    TracksConnected( m_pad, m_Parent->GetBoard(), tracks_list);
+    for( auto track : tracks_list )
+        //if( !m_only_exact_connected || ( m_only_exact_connected && m_Parent->IsConnected( m_pad, track ) ) )
             if( ExecuteAt( track ) )
                 return;
-#else
-    for( unsigned int n = 0; n < m_pad->m_TracksConnected.size(); ++n )
-    {
-        TRACK* track_seg = static_cast<TRACK*>( m_pad->m_TracksConnected.at( n ) );
-        if( !m_only_exact_connected || ( m_only_exact_connected && m_Parent->IsConnected( m_pad, track_seg ) ) )
-            if( ExecuteAt( track_seg ) )
-                return;
-    }
-#endif
 }
 
 TEARDROPS::NET_SCAN_PAD_UPDATE::NET_SCAN_PAD_UPDATE( const D_PAD* aPad,
@@ -2381,20 +2323,10 @@ void TEARDROPS::Update( D_PAD* aPadAt,
                         bool aErase
                       )
 {
-#ifdef NEWCONALGO
-    auto connity = m_Parent->GetBoard()->GetConnectivity();
-    auto tracks = connity->GetConnectedTracks( aPadAt );
-    for( auto track : tracks )
+    Tracks_Container tracks_list;
+    TracksConnected( aPadAt, m_Board, tracks_list);
+    for( auto track : tracks_list )
         Update( track, aPanel, aDC, aDrawMode, aErase );
-#else
-    if( aPadAt )
-        for( unsigned int n = 0; n < aPadAt->m_TracksConnected.size(); ++n )
-            Update( static_cast<TRACK*>( aPadAt->m_TracksConnected.at( n ) ),
-                    aPanel,
-                    aDC,
-                    aDrawMode,
-                    aErase );
-#endif
 }
 
 void TEARDROPS::Update( MODULE* aModuleAt,
@@ -2640,7 +2572,7 @@ bool TEARDROPS::NET_SCAN_GET_NEXT_TEARDROP::ExecuteAt( TRACK* aTrack )
     return false;
 }
 
-TRACKNODEITEM* TEARDROPS::Next( const TRACK* aTrackSegAt ) const
+TRACKNODEITEM* TEARDROPS::EndPosItem( const TRACK* aTrackSegAt ) const
 {
     TEARDROP* result_tear = nullptr;
     if( aTrackSegAt && ( aTrackSegAt->Type() == PCB_TRACE_T ) )
@@ -2676,7 +2608,7 @@ bool TEARDROPS::NET_SCAN_GET_BACK_TEARDROP::ExecuteAt( TRACK* aTrack )
     return false;
 }
 
-TRACKNODEITEM* TEARDROPS::Back( const TRACK* aTrackSegAt ) const
+TRACKNODEITEM* TEARDROPS::StartPosItem( const TRACK* aTrackSegAt ) const
 {
     TEARDROP* result_tear = nullptr;
     if( aTrackSegAt && ( aTrackSegAt->Type() == PCB_TRACE_T ) )

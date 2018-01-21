@@ -690,6 +690,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
                 GetBoard()->TrackItems()->RoundedTracksCorners()->Add(tr, &s_ItemsListPicker);
             GetBoard()->TrackItems()->Teardrops()->Add(tr, &s_ItemsListPicker );
         }
+        GetBoard()->TrackItems()->Teardrops()->Repopulate( netcode, TEARDROPS::ALL_TYPES_T, &s_ItemsListPicker );
         GetBoard()->TrackItems()->RoundedTracksCorners()->Repopulate( netcode, &s_ItemsListPicker );
 #endif
         SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
