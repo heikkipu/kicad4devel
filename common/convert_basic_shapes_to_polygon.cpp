@@ -32,6 +32,10 @@
 #include <common.h>
 #include <convert_basic_shapes_to_polygon.h>
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+#include <trackitems/tracknodeitem.h>
+#endif
+
 
 /**
  * Function TransformCircleToPolygon
@@ -162,6 +166,25 @@ void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     aCornerBuffer.NewOutline();
 
+#ifdef PCBNEW_WITH_TRACKITEMS
+    double seg_angle = TrackNodeItem::AngleRad( aStart, aEnd );
+    double delta_angle = TrackNodeItem::M_PIx2 / aCircleToSegmentsCount;
+    double half_delta_angle = delta_angle / 2.0;
+    int vec_length = radius / ( cos( half_delta_angle ) );
+    double vec_angle = seg_angle + M_PI_2 + half_delta_angle;
+    int half_circlesegment_count = aCircleToSegmentsCount / 2;
+    for( int n = 0; n < aCircleToSegmentsCount; ++n )
+    {
+        wxPoint vec_start_pos;
+        (n < half_circlesegment_count)? vec_start_pos = aStart : vec_start_pos = aEnd;
+        corner = TrackNodeItem::GetPoint( vec_start_pos, vec_angle, vec_length );
+        polypoint.x = corner.x;
+        polypoint.y = corner.y;
+        aCornerBuffer.Append( polypoint.x, polypoint.y );
+        vec_angle += delta_angle;
+    }
+#else
+
     // normalize the position in order to have endp.x >= 0;
     if( endp.x < 0 )
     {
@@ -215,6 +238,8 @@ void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     polypoint.x = corner.x;
     polypoint.y = corner.y;
     aCornerBuffer.Append( polypoint.x, polypoint.y );
+
+#endif
 }
 
 

@@ -87,7 +87,7 @@ void ROUNDED_CORNER_TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET&
                                                                double aCorrectionFactor
                                                              ) const
 {
-    ::TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
+    TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
                                             m_StartVisible,
                                             m_EndVisible,
                                             aCircleToSegmentsCount,
