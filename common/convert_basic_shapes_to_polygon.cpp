@@ -167,13 +167,17 @@ void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     aCornerBuffer.NewOutline();
 
 #ifdef PCBNEW_WITH_TRACKITEMS
+    int circlesegment_count = aCircleToSegmentsCount;
+    //Must be even number.
+    if( circlesegment_count & 1 )
+        circlesegment_count += 1;
     double seg_angle = TrackNodeItem::AngleRad( aStart, aEnd );
-    double delta_angle = TrackNodeItem::M_PIx2 / aCircleToSegmentsCount;
+    double delta_angle = TrackNodeItem::M_PIx2 / circlesegment_count;
     double half_delta_angle = delta_angle / 2.0;
     int vec_length = radius / ( cos( half_delta_angle ) );
     double vec_angle = seg_angle + M_PI_2 + half_delta_angle;
-    int half_circlesegment_count = aCircleToSegmentsCount / 2;
-    for( int n = 0; n < aCircleToSegmentsCount; ++n )
+    int half_circlesegment_count = circlesegment_count / 2;
+    for( int n = 0; n < circlesegment_count; ++n )
     {
         wxPoint vec_start_pos;
         (n < half_circlesegment_count)? vec_start_pos = aStart : vec_start_pos = aEnd;
