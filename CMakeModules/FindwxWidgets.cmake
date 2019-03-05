@@ -735,7 +735,7 @@ else()
     # Support cross-compiling, only search in the target platform.
     find_program(wxWidgets_CONFIG_EXECUTABLE
       #Fedora needs compat-wx* libs.
-      NAMES wx-config-3.0-gtk2 wx-config wx-config-3.1 wx-config-3.0 wx-config-2.9 wx-config-2.8
+      NAMES /usr/lib64/wx/config/gtk2-unicode-3.0 wx-config-3.0-gtk2 wx-config wx-config-3.1 wx-config-3.0 wx-config-2.9 wx-config-2.8
       DOC "Location of wxWidgets library configuration provider binary (wx-config)."
       ONLY_CMAKE_FIND_ROOT_PATH
       )
