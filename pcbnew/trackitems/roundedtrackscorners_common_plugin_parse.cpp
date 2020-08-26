@@ -49,30 +49,30 @@ void ROUNDED_TRACKS_CORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel
                 {
                     if( param != prev_params )
                     {
-                        aOut->Print( aNestLevel, "( roundedtrackscorner " );
+                        aOut->Print( aNestLevel, "(roundedtrackscorner" );
                         aOut->Print( 0,
-                                    " ( length_set %d ) ( length_ratio %d ) ( segments %d )",
+                                    " (length_set %d) (length_ratio %d) (segments %d)",
                                     param.length_set,
                                     param.length_ratio,
                                     param.num_segments );
-                        aOut->Print( 0, " ( parameters ) )\n" );
+                        aOut->Print( 0, " (parameters))\n" );
                         prev_params = param;
                     }
-                    aOut->Print( aNestLevel, "( roundedtrackscorner " );
+                    aOut->Print( aNestLevel, "(roundedtrackscorner" );
                     aOut->Print( 0,
-                                " ( position %s ) ( net %d )",
+                                " (position %s) (net %d)",
                                 FMT_IU( track_seg->GetEnd() ).c_str(),
                                 track_seg->GetNetCode() );
                     aOut->Print( 0,
-                                " ( layer %s )",
+                                " (layer %s)",
                                 aOut->Quotew( connected_track->GetLayerName() ).c_str() );
                     aOut->Print( 0,
-                                " ( start %s ) ( end %s )",
+                                " (start %s) (end %s)",
                                 FMT_IU( connected_track->GetStart() ).c_str(),
                                 FMT_IU( connected_track->GetEnd() ).c_str() );
                     if( dynamic_cast<ROUNDED_TRACKS_CORNER*>( track_seg )->IsLocked() )
-                        aOut->Print( 0, " ( locked )" );
-                    aOut->Print( 0, " ( arc ) )\n" );
+                        aOut->Print( 0, " (locked)" );
+                    aOut->Print( 0, " (arc))\n" );
                     corners = true;
                 }
             }
@@ -83,13 +83,13 @@ void ROUNDED_TRACKS_CORNERS::Format( OUTPUTFORMATTER* aOut, const int aNestLevel
     {
         //Save current last. When load, it is current back.
         ROUNDED_TRACKS_CORNER::PARAMS cur_params = GetParams();
-        aOut->Print( aNestLevel, "( roundedtrackscorner " );
+        aOut->Print( aNestLevel, "(roundedtrackscorner" );
         aOut->Print( 0,
-                     " ( length_set %d ) ( length_ratio %d ) ( segments %d )",
+                     " (length_set %d) (length_ratio %d) (segments %d)",
                      cur_params.length_set,
                      cur_params.length_ratio,
                      cur_params.num_segments );
-        aOut->Print( 0, " ( parameters ) )\n" );
+        aOut->Print( 0, " (parameters))\n" );
     }
 }
 

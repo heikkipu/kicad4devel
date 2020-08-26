@@ -333,6 +333,7 @@ endif()
 
 if( PCBNEW_WITH_TRACKITEMS )
     add_definitions( -DPCBNEW_WITH_TRACKITEMS )
+    add_definitions( -DVERSION4HP )
 endif()
 
 
