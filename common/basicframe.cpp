@@ -48,7 +48,7 @@
 /// The default auto save interval is 10 minutes.
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
 
-#define URL_GET_INVOLVED "http://kicad-pcb.org/contribute/"
+#define URL_GET_INVOLVED "http://kicad.org/contribute/"
 
 const wxChar traceAutoSave[] = wxT( "KicadAutoSave" );
 

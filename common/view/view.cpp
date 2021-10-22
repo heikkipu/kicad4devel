@@ -24,6 +24,7 @@
  */
 
 
+#include <algorithm>
 #include <base_struct.h>
 #include <layers_id_colors_and_visibility.h>
 

@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
 

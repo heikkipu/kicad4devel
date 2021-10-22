@@ -547,7 +547,7 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL )
     KICAD_CURL_EASY kcurl;      // this can THROW_IO_ERROR
 
     kcurl.SetURL( zip_url.c_str() );
-    kcurl.SetUserAgent( "http://kicad-pcb.org" );
+    kcurl.SetUserAgent( "http://kicad.org" );
     kcurl.SetHeader( "Accept", "application/zip" );
     kcurl.SetFollowRedirects( true );
 

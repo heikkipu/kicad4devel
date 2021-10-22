@@ -33,6 +33,7 @@
  * @brief Automatic routing routines
  */
 
+#include <algorithm>
 #include <fctsys.h>
 #include <common.h>
 

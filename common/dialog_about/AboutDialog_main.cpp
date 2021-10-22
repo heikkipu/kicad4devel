@@ -144,7 +144,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     // bullet-ed list with some http links
     description << wxT( "<ul>" );
     description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "http://www.kicad-pcb.org" ),
+                << HtmlHyperlink( wxT( "http://www.kicad.org" ),
                                   _( "The official KiCad website" ) )
                 << wxT( "</li>" );
     description << wxT( "<li>" )

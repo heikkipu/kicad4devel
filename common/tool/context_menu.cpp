@@ -30,6 +30,7 @@
 #include <wx/log.h>
 
 #include <functional>
+#include <algorithm>
 using namespace std::placeholders;
 
 CONTEXT_MENU::CONTEXT_MENU() :

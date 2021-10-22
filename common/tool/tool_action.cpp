@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bits/algorithmfwd.h>
 #include <tool/tool_action.h>
 #include <tool/action_manager.h>
 
