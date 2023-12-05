@@ -1,4 +1,3 @@
-
 KiCad README
 ============
 For specific documentation like Compiling, GUI translation, old
@@ -46,4 +45,3 @@ template          - Project and pagelayout templates
 tools             - Other miscellaneous helpers for testing
 utils             - Small utils for kicad, e.g. IDF tools
 
-hp
