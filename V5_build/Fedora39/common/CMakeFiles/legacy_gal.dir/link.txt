@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblegacy_gal.a CMakeFiles/legacy_gal.dir/legacy_gal/block.cpp.o CMakeFiles/legacy_gal.dir/legacy_gal/eda_draw_frame.cpp.o CMakeFiles/legacy_gal.dir/legacy_gal/other.cpp.o
+/usr/bin/ranlib liblegacy_gal.a

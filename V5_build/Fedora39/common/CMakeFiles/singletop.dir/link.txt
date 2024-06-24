@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsingletop.a CMakeFiles/singletop.dir/confirm.cpp.o CMakeFiles/singletop.dir/eda_doc.cpp.o CMakeFiles/singletop.dir/kiway.cpp.o CMakeFiles/singletop.dir/kiway_holder.cpp.o
+/usr/bin/ranlib libsingletop.a
