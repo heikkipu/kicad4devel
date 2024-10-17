@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall  -Wsuggest-override -Werror=vla -pthread -Wshadow -O3 -DNDEBUG -s -rdynamic CMakeFiles/idfcyl.dir/idf_cylinder.cpp.o -o idfcyl   -L/opt/kicad/program/V5/Tears_V5_S/build/lib_dxf 

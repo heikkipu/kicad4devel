@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpolygon.a CMakeFiles/polygon.dir/math_for_graphics.cpp.o CMakeFiles/polygon.dir/polygon_test_point_inside.cpp.o CMakeFiles/polygon.dir/clipper.cpp.o
+/usr/bin/ranlib libpolygon.a
