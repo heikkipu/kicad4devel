@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblegacy_wx.a CMakeFiles/legacy_wx.dir/legacy_wx/block.cpp.o CMakeFiles/legacy_wx.dir/legacy_wx/eda_draw_frame.cpp.o CMakeFiles/legacy_wx.dir/legacy_wx/eda_draw_panel.cpp.o CMakeFiles/legacy_wx.dir/legacy_wx/other.cpp.o
+/usr/bin/ranlib liblegacy_wx.a
