@@ -1,0 +1,2 @@
+/usr/bin/ar qc libgithub_plugin.a CMakeFiles/github_plugin.dir/github_plugin.cpp.o CMakeFiles/github_plugin.dir/github_getliblist.cpp.o CMakeFiles/github_plugin.dir/html_link_parser.cpp.o
+/usr/bin/ranlib libgithub_plugin.a
