@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall  -Wsuggest-override -Werror=vla -pthread -O3 -DNDEBUG -s -rdynamic "CMakeFiles/test-nm-biu-to-ascii-mm-round-tripping.dir/test-nm-biu-to-ascii-mm-round-tripping.cpp.o" -o test-nm-biu-to-ascii-mm-round-tripping

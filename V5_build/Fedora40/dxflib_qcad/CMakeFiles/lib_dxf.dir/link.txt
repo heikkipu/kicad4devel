@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblib_dxf.a CMakeFiles/lib_dxf.dir/dl_dxf.cpp.o CMakeFiles/lib_dxf.dir/dl_writer_ascii.cpp.o CMakeFiles/lib_dxf.dir/tinyspline_lib/tinyspline.c.o CMakeFiles/lib_dxf.dir/tinyspline_lib/tinysplinecpp.cpp.o
+/usr/bin/ranlib liblib_dxf.a

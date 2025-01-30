@@ -1,0 +1,1172 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineSystem.cmake:205 (message)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      The system is: Linux - 6.12.10-100.fc40.x86_64 - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /usr/bin/cc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is GNU, found in:
+        /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/3.30.5/CompilerIdC/a.out
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /usr/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is GNU, found in:
+        /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/3.30.5/CompilerIdCXX/a.out
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:34 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-BtYANK"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-BtYANK"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-BtYANK'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_121a0/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_121a0.dir/build.make CMakeFiles/cmTC_121a0.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-BtYANK'
+        Building C object CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o
+        /usr/bin/cc   -v -o CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/cc
+        OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+        OFFLOAD_TARGET_DEFAULT=1
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,objc,obj-c++,ada,go,d,m2,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-14.2.1-20240912/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none,amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_121a0.dir/'
+         /usr/libexec/gcc/x86_64-redhat-linux/14/cc1 -quiet -v /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_121a0.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/cca5H2UW.s
+        GNU C17 (GCC) version 14.2.1 20240912 (Red Hat 14.2.1-3) (x86_64-redhat-linux)
+        	compiled by GNU C version 14.2.1 20240912 (Red Hat 14.2.1-3), GMP version 6.2.1, MPFR version 4.2.1, MPC version 1.3.1, isl version isl-0.24-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../x86_64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/x86_64-redhat-linux/14/include
+         /usr/local/include
+         /usr/include
+        End of search list.
+        Compiler executable checksum: a827ac3ce32367df3fd4c736df15654d
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_121a0.dir/'
+         as -v --64 -o CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o /tmp/cca5H2UW.s
+        GNU assembler version 2.41 (x86_64-redhat-linux) using BFD version version 2.41-38.fc40
+        COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_121a0
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_121a0.dir/link.txt --verbose=1
+        /usr/bin/cc  -v -Wl,-v -rdynamic CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o -o cmTC_121a0
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/cc
+        COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper
+        OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+        OFFLOAD_TARGET_DEFAULT=1
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,objc,obj-c++,ada,go,d,m2,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-14.2.1-20240912/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none,amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC) 
+        COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_121a0' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_121a0.'
+         /usr/libexec/gcc/x86_64-redhat-linux/14/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSE333j.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_121a0 /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+        collect2 version 14.2.1 20240912 (Red Hat 14.2.1-3)
+        /usr/bin/ld -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSE333j.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_121a0 /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+        GNU ld version 2.41-38.fc40
+        COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_121a0' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_121a0.'
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-BtYANK'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/gcc/x86_64-redhat-linux/14/include]
+          add: [/usr/local/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/14/include] ==> [/usr/lib/gcc/x86_64-redhat-linux/14/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/lib/gcc/x86_64-redhat-linux/14/include;/usr/local/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-BtYANK']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_121a0/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_121a0.dir/build.make CMakeFiles/cmTC_121a0.dir/build]
+        ignore line: [gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-BtYANK']
+        ignore line: [Building C object CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/cc]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
+        ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran objc obj-c++ ada go d m2 lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-14.2.1-20240912/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_121a0.dir/']
+        ignore line: [ /usr/libexec/gcc/x86_64-redhat-linux/14/cc1 -quiet -v /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_121a0.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/cca5H2UW.s]
+        ignore line: [GNU C17 (GCC) version 14.2.1 20240912 (Red Hat 14.2.1-3) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 14.2.1 20240912 (Red Hat 14.2.1-3)  GMP version 6.2.1  MPFR version 4.2.1  MPC version 1.3.1  isl version isl-0.24-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../x86_64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/14/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [Compiler executable checksum: a827ac3ce32367df3fd4c736df15654d]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_121a0.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o /tmp/cca5H2UW.s]
+        ignore line: [GNU assembler version 2.41 (x86_64-redhat-linux) using BFD version version 2.41-38.fc40]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_121a0]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_121a0.dir/link.txt --verbose=1]
+        ignore line: [/usr/bin/cc  -v -Wl -v -rdynamic CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o -o cmTC_121a0]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/cc]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
+        ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran objc obj-c++ ada go d m2 lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-14.2.1-20240912/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_121a0' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_121a0.']
+        link line: [ /usr/libexec/gcc/x86_64-redhat-linux/14/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSE333j.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_121a0 /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+          arg [/usr/libexec/gcc/x86_64-redhat-linux/14/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccSE333j.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-export-dynamic] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_121a0] ==> ignore
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14/../../..] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../..]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+        ignore line: [collect2 version 14.2.1 20240912 (Red Hat 14.2.1-3)]
+        ignore line: [/usr/bin/ld -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSE333j.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_121a0 /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_121a0.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+        linker tool for 'C': /usr/bin/ld
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14] ==> [/usr/lib/gcc/x86_64-redhat-linux/14]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../..] ==> [/usr/lib]
+        implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+        implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o;/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o;/usr/lib64/crtn.o]
+        implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/14;/usr/lib64;/lib64;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/usr/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      Running the C compiler's linker: "/usr/bin/ld" "-v"
+      GNU ld version 2.41-38.fc40
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:34 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-mzaOYA"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-mzaOYA"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-mzaOYA'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8dfdc/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_8dfdc.dir/build.make CMakeFiles/cmTC_8dfdc.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-mzaOYA'
+        Building CXX object CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/c++   -v -o CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+        OFFLOAD_TARGET_DEFAULT=1
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,objc,obj-c++,ada,go,d,m2,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-14.2.1-20240912/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none,amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8dfdc.dir/'
+         /usr/libexec/gcc/x86_64-redhat-linux/14/cc1plus -quiet -v -D_GNU_SOURCE /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_8dfdc.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/ccrl5SJ5.s
+        GNU C++17 (GCC) version 14.2.1 20240912 (Red Hat 14.2.1-3) (x86_64-redhat-linux)
+        	compiled by GNU C version 14.2.1 20240912 (Red Hat 14.2.1-3), GMP version 6.2.1, MPFR version 4.2.1, MPC version 1.3.1, isl version isl-0.24-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../x86_64-redhat-linux/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14
+         /usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/x86_64-redhat-linux
+         /usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/backward
+         /usr/lib/gcc/x86_64-redhat-linux/14/include
+         /usr/local/include
+         /usr/include
+        End of search list.
+        Compiler executable checksum: eec2371a83b7453e8c6bc9f634c2b1c3
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8dfdc.dir/'
+         as -v --64 -o CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccrl5SJ5.s
+        GNU assembler version 2.41 (x86_64-redhat-linux) using BFD version version 2.41-38.fc40
+        COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_8dfdc
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8dfdc.dir/link.txt --verbose=1
+        /usr/bin/c++  -v -Wl,-v -rdynamic CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8dfdc
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper
+        OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+        OFFLOAD_TARGET_DEFAULT=1
+        Target: x86_64-redhat-linux
+        Configured with: ../configure --enable-bootstrap --enable-languages=c,c++,fortran,objc,obj-c++,ada,go,d,m2,lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-14.2.1-20240912/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none,amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC) 
+        COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/
+        LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_8dfdc' '-foffload-options=-l_GCC_m' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_8dfdc.'
+         /usr/libexec/gcc/x86_64-redhat-linux/14/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cc0W1d5Q.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_8dfdc /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+        collect2 version 14.2.1 20240912 (Red Hat 14.2.1-3)
+        /usr/bin/ld -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cc0W1d5Q.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_8dfdc /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o
+        GNU ld version 2.41-38.fc40
+        COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_8dfdc' '-foffload-options=-l_GCC_m' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_8dfdc.'
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-mzaOYA'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:182 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14]
+          add: [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/x86_64-redhat-linux]
+          add: [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/backward]
+          add: [/usr/lib/gcc/x86_64-redhat-linux/14/include]
+          add: [/usr/local/include]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14] ==> [/usr/include/c++/14]
+        collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/x86_64-redhat-linux] ==> [/usr/include/c++/14/x86_64-redhat-linux]
+        collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/backward] ==> [/usr/include/c++/14/backward]
+        collapse include dir [/usr/lib/gcc/x86_64-redhat-linux/14/include] ==> [/usr/lib/gcc/x86_64-redhat-linux/14/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/include/c++/14;/usr/include/c++/14/x86_64-redhat-linux;/usr/include/c++/14/backward;/usr/lib/gcc/x86_64-redhat-linux/14/include;/usr/local/include;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(\\.[a-z]+)?))("|,| |$)]
+        ignore line: [Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-mzaOYA']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8dfdc/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_8dfdc.dir/build.make CMakeFiles/cmTC_8dfdc.dir/build]
+        ignore line: [gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-mzaOYA']
+        ignore line: [Building CXX object CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
+        ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran objc obj-c++ ada go d m2 lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-14.2.1-20240912/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8dfdc.dir/']
+        ignore line: [ /usr/libexec/gcc/x86_64-redhat-linux/14/cc1plus -quiet -v -D_GNU_SOURCE /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_8dfdc.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mtune=generic -march=x86-64 -version -o /tmp/ccrl5SJ5.s]
+        ignore line: [GNU C++17 (GCC) version 14.2.1 20240912 (Red Hat 14.2.1-3) (x86_64-redhat-linux)]
+        ignore line: [	compiled by GNU C version 14.2.1 20240912 (Red Hat 14.2.1-3)  GMP version 6.2.1  MPFR version 4.2.1  MPC version 1.3.1  isl version isl-0.24-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/x86_64-redhat-linux/14/../../../../x86_64-redhat-linux/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14]
+        ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/x86_64-redhat-linux]
+        ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/14/../../../../include/c++/14/backward]
+        ignore line: [ /usr/lib/gcc/x86_64-redhat-linux/14/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [Compiler executable checksum: eec2371a83b7453e8c6bc9f634c2b1c3]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8dfdc.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o /tmp/ccrl5SJ5.s]
+        ignore line: [GNU assembler version 2.41 (x86_64-redhat-linux) using BFD version version 2.41-38.fc40]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_8dfdc]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8dfdc.dir/link.txt --verbose=1]
+        ignore line: [/usr/bin/c++  -v -Wl -v -rdynamic CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_8dfdc]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper]
+        ignore line: [OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa]
+        ignore line: [OFFLOAD_TARGET_DEFAULT=1]
+        ignore line: [Target: x86_64-redhat-linux]
+        ignore line: [Configured with: ../configure --enable-bootstrap --enable-languages=c c++ fortran objc obj-c++ ada go d m2 lto --prefix=/usr --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=http://bugzilla.redhat.com/bugzilla --enable-shared --enable-threads=posix --enable-checking=release --enable-multilib --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=/usr/share/zoneinfo --with-linker-hash-style=gnu --enable-plugin --enable-initfini-array --with-isl=/builddir/build/BUILD/gcc-14.2.1-20240912/obj-x86_64-redhat-linux/isl-install --enable-offload-targets=nvptx-none amdgcn-amdhsa --enable-offload-defaulted --without-cuda-driver --enable-gnu-indirect-function --enable-cet --with-tune=generic --with-arch_32=i686 --build=x86_64-redhat-linux --with-build-config=bootstrap-lto --enable-link-serialization=1]
+        ignore line: [Thread model: posix]
+        ignore line: [Supported LTO compression algorithms: zlib zstd]
+        ignore line: [gcc version 14.2.1 20240912 (Red Hat 14.2.1-3) (GCC) ]
+        ignore line: [COMPILER_PATH=/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/14/:/usr/libexec/gcc/x86_64-redhat-linux/:/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-redhat-linux/14/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/usr/lib/gcc/x86_64-redhat-linux/14/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_8dfdc' '-foffload-options=-l_GCC_m' '-shared-libgcc' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_8dfdc.']
+        link line: [ /usr/libexec/gcc/x86_64-redhat-linux/14/collect2 -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cc0W1d5Q.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_8dfdc /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+          arg [/usr/libexec/gcc/x86_64-redhat-linux/14/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/cc0W1d5Q.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--no-add-needed] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [-m] ==> ignore
+          arg [elf_x86_64] ==> ignore
+          arg [-export-dynamic] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_8dfdc] ==> ignore
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64]
+          arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+          arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+          arg [-L/usr/lib/gcc/x86_64-redhat-linux/14/../../..] ==> dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../..]
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o]
+          arg [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o] ==> obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+        ignore line: [collect2 version 14.2.1 20240912 (Red Hat 14.2.1-3)]
+        ignore line: [/usr/bin/ld -plugin /usr/libexec/gcc/x86_64-redhat-linux/14/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-redhat-linux/14/lto-wrapper -plugin-opt=-fresolution=/tmp/cc0W1d5Q.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --no-add-needed --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -export-dynamic -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_8dfdc /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o /usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o -L/usr/lib/gcc/x86_64-redhat-linux/14 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/lib/gcc/x86_64-redhat-linux/14/../../.. -v CMakeFiles/cmTC_8dfdc.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-redhat-linux/14/crtend.o /usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o]
+        linker tool for 'CXX': /usr/bin/ld
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crt1.o] ==> [/usr/lib64/crt1.o]
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crti.o] ==> [/usr/lib64/crti.o]
+        collapse obj [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64/crtn.o] ==> [/usr/lib64/crtn.o]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14] ==> [/usr/lib/gcc/x86_64-redhat-linux/14]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../../../lib64] ==> [/usr/lib64]
+        collapse library dir [/lib/../lib64] ==> [/lib64]
+        collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+        collapse library dir [/usr/lib/gcc/x86_64-redhat-linux/14/../../..] ==> [/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/usr/lib64/crt1.o;/usr/lib64/crti.o;/usr/lib/gcc/x86_64-redhat-linux/14/crtbegin.o;/usr/lib/gcc/x86_64-redhat-linux/14/crtend.o;/usr/lib64/crtn.o]
+        implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/14;/usr/lib64;/lib64;/usr/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
+      - "/usr/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
+      - "/usr/share/cmake/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:34 (project)"
+    message: |
+      Running the CXX compiler's linker: "/usr/bin/ld" "-v"
+      GNU ld version 2.41-38.fc40
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "CMakeModules/PerformFeatureChecks.cmake:51 (check_include_file)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for malloc.h"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-oTSpFf"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-oTSpFf"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_MALLOC_H"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-oTSpFf'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_8c8fa/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_8c8fa.dir/build.make CMakeFiles/cmTC_8c8fa.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-oTSpFf'
+        Building C object CMakeFiles/cmTC_8c8fa.dir/CheckIncludeFile.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_8c8fa.dir/CheckIncludeFile.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-oTSpFf/CheckIncludeFile.c
+        Linking C executable cmTC_8c8fa
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8c8fa.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_8c8fa.dir/CheckIncludeFile.c.o -o cmTC_8c8fa
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-oTSpFf'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "CMakeModules/PerformFeatureChecks.cmake:59 (check_include_file)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for iso646.h"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EKhWYF"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EKhWYF"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_ISO646_H"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EKhWYF'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_d943d/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_d943d.dir/build.make CMakeFiles/cmTC_d943d.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EKhWYF'
+        Building C object CMakeFiles/cmTC_d943d.dir/CheckIncludeFile.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_d943d.dir/CheckIncludeFile.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EKhWYF/CheckIncludeFile.c
+        Linking C executable cmTC_d943d
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d943d.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_d943d.dir/CheckIncludeFile.c.o -o cmTC_d943d
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EKhWYF'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "CMakeModules/PerformFeatureChecks.cmake:67 (check_include_file)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for stdint.h"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-1FI0eQ"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-1FI0eQ"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_STDINT_H"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-1FI0eQ'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_03205/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_03205.dir/build.make CMakeFiles/cmTC_03205.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-1FI0eQ'
+        Building C object CMakeFiles/cmTC_03205.dir/CheckIncludeFile.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_03205.dir/CheckIncludeFile.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-1FI0eQ/CheckIncludeFile.c
+        Linking C executable cmTC_03205
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_03205.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_03205.dir/CheckIncludeFile.c.o -o cmTC_03205
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-1FI0eQ'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:66 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:78 (check_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for strcasecmp"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-LEMAYG"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-LEMAYG"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_STRCASECMP"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-LEMAYG'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_44bb4/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_44bb4.dir/build.make CMakeFiles/cmTC_44bb4.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-LEMAYG'
+        Building C object CMakeFiles/cmTC_44bb4.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_44bb4.dir/CheckSymbolExists.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-LEMAYG/CheckSymbolExists.c
+        Linking C executable cmTC_44bb4
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_44bb4.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_44bb4.dir/CheckSymbolExists.c.o -o cmTC_44bb4
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-LEMAYG'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:66 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:80 (check_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for strncasecmp"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-TyZlWq"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-TyZlWq"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_STRNCASECMP"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-TyZlWq'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_9cce6/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_9cce6.dir/build.make CMakeFiles/cmTC_9cce6.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-TyZlWq'
+        Building C object CMakeFiles/cmTC_9cce6.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_9cce6.dir/CheckSymbolExists.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-TyZlWq/CheckSymbolExists.c
+        Linking C executable cmTC_9cce6
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9cce6.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_9cce6.dir/CheckSymbolExists.c.o -o cmTC_9cce6
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-TyZlWq'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:66 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:82 (check_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for strtok_r"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-vtvMas"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-vtvMas"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_STRTOKR"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-vtvMas'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_e6135/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_e6135.dir/build.make CMakeFiles/cmTC_e6135.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-vtvMas'
+        Building C object CMakeFiles/cmTC_e6135.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_e6135.dir/CheckSymbolExists.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-vtvMas/CheckSymbolExists.c
+        Linking C executable cmTC_e6135
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e6135.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_e6135.dir/CheckSymbolExists.c.o -o cmTC_e6135
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-vtvMas'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:66 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:88 (check_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for malloc"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EFrSnU"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EFrSnU"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "MALLOC_IN_STDLIB_H"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EFrSnU'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_02eae/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_02eae.dir/build.make CMakeFiles/cmTC_02eae.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EFrSnU'
+        Building C object CMakeFiles/cmTC_02eae.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_02eae.dir/CheckSymbolExists.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EFrSnU/CheckSymbolExists.c
+        Linking C executable cmTC_02eae
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_02eae.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_02eae.dir/CheckSymbolExists.c.o -o cmTC_02eae
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-EFrSnU'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFile.cmake:90 (try_compile)"
+      - "CMakeModules/PerformFeatureChecks.cmake:91 (check_include_file)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for math.h"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-A8J2MK"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-A8J2MK"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_MATH_H"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-A8J2MK'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_0747c/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_0747c.dir/build.make CMakeFiles/cmTC_0747c.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-A8J2MK'
+        Building C object CMakeFiles/cmTC_0747c.dir/CheckIncludeFile.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_0747c.dir/CheckIncludeFile.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-A8J2MK/CheckIncludeFile.c
+        Linking C executable cmTC_0747c
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0747c.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_0747c.dir/CheckIncludeFile.c.o -o cmTC_0747c
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-A8J2MK'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckIncludeFileCXX.cmake:89 (try_compile)"
+      - "CMakeModules/PerformFeatureChecks.cmake:94 (check_include_file_cxx)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for C++ include cmath"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-3GF2VV"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-3GF2VV"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_CXX_CMATH"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-3GF2VV'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_af6bb/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_af6bb.dir/build.make CMakeFiles/cmTC_af6bb.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-3GF2VV'
+        Building CXX object CMakeFiles/cmTC_af6bb.dir/CheckIncludeFile.cxx.o
+        /usr/bin/c++   -fPIE -o CMakeFiles/cmTC_af6bb.dir/CheckIncludeFile.cxx.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-3GF2VV/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_af6bb
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_af6bb.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic CMakeFiles/cmTC_af6bb.dir/CheckIncludeFile.cxx.o -o cmTC_af6bb
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-3GF2VV'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckCXXSymbolExists.cmake:72 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:95 (check_cxx_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for asinh"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-Ska2AZ"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-Ska2AZ"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_CMATH_ASINH"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-Ska2AZ'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_944f1/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_944f1.dir/build.make CMakeFiles/cmTC_944f1.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-Ska2AZ'
+        Building CXX object CMakeFiles/cmTC_944f1.dir/CheckSymbolExists.cxx.o
+        /usr/bin/c++   -fPIE -o CMakeFiles/cmTC_944f1.dir/CheckSymbolExists.cxx.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-Ska2AZ/CheckSymbolExists.cxx
+        Linking CXX executable cmTC_944f1
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_944f1.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic CMakeFiles/cmTC_944f1.dir/CheckSymbolExists.cxx.o -o cmTC_944f1
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-Ska2AZ'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckCXXSymbolExists.cmake:72 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:96 (check_cxx_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for acosh"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-qBI6Fm"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-qBI6Fm"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_CMATH_ACOSH"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-qBI6Fm'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_7dc98/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_7dc98.dir/build.make CMakeFiles/cmTC_7dc98.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-qBI6Fm'
+        Building CXX object CMakeFiles/cmTC_7dc98.dir/CheckSymbolExists.cxx.o
+        /usr/bin/c++   -fPIE -o CMakeFiles/cmTC_7dc98.dir/CheckSymbolExists.cxx.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-qBI6Fm/CheckSymbolExists.cxx
+        Linking CXX executable cmTC_7dc98
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7dc98.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic CMakeFiles/cmTC_7dc98.dir/CheckSymbolExists.cxx.o -o cmTC_7dc98
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-qBI6Fm'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckCXXSymbolExists.cmake:72 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:97 (check_cxx_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for atanh"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FQh7bS"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FQh7bS"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_CMATH_ATANH"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FQh7bS'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_994a7/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_994a7.dir/build.make CMakeFiles/cmTC_994a7.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FQh7bS'
+        Building CXX object CMakeFiles/cmTC_994a7.dir/CheckSymbolExists.cxx.o
+        /usr/bin/c++   -fPIE -o CMakeFiles/cmTC_994a7.dir/CheckSymbolExists.cxx.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FQh7bS/CheckSymbolExists.cxx
+        Linking CXX executable cmTC_994a7
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_994a7.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic CMakeFiles/cmTC_994a7.dir/CheckSymbolExists.cxx.o -o cmTC_994a7
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FQh7bS'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckCXXSourceCompiles.cmake:52 (cmake_check_source_compiles)"
+      - "CMakeModules/PerformFeatureChecks.cmake:101 (check_cxx_source_compiles)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Performing Test HAVE_CMATH_ISINF"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FndA1M"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FndA1M"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_CMATH_ISINF"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FndA1M'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_4b79a/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_4b79a.dir/build.make CMakeFiles/cmTC_4b79a.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FndA1M'
+        Building CXX object CMakeFiles/cmTC_4b79a.dir/src.cxx.o
+        /usr/bin/c++ -DHAVE_CMATH_ISINF  -fPIE -o CMakeFiles/cmTC_4b79a.dir/src.cxx.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FndA1M/src.cxx
+        Linking CXX executable cmTC_4b79a
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b79a.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic CMakeFiles/cmTC_4b79a.dir/src.cxx.o -o cmTC_4b79a
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-FndA1M'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckLibraryExists.cmake:69 (try_compile)"
+      - "CMakeModules/PerformFeatureChecks.cmake:104 (check_library_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for clock_gettime in rt"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-ZhoNse"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-ZhoNse"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_CLOCK_GETTIME"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-ZhoNse'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_f8290/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_f8290.dir/build.make CMakeFiles/cmTC_f8290.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-ZhoNse'
+        Building C object CMakeFiles/cmTC_f8290.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=clock_gettime -fPIE -o CMakeFiles/cmTC_f8290.dir/CheckFunctionExists.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-ZhoNse/CheckFunctionExists.c
+        Linking C executable cmTC_f8290
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f8290.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=clock_gettime -rdynamic CMakeFiles/cmTC_f8290.dir/CheckFunctionExists.c.o -o cmTC_f8290  -lrt
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-ZhoNse'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:66 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:107 (check_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for gettimeofday"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-WO8CsQ"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-WO8CsQ"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_GETTIMEOFDAY_FUNC"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-WO8CsQ'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_bffa8/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_bffa8.dir/build.make CMakeFiles/cmTC_bffa8.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-WO8CsQ'
+        Building C object CMakeFiles/cmTC_bffa8.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_bffa8.dir/CheckSymbolExists.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-WO8CsQ/CheckSymbolExists.c
+        Linking C executable cmTC_bffa8
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bffa8.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_bffa8.dir/CheckSymbolExists.c.o -o cmTC_bffa8
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-WO8CsQ'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:154 (try_compile)"
+      - "/usr/share/cmake/Modules/CheckSymbolExists.cmake:66 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeModules/PerformFeatureChecks.cmake:111 (check_symbol_exists)"
+      - "CMakeLists.txt:196 (perform_feature_checks)"
+    checks:
+      - "Looking for getc_unlocked"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-g52s7Z"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-g52s7Z"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "HAVE_FGETC_NOLOCK"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-g52s7Z'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_3d47a/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_3d47a.dir/build.make CMakeFiles/cmTC_3d47a.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-g52s7Z'
+        Building C object CMakeFiles/cmTC_3d47a.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -fPIE -o CMakeFiles/cmTC_3d47a.dir/CheckSymbolExists.c.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-g52s7Z/CheckSymbolExists.c
+        Linking C executable cmTC_3d47a
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3d47a.dir/link.txt --verbose=1
+        /usr/bin/cc -rdynamic CMakeFiles/cmTC_3d47a.dir/CheckSymbolExists.c.o -o cmTC_3d47a
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-g52s7Z'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "CMakeLists.txt:203 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test COMPILER_SUPPORTS_WSUGGEST_OVERRIDE"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-JKxlfu"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-JKxlfu"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "COMPILER_SUPPORTS_WSUGGEST_OVERRIDE"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-JKxlfu'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_23d38/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_23d38.dir/build.make CMakeFiles/cmTC_23d38.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-JKxlfu'
+        Building CXX object CMakeFiles/cmTC_23d38.dir/src.cxx.o
+        /usr/bin/c++ -DCOMPILER_SUPPORTS_WSUGGEST_OVERRIDE  -fPIE   -Wsuggest-override -o CMakeFiles/cmTC_23d38.dir/src.cxx.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-JKxlfu/src.cxx
+        Linking CXX executable cmTC_23d38
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_23d38.dir/link.txt --verbose=1
+        /usr/bin/c++ -rdynamic CMakeFiles/cmTC_23d38.dir/src.cxx.o -o cmTC_23d38
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-JKxlfu'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "CMakeLists.txt:209 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test COMPILER_SUPPORTS_WVLA"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-XfEkSn"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-XfEkSn"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wsuggest-override"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "COMPILER_SUPPORTS_WVLA"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-XfEkSn'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_652dc/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_652dc.dir/build.make CMakeFiles/cmTC_652dc.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-XfEkSn'
+        Building CXX object CMakeFiles/cmTC_652dc.dir/src.cxx.o
+        /usr/bin/c++ -DCOMPILER_SUPPORTS_WVLA  -Wsuggest-override  -fPIE   -Wvla -o CMakeFiles/cmTC_652dc.dir/src.cxx.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-XfEkSn/src.cxx
+        Linking CXX executable cmTC_652dc
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_652dc.dir/link.txt --verbose=1
+        /usr/bin/c++  -Wsuggest-override  -rdynamic CMakeFiles/cmTC_652dc.dir/src.cxx.o -o cmTC_652dc
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-XfEkSn'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "CMakeLists.txt:226 (CHECK_CXX_COMPILER_FLAG)"
+    checks:
+      - "Performing Test COMPILER_SUPPORTS_WSHADOW"
+    directories:
+      source: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-xFxZRr"
+      binary: "/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-xFxZRr"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: " -Wsuggest-override -Werror=vla"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/opt/kicad/program/V5/Tears_V5_S/CMakeModules"
+      CMAKE_POSITION_INDEPENDENT_CODE: "ON"
+    buildResult:
+      variable: "COMPILER_SUPPORTS_WSHADOW"
+      cached: true
+      stdout: |
+        Change Dir: '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-xFxZRr'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_4be5c/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_4be5c.dir/build.make CMakeFiles/cmTC_4be5c.dir/build
+        gmake[1]: Entering directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-xFxZRr'
+        Building CXX object CMakeFiles/cmTC_4be5c.dir/src.cxx.o
+        /usr/bin/c++ -DCOMPILER_SUPPORTS_WSHADOW  -Wsuggest-override -Werror=vla  -fPIE   -Wshadow -o CMakeFiles/cmTC_4be5c.dir/src.cxx.o -c /opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-xFxZRr/src.cxx
+        Linking CXX executable cmTC_4be5c
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4be5c.dir/link.txt --verbose=1
+        /usr/bin/c++  -Wsuggest-override -Werror=vla  -rdynamic CMakeFiles/cmTC_4be5c.dir/src.cxx.o -o cmTC_4be5c
+        gmake[1]: Leaving directory '/opt/kicad/program/V5/Tears_V5_S/build/CMakeFiles/CMakeScratch/TryCompile-xFxZRr'
+        
+      exitCode: 0
+...
