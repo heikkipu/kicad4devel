@@ -1,0 +1,2 @@
+/usr/bin/ar qc libqa_utils.a CMakeFiles/qa_utils.dir/stdstream_line_reader.cpp.o CMakeFiles/qa_utils.dir/utility_program.cpp.o CMakeFiles/qa_utils.dir/uuid_test_utils.cpp.o CMakeFiles/qa_utils.dir/geometry/line_chain_construction.cpp.o CMakeFiles/qa_utils.dir/geometry/poly_set_construction.cpp.o CMakeFiles/qa_utils.dir/geometry/seg_construction.cpp.o CMakeFiles/qa_utils.dir/wx_utils/unit_test_utils.cpp.o CMakeFiles/qa_utils.dir/wx_utils/wx_assert.cpp.o
+/usr/bin/ranlib libqa_utils.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnlohmann_json_schema_validator.a "CMakeFiles/nlohmann_json_schema_validator.dir/json-schema-draft7.json.cpp.o" "CMakeFiles/nlohmann_json_schema_validator.dir/json-uri.cpp.o" "CMakeFiles/nlohmann_json_schema_validator.dir/json-validator.cpp.o" "CMakeFiles/nlohmann_json_schema_validator.dir/json-patch.cpp.o" "CMakeFiles/nlohmann_json_schema_validator.dir/string-format-check.cpp.o"
+/usr/bin/ranlib libnlohmann_json_schema_validator.a

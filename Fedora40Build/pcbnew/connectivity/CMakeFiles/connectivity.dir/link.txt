@@ -1,0 +1,2 @@
+/usr/bin/ar qc libconnectivity.a CMakeFiles/connectivity.dir/connectivity_algo.cpp.o CMakeFiles/connectivity.dir/connectivity_data.cpp.o CMakeFiles/connectivity.dir/connectivity_items.cpp.o CMakeFiles/connectivity.dir/from_to_cache.cpp.o CMakeFiles/connectivity.dir/topo_match.cpp.o
+/usr/bin/ranlib libconnectivity.a

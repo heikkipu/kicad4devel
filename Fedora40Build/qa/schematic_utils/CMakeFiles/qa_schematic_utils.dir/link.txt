@@ -1,0 +1,2 @@
+/usr/bin/ar qc libqa_schematic_utils.a CMakeFiles/qa_schematic_utils.dir/eeschema_test_utils.cpp.o CMakeFiles/qa_schematic_utils.dir/schematic_file_util.cpp.o
+/usr/bin/ranlib libqa_schematic_utils.a

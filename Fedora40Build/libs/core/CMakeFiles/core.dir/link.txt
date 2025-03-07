@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcore.a CMakeFiles/core.dir/base64.cpp.o CMakeFiles/core.dir/observable.cpp.o CMakeFiles/core.dir/profile.cpp.o CMakeFiles/core.dir/utf8.cpp.o CMakeFiles/core.dir/version_compare.cpp.o CMakeFiles/core.dir/wx_stl_compat.cpp.o
+/usr/bin/ranlib libcore.a

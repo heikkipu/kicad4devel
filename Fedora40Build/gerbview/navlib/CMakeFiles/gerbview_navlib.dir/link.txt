@@ -1,0 +1,2 @@
+/usr/bin/ar qc libgerbview_navlib.a CMakeFiles/gerbview_navlib.dir/nl_gerbview_plugin.cpp.o CMakeFiles/gerbview_navlib.dir/nl_gerbview_plugin_impl.cpp.o
+/usr/bin/ranlib libgerbview_navlib.a
