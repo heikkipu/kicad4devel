@@ -1,0 +1,2 @@
+/usr/bin/ar qc libaltium2pcbnew.a CMakeFiles/altium2pcbnew.dir/altium_parser_pcb.cpp.o CMakeFiles/altium2pcbnew.dir/altium_pcb.cpp.o CMakeFiles/altium2pcbnew.dir/altium_pcb_compound_file.cpp.o CMakeFiles/altium2pcbnew.dir/altium_rule_transformer.cpp.o CMakeFiles/altium2pcbnew.dir/pcb_io_altium_circuit_maker.cpp.o CMakeFiles/altium2pcbnew.dir/pcb_io_altium_circuit_studio.cpp.o CMakeFiles/altium2pcbnew.dir/pcb_io_altium_designer.cpp.o CMakeFiles/altium2pcbnew.dir/pcb_io_solidworks.cpp.o
+/usr/bin/ranlib libaltium2pcbnew.a

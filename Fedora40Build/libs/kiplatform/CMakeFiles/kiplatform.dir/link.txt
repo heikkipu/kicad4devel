@@ -1,0 +1,2 @@
+/usr/bin/ar qc libkiplatform.a CMakeFiles/kiplatform.dir/port/wxgtk/ui.cpp.o CMakeFiles/kiplatform.dir/os/unix/app.cpp.o CMakeFiles/kiplatform.dir/os/unix/drivers.cpp.o CMakeFiles/kiplatform.dir/os/unix/environment.cpp.o CMakeFiles/kiplatform.dir/os/unix/io.cpp.o CMakeFiles/kiplatform.dir/os/unix/policy.cpp.o CMakeFiles/kiplatform.dir/os/unix/secrets.cpp.o CMakeFiles/kiplatform.dir/os/unix/sysinfo.cpp.o
+/usr/bin/ranlib libkiplatform.a
