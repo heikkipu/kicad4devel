@@ -1,0 +1,2 @@
+/usr/bin/ar qc libipc2581.a CMakeFiles/ipc2581.dir/pcb_io_ipc2581.cpp.o
+/usr/bin/ranlib libipc2581.a

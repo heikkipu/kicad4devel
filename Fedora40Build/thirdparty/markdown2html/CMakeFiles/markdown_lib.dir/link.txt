@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmarkdown_lib.a CMakeFiles/markdown_lib.dir/markdown2html.cpp.o CMakeFiles/markdown_lib.dir/md_parser/markdown.c.o CMakeFiles/markdown_lib.dir/md_parser/stack.c.o CMakeFiles/markdown_lib.dir/md_parser/buffer.c.o CMakeFiles/markdown_lib.dir/md_parser/autolink.c.o CMakeFiles/markdown_lib.dir/html_formatter/html.c.o CMakeFiles/markdown_lib.dir/html_formatter/html_smartypants.c.o CMakeFiles/markdown_lib.dir/html_formatter/houdini_html_e.c.o CMakeFiles/markdown_lib.dir/html_formatter/houdini_href_e.c.o
+/usr/bin/ranlib libmarkdown_lib.a

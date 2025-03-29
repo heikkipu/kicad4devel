@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfabmaster.a CMakeFiles/fabmaster.dir/pcb_io_fabmaster.cpp.o CMakeFiles/fabmaster.dir/import_fabmaster.cpp.o
+/usr/bin/ranlib libfabmaster.a
