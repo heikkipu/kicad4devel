@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpotrace.a CMakeFiles/potrace.dir/src/bitmap_io.cpp.o CMakeFiles/potrace.dir/src/curve.cpp.o CMakeFiles/potrace.dir/src/decompose.cpp.o CMakeFiles/potrace.dir/src/greymap.cpp.o CMakeFiles/potrace.dir/src/potracelib.cpp.o CMakeFiles/potrace.dir/src/render.cpp.o CMakeFiles/potrace.dir/src/trace.cpp.o
+/usr/bin/ranlib libpotrace.a

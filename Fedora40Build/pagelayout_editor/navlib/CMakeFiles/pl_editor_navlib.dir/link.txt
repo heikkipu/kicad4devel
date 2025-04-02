@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpl_editor_navlib.a CMakeFiles/pl_editor_navlib.dir/nl_pl_editor_plugin.cpp.o CMakeFiles/pl_editor_navlib.dir/nl_pl_editor_plugin_impl.cpp.o
+/usr/bin/ranlib libpl_editor_navlib.a

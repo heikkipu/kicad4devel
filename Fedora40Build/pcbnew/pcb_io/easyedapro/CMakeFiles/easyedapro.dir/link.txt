@@ -1,0 +1,2 @@
+/usr/bin/ar qc libeasyedapro.a CMakeFiles/easyedapro.dir/pcb_io_easyedapro.cpp.o CMakeFiles/easyedapro.dir/pcb_io_easyedapro_parser.cpp.o
+/usr/bin/ranlib libeasyedapro.a

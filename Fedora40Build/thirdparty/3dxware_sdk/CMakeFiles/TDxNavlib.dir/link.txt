@@ -1,0 +1,2 @@
+/usr/bin/ar qc libTDxNavlib.a CMakeFiles/TDxNavlib.dir/src/navlib_stub.c.o CMakeFiles/TDxNavlib.dir/src/navlib_load.cpp.o
+/usr/bin/ranlib libTDxNavlib.a

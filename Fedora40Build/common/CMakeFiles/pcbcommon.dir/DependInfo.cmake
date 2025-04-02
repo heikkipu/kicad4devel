@@ -1,0 +1,143 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
+# The set of languages for which implicit dependencies are needed:
+set(CMAKE_DEPENDS_LANGUAGES
+  )
+
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/opt/kicad/program/master/Tears_Master/pcbnew/api/api_pcb_enums.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/api/api_pcb_enums.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/api/api_pcb_enums.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/api/api_pcb_utils.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/api/api_pcb_utils.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/api/api_pcb_utils.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/board.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/board_commit.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_commit.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_commit.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/board_connected_item.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_connected_item.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_connected_item.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/board_design_settings.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_design_settings.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_design_settings.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/board_item.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_item.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_item.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/board_stackup_manager/board_stackup.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_stackup_manager/board_stackup.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/board_stackup_manager/board_stackup.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/collectors.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/collectors.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/collectors.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/component_classes/component_class.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/component_classes/component_class.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/component_classes/component_class.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/component_classes/component_class_assignment_rule.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/component_classes/component_class_assignment_rule.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/component_classes/component_class_assignment_rule.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/component_classes/component_class_cache_proxy.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/component_classes/component_class_cache_proxy.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/component_classes/component_class_cache_proxy.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/component_classes/component_class_manager.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/component_classes/component_class_manager.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/component_classes/component_class_manager.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/connectivity/connectivity_algo.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/connectivity/connectivity_algo.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/connectivity/connectivity_algo.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/connectivity/connectivity_data.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/connectivity/connectivity_data.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/connectivity/connectivity_data.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/connectivity/connectivity_items.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/connectivity/connectivity_items.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/connectivity/connectivity_items.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/connectivity/from_to_cache.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/connectivity/from_to_cache.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/connectivity/from_to_cache.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/convert_shape_list_to_polygon.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/convert_shape_list_to_polygon.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/convert_shape_list_to_polygon.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/drc/drc_cache_generator.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_cache_generator.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_cache_generator.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/drc/drc_engine.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_engine.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_engine.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/drc/drc_item.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_item.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_item.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/drc/drc_rule.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_rule.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_rule.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/drc/drc_rule_condition.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_rule_condition.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_rule_condition.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/drc/drc_rule_parser.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_rule_parser.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_rule_parser.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/drc/drc_test_provider.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_test_provider.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/drc/drc_test_provider.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/fix_board_shape.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/fix_board_shape.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/fix_board_shape.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/footprint.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/footprint.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/footprint.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/footprint_editor_settings.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/footprint_editor_settings.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/footprint_editor_settings.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/generators_mgr.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/generators_mgr.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/generators_mgr.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/kicad_clipboard.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/kicad_clipboard.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/kicad_clipboard.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/length_calculation.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/length_calculation.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/length_calculation.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/netinfo_item.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netinfo_item.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netinfo_item.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/netinfo_list.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netinfo_list.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netinfo_list.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/netlist_reader/kicad_netlist_reader.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netlist_reader/kicad_netlist_reader.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netlist_reader/kicad_netlist_reader.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/netlist_reader/legacy_netlist_reader.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netlist_reader/legacy_netlist_reader.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netlist_reader/legacy_netlist_reader.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/netlist_reader/netlist_reader.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netlist_reader/netlist_reader.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netlist_reader/netlist_reader.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/netlist_reader/pcb_netlist.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netlist_reader/pcb_netlist.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/netlist_reader/pcb_netlist.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pad.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pad.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pad.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pad_utils.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pad_utils.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pad_utils.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/padstack.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/padstack.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/padstack.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_base_frame.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_base_frame.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_base_frame.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_dimension.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_dimension.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_dimension.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_draw_panel_gal.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_draw_panel_gal.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_draw_panel_gal.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_field.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_field.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_field.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_generator.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_generator.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_generator.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_group.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_group.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_group.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_io/eagle/pcb_io_eagle.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/eagle/pcb_io_eagle.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/eagle/pcb_io_eagle.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_io/geda/pcb_io_geda.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/geda/pcb_io_geda.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/geda/pcb_io_geda.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_io/kicad_sexpr_V9/V9_pcb_io_kicad_sexpr.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/kicad_sexpr_V9/V9_pcb_io_kicad_sexpr.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/kicad_sexpr_V9/V9_pcb_io_kicad_sexpr.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_io/pcb_io.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/pcb_io.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/pcb_io.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_io/pcb_io_mgr.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/pcb_io_mgr.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_io/pcb_io_mgr.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_marker.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_marker.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_marker.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_origin_transforms.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_origin_transforms.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_origin_transforms.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_painter.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_painter.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_painter.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_plot_params.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_plot_params.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_plot_params.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_reference_image.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_reference_image.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_reference_image.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_screen.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_screen.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_screen.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_shape.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_shape.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_shape.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_table.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_table.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_table.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_tablecell.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_tablecell.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_tablecell.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_target.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_target.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_target.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_text.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_text.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_text.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_textbox.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_textbox.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_textbox.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_track.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_track.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_track.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcb_view.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_view.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcb_view.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcbexpr_evaluator.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcbexpr_evaluator.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcbexpr_evaluator.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcbexpr_functions.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcbexpr_functions.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcbexpr_functions.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/pcbnew_settings.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcbnew_settings.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/pcbnew_settings.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/project_pcb.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/project_pcb.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/project_pcb.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/ratsnest/ratsnest_data.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/ratsnest/ratsnest_data.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/ratsnest/ratsnest_data.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/ratsnest/ratsnest_view_item.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/ratsnest/ratsnest_view_item.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/ratsnest/ratsnest_view_item.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/router/pns_meander.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/router/pns_meander.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/router/pns_meander.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/sel_layer.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/sel_layer.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/sel_layer.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/teardrop/teardrop.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/teardrop/teardrop.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/teardrop/teardrop.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/teardrop/teardrop_parameters.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/teardrop/teardrop_parameters.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/teardrop/teardrop_parameters.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/teardrop/teardrop_utils.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/teardrop/teardrop_utils.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/teardrop/teardrop_utils.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/tools/pcb_actions.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/tools/pcb_actions.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/tools/pcb_actions.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/tools/pcb_editor_conditions.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/tools/pcb_editor_conditions.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/tools/pcb_editor_conditions.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/tools/pcb_grid_helper.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/tools/pcb_grid_helper.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/tools/pcb_grid_helper.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/tools/pcb_viewer_tools.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/tools/pcb_viewer_tools.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/tools/pcb_viewer_tools.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/roundedcornertrack.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedcornertrack.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedcornertrack.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/roundedtrackscorner.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorner.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorner.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/roundedtrackscorners_common.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/roundedtrackscorners_common_edit.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_edit.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_edit.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/roundedtrackscorners_common_menus.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_menus.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_menus.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/roundedtrackscorners_common_misc.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_misc.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_misc.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/roundedtrackscorners_common_plugin_parse.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_plugin_parse.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_plugin_parse.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/roundedtrackscorners_common_todolist.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_todolist.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/roundedtrackscorners_common_todolist.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/teardrop.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrop.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrop.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/teardrops_common.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/teardrops_common_commit.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_commit.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_commit.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/teardrops_common_edit.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_edit.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_edit.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/teardrops_common_menus.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_menus.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_menus.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/teardrops_common_misc.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_misc.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_misc.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/teardrops_common_plugin_parse.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_plugin_parse.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_plugin_parse.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/teardrops_common_todolist.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_todolist.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/teardrops_common_todolist.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/trackitem.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackitem.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackitem.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/trackitems_common.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackitems_common.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackitems_common.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/trackitems_connection_common.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackitems_connection_common.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackitems_connection_common.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/trackitems_galrouter_common.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackitems_galrouter_common.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackitems_galrouter_common.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/trackmeasurementpoint.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackmeasurementpoint.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackmeasurementpoint.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/trackmeasurementpoints_common.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackmeasurementpoints_common.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/trackmeasurementpoints_common.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/tracknodeitem.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/tracknodeitem.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/tracknodeitem.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/trackitems/tracknodeitems_common.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/tracknodeitems_common.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/trackitems/tracknodeitems_common.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/zone.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/zone.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/zone.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/pcbnew/zone_settings.cpp" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/zone_settings.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/__/pcbnew/zone_settings.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/common/fp_lib_table.cpp" "common/CMakeFiles/pcbcommon.dir/fp_lib_table.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/fp_lib_table.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/common/hash_eda.cpp" "common/CMakeFiles/pcbcommon.dir/hash_eda.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/hash_eda.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/build/common/pcb_keywords.cpp" "common/CMakeFiles/pcbcommon.dir/pcb_keywords.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/pcb_keywords.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/build/common/pcb_plot_params_keywords.cpp" "common/CMakeFiles/pcbcommon.dir/pcb_plot_params_keywords.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/pcb_plot_params_keywords.cpp.o.d"
+  "/opt/kicad/program/master/Tears_Master/common/widgets/net_selector.cpp" "common/CMakeFiles/pcbcommon.dir/widgets/net_selector.cpp.o" "gcc" "common/CMakeFiles/pcbcommon.dir/widgets/net_selector.cpp.o.d"
+  )
+
+# Pairs of files generated by the same build rule.
+set(CMAKE_MULTIPLE_OUTPUT_PAIRS
+  "/opt/kicad/program/master/Tears_Master/build/common/pcb_keywords.cpp" "/opt/kicad/program/master/Tears_Master/build/common/pcb_lexer.h"
+  "/opt/kicad/program/master/Tears_Master/build/common/pcb_plot_params_keywords.cpp" "/opt/kicad/program/master/Tears_Master/build/common/pcb_plot_params_lexer.h"
+  )
+
+
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+  )
+
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_FORWARD_LINKED_INFO_FILES
+  )
+
+# Fortran module output directory.
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")

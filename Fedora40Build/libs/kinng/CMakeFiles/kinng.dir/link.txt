@@ -1,0 +1,2 @@
+/usr/bin/ar qc libkinng.a CMakeFiles/kinng.dir/src/kinng.cpp.o
+/usr/bin/ranlib libkinng.a

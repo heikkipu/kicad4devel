@@ -1,0 +1,2 @@
+/usr/bin/ar qc lib3d-viewer_navlib.a "CMakeFiles/3d-viewer_navlib.dir/nl_3d_viewer_plugin.cpp.o" "CMakeFiles/3d-viewer_navlib.dir/nl_3d_viewer_plugin_impl.cpp.o" "CMakeFiles/3d-viewer_navlib.dir/nl_footprint_properties_plugin.cpp.o" "CMakeFiles/3d-viewer_navlib.dir/nl_footprint_properties_plugin_impl.cpp.o"
+/usr/bin/ranlib lib3d-viewer_navlib.a

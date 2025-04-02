@@ -1,0 +1,210 @@
+common/CMakeFiles/common.dir/git/git_sync_handler.cpp.o: \
+ /opt/kicad/program/master/Tears_Master/common/git/git_sync_handler.cpp \
+ /usr/include/stdc-predef.h \
+ /opt/kicad/program/master/Tears_Master/common/git/git_sync_handler.h \
+ /usr/include/git2.h /usr/include/git2/annotated_commit.h \
+ /usr/include/git2/common.h /usr/include/time.h /usr/include/features.h \
+ /usr/include/features-time64.h /usr/include/bits/wordsize.h \
+ /usr/include/bits/timesize.h /usr/include/sys/cdefs.h \
+ /usr/include/bits/long-double.h /usr/include/gnu/stubs.h \
+ /usr/include/gnu/stubs-64.h \
+ /usr/lib/gcc/x86_64-redhat-linux/14/include/stddef.h \
+ /usr/include/bits/time.h /usr/include/bits/types.h \
+ /usr/include/bits/typesizes.h /usr/include/bits/time64.h \
+ /usr/include/bits/timex.h /usr/include/bits/types/struct_timeval.h \
+ /usr/include/bits/types/clock_t.h /usr/include/bits/types/time_t.h \
+ /usr/include/bits/types/struct_tm.h \
+ /usr/include/bits/types/struct_timespec.h /usr/include/bits/endian.h \
+ /usr/include/bits/endianness.h /usr/include/bits/types/clockid_t.h \
+ /usr/include/bits/types/timer_t.h \
+ /usr/include/bits/types/struct_itimerspec.h \
+ /usr/include/bits/types/locale_t.h /usr/include/bits/types/__locale_t.h \
+ /usr/include/c++/14/stdlib.h /usr/include/c++/14/cstdlib \
+ /usr/include/c++/14/x86_64-redhat-linux/bits/c++config.h \
+ /usr/include/c++/14/x86_64-redhat-linux/bits/os_defines.h \
+ /usr/include/c++/14/x86_64-redhat-linux/bits/cpu_defines.h \
+ /usr/include/c++/14/pstl/pstl_config.h /usr/include/stdlib.h \
+ /usr/include/bits/libc-header-start.h /usr/include/bits/waitflags.h \
+ /usr/include/bits/waitstatus.h /usr/include/bits/floatn.h \
+ /usr/include/bits/floatn-common.h /usr/include/sys/types.h \
+ /usr/include/bits/stdint-intn.h /usr/include/endian.h \
+ /usr/include/bits/byteswap.h /usr/include/bits/uintn-identity.h \
+ /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/bits/types/sigset_t.h /usr/include/bits/types/__sigset_t.h \
+ /usr/include/bits/pthreadtypes.h /usr/include/bits/thread-shared-types.h \
+ /usr/include/bits/pthreadtypes-arch.h \
+ /usr/include/bits/atomic_wide_counter.h /usr/include/bits/struct_mutex.h \
+ /usr/include/bits/struct_rwlock.h /usr/include/alloca.h \
+ /usr/include/bits/stdlib-bsearch.h /usr/include/bits/stdlib-float.h \
+ /usr/include/c++/14/bits/std_abs.h /usr/include/inttypes.h \
+ /usr/lib/gcc/x86_64-redhat-linux/14/include/stdint.h \
+ /usr/include/stdint.h /usr/include/bits/wchar.h \
+ /usr/include/bits/stdint-uintn.h /usr/include/bits/stdint-least.h \
+ /usr/include/git2/repository.h /usr/include/git2/types.h \
+ /usr/include/git2/buffer.h /usr/include/git2/oid.h \
+ /usr/include/git2/experimental.h /usr/include/git2/apply.h \
+ /usr/include/git2/diff.h /usr/include/git2/tree.h \
+ /usr/include/git2/object.h /usr/include/git2/refs.h \
+ /usr/include/git2/strarray.h /usr/include/git2/attr.h \
+ /usr/include/git2/blob.h /usr/include/git2/blame.h \
+ /usr/include/git2/branch.h /usr/include/git2/buffer.h \
+ /usr/include/git2/cert.h /usr/include/git2/checkout.h \
+ /usr/include/git2/cherrypick.h /usr/include/git2/merge.h \
+ /usr/include/git2/oidarray.h /usr/include/git2/checkout.h \
+ /usr/include/git2/index.h /usr/include/git2/indexer.h \
+ /usr/include/git2/annotated_commit.h /usr/include/git2/clone.h \
+ /usr/include/git2/remote.h /usr/include/git2/refspec.h \
+ /usr/include/git2/net.h /usr/include/git2/transport.h \
+ /usr/include/git2/cert.h /usr/include/git2/credential.h \
+ /usr/include/git2/pack.h /usr/include/git2/proxy.h \
+ /usr/include/git2/commit.h /usr/include/git2/common.h \
+ /usr/include/git2/config.h /usr/include/git2/credential.h \
+ /usr/include/git2/deprecated.h /usr/include/git2/attr.h \
+ /usr/include/git2/config.h /usr/include/git2/blame.h \
+ /usr/include/git2/cherrypick.h /usr/include/git2/clone.h \
+ /usr/include/git2/describe.h /usr/include/git2/errors.h \
+ /usr/include/git2/filter.h /usr/include/git2/rebase.h \
+ /usr/include/git2/commit.h /usr/include/git2/trace.h \
+ /usr/include/git2/revert.h /usr/include/git2/revparse.h \
+ /usr/include/git2/stash.h /usr/include/git2/status.h \
+ /usr/include/git2/submodule.h /usr/include/git2/worktree.h \
+ /usr/include/git2/credential_helpers.h \
+ /usr/include/git2/sys/credential.h /usr/include/git2/common.h \
+ /usr/include/git2/credential.h /usr/include/git2/describe.h \
+ /usr/include/git2/diff.h /usr/include/git2/email.h \
+ /usr/include/git2/errors.h /usr/include/git2/experimental.h \
+ /usr/include/git2/filter.h /usr/include/git2/global.h \
+ /usr/include/git2/graph.h /usr/include/git2/ignore.h \
+ /usr/include/git2/index.h /usr/include/git2/indexer.h \
+ /usr/include/git2/mailmap.h /usr/include/git2/merge.h \
+ /usr/include/git2/message.h /usr/include/git2/net.h \
+ /usr/include/git2/notes.h /usr/include/git2/object.h \
+ /usr/include/git2/odb.h /usr/include/git2/odb_backend.h \
+ /usr/include/git2/oid.h /usr/include/git2/pack.h \
+ /usr/include/git2/patch.h /usr/include/git2/pathspec.h \
+ /usr/include/git2/proxy.h /usr/include/git2/rebase.h \
+ /usr/include/git2/refdb.h /usr/include/git2/reflog.h \
+ /usr/include/git2/refs.h /usr/include/git2/refspec.h \
+ /usr/include/git2/remote.h /usr/include/git2/repository.h \
+ /usr/include/git2/reset.h /usr/include/git2/revert.h \
+ /usr/include/git2/revparse.h /usr/include/git2/revwalk.h \
+ /usr/include/git2/signature.h /usr/include/git2/stash.h \
+ /usr/include/git2/status.h /usr/include/git2/submodule.h \
+ /usr/include/git2/tag.h /usr/include/git2/transport.h \
+ /usr/include/git2/transaction.h /usr/include/git2/tree.h \
+ /usr/include/git2/types.h /usr/include/git2/version.h \
+ /usr/include/git2/worktree.h /usr/include/wx-3.2/wx/string.h \
+ /usr/include/wx-3.2/wx/defs.h /usr/include/wx-3.2/wx/platform.h \
+ /usr/include/wx-3.2/wx/compiler.h \
+ /usr/lib64/wx/include/gtk3-unicode-3.2/wx/setup.h \
+ /usr/include/wx-3.2/wx/chkconf.h /usr/include/wx-3.2/wx/gtk/chkconf.h \
+ /usr/include/wx-3.2/wx/unix/chkconf.h /usr/include/wx-3.2/wx/version.h \
+ /usr/include/wx-3.2/wx/cpp.h /usr/include/wx-3.2/wx/dlimpexp.h \
+ /usr/include/wx-3.2/wx/types.h /usr/include/wx-3.2/wx/debug.h \
+ /usr/include/assert.h \
+ /usr/lib/gcc/x86_64-redhat-linux/14/include/limits.h \
+ /usr/lib/gcc/x86_64-redhat-linux/14/include/syslimits.h \
+ /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+ /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/bits/pthread_stack_min-dynamic.h \
+ /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+ /usr/include/bits/uio_lim.h /usr/include/wx-3.2/wx/chartype.h \
+ /usr/include/wchar.h \
+ /usr/lib/gcc/x86_64-redhat-linux/14/include/stdarg.h \
+ /usr/include/bits/types/wint_t.h /usr/include/bits/types/mbstate_t.h \
+ /usr/include/bits/types/__mbstate_t.h /usr/include/bits/types/__FILE.h \
+ /usr/include/bits/types/FILE.h /usr/include/wx-3.2/wx/features.h \
+ /usr/include/string.h /usr/include/strings.h /usr/include/stdio.h \
+ /usr/include/bits/types/__fpos_t.h /usr/include/bits/types/__fpos64_t.h \
+ /usr/include/bits/types/struct_FILE.h \
+ /usr/include/bits/types/cookie_io_functions_t.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+ /usr/include/wx-3.2/wx/wxcrtbase.h /usr/include/ctype.h \
+ /usr/include/wctype.h /usr/include/bits/wctype-wchar.h \
+ /usr/include/wx-3.2/wx/strvararg.h /usr/include/wx-3.2/wx/strconv.h \
+ /usr/include/wx-3.2/wx/buffer.h /usr/include/wx-3.2/wx/fontenc.h \
+ /usr/include/wx-3.2/wx/unichar.h /usr/include/wx-3.2/wx/stringimpl.h \
+ /usr/include/wx-3.2/wx/beforestd.h /usr/include/c++/14/string \
+ /usr/include/c++/14/bits/requires_hosted.h \
+ /usr/include/c++/14/bits/stringfwd.h \
+ /usr/include/c++/14/bits/memoryfwd.h \
+ /usr/include/c++/14/bits/char_traits.h \
+ /usr/include/c++/14/bits/postypes.h /usr/include/c++/14/cwchar \
+ /usr/include/c++/14/type_traits /usr/include/c++/14/bits/version.h \
+ /usr/include/c++/14/compare /usr/include/c++/14/concepts \
+ /usr/include/c++/14/bits/stl_construct.h /usr/include/c++/14/new \
+ /usr/include/c++/14/bits/exception.h /usr/include/c++/14/bits/move.h \
+ /usr/include/c++/14/bits/stl_iterator_base_types.h \
+ /usr/include/c++/14/bits/iterator_concepts.h \
+ /usr/include/c++/14/bits/ptr_traits.h \
+ /usr/include/c++/14/bits/ranges_cmp.h \
+ /usr/include/c++/14/bits/stl_iterator_base_funcs.h \
+ /usr/include/c++/14/bits/concept_check.h \
+ /usr/include/c++/14/debug/assertions.h \
+ /usr/include/c++/14/bits/allocator.h \
+ /usr/include/c++/14/x86_64-redhat-linux/bits/c++allocator.h \
+ /usr/include/c++/14/bits/new_allocator.h \
+ /usr/include/c++/14/bits/functexcept.h \
+ /usr/include/c++/14/bits/exception_defines.h \
+ /usr/include/c++/14/bits/cpp_type_traits.h \
+ /usr/include/c++/14/bits/localefwd.h \
+ /usr/include/c++/14/x86_64-redhat-linux/bits/c++locale.h \
+ /usr/include/c++/14/clocale /usr/include/locale.h \
+ /usr/include/bits/locale.h /usr/include/c++/14/iosfwd \
+ /usr/include/c++/14/cctype /usr/include/c++/14/bits/ostream_insert.h \
+ /usr/include/c++/14/bits/cxxabi_forced.h \
+ /usr/include/c++/14/bits/stl_iterator.h \
+ /usr/include/c++/14/ext/type_traits.h \
+ /usr/include/c++/14/bits/stl_function.h \
+ /usr/include/c++/14/backward/binders.h \
+ /usr/include/c++/14/ext/numeric_traits.h \
+ /usr/include/c++/14/bits/stl_algobase.h \
+ /usr/include/c++/14/bits/stl_pair.h /usr/include/c++/14/bits/utility.h \
+ /usr/include/c++/14/debug/debug.h \
+ /usr/include/c++/14/bits/predefined_ops.h /usr/include/c++/14/bit \
+ /usr/include/c++/14/bits/refwrap.h /usr/include/c++/14/bits/invoke.h \
+ /usr/include/c++/14/bits/range_access.h \
+ /usr/include/c++/14/initializer_list \
+ /usr/include/c++/14/bits/basic_string.h \
+ /usr/include/c++/14/ext/alloc_traits.h \
+ /usr/include/c++/14/bits/alloc_traits.h /usr/include/c++/14/string_view \
+ /usr/include/c++/14/bits/functional_hash.h \
+ /usr/include/c++/14/bits/hash_bytes.h \
+ /usr/include/c++/14/bits/ranges_base.h \
+ /usr/include/c++/14/bits/max_size_type.h /usr/include/c++/14/numbers \
+ /usr/include/c++/14/bits/string_view.tcc \
+ /usr/include/c++/14/ext/string_conversions.h /usr/include/c++/14/cstdio \
+ /usr/include/c++/14/cerrno /usr/include/errno.h \
+ /usr/include/bits/errno.h /usr/include/linux/errno.h \
+ /usr/include/asm/errno.h /usr/include/asm-generic/errno.h \
+ /usr/include/asm-generic/errno-base.h /usr/include/bits/types/error_t.h \
+ /usr/include/c++/14/bits/charconv.h \
+ /usr/include/c++/14/bits/basic_string.tcc \
+ /usr/include/c++/14/bits/memory_resource.h /usr/include/c++/14/cstddef \
+ /usr/include/c++/14/bits/uses_allocator.h \
+ /usr/include/c++/14/bits/uses_allocator_args.h /usr/include/c++/14/tuple \
+ /usr/include/c++/14/bits/ranges_util.h /usr/include/wx-3.2/wx/afterstd.h \
+ /usr/include/c++/14/algorithm /usr/include/c++/14/bits/stl_algo.h \
+ /usr/include/c++/14/bits/algorithmfwd.h \
+ /usr/include/c++/14/bits/stl_heap.h \
+ /usr/include/c++/14/bits/uniform_int_dist.h \
+ /usr/include/c++/14/bits/stl_tempbuf.h \
+ /usr/include/c++/14/bits/ranges_algo.h \
+ /usr/include/c++/14/bits/ranges_algobase.h \
+ /usr/include/c++/14/pstl/glue_algorithm_defs.h \
+ /usr/include/c++/14/pstl/execution_defs.h /usr/include/c++/14/utility \
+ /usr/include/c++/14/bits/stl_relops.h /usr/include/wx-3.2/wx/stringops.h \
+ /usr/include/c++/14/functional /usr/include/c++/14/bits/std_function.h \
+ /usr/include/c++/14/typeinfo /usr/include/c++/14/unordered_map \
+ /usr/include/c++/14/bits/unordered_map.h \
+ /usr/include/c++/14/bits/hashtable.h \
+ /usr/include/c++/14/bits/hashtable_policy.h \
+ /usr/include/c++/14/ext/aligned_buffer.h \
+ /usr/include/c++/14/bits/enable_special_members.h \
+ /usr/include/c++/14/bits/node_handle.h \
+ /usr/include/c++/14/bits/erase_if.h /usr/include/c++/14/vector \
+ /usr/include/c++/14/bits/stl_uninitialized.h \
+ /usr/include/c++/14/bits/stl_vector.h \
+ /usr/include/c++/14/bits/stl_bvector.h \
+ /usr/include/c++/14/bits/vector.tcc /usr/include/c++/14/array \
+ /usr/include/wx-3.2/wx/iosfwrap.h

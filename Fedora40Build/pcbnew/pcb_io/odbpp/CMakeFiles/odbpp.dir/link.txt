@@ -1,0 +1,2 @@
+/usr/bin/ar qc libodbpp.a CMakeFiles/odbpp.dir/odb_util.cpp.o CMakeFiles/odbpp.dir/odb_attribute.cpp.o CMakeFiles/odbpp.dir/odb_feature.cpp.o CMakeFiles/odbpp.dir/odb_component.cpp.o CMakeFiles/odbpp.dir/odb_netlist.cpp.o CMakeFiles/odbpp.dir/odb_eda_data.cpp.o CMakeFiles/odbpp.dir/odb_fonts.cpp.o CMakeFiles/odbpp.dir/odb_entity.cpp.o CMakeFiles/odbpp.dir/pcb_io_odbpp.cpp.o
+/usr/bin/ranlib libodbpp.a

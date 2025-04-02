@@ -1,0 +1,2 @@
+/usr/bin/ar qc libtinyspline_lib.a CMakeFiles/tinyspline_lib.dir/tinyspline.c.o CMakeFiles/tinyspline_lib.dir/tinysplinecxx.cxx.o CMakeFiles/tinyspline_lib.dir/parson.c.o
+/usr/bin/ranlib libtinyspline_lib.a

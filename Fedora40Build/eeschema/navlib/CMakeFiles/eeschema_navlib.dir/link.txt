@@ -1,0 +1,2 @@
+/usr/bin/ar qc libeeschema_navlib.a CMakeFiles/eeschema_navlib.dir/nl_schematic_plugin.cpp.o CMakeFiles/eeschema_navlib.dir/nl_schematic_plugin_impl.cpp.o
+/usr/bin/ranlib libeeschema_navlib.a

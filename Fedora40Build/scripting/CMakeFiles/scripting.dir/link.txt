@@ -1,0 +1,2 @@
+/usr/bin/ar qc libscripting.a CMakeFiles/scripting.dir/kipython_settings.cpp.o
+/usr/bin/ranlib libscripting.a

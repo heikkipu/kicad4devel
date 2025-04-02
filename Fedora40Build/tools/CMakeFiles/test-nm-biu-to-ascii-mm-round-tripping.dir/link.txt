@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wno-attributes -Wno-ignored-attributes -pthread -O3 -DNDEBUG "CMakeFiles/test-nm-biu-to-ascii-mm-round-tripping.dir/test-nm-biu-to-ascii-mm-round-tripping.cpp.o" -o test-nm-biu-to-ascii-mm-round-tripping

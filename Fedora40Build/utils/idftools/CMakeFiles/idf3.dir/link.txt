@@ -1,0 +1,2 @@
+/usr/bin/ar qc libidf3.a CMakeFiles/idf3.dir/idf_helpers.cpp.o CMakeFiles/idf3.dir/idf_common.cpp.o CMakeFiles/idf3.dir/idf_outlines.cpp.o CMakeFiles/idf3.dir/idf_parser.cpp.o CMakeFiles/idf3.dir/vrml_layer.cpp.o
+/usr/bin/ranlib libidf3.a

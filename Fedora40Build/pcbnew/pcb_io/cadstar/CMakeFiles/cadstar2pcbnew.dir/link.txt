@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcadstar2pcbnew.a CMakeFiles/cadstar2pcbnew.dir/cadstar_pcb_archive_parser.cpp.o CMakeFiles/cadstar2pcbnew.dir/cadstar_pcb_archive_loader.cpp.o CMakeFiles/cadstar2pcbnew.dir/pcb_io_cadstar_archive.cpp.o
+/usr/bin/ranlib libcadstar2pcbnew.a

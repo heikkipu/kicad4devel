@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsexpr.a CMakeFiles/sexpr.dir/sexpr.cpp.o CMakeFiles/sexpr.dir/sexpr_parser.cpp.o
+/usr/bin/ranlib libsexpr.a

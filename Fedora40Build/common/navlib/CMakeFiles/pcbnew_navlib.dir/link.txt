@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpcbnew_navlib.a CMakeFiles/pcbnew_navlib.dir/nl_pcbnew_plugin.cpp.o CMakeFiles/pcbnew_navlib.dir/nl_pcbnew_plugin_impl.cpp.o
+/usr/bin/ranlib libpcbnew_navlib.a
